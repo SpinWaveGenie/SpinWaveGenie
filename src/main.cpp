@@ -22,27 +22,60 @@ int main(int argc, const char * argv[])
     double KX;
     SW_Matrix test;
     
-    SL[0].set_sublattice(5.0/2.0,PI/2.0 - 0.01098,0.0);
-    SL[1].set_sublattice(5.0/2.0,PI/2.0 - 0.01098,PI);
+    Vector3d pos;
+    vector<Vector3d> positions;
+    vector<int> types;
+
+    types.push_back(1);
+    pos << 0.0,0.0,0.5;
+    positions.push_back(pos);
+    types.push_back(1);
+    pos << 0.5,-0.5,0.0;
+    positions.push_back(pos);
+    types.push_back(1);
+    pos << 0.5,0.5,0.0;
+    positions.push_back(pos);
+    types.push_back(1);
+    pos << 0.0,0.0,-0.5;
+    positions.push_back(pos);
+    types.push_back(1);
+    pos << -0.5,0.5,0.0;
+    positions.push_back(pos);
+    types.push_back(1);
+    pos << -0.5,-0.5,0.0;
+    positions.push_back(pos);
     
-    cout << SL[0].get_rot_matrix() << endl;
-    cout << SL[1].get_rot_matrix() << endl;
+    SL[0].set_sublattice(5.0/2.0,PI/2.0 - 0.01098,0.0);
+    SL[0].add_neighbors(types,positions);
+    
+    vector<double> interaction;
+    interaction.push_back(0.0);
+    interaction.push_back(1.0/sqrt(2.0));
+    SL[0].set_interactions(interaction);
+    
+    SL[1].set_sublattice(5.0/2.0,PI/2.0 - 0.01098,PI);
+    for (int i=0;i<6;i++)
+    {
+        types[i] = 0;
+    }
+    
+    SL[1].add_neighbors(types,positions);
+    
+    interaction.erase(interaction.begin(),interaction.end());
+    
+    interaction.push_back(1.0/sqrt(2.0));
+    interaction.push_back(0.0);
+    
+    SL[1].set_interactions(interaction);
+    
+    //cout << SL[0].get_rot_matrix() << endl;
+    //cout << SL[1].get_rot_matrix() << endl;
     
     X[0] = 2.112; //2.48;
     X[1] = 0.109;
     X[2] = 4.61e-3;
     X[3] = 1.135e-3;
-    
-    /*X[0] = -0.1594199E-02;
-    X[1] = -0.2192590E+00;
-    X[2] = -0.2875218E-01;
-    X[3] =  0.3184059E-02;
-    X[4] =  0.9540724E-03;
-    X[5] =  0.1066680E+01;
-    X[6] =  0.3936251E-04;
-    X[7] =  0.2611718E+00;
-    */
-    
+        
     test.set_parr(SL,X);
     for (int i=0;i<301;i++)
     {
@@ -58,4 +91,3 @@ int main(int argc, const char * argv[])
     }
     return 0;
 }
-

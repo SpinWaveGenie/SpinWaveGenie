@@ -25,12 +25,57 @@ void SW_Matrix::set_parr(vector<SW_sublattice> SLin,vector<double>& Xin)
     
     M= (int)SL.size();
     N=2*M;
+
+    LN.resize(N,N); LN.setZero();
     
+    SS.resize(N);
+    SS.setZero();
+    for (int j=0;j<M;j++)
+    {
+        SS(j) = 1.0;
+        SS(j+M) = -1.0;
+    }
 }
 
 vector<double> SW_Matrix::get_parr()
 {
     return X;
+}
+
+void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP)
+{
+    /* diagonal terms in exchange*/
+    
+    MatrixXi interactions;
+    
+    interactions << 0,1,
+                    1,0;
+    
+    
+    
+    
+    for (int q=0;q<M;q++)
+    {
+        for (int s=0;s<M;s++)
+        {
+            if (interactions(q,s) == 1)
+            {
+                
+            }
+                
+            
+        }
+        for (int r=0;r<M;r++)
+        {
+            if (interactions(r,q) == 1)
+            {
+                
+            }
+            
+        }
+    }
+    
+    
 }
 
 void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
@@ -41,8 +86,6 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     double KX = KXP*2.0*PI;
     double KY = KYP*2.0*PI;
     double KZ = KZP*2.0*PI;
-    LN.resize(N,N); LN.setZero();
-    SS.resize(N);  SS.setZero();
     
     J = X[0];
     D = X[1];
@@ -55,13 +98,7 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     theta = SL[0].get_sublattice()[1]; //PI/2.0 - 0.01098;
 
     cout << theta << endl;
-    
-    for (int j=0;j<M;j++)
-    {
-        SS(j) = 1.0;
-        SS(j+M) = -1.0;
-    }
-    
+ 
     gamma_q = (cos(KZ/2.0) + cos((KX+KY)/2.0) + cos((KX-KY)/2.0))/3.0;
     eta_q =   (cos(KZ/2.0) + cos((KX+KY)/2.0) + cos((KX-KY)/2.0))/3.0;
     

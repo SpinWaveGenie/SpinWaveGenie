@@ -23,6 +23,7 @@ class SW_Matrix
 public:
     void set_parr(std::vector<SW_sublattice> SLin, std::vector<double>& Xin);
     std::vector<double> get_parr();
+    void CreateMatrix_exchange(double KXP, double KYP, double KZP);
     void CreateMatrix_NVO(double KXP, double KYP, double KZP);
     void CreateMatrix_YFeO3(double KXP, double KYP, double KZP);
     void CreateMatrix_AFM(double KXP, double KYP, double KZP);

@@ -18,15 +18,24 @@
 class SW_sublattice
 {
 public:
+    struct neighbor
+    {
+        int type;
+        Eigen::Vector3d position;
+    };
+    void set_interactions(std::vector<double> int_input);
     void set_sublattice(double spin_input, double theta_input, double phi_input);
-    void add_neighbors(double type, Eigen::Vector3d position);
+    void add_neighbors(std::vector<int> types, std::vector<Eigen::Vector3d> positions);
+    std::vector<neighbor> get_neighbors();
     std::vector<double> get_sublattice();
     Eigen::Matrix3d get_rot_matrix();
     Eigen::Matrix3d get_inv_matrix();
 private:
+    std::vector<neighbor> neighbors;
     double PI = atan(1.0)*4.0;
     double spin,theta,phi;
     Eigen::Matrix3d rot_matrix,inv_matrix;
+    std::vector<double> exchange_interaction;
 };
 
 #endif /* defined(__Spin_Wave_Fit__SW_sublattice__) */

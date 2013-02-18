@@ -34,8 +34,17 @@ void SW_sublattice::set_sublattice(double spin_input, double theta_input, double
     inv_matrix = rot_matrix.inverse();
 }
 
-void add_neighbors(double type, double position)
+void SW_sublattice::add_neighbors(vector<int> input_types, vector<Vector3d> input_positions)
 {
+    assert(input_types.size() == input_positions.size());
+    
+    neighbor add;
+    for (int i=0;i < input_types.size(); i++)
+    {
+        add.type = input_types[i];
+        add.position = input_positions[i];
+        neighbors.push_back(add);
+    }
     
 }
 
@@ -59,4 +68,9 @@ Eigen::Matrix3d SW_sublattice::get_rot_matrix()
 Eigen::Matrix3d SW_sublattice::get_inv_matrix()
 {
     return inv_matrix;
+}
+
+void SW_sublattice::set_interactions(vector<double> int_input)
+{
+    exchange_interaction = int_input;
 }
