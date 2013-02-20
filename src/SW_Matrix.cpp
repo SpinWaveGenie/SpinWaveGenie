@@ -83,9 +83,9 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     double J,D,Kx,Kz,z,S,theta;
     double eta_q,gamma_q;
     double A_q,B_q,C_q,D_q;
-    double KX = KXP*2.0*PI;
-    double KY = KYP*2.0*PI;
-    double KZ = KZP*2.0*PI;
+    double KX = KXP*2.0*M_PI;
+    double KY = KYP*2.0*M_PI;
+    double KZ = KZP*2.0*M_PI;
     
     J = X[0];
     D = X[1];
@@ -95,7 +95,7 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     S=SL[0].get_sublattice()[0];
     cout << S << endl;
     
-    theta = SL[0].get_sublattice()[1]; //PI/2.0 - 0.01098;
+    theta = SL[0].get_sublattice()[1]; //M_PI/2.0 - 0.01098;
 
     cout << theta << endl;
  
@@ -134,9 +134,9 @@ void SW_Matrix::CreateMatrix_AFM(double KXP, double KYP, double KZP)
     double J,D,z,S;
     double gamma_q;
     double A_q,C_q;
-    double KX = KXP*2.0*PI;
-    double KY = KYP*2.0*PI;
-    double KZ = KZP*2.0*PI;
+    double KX = KXP*2.0*M_PI;
+    double KY = KYP*2.0*M_PI;
+    double KZ = KZP*2.0*M_PI;
     LN.resize(N,N); LN.setZero();
     SS.resize(N);  SS.setZero();
     
@@ -235,7 +235,7 @@ void SW_Matrix::Calc_Eigenvalues()
     //
 }
 
-bool sortweights(pair<double, pair<complex<double>,VectorXcd> >& a, pair<double, pair<complex<double>,VectorXcd> >& b)
+bool sortweights(pair<double, pair<complex<double>,VectorXcd> > a, pair<double, pair<complex<double>,VectorXcd> > b)
 {
     // sortweights from largest to smallest
     return b.first < a.first;
@@ -459,9 +459,9 @@ void SW_Matrix::Unique_Solutions()
 void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
 {
     double CXX,CYY,CZZ;
-    double KX = KXP*2.0*PI;
-    double KY = KYP*2.0*PI;
-    double KZ = KZP*2.0*PI;
+    double KX = KXP*2.0*M_PI;
+    double KY = KYP*2.0*M_PI;
+    double KZ = KZP*2.0*M_PI;
     double ETS = 1.0e-2;
     VectorXd SJN(NU),ZJN(NU);
     IM = 0; MI = 0;
@@ -505,6 +505,6 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
     //SVI.resize(MI);
     for (int i=0;i<MI;i++)
     {
-        cout << KY/2.0/PI << "\t" << VI(i) << "\t" << SVI(i) << endl;
+        cout << KY/2.0/M_PI << "\t" << VI(i) << "\t" << SVI(i) << endl;
     }
 }

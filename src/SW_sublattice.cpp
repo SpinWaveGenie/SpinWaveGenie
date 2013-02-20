@@ -15,10 +15,10 @@ void SW_sublattice::set_sublattice(double spin_input, double theta_input, double
 {
     spin = spin_input;
     
-    assert(theta_input <= PI && theta_input >= 0.0);
+    assert(theta_input <= M_PI && theta_input >= 0.0);
     theta = theta_input;
     
-    assert(phi_input <= 2.0*PI && phi_input >= 0.0);
+    assert(phi_input <= 2.0*M_PI && phi_input >= 0.0);
     phi = phi_input;
     
     rot_matrix(0,0) = cos(theta)*cos(phi);

@@ -5,7 +5,8 @@
 //  Created by Hahn, Steven E. on 1/7/13.
 //  Copyright (c) 2013 Oak Ridge National Laboratory. All rights reserved.
 //
-
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <iostream>
 #include <vector>
 #include "SW_Matrix.h"
@@ -16,7 +17,6 @@ using namespace std;
 
 int main(int argc, const char * argv[])
 {
-    double PI = atan(1.0)*4.0;
     vector<double> X(4,0.0);
     vector<SW_sublattice> SL(2);
     double KX;
@@ -45,7 +45,7 @@ int main(int argc, const char * argv[])
     pos << -0.5,-0.5,0.0;
     positions.push_back(pos);
     
-    SL[0].set_sublattice(5.0/2.0,PI/2.0 - 0.01098,0.0);
+    SL[0].set_sublattice(5.0/2.0,M_PI/2.0 - 0.01098,0.0);
     SL[0].add_neighbors(types,positions);
     
     vector<double> interaction;
@@ -53,7 +53,7 @@ int main(int argc, const char * argv[])
     interaction.push_back(1.0/sqrt(2.0));
     SL[0].set_interactions(interaction);
     
-    SL[1].set_sublattice(5.0/2.0,PI/2.0 - 0.01098,PI);
+    SL[1].set_sublattice(5.0/2.0,M_PI/2.0 - 0.01098,M_PI);
     for (int i=0;i<6;i++)
     {
         types[i] = 0;

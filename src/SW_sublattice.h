@@ -9,6 +9,8 @@
 #ifndef __Spin_Wave_Fit__SW_sublattice__
 #define __Spin_Wave_Fit__SW_sublattice__
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <iostream>
 #include <Eigen/Dense>
 #include <vector>
@@ -32,7 +34,6 @@ public:
     Eigen::Matrix3d get_inv_matrix();
 private:
     std::vector<neighbor> neighbors;
-    double PI = atan(1.0)*4.0;
     double spin,theta,phi;
     Eigen::Matrix3d rot_matrix,inv_matrix;
     std::vector<double> exchange_interaction;

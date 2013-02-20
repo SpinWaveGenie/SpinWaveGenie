@@ -9,6 +9,8 @@
 #ifndef __Spin_Wave_Fit__CreateMatrix__
 #define __Spin_Wave_Fit__CreateMatrix__
 
+#define _USE_MATH_DEFINES
+
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -46,7 +48,6 @@ private:
     //VectorXd VP;
     std::vector<SW_sublattice> SL;
     std::vector<double> X;
-    double PI = atan(1.0)*4.0;
     Eigen::MatrixXcd LN;
     Eigen::MatrixXd CP,CM,CZ;
     Eigen::VectorXd TM,SS,AL;
