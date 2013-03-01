@@ -45,34 +45,122 @@ vector<double> SW_Matrix::get_parr()
 void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP)
 {
     /* diagonal terms in exchange*/
-    
+    Vector3d K;
     MatrixXi interactions;
     
+    K[0] = KXP*2.0*M_PI;
+    K[1] = KYP*2.0*M_PI;
+    K[2] = KZP*2.0*M_PI;
+    
+    /*interactions.resize(4,4);
+    
+    interactions << 1,0,1,0,
+                    0,1,0,1,
+                    1,0,1,0,
+                    0,1,0,1;
+     */
+    
+    interactions.resize(2,2);
+    
     interactions << 0,1,
-                    1,0;
-    
-    
-    
+                    1,2;
     
     for (int q=0;q<M;q++)
     {
+    double Sq = SL[q].get_sublattice()[0];
         for (int s=0;s<M;s++)
         {
-            if (interactions(q,s) == 1)
+            if (interactions(q,s) >= 0)
             {
+                Matrix3d F = SL[q].get_rot_matrix()*SL[s].get_inv_matrix();
+                //cout << q << "\t" << s << endl << F << endl;
+                //cout << endl;
+                vector<Vector3d> neighbors = SL[q].get_neighbors(s);
+                double z_qs = (double) neighbors.size();
                 
+                complex<double> gamma_qs (0.0,0.0);
+                for (int i=0;i<neighbors.size();i++)
+                {
+                    double dot_prod = K.dot(neighbors[i]);
+                    gamma_qs += complex<double> (cos(dot_prod),-1.0*sin(dot_prod));
+                }
+                gamma_qs /= z_qs;
+                //cout << "gamma_qs(" << q << "," << s << ")= " << gamma_qs << endl;
+                
+                complex<double> G1 (F(0,0) + F(1,1),F(1,0)-F(0,1));
+                G1 *= -0.5;
+                
+                complex<double> G2 (F(0,0) - F(1,1),F(1,0)+F(0,1));
+                G2 *= -0.5;
+                LN(q,s) += z_qs*X[interactions(q,s)]*Sq*gamma_qs*G1;
+                LN(q,s+M) += z_qs*X[interactions(q,s)]*Sq*conj(gamma_qs)*conj(G2);
+                LN(q,q) += z_qs*X[interactions(q,s)]*Sq*F(2,2);
             }
-                
-            
         }
         for (int r=0;r<M;r++)
         {
-            if (interactions(r,q) == 1)
+            if (interactions(r,q) >= 0)
             {
+                Matrix3d F = SL[r].get_rot_matrix()*SL[q].get_inv_matrix();
+                vector<Vector3d> neighbors = SL[r].get_neighbors(q);
+                double z_rq = (double) neighbors.size();
                 
+                complex<double> gamma_rq (0.0,0.0);
+                
+                for (int i=0;i<neighbors.size();i++)
+                {
+                    double dot_prod = K.dot(neighbors[i]);
+                    gamma_rq += complex<double>(cos(dot_prod),-1.0*sin(dot_prod));
+                }
+                gamma_rq /= z_rq;
+                
+                //cout << "gamma_rq(" << r << "," << q << ")= " << gamma_rq << endl;
+                
+                complex<double> G1 (F(0,0) + F(1,1),F(1,0)-F(0,1));
+                G1 *= -0.5;
+                
+                complex<double> G2 (F(0,0) - F(1,1),F(1,0)+F(0,1));
+                G2 *= -0.5;
+                
+                LN(q,r) += z_rq*X[interactions(q,r)]*Sq*conj(gamma_rq)*conj(G1);
+                LN(q,r+M) += z_rq*X[interactions(q,r)]*Sq*gamma_rq*conj(G2);
+                LN(q,q) += z_rq*X[interactions(q,r)]*Sq*F(2,2);
             }
-            
         }
+    }
+}
+
+void SW_Matrix::CreateMatrix_anis_z()
+{
+    for (int q=0;q<M;q++)
+    {
+        double Sq = SL[q].get_sublattice()[0];
+        double theta_q = SL[q].get_sublattice()[1];
+        LN(q,q) += -0.5*X[2]*Sq*(2.0*pow(sin(theta_q),2) - 4.0*pow(cos(theta_q),2) );
+        LN(q,q+M) += X[2]*Sq*pow(sin(theta_q),2);
+    }
+    
+    
+}
+
+void SW_Matrix::CreateMatrix_anis_x()
+{
+    for (int q=0;q<M;q++)
+    {
+        double Sq = SL[q].get_sublattice()[0];
+        Matrix3d UI = SL[q].get_inv_matrix();
+        LN(q,q) -= X[3]*Sq*(pow(UI(0,0),2)+pow(UI(0,1),2)-2.0*pow(UI(0,2),2));
+        LN(q,q+M) -= X[3]*Sq * pow( complex<double>(UI(0,0),-1.0*UI(0,1)),2);
+    }
+}
+
+void SW_Matrix::CreateMatrix_bfield()
+{
+    for (int q=0;q<M;q++)
+    {
+        double Sq = SL[q].get_sublattice()[0];
+        double theta_q = SL[q].get_sublattice()[1];
+        LN(q,q) -= X[3]*Sq*cos(theta_q);
     }
     
     
@@ -88,16 +176,13 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     double KZ = KZP*2.0*M_PI;
     
     J = X[0];
-    D = X[1];
-    Kx = X[2];
-    Kz = X[3];
+    D = 0.0;
+    Kx = X[3];
+    Kz = X[2];
     z=6.0;
     S=SL[0].get_sublattice()[0];
-    cout << S << endl;
     
     theta = SL[0].get_sublattice()[1]; //M_PI/2.0 - 0.01098;
-
-    cout << theta << endl;
  
     gamma_q = (cos(KZ/2.0) + cos((KX+KY)/2.0) + cos((KX-KY)/2.0))/3.0;
     eta_q =   (cos(KZ/2.0) + cos((KX+KY)/2.0) + cos((KX-KY)/2.0))/3.0;
@@ -111,19 +196,23 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     
     D_q = 0.5*z*D*S*sin(2.0*theta)*eta_q - z*J*S*(cos(2.0*theta)-1.0)*gamma_q;
     
-    LN(0,0) = A_q;
-    LN(0,1) = C_q;
-    LN(0,2) = 2.0*B_q;
-    LN(0,3) = D_q;
-    LN(1,0) = C_q;
-    LN(1,1) = A_q;
-    LN(1,2) = D_q;
-    LN(1,3) = 2.0*B_q;
+    MatrixXcd ML;
+    ML.resize(4,4);
+    ML.setZero();
     
-    LN.block(M,0,M,M) = -1.0*LN.block(0,M,M,M);
-    LN.block(M,M,M,M) = -1.0*LN.block(0,0,M,M);
+    ML(0,0) = A_q;
+    ML(0,1) = C_q;
+    ML(0,2) = 2.0*B_q;
+    ML(0,3) = D_q;
+    ML(1,0) = C_q;
+    ML(1,1) = A_q;
+    ML(1,2) = D_q;
+    ML(1,3) = 2.0*B_q;
     
-    //cout << LN << endl;
+    ML.block(M,0,M,M) = -1.0*ML.block(0,M,M,M);
+    ML.block(M,M,M,M) = -1.0*ML.block(0,0,M,M);
+    
+    cout << ML << endl;
     
     //cout << sqrt(24.0*J*S*2.0*S*(Kx-Kz)) << endl;
     //cout << sqrt(24.0*J*S*2.0*Kx*S) << endl;
@@ -143,13 +232,7 @@ void SW_Matrix::CreateMatrix_AFM(double KXP, double KYP, double KZP)
     J = X[0];
     D = X[1];
     z=6.0;
-    S=5.0/2.0;
-    
-    for (int j=0;j<M;j++)
-    {
-        SS(j) = 1.0;
-        SS(j+M) = -1.0;
-    }
+    S=SL[0].get_sublattice()[0];
     
     gamma_q = (cos(KX) + cos(KY) + cos(KZ))/3.0;
     
@@ -187,10 +270,18 @@ void SW_Matrix::Calc_Eigenvalues()
     //        }
     //    }
     
+    
+    LN.block(M,0,M,M) = -1.0*LN.block(0,M,M,M);
+    LN.block(M,M,M,M) = -1.0*LN.block(0,0,M,M);
+    
+    cout << "LN" << endl;
+    cout << LN << endl;
+    cout << endl;
+    
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
-
+    
     //
     //     Test eigenvalue condition
     //
@@ -227,8 +318,6 @@ void SW_Matrix::Calc_Eigenvalues()
                 cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
         }
     }
-
-    //cout << ces.eigenvalues() << endl;
     
     //
     //     Normalize the XXs
@@ -249,7 +338,7 @@ void SW_Matrix::Calc_Weights()
     XY.resize(N,N);
     WW.resize(N);
     XX = ces.eigenvectors().adjoint();
-
+    
     for (int L1=0;L1<N;L1++)
     {
         //VectorXcd tmp1 = ces.eigenvectors().col(L1).array()*SS.array()*ces.eigenvectors().col(L1).conjugate().array();
@@ -260,6 +349,9 @@ void SW_Matrix::Calc_Weights()
         //cout << ces.eigenvalues()[L1] << "\t" << AL(L1) << endl;
         XX.row(L1) /= sqrt(abs(AL(L1)));
     }
+    
+    // for testing at KY=1/2. !!!!!IN GENERAL THIS IS NOT CORRECT!!!!! 
+    //XX =  XX.array()*XX.array().conjugate();
 
     //
     // Reorder the XX's by the weights
@@ -283,6 +375,8 @@ void SW_Matrix::Calc_Weights()
         //cout << "Eigenvalues= " << WW(L1) << endl;
         XY.row(L1) = eigen[L1].second.second;   //eigenvector
     }
+    //cout << XY << endl;
+    //cout << LN << endl << endl << XX << endl << endl;
     
     eigen.erase(eigen.begin(),eigen.end());
 
@@ -325,9 +419,10 @@ C       write(6,852) L,L2,AL(L),WW(L2)
     XIN = XY.adjoint();
     XIN.block(0,M,M,M) = -1.0*XIN.block(0,M,M,M);
     XIN.block(M,0,M,M) = -1.0*XIN.block(M,0,M,M);
-
-    //cout << (XIN*XY).diagonal() << endl;
-    //cout << (XIN*XY).block(0,0,5,5) << endl ;
+    
+    //cout << "XIN= " << endl << XIN << endl;
+    //cout << XY.inverse() << endl ;
+    
     //cout << endl;
     //cout << (XY.inverse()*XY).block(0,0,5,5)  << endl ;
     //cout << XIN*XY << endl;
@@ -357,37 +452,56 @@ void SW_Matrix::Rotation_Matrix()
     Matrix3d V1,V2;
     MatrixXcd Intensities(M,3); Intensities.setZero();
     
-    V_array.push_back(SL[0].get_inv_matrix());
-    V_array.push_back(SL[1].get_inv_matrix());
-   
-    /*for(int L=0;L<M;L++)
+    for (int i=0;i<M;i++)
     {
-        for(int L1=0;L1<3;L1++)
+        V_array.push_back(SL[i].get_inv_matrix());
+    }
+   
+    for(int L=0;L<M;L++) //n
+    {
+        for(int L1=0;L1<3;L1++) //alpha
         {
-            for( int L2=0;L2<M;L2++)
+            for( int L2=0;L2<M;L2++) // r
             {
-                Intensities(L,L1) += (V_array[L2](L1,0) - XI*V_array[L2](L1,1)) * XIN(L2,L+M)
-                                    +(V_array[L2](L1,0) + XI*V_array[L2](L1,1)) * XIN(L2+M,L+M);
+                complex<double> Intensities_r = (V_array[L2](L1,0) - XI*V_array[L2](L1,1)) * XIN(L2,L+M)
+                              +  (V_array[L2](L1,0) + XI*V_array[L2](L1,1)) * XIN(L2+M,L+M);
+                Intensities(L,L1) += conj(Intensities_r)*Intensities_r;
+                
+                //cout << L << '\t' << L1 << '\t' << L2 << '\t' << conj(Intensities_r)*Intensities_r << endl;
             }
         }
-    }*/
+    }
     
-    for(int L1=0;L1<3;L1++)
+    //cout << XIN << endl;
+    
+    /*for(int L1=0;L1<3;L1++)
         {
         for( int L2=0;L2<M;L2++)
         {
             Intensities.block(0,L1,M,1) += (V_array[L2](L1,0) - XI*V_array[L2](L1,1)) * XIN.block(L2, M, 1, M).transpose()
             +(V_array[L2](L1,0) + XI*V_array[L2](L1,1)) * XIN.block(L2+M,M,1,M).transpose();
         }
-    }
+    }*/
        
-    Intensities = Intensities.array().conjugate()*Intensities.array();
-    Intensities *= S/8.0;
+    //Intensities = Intensities.array().conjugate()*Intensities.array();
+    Intensities *= S/(4.0*M);
     
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
     WP = WW.segment(0,M).array().abs();
+    
+    double KX = 0.0;
+    double KY = 0.5*2.0*M_PI;
+    double KZ = 0.0;
+    
+    for (int k=0; k<M;k++)
+    {
+        double CXX = SXX(k);
+        double CYY = SYY(k);
+        double CZZ = SZZ(k);
+        cout << WP(k) << '\t' << CXX + CYY + CZZ - (pow(KZ,2)*CXX + pow(KX,2)*CYY + pow(KY,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2)) << endl;
+    }
 }
 
 bool evalues_equal(double a, double b)
@@ -486,6 +600,7 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
             MI++;
         }
     }*/
+    
     for (int k=0; k<NU;k++)
     {
         if (TXX(k) > ETS || TYY(k) > ETS || TZZ(k) > ETS )
@@ -494,7 +609,8 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
             CXX = TXX(k);
             CYY = TYY(k);
             CZZ = TZZ(k);
-            SVI(IM) = CXX + CYY + CZZ - (pow(KZ,2)*CXX + pow(KX,2)*CYY+pow(KY,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
+            //cout << "CXX= " << CXX << "\t CYY= " << CYY << "\t CZZ= " << CZZ << endl;
+            SVI(IM) = CXX + CYY + CZZ - (pow(KZ,2)*CXX + pow(KX,2)*CYY + pow(KY,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
             IM++;
             MI++;
         }
@@ -503,8 +619,9 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
     
     //VI.resize(MI);
     //SVI.resize(MI);
+    cout << "Numerical Result" << endl;
     for (int i=0;i<MI;i++)
     {
-        cout << KY/2.0/M_PI << "\t" << VI(i) << "\t" << SVI(i) << endl;
+        cout << KYP << "\t" << VI(i) << "\t" << SVI(i) << endl;
     }
 }

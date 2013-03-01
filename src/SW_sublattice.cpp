@@ -48,7 +48,7 @@ void SW_sublattice::add_neighbors(vector<int> input_types, vector<Vector3d> inpu
     
 }
 
-std::vector<double> SW_sublattice::get_sublattice()
+vector<double> SW_sublattice::get_sublattice()
 {
     vector<double> angles;
     angles.push_back(spin);
@@ -60,6 +60,19 @@ std::vector<double> SW_sublattice::get_sublattice()
     return angles;
 }
 
+vector<Vector3d> SW_sublattice::get_neighbors(int type)
+{
+    vector<Vector3d> requested_neighbors;
+    
+    for(int i=0; i<neighbors.size();i++)
+    {
+        if (neighbors[i].type == type)
+            requested_neighbors.push_back(neighbors[i].position);
+    }
+    
+    return requested_neighbors;
+}
+
 Eigen::Matrix3d SW_sublattice::get_rot_matrix()
 {
     return rot_matrix;
@@ -68,9 +81,4 @@ Eigen::Matrix3d SW_sublattice::get_rot_matrix()
 Eigen::Matrix3d SW_sublattice::get_inv_matrix()
 {
     return inv_matrix;
-}
-
-void SW_sublattice::set_interactions(vector<double> int_input)
-{
-    exchange_interaction = int_input;
 }
