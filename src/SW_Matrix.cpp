@@ -62,8 +62,12 @@ void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP)
     
     interactions.resize(2,2);
     
-    interactions << 0,1,
-                    1,2;
+    interactions << -1,0,
+                     0,-1;
+    
+    //interactions.resize(1,1);
+    
+    //interactions << 0;
     
     for (int q=0;q<M;q++)
     {
@@ -92,6 +96,7 @@ void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP)
                 
                 complex<double> G2 (F(0,0) - F(1,1),F(1,0)+F(0,1));
                 G2 *= -0.5;
+		cout << G1 << '\t' << G2 << '\t' << F(2,2) << '\t' << endl;
                 LN(q,s) += z_qs*X[interactions(q,s)]*Sq*gamma_qs*G1;
                 LN(q,s+M) += z_qs*X[interactions(q,s)]*Sq*conj(gamma_qs)*conj(G2);
                 LN(q,q) += z_qs*X[interactions(q,s)]*Sq*F(2,2);
@@ -149,8 +154,8 @@ void SW_Matrix::CreateMatrix_anis_x()
     {
         double Sq = SL[q].get_sublattice()[0];
         Matrix3d UI = SL[q].get_inv_matrix();
-        LN(q,q) -= X[3]*Sq*(pow(UI(0,0),2)+pow(UI(0,1),2)-2.0*pow(UI(0,2),2));
-        LN(q,q+M) -= X[3]*Sq * pow( complex<double>(UI(0,0),-1.0*UI(0,1)),2);
+        LN(q,q) -= X[1]*Sq*(pow(UI(0,0),2)+pow(UI(0,1),2)-2.0*pow(UI(0,2),2));
+        LN(q,q+M) -= X[1]*Sq * pow( complex<double>(UI(0,0),-1.0*UI(0,1)),2);
     }
 }
 
@@ -212,7 +217,7 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     ML.block(M,0,M,M) = -1.0*ML.block(0,M,M,M);
     ML.block(M,M,M,M) = -1.0*ML.block(0,0,M,M);
     
-    cout << ML << endl;
+    //cout << ML << endl;
     
     //cout << sqrt(24.0*J*S*2.0*S*(Kx-Kz)) << endl;
     //cout << sqrt(24.0*J*S*2.0*Kx*S) << endl;
@@ -271,13 +276,18 @@ void SW_Matrix::Calc_Eigenvalues()
     //    }
     
     
-    LN.block(M,0,M,M) = -1.0*LN.block(0,M,M,M);
-    LN.block(M,M,M,M) = -1.0*LN.block(0,0,M,M);
+    LN.block(M,0,M,M) = LN.block(0,M,M,M);
+    LN.block(M,M,M,M) = LN.block(0,0,M,M);
+   
+    LN.block(0,M,M,M) *= -1.0;
+    LN.block(M,M,M,M) *= -1.0;
     
     cout << "LN" << endl;
     cout << LN << endl;
     cout << endl;
-    
+
+
+
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
@@ -339,6 +349,8 @@ void SW_Matrix::Calc_Weights()
     WW.resize(N);
     XX = ces.eigenvectors().adjoint();
     
+    cout << "eigenvectors" << endl;
+    cout << ces.eigenvectors() << endl;
     for (int L1=0;L1<N;L1++)
     {
         //VectorXcd tmp1 = ces.eigenvectors().col(L1).array()*SS.array()*ces.eigenvectors().col(L1).conjugate().array();
@@ -375,7 +387,7 @@ void SW_Matrix::Calc_Weights()
         //cout << "Eigenvalues= " << WW(L1) << endl;
         XY.row(L1) = eigen[L1].second.second;   //eigenvector
     }
-    //cout << XY << endl;
+    cout << XY << endl;
     //cout << LN << endl << endl << XX << endl << endl;
     
     eigen.erase(eigen.begin(),eigen.end());
@@ -420,12 +432,12 @@ C       write(6,852) L,L2,AL(L),WW(L2)
     XIN.block(0,M,M,M) = -1.0*XIN.block(0,M,M,M);
     XIN.block(M,0,M,M) = -1.0*XIN.block(M,0,M,M);
     
-    //cout << "XIN= " << endl << XIN << endl;
+    cout << "XIN= " << endl << XIN << endl;
     //cout << XY.inverse() << endl ;
     
     //cout << endl;
     //cout << (XY.inverse()*XY).block(0,0,5,5)  << endl ;
-    //cout << XIN*XY << endl;
+    cout << XIN*XY << endl;
     /*C
      C     Evaluate inverse of XY or XIN
      C
@@ -465,9 +477,9 @@ void SW_Matrix::Rotation_Matrix()
             {
                 complex<double> Intensities_r = (V_array[L2](L1,0) - XI*V_array[L2](L1,1)) * XIN(L2,L+M)
                               +  (V_array[L2](L1,0) + XI*V_array[L2](L1,1)) * XIN(L2+M,L+M);
-                Intensities(L,L1) += conj(Intensities_r)*Intensities_r;
+                Intensities(L,L1) += Intensities_r;
                 
-                //cout << L << '\t' << L1 << '\t' << L2 << '\t' << conj(Intensities_r)*Intensities_r << endl;
+                cout << L << '\t' << L1 << '\t' << L2 << '\t' << conj(Intensities_r)*Intensities_r << endl;
             }
         }
     }
@@ -483,25 +495,15 @@ void SW_Matrix::Rotation_Matrix()
         }
     }*/
        
-    //Intensities = Intensities.array().conjugate()*Intensities.array();
+    Intensities = Intensities.array().conjugate()*Intensities.array();
     Intensities *= S/(4.0*M);
     
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
+    cout << "intensities" << endl;
+    cout << Intensities.col(0) << endl;
     WP = WW.segment(0,M).array().abs();
-    
-    double KX = 0.0;
-    double KY = 0.5*2.0*M_PI;
-    double KZ = 0.0;
-    
-    for (int k=0; k<M;k++)
-    {
-        double CXX = SXX(k);
-        double CYY = SYY(k);
-        double CZZ = SZZ(k);
-        cout << WP(k) << '\t' << CXX + CYY + CZZ - (pow(KZ,2)*CXX + pow(KX,2)*CYY + pow(KY,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2)) << endl;
-    }
 }
 
 bool evalues_equal(double a, double b)
@@ -591,7 +593,7 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
             CXX = ZJN(k);
             CYY = SJN(k) - ZJN(k);
             CZZ = ZJN(k);
-            SVI(IM) = CXX + CYY + CZZ - (pow(KZ,2)*CXX + pow(KX,2)*CYY+pow(KY,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
+            SVI(IM) = CXX + CYY + CZZ - (pow(KX,2)*CXX + pow(KY,2)*CYY+pow(KZ,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
             if (abs(SVI(IM)) < 1.0e-6)
             {
                 SVI(IM) = 0.0;
@@ -609,8 +611,8 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
             CXX = TXX(k);
             CYY = TYY(k);
             CZZ = TZZ(k);
-            //cout << "CXX= " << CXX << "\t CYY= " << CYY << "\t CZZ= " << CZZ << endl;
-            SVI(IM) = CXX + CYY + CZZ - (pow(KZ,2)*CXX + pow(KX,2)*CYY + pow(KY,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
+            cout << "CXX= " << CXX << "\t CYY= " << CYY << "\t CZZ= " << CZZ << endl;
+            SVI(IM) = CXX + CYY + CZZ - (pow(KX,2)*CXX + pow(KY,2)*CYY + pow(KZ,2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
             IM++;
             MI++;
         }
@@ -622,6 +624,6 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
     cout << "Numerical Result" << endl;
     for (int i=0;i<MI;i++)
     {
-        cout << KYP << "\t" << VI(i) << "\t" << SVI(i) << endl;
+        cout << KXP << "\t" << VI(i) << "\t" << SVI(i) << endl;
     }
 }

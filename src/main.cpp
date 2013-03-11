@@ -8,6 +8,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include "SW_Matrix.h"
 #include "SW_sublattice.h"
@@ -17,62 +18,45 @@ using namespace std;
 
 int main(int argc, const char * argv[])
 {
-    vector<double> X(4,0.0);
+    vector<double> X(2,0.0);
     vector<SW_sublattice> SL(2);
     double KX,KY,KZ;
     SW_Matrix test;
-    
-    X[0] = 1.0; //J
-    X[1] = -2.0; //g*J
-    X[2] = 2.0; //-n*J
-    X[3] = -8.0; //B'
-    
-    KX = 0.0;
-    KZ = 0.0;
     
     Vector3d pos;
     vector<Vector3d> positions;
     vector<int> types;
 
-    double alpha = acos(X[3]/(4.0*X[1]/X[0]));
-    cout << "alpha= " << alpha <<endl;
-    
     types.push_back(1);
-    pos << 0.0,0.5,0.0;
-    positions.push_back(pos);
-    //types.push_back(1);
-    //pos << 0.0,-0.5,0.0;
-    //positions.push_back(pos);
-    types.push_back(0);
     pos << 1.0,0.0,0.0;
     positions.push_back(pos);
-    //types.push_back(0);
-    //pos << -1.0,0.0,0.0;
-    //positions.push_back(pos);
-
-    SL[0].set_sublattice(1.0,alpha,0.0);
+    
+    SL[0].set_sublattice(1.0,0.0,0.0);
     SL[0].add_neighbors(types,positions);
     
-    SL[1].set_sublattice(1.0,alpha,M_PI);
+    SL[1].set_sublattice(1.0,M_PI,0.0);
     for (int i=0;i<1;i++)
     {
         types[i] = 0;
     }
-    for (int i=1;i<2;i++)
-    {
-    	types[i] = 1;
-    }
     SL[1].add_neighbors(types,positions);
-
+    
+    X[0] = -1.0;
+    X[1] = -2.0;
+        
+    test.set_parr(SL,X);
+    
+    KY = 0.0;
+    KZ = 0.0;
+    
     for (int i=0;i<11;i++)
     {
-        KY = (double)i/10.0;
+        KX = (double)i/100.0;
         //cout << KX << endl;
         test.set_parr(SL,X);
-        test.CreateMatrix_exchange(KX,KY,KZ);
-        test.CreateMatrix_bfield();
+	    test.CreateMatrix_exchange(KX,KY,KZ);
         //test.CreateMatrix_anis_z();
-        //test.CreateMatrix_anis_x();
+        test.CreateMatrix_anis_x();
         //test.CreateMatrix_AFM(0.0,0.0,0.0);
         test.Calc_Eigenvalues();
         test.Calc_Weights();
@@ -80,19 +64,21 @@ int main(int argc, const char * argv[])
         test.Unique_Solutions();
         test.Signif_Solutions(KX,KY,KZ);
         
-        KY=KY/2.0;
+        double z=1.0;
         double S=SL[0].get_sublattice()[0];
-        double J = X[0];
-        double gamma = X[1]/X[0];
-        double eta = -1.0*X[2]/X[0];
-        double R2p = (eta-1.0)*(cos(2.0*M_PI*KX) -1.0) + 2.0*gamma*(-1.0+cos(2.0*M_PI*KY));
-        double R2m = (eta-1.0)*(cos(2.0*M_PI*KX) -1.0) + 2.0*gamma*(-1.0-cos(2.0*M_PI*KY));
+        double J = abs(X[0]);
+        double D = abs(X[1]);
+
+        cout << "Analytical Solution" << endl;
+        cout << scientific;
+        cout << KX << '\t';
+        cout << setprecision (9) << sqrt(4.0*pow(J*S,2)*(1.0-pow(cos(2.0*M_PI*KX),2))+4*J*D*pow(S,2)*(1+cos(2.0*M_PI*KX))) << '\t';
+        cout << setprecision (9) << S/(4.0*sqrt(2.0*J*S))/sqrt(1.0+cos(2.0*M_PI*KX))*sqrt(2.0*J*S*(1.0-cos(2.0*M_PI*KX))+2.0*D*S) << endl;
+        cout << 0.25*sqrt(D/2.0/J)*S << endl;
+        cout << KX << '\t';
+        cout << setprecision (9) << sqrt(4.0*pow(J*S,2)*(1.0-pow(cos(2.0*M_PI*KX),2))+4*J*D*pow(S,2)*(1-cos(2.0*M_PI*KX)))<< '\t';
+        cout << setprecision (9) << S/4.0*sqrt(2.0*J*S)*sqrt(1-cos(2.0*M_PI*KX))/sqrt(2.0*J*S*(1+cos(2.0*M_PI*KX))+2.0*D*S) << endl;
         
-        cout << "analytical results" << endl;
-        cout << KY << '\t' << sqrt(R2p*R2m)+(eta+1)*(1.0-cos(2.0*M_PI*KX));
-        cout << '\t' << sqrt(R2p/R2m) << endl;
-        cout << KY << '\t' << sqrt(R2p*R2m)-(eta+1)*(1.0-cos(2.0*M_PI*KX));
-        cout << '\t' << sqrt(R2p/R2m) << endl;                     
         //cout << endl;
     }
     return 0;
