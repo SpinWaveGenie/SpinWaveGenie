@@ -26,6 +26,7 @@ public:
     void set_parr(std::vector<SW_sublattice> SLin, std::vector<double>& Xin);
     std::vector<double> get_parr();
     void CreateMatrix_exchange(double KXP, double KYP, double KZP);
+    void CreateMatrix_DMy(double KXP, double KYP, double KZP);
     void CreateMatrix_anis_x();
     void CreateMatrix_anis_z();
     void CreateMatrix_bfield();
@@ -38,13 +39,10 @@ public:
     //void Rotation_Matrix_NVO();
     void Unique_Solutions();
     void Signif_Solutions(double KXP, double KYP, double KZP);
+    std::vector<double> Get_Frequencies();
+    std::vector<double> Get_Intensities();
+
 private:
-    /*const int P = 10;
-    const int M = 20;
-    const int N = 40;*/
-    /*const int P = 1;
-    const int M = 2;
-    const int N = 4;*/
     int M,N;
     //int mod(int K);
     int NU,MI,IM;
@@ -60,7 +58,7 @@ private:
     Eigen::VectorXd SXX,SYY,SZZ;
     Eigen::VectorXd WP;
     Eigen::VectorXd VP,TXX,TYY,TZZ;
-    Eigen::VectorXd VI,SVI;
+    std::vector<double> VI,SVI;
     Eigen::MatrixXcd XY,XIN;
 };
 
