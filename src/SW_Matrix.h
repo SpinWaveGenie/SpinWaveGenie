@@ -25,18 +25,16 @@ class SW_Matrix
 public:
     void set_parr(std::vector<SW_sublattice> SLin, std::vector<double>& Xin);
     std::vector<double> get_parr();
-    void CreateMatrix_exchange(double KXP, double KYP, double KZP);
-    void CreateMatrix_exchange_sumoverhalf(double KXP, double KYP, double KZP);
-    void CreateMatrix_DMy(double KXP, double KYP, double KZP);
-    void CreateMatrix_DMz(double KXP, double KYP, double KZP);
+    void CreateMatrix_exchange(double KXP, double KYP, double KZP, Eigen::MatrixXi &interactions);
+    void CreateMatrix_DMy(double KXP, double KYP, double KZP, Eigen::MatrixXi &interactions);
+    void CreateMatrix_DMz(double KXP, double KYP, double KZP, Eigen::MatrixXi &interactions);
     void CreateMatrix_anis_x();
     void CreateMatrix_anis_z();
     void CreateMatrix_bfield();
     void CreateMatrix_YFeO3(double KXP, double KYP, double KZP);
     void Calc_Eigenvalues();
     void Calc_Weights();
-    void Rotation_Matrix();
-    //void Rotation_Matrix_NVO();
+    void Calc_Intensities();
     void Unique_Solutions();
     void Signif_Solutions(double KXP, double KYP, double KZP);
     std::vector<double> Get_Frequencies();
