@@ -28,7 +28,7 @@ struct Results
 
 int main(int argc, const char * argv[])
 {
-    for (int a=-3;a<0;a++)
+    for (int a=0;a<1;a++)
     {
         
     vector<double> X(5,0.0);
@@ -56,7 +56,7 @@ int main(int argc, const char * argv[])
         
     
     //double delta= -2.0*X[4]/(6.0*X[0]+X[2]-X[3]);
-    double delta = 0.00;
+    double delta = 0.01;
     
     X[4] = -0.5*delta*(6.0*X[0]+X[2]-X[3]);
 
@@ -137,42 +137,41 @@ int main(int argc, const char * argv[])
     
     MatrixXi exch_interaction, DMy_interaction, DMz_interaction;
     
+    test.set_parr(SL,X);    
     exch_interaction.resize(2,2);
     exch_interaction << 1,0,
     0,1;
+        
+    test.set_exch_int(exch_interaction);
     
     DMy_interaction.resize(2,2);
     DMy_interaction << -1,4,
     -1,-1;
     
+    test.set_DMy_int(DMy_interaction);
+        
     //cout << SL[0].get_rot_matrix() << endl;
     //cout << SL[1].get_rot_matrix() << endl;
     //cout << SL[2].get_rot_matrix() << endl;
     //cout << SL[3].get_rot_matrix() << endl;
 
-    KX = 2.0;
+    KX = 1.0;
     KY = 0.0;
-    KZ = (double)a;
+    KZ = -3.0;//(double)a;
+        
+    //for (int i=0;i<101;i++)
+    //    cout << (double)rand()/RAND_MAX << endl;
+        
     
     vector<double> kpoint (3);
     Results tmp_result;
-    for (int i=0;i<601;i++)
+            test.set_parr(SL,X);
+    for (int i=0;i<151;i++)
     {
-        //KZ = (double)i/100.0 - 4.0;
-        KY = (double)i/200.0 + -1.5;
-        //KZ = (double)i/50.0 -2.0;
+        KY = (double)i/50.0 + -1.5;
         cout << KX << '\t' << KY << '\t' << KZ << endl;
-        test.set_parr(SL,X);
-	    test.CreateMatrix_exchange(KX,KY,KZ,exch_interaction);
-        test.CreateMatrix_anis_z();
-        test.CreateMatrix_anis_x();
-        test.CreateMatrix_YFeO3(KX,KY,KZ);
-        //test.CreateMatrix_DMy(KX,KY,KZ,DMy_interaction);
-        test.Calc_Eigenvalues();
-        test.Calc_Weights();
-        test.Calc_Intensities();
-        test.Unique_Solutions();
-        test.Signif_Solutions(KX,KY,KZ);
+        test.Clear_LN();
+        test.Calc_SW(KX,KY,KZ);
         kpoint[0] = KX;
         kpoint[1] = KY;
         kpoint[2] = KZ;
@@ -187,7 +186,7 @@ int main(int argc, const char * argv[])
     string output = "DMy_" + strs.str() + ".txt";
     ofstream out_file ( output.c_str() );
     
-        for (int i=0;i<601;i++)
+        for (int i=0;i<151;i++)
     {
         out_file << SW_results[i].kpoint[0] << '\t' << SW_results[i].kpoint[1] << '\t' << SW_results[i].kpoint[2] << '\t';
         for (int k=0; k!=SW_results[i].frequencies.size();k++)

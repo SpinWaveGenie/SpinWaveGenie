@@ -21,20 +21,28 @@ using namespace std;
 
 void SW_Matrix::set_parr(vector<SW_sublattice> SLin,vector<double>& Xin)
 {
+    /*
+     
+    */
     X = Xin;
     SL = SLin;
     
-    M= (int)SL.size();
-    N=2*M;
+    M = (int)SL.size();
+    N = 2*M;
 
     LN.resize(N,N); LN.setZero();
     
     SS.resize(N);
     SS.setZero();
+    
     for (int j=0;j<M;j++)
     {
         SS(j) = 1.0;
-        SS(j+M) = -1.0;
+    }
+    
+    for (int j=M;j<2*M;j++)
+    {
+        SS(j) = -1.0;
     }
 }
 
@@ -43,7 +51,36 @@ vector<double> SW_Matrix::get_parr()
     return X;
 }
 
-void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP, MatrixXi &interactions)
+void SW_Matrix::Clear_LN()
+{
+    LN.setZero();
+}
+
+
+void SW_Matrix::set_exch_int(MatrixXi &interactions)
+{
+    //cout << interactions.rows() << endl;
+    //cout << interactions.cols() << endl;
+    //cout << M << endl;
+    assert( interactions.rows() == M &&  interactions.rows() == interactions.cols());
+    exch_int = interactions;
+}
+
+void SW_Matrix::set_DMy_int(MatrixXi &interactions)
+{
+    assert( interactions.rows() == M &&  interactions.rows() == interactions.cols());
+    DMy_int = interactions;
+}
+
+void SW_Matrix::set_DMz_int(MatrixXi &interactions)
+{
+    assert( interactions.rows() == M &&  interactions.rows() == interactions.cols());
+    DMz_int = interactions;
+}
+
+
+
+void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP)
 {
     double Sr, z_rs;
     Matrix3d F;
@@ -60,7 +97,7 @@ void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP, Matri
         for (int s=0;s<M;s++)
         {
             //cout << r << '\t' << s << endl;
-            if (interactions(r,s) >= 0)
+            if (exch_int(r,s) >= 0)
             {
                 F = SL[r].get_rot_matrix()*SL[s].get_inv_matrix();
                 //cout << q << "\t" << s << endl << F << endl;
@@ -83,33 +120,32 @@ void SW_Matrix::CreateMatrix_exchange( double KXP, double KYP, double KZP, Matri
                 complex<double> G2 (F(0,0) - F(1,1),-F(1,0)-F(0,1));
                 G2 *= -0.5;
                 
-                cout << "G1= " << G1 << endl;
-		        cout << "G2= " << G2 << endl;
+                //cout << "G1= " << G1 << endl;
+		        //cout << "G2= " << G2 << endl;
                 {
-                    LN(r,r) += 0.25*z_rs*X[interactions(r,s)]*Sr*F(2,2);
-                    LN(s,s) += 0.25*z_rs*X[interactions(r,s)]*Sr*F(2,2);
-                    LN(r+M,r+M) += 0.25*z_rs*X[interactions(r,s)]*Sr*F(2,2);
-                    LN(s+M,s+M) += 0.25*z_rs*X[interactions(r,s)]*Sr*F(2,2);
+                    LN(r,r) += 0.25*z_rs*X[exch_int(r,s)]*Sr*F(2,2);
+                    LN(s,s) += 0.25*z_rs*X[exch_int(r,s)]*Sr*F(2,2);
+                    LN(r+M,r+M) += 0.25*z_rs*X[exch_int(r,s)]*Sr*F(2,2);
+                    LN(s+M,s+M) += 0.25*z_rs*X[exch_int(r,s)]*Sr*F(2,2);
                     
-                    LN(r,s) += 0.25*z_rs*X[interactions(r,s)]*Sr*gamma_rs*G1;
-                    LN(r+M,s+M) += 0.25*z_rs*X[interactions(r,s)]*Sr*conj(gamma_rs)*conj(G1);
-                    LN(s,r) += 0.25*z_rs*X[interactions(r,s)]*Sr*gamma_rs*conj(G1);
-                    LN(s+M,r+M) += 0.25*z_rs*X[interactions(r,s)]*Sr*conj(gamma_rs)*G1;
+                    LN(r,s) += 0.25*z_rs*X[exch_int(r,s)]*Sr*gamma_rs*G1;
+                    LN(r+M,s+M) += 0.25*z_rs*X[exch_int(r,s)]*Sr*conj(gamma_rs)*conj(G1);
+                    LN(s,r) += 0.25*z_rs*X[exch_int(r,s)]*Sr*gamma_rs*conj(G1);
+                    LN(s+M,r+M) += 0.25*z_rs*X[exch_int(r,s)]*Sr*conj(gamma_rs)*G1;
                     
-                    LN(r,s+M) += 0.25*z_rs*X[interactions(r,s)]*Sr*conj(gamma_rs)*conj(G2);
-                    LN(s,r+M) += 0.25*z_rs*X[interactions(r,s)]*Sr*gamma_rs*conj(G2);
+                    LN(r,s+M) += 0.25*z_rs*X[exch_int(r,s)]*Sr*conj(gamma_rs)*conj(G2);
+                    LN(s,r+M) += 0.25*z_rs*X[exch_int(r,s)]*Sr*gamma_rs*conj(G2);
                     
-                    LN(r+M,s) += 0.25*z_rs*X[interactions(r,s)]*Sr*conj(gamma_rs)*G2;
-                    LN(s+M,r) += 0.25*z_rs*X[interactions(r,s)]*Sr*gamma_rs*G2;
+                    LN(r+M,s) += 0.25*z_rs*X[exch_int(r,s)]*Sr*conj(gamma_rs)*G2;
+                    LN(s+M,r) += 0.25*z_rs*X[exch_int(r,s)]*Sr*gamma_rs*G2;
                 }
-                
             }
         }
     }
 }
 
 
-void SW_Matrix::CreateMatrix_DMy( double KXP, double KYP, double KZP, MatrixXi &interactions)
+void SW_Matrix::CreateMatrix_DMy( double KXP, double KYP, double KZP)
 {
     /* diagonal terms in exchange*/
     complex<double> XI (0.0,1.0);
@@ -132,7 +168,7 @@ void SW_Matrix::CreateMatrix_DMy( double KXP, double KYP, double KZP, MatrixXi &
         for (int s=0;s<M;s++)
         {
             //cout << r << '\t' << s << endl;
-            if (interactions(r,s) >= 0)
+            if (DMy_int(r,s) >= 0)
             {
                 Ss = SL[s].get_sublattice()[0];
                 theta_s = SL[s].get_sublattice()[1];
@@ -154,7 +190,7 @@ void SW_Matrix::CreateMatrix_DMy( double KXP, double KYP, double KZP, MatrixXi &
                 gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
                 //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
 
-                tmp = 0.5*X[interactions(r,s)]*Sr*z_rs*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
+                tmp = 0.5*X[DMy_int(r,s)]*Sr*z_rs*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
                 LN(r,r) -= tmp;
                 LN(r+M,r+M) -= tmp;
                 LN(s,s) -= tmp;
@@ -167,22 +203,22 @@ void SW_Matrix::CreateMatrix_DMy( double KXP, double KYP, double KZP, MatrixXi &
                 //cout << "r= " << r << ", s= " << s << endl;
                 //cout << tmp1 << '\t' << tmp2 << '\t' << tmp3 << endl;
                 
-                LN(r,s) -= 0.25*X[interactions(r,s)]*Sr*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 - XI*tmp3);
-                LN(s,r) -= 0.25*X[interactions(r,s)]*Sr*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
-                LN(r+M,s+M) -= 0.25*X[interactions(r,s)]*z_rs*conj(gamma_rs)*Sr*(tmp1 + XI*tmp2 + XI*tmp3);
-                LN(s+M,r+M) -= 0.25*X[interactions(r,s)]*z_rs*gamma_rs*Sr*(tmp1 - XI*tmp2 - XI*tmp3);
+                LN(r,s) -= 0.25*X[DMy_int(r,s)]*Sr*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 - XI*tmp3);
+                LN(s,r) -= 0.25*X[DMy_int(r,s)]*Sr*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
+                LN(r+M,s+M) -= 0.25*X[DMy_int(r,s)]*z_rs*conj(gamma_rs)*Sr*(tmp1 + XI*tmp2 + XI*tmp3);
+                LN(s+M,r+M) -= 0.25*X[DMy_int(r,s)]*z_rs*gamma_rs*Sr*(tmp1 - XI*tmp2 - XI*tmp3);
                 
-                LN(r+M,s) -= 0.25*X[interactions(r,s)]*z_rs*conj(gamma_rs)*Sr*(tmp1 - XI*tmp2 + XI*tmp3);
-                LN(s+M,r) -= 0.25*X[interactions(r,s)]*z_rs*gamma_rs*Sr*(tmp1 - XI*tmp2 + XI*tmp3);
+                LN(r+M,s) -= 0.25*X[DMy_int(r,s)]*z_rs*conj(gamma_rs)*Sr*(tmp1 - XI*tmp2 + XI*tmp3);
+                LN(s+M,r) -= 0.25*X[DMy_int(r,s)]*z_rs*gamma_rs*Sr*(tmp1 - XI*tmp2 + XI*tmp3);
                 
-                LN(r,s+M) -= 0.25*X[interactions(r,s)]*z_rs*conj(gamma_rs)*Sr*(tmp1 + XI*tmp2 - XI*tmp3);
-                LN(s,r+M) -= 0.25*X[interactions(r,s)]*z_rs*gamma_rs*Sr*(tmp1 + XI*tmp2 - XI*tmp3);
+                LN(r,s+M) -= 0.25*X[DMy_int(r,s)]*z_rs*conj(gamma_rs)*Sr*(tmp1 + XI*tmp2 - XI*tmp3);
+                LN(s,r+M) -= 0.25*X[DMy_int(r,s)]*z_rs*gamma_rs*Sr*(tmp1 + XI*tmp2 - XI*tmp3);
             }
         }
     }
 }
 
-void SW_Matrix::CreateMatrix_DMz( double KXP, double KYP, double KZP, MatrixXi &interactions)
+void SW_Matrix::CreateMatrix_DMz( double KXP, double KYP, double KZP)
 {
     /* diagonal terms in exchange*/
     complex<double> XI (0.0,1.0);
@@ -204,7 +240,7 @@ void SW_Matrix::CreateMatrix_DMz( double KXP, double KYP, double KZP, MatrixXi &
         for (int s=0;s<M;s++)
         {
             //cout << r << '\t' << s << endl;
-            if (interactions(r,s) >= 0)
+            if (DMz_int(r,s) >= 0)
             {
                 Ss = SL[s].get_sublattice()[0];
                 theta_s = SL[s].get_sublattice()[1];
@@ -221,7 +257,7 @@ void SW_Matrix::CreateMatrix_DMz( double KXP, double KYP, double KZP, MatrixXi &
                 }
                 gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
                 
-                tmp = 0.5*X[interactions(r,s)]*Sr*z_rs*sin(theta_r)*sin(theta_s)*sin(phi_r-phi_s);
+                tmp = 0.5*X[DMz_int(r,s)]*Sr*z_rs*sin(theta_r)*sin(theta_s)*sin(phi_r-phi_s);
                 //cout << tmp << endl;
                 LN(r,r) -= tmp;
                 LN(r+M,r+M) -= tmp;
@@ -238,17 +274,17 @@ void SW_Matrix::CreateMatrix_DMz( double KXP, double KYP, double KZP, MatrixXi &
                 //cout << phi_r-phi_s << endl;
                 
                 
-                LN(r,s) -= 0.25*X[interactions(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 - XI*tmp2 - XI*tmp3 - tmp4);
-                LN(s,r) -= 0.25*X[interactions(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 + XI*tmp2 + XI*tmp3 - tmp4);
+                LN(r,s) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 - XI*tmp2 - XI*tmp3 - tmp4);
+                LN(s,r) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 + XI*tmp2 + XI*tmp3 - tmp4);
                 
-                LN(r+M,s+M) -= 0.25*X[interactions(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 + XI*tmp2 + XI*tmp3 - tmp4);
-                LN(s+M,r+M) -= 0.25*X[interactions(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 - XI*tmp2 - XI*tmp3 - tmp4);
+                LN(r+M,s+M) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 + XI*tmp2 + XI*tmp3 - tmp4);
+                LN(s+M,r+M) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 - XI*tmp2 - XI*tmp3 - tmp4);
                 
-                LN(r+M,s) -= 0.25*X[interactions(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 - XI*tmp2 + XI*tmp3 + tmp4);
-                LN(s+M,r) -= 0.25*X[interactions(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 - XI*tmp2 + XI*tmp3 + tmp4);
+                LN(r+M,s) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 - XI*tmp2 + XI*tmp3 + tmp4);
+                LN(s+M,r) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 - XI*tmp2 + XI*tmp3 + tmp4);
                 
-                LN(r,s+M) -= 0.25*X[interactions(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 + XI*tmp2 - XI*tmp3 + tmp4);
-                LN(s,r+M) -= 0.25*X[interactions(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 + XI*tmp2 - XI*tmp3 + tmp4);
+                LN(r,s+M) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*conj(gamma_rs)*(-tmp1 + XI*tmp2 - XI*tmp3 + tmp4);
+                LN(s,r+M) -= 0.25*X[DMz_int(r,s)]*Sr*z_rs*gamma_rs*(-tmp1 + XI*tmp2 - XI*tmp3 + tmp4);
             }
         }
     }
@@ -316,7 +352,7 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
 
     theta = SL[0].get_sublattice()[1]; //M_PI/2.0 - 0.01098;
     
-    cout << M_PI/2.0 - theta << endl;
+    //cout << M_PI/2.0 - theta << endl;
 
     gamma_q = (cos(KZ/2.0) + cos((KX+KY)/2.0) + cos((KX-KY)/2.0))/3.0;
 
@@ -344,16 +380,16 @@ void SW_Matrix::CreateMatrix_YFeO3( double KXP, double KYP, double KZP)
     ML.block(M,M,M,M) = ML.block(0,0,M,M);
     ML.block(M,0,M,M) = ML.block(0,M,M,M);
 
-    cout << ML << endl;
-    cout << LN << endl;
+    //cout << ML << endl;
+    //cout << LN << endl;
     
     //LN = ML;
     
     //cout << sqrt(24.0*J*S*S*(2.0*(Kx-Kz))) << '\t';
     //cout << sqrt(24.0*J*S*S*(6.0*abs(D)*tan(abs(delta)) + 2.0*Kx)) << endl;
     
-    cout << sqrt(24.0*J*S*2.0*S*(Kx-Kz)) << endl;
-    cout << sqrt(24.0*J*S*2.0*Kx*S) << endl;
+    //cout << sqrt(24.0*J*S*2.0*S*(Kx-Kz)) << endl;
+    //cout << sqrt(24.0*J*S*2.0*Kx*S) << endl;
 }
 
 void SW_Matrix::Calc_Eigenvalues()
@@ -394,7 +430,7 @@ void SW_Matrix::Calc_Eigenvalues()
     if (ces.info() != Success)
         cout << ces.info() << endl;
     
-    cout << ces.eigenvalues() << endl;
+    //cout << ces.eigenvalues() << endl;
     
     //
     //     Test eigenvalue condition
@@ -433,12 +469,6 @@ void SW_Matrix::Calc_Eigenvalues()
                 cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
         }
     }*/
-}
-
-bool sortweights(pair<double, pair<complex<double>,VectorXcd> > a, pair<double, pair<complex<double>,VectorXcd> > b)
-{
-    // sortweights from largest to smallest
-    return b.first < a.first;
 }
 
 void SW_Matrix::Calc_Weights()
@@ -523,26 +553,35 @@ void SW_Matrix::Calc_Weights()
     
     for(int L1=0;L1<N;L1++)
     {
+        results tmp;
+        tmp.weight = AL(L1);
+        tmp.eigenvalue = ces.eigenvalues()[L1];
+        tmp.eigenvector = XX.row(L1);
+        eigenresults.push_back(tmp);
+    }
+    
+    /*for(int L1=0;L1<N;L1++)
+    {
         pair<double, pair<complex<double>,VectorXcd> > tmp;
         tmp.first = AL(L1);
         tmp.second.first = ces.eigenvalues()[L1];
         tmp.second.second = XX.row(L1);
         eigen.push_back(tmp);
-    }
+    }*/
     
-    sort(eigen.begin(),eigen.end(),sortweights);
-    
+    sort(eigenresults.begin(),eigenresults.end());
     
     for(int L1=0;L1<N;L1++)
     {
-        WW(L1) = eigen[L1].second.first.real(); //eigenvalue
+        WW(L1) = eigenresults[L1].eigenvalue.real(); //eigenvalue
         //cout << "Eigenvalues= " << WW(L1) << endl;
-        XY.row(L1) = eigen[L1].second.second;   //eigenvector
+        XY.row(L1) = eigenresults[L1].eigenvector;   //eigenvector
     }
+    
     //cout << XY << endl;
     //cout << LN << endl << endl << XX << endl << endl;
     
-    eigen.erase(eigen.begin(),eigen.end());
+    eigenresults.erase(eigenresults.begin(),eigenresults.end());
 
     //;eigen.erase (0,N);
 
@@ -604,8 +643,6 @@ C       write(6,852) L,L2,AL(L),WW(L2)
         endif
 802   CONTINUE
 801   CONTINUE*/
-    
-    
 }
 
 void SW_Matrix::Calc_Intensities()
@@ -626,9 +663,8 @@ void SW_Matrix::Calc_Intensities()
     {
         V_array.push_back(SL[i].get_inv_matrix());
     }
-    
-    
-    for(int L=0;L<2*M;L++)
+
+    /*for(int L=0;L<2*M;L++)
     {
         for(int alpha=0;alpha<3;alpha++) //r
         {
@@ -648,9 +684,9 @@ void SW_Matrix::Calc_Intensities()
                     }
                 }
                 //cout << C << endl << endl;
-                for(int r=0;r<M;r++) //r
+                for(int r=0;r<2*M;r++) //r
                 {
-                    for( int s=0;s<M;s++) // s
+                    for( int s=0;s<2*M;s++) // s
                     {
                         SS(alpha,beta) -= conj(XIN(r,L))*XIN(s,L)*C(s,r);
                     }
@@ -658,12 +694,9 @@ void SW_Matrix::Calc_Intensities()
             }
         }
         std::cout << fixed;
-        cout << setprecision(5) << SS*S/M*4.0 << endl << endl;
+        cout << setprecision(5) << -1.0*SS*S/M << endl << endl;
         SS.setZero();
-    }
-
-
-
+    }*/
 
     for(int L=0;L<M;L++) //n
     {
@@ -677,8 +710,6 @@ void SW_Matrix::Calc_Intensities()
             }
         }
     }
-    
-    
     
     //cout << XIN << endl;
     
@@ -720,6 +751,7 @@ void SW_Matrix::Unique_Solutions()
     {
         WP_unique.push_back(WP(i));
     }
+    
     //reverse order
     //sort(WP_unique.begin(),WP_unique.end());
     
@@ -787,7 +819,7 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
             CXX = TXX(k);
             CYY = TYY(k);
             CZZ = TZZ(k);
-            cout << "CXX= " << CXX << "\t CYY= " << CYY << "\t CZZ= " << CZZ << endl;
+            //cout << "CXX= " << CXX << "\t CYY= " << CYY << "\t CZZ= " << CZZ << endl;
             SVI.push_back(CXX + CYY + CZZ - (pow(KX,2)*CXX + pow(KY,2)*CYY + pow(KZ/sqrt(2.0),2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ/sqrt(2.0),2)));
             MI++;
         }
@@ -800,6 +832,20 @@ void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
     //{
     //    cout << KZP << "\t" << VI[i] << "\t" << SVI[i] << endl;
     //}
+}
+
+void SW_Matrix::Calc_SW(double KX, double KY, double KZ)
+{
+    CreateMatrix_exchange(KX,KY,KZ);
+    CreateMatrix_anis_z();
+    CreateMatrix_anis_x();
+    CreateMatrix_YFeO3(KX,KY,KZ);
+    CreateMatrix_DMy(KX,KY,KZ);
+    Calc_Eigenvalues();
+    Calc_Weights();
+    Calc_Intensities();
+    Unique_Solutions();
+    Signif_Solutions(KX,KY,KZ);
 }
 
 vector<double> SW_Matrix::Get_Frequencies()

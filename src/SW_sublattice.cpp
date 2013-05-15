@@ -1,4 +1,4 @@
-//
+///
 //  SW_sublattice.cpp
 //  Spin Wave Fit
 //
