@@ -33,7 +33,7 @@ int main(int argc, const char * argv[])
         
     vector<double> X(5,0.0);
     vector<SW_sublattice> SL(2);
-    double KX,KY,KZ;
+    double KX,KX0,KY,KY0,KZ,KZ0;
     SW_Matrix test;
     vector<Results> SW_results;
         
@@ -60,8 +60,8 @@ int main(int argc, const char * argv[])
     
     X[4] = -0.5*delta*(6.0*X[0]+X[2]-X[3]);
 
-    cout << "delta= " << delta << endl;
-    cout << "DMy= " << X[4] << endl;
+    //cout << "delta= " << delta << endl;
+    //cout << "DMy= " << X[4] << endl;
 
     //nn
     types.push_back(1);
@@ -155,38 +155,51 @@ int main(int argc, const char * argv[])
     //cout << SL[2].get_rot_matrix() << endl;
     //cout << SL[3].get_rot_matrix() << endl;
 
-    KX = 1.0;
-    KY = 0.0;
-    KZ = -3.0;//(double)a;
+    KX0 = 2.0;
+    KY0 = 0.0;
+        KZ0 = 0.0; //-2.0;//(double)a;
         
-    //for (int i=0;i<101;i++)
-    //    cout << (double)rand()/RAND_MAX << endl;
-        
+    double q_res = (double)a/100.0;
+    cout << q_res << endl;
     
     vector<double> kpoint (3);
     Results tmp_result;
             test.set_parr(SL,X);
-    for (int i=0;i<151;i++)
+    for (int i=0;i<601;i++)
     {
-        KY = (double)i/50.0 + -1.5;
-        cout << KX << '\t' << KY << '\t' << KZ << endl;
-        test.Clear_LN();
-        test.Calc_SW(KX,KY,KZ);
-        kpoint[0] = KX;
-        kpoint[1] = KY;
-        kpoint[2] = KZ;
+        KZ0 = (double)i/100.0 + -4.0;
+        //cout << KX0 << '\t' << KY0 << '\t' << KZ0 << endl;
+        kpoint[0] = KX0;
+        kpoint[1] = KY0;
+        kpoint[2] = KZ0;
         tmp_result.kpoint = kpoint;
-        tmp_result.frequencies = test.Get_Frequencies();
-        tmp_result.intensities = test.Get_Intensities();
+        for (int i=0;i<1;i++)
+        {
+            double rand_value = 0.0; // (double)rand()*2.0/RAND_MAX - 1.0;
+            KX = kpoint[0] + q_res*rand_value;
+            rand_value = (double)rand()*2.0/RAND_MAX - 1.0;
+            KY = kpoint[1] + q_res*rand_value;
+            rand_value = sqrt(2.0)*((double)rand()*2.0/RAND_MAX - 1.0);
+            KZ = kpoint[2] + q_res*rand_value;
+            test.Clear_LN();
+            test.Calc_SW(KX,KY,KZ);
+            vector<double> freq = test.Get_Frequencies();
+            tmp_result.frequencies.insert(tmp_result.frequencies.end(),freq.begin(),freq.end());
+            vector<double> intens = test.Get_Intensities();
+            tmp_result.intensities.insert(tmp_result.intensities.end(),intens.begin(),intens.end());
+        }
         SW_results.push_back(tmp_result);
+        tmp_result.frequencies.clear();
+        tmp_result.intensities.clear();
     }
     
     ostringstream strs;
-    strs << a;
-    string output = "DMy_" + strs.str() + ".txt";
+        strs << a;
+    //string output = "YFeO3_" + strs.str() + ".txt";
+    string output = "YFeO3_2_0_xi.txt";
     ofstream out_file ( output.c_str() );
     
-        for (int i=0;i<151;i++)
+        for (int i=0;i<601;i++)
     {
         out_file << SW_results[i].kpoint[0] << '\t' << SW_results[i].kpoint[1] << '\t' << SW_results[i].kpoint[2] << '\t';
         for (int k=0; k!=SW_results[i].frequencies.size();k++)
@@ -197,7 +210,6 @@ int main(int argc, const char * argv[])
         for (int k=0; k!=SW_results[i].intensities.size();k++)
         {
             out_file << SW_results[i].intensities[k] << '\t';
-            
         }
         
         out_file << endl;

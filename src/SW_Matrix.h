@@ -49,9 +49,9 @@ public:
     void CreateMatrix_YFeO3(double KXP, double KYP, double KZP);
     void Calc_Eigenvalues();
     void Calc_Weights();
-    void Calc_Intensities();
+    void Calc_Intensities(double KXP, double KYP, double KZP);
     void Unique_Solutions();
-    void Signif_Solutions(double KXP, double KYP, double KZP);
+    void Signif_Solutions();
     void Calc_SW(double KX, double KY, double KZ);
     std::vector<double> Get_Frequencies();
     std::vector<double> Get_Intensities();
@@ -71,9 +71,9 @@ private:
     //std::vector<std::pair<double, std::pair<std::complex<double>,Eigen::VectorXcd> > > eigen;
     std::vector<results> eigenresults;
     Eigen::VectorXd WW;
-    Eigen::VectorXd SXX,SYY,SZZ;
-    Eigen::VectorXd WP;
-    Eigen::VectorXd VP,TXX,TYY,TZZ;
+    //Eigen::VectorXd SXX,SYY,SZZ;
+    //Eigen::VectorXd WP;
+    //Eigen::VectorXd VP,TXX,TYY,TZZ;
     std::vector<double> VI,SVI;
     Eigen::MatrixXcd XY,XIN;
 };

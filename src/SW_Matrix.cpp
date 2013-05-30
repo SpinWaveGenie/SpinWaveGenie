@@ -493,7 +493,7 @@ void SW_Matrix::Calc_Weights()
     
     for(int ito=0;ito<50;ito++)
     {
-        cout << "iteration # " << ito << endl;
+        //cout << "iteration # " << ito << endl;
         
         MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
         IPR.setZero();
@@ -645,14 +645,17 @@ C       write(6,852) L,L2,AL(L),WW(L2)
 801   CONTINUE*/
 }
 
-void SW_Matrix::Calc_Intensities()
+void SW_Matrix::Calc_Intensities(double KXP,double KYP,double KZP)
 {
     complex<double> XI (0.0,1.0);
+    double KX = KXP*2.0*M_PI;
+    double KY = KYP*2.0*M_PI;
+    double KZ = KZP*2.0*M_PI;
     double S = SL[0].get_sublattice()[0];
     vector<Matrix3d> V_array;
     Matrix3d V_r,V_s;
     MatrixXcd Intensities(M,3); Intensities.setZero();
-    
+    VectorXd SXX,SYY,SZZ;
     MatrixXcd C,SS;
     
     C.resize(2*M,2*M);
@@ -721,14 +724,26 @@ void SW_Matrix::Calc_Intensities()
             +(V_array[L2](L1,0) + XI*V_array[L2](L1,1)) * XIN.block(L2+M,M,1,M).transpose();
         }
     }*/
-       
+    
+
     Intensities = Intensities.array().conjugate()*Intensities.array();
     Intensities *= S/(4.0*M);
     
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
-    WP = WW.segment(M,M).array().abs();
+    
+    VI.clear();
+    SVI.clear();
+    
+    for (int i=0;i<M;i++)
+    {
+        VI.push_back(abs(WW[i+M]));
+        //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
+        SVI.push_back(SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ/sqrt(2.0),2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ/sqrt(2.0),2)));
+    }
+    
+    //WP = WW.segment(M,M).array().abs();
     //cout << "WP= " << WP << endl;
 }
 
@@ -745,53 +760,39 @@ void SW_Matrix::Unique_Solutions()
     int VP_pos;
     vector<double>::iterator last;
     vector<double>::iterator uniq;
-    vector<double> WP_unique;
+    vector<double> VI_unique,SVI_unique;
     // Find unique eigenvalues
-    for (int i=0;i<M;i++)
-    {
-        WP_unique.push_back(WP(i));
-    }
-    
-    //reverse order
-    //sort(WP_unique.begin(),WP_unique.end());
-    
-    /*for (int i=0;i<M;i++)
-    {
-        cout << WP_unique[i] << "\t" << WP[i] << endl;
-    }*/
-    
-    WP_unique.erase(unique(WP_unique.begin(),WP_unique.end(),evalues_equal),WP_unique.end());
-    // map WP_unique to VP
-    NU = (int)WP_unique.size();
-    VP.resize(NU);
-    //Map<VectorXd> VP(&WP_unique[0],NU);
-    for (int i=0;i<NU;i++)
-        VP(i) = WP_unique[i];
+    VI_unique = VI;
 
-    //cout << VP << endl;
-    //TPM.resize(NU); TPM.setZero();
-    //TMP.resize(NU); TMP.setZero();
-    TXX.resize(NU); TXX.setZero();
-    TYY.resize(NU); TYY.setZero();
-    TZZ.resize(NU); TZZ.setZero();
+    VI_unique.erase(unique(VI_unique.begin(),VI_unique.end(),evalues_equal),VI_unique.end());
+
+    NU = (int)VI_unique.size();
+    VI_unique.resize(NU);
+    
+    for (int i=0;i<NU;i++)
+    {
+        SVI_unique.push_back(0.0);
+    }
     
     for (int i=0;i<M;i++)
     {
         VP_pos = NU; //set position to a nonsense value
         for (int j=0;j<NU;j++)
         {
-            if (abs(WP(i) - VP(j)) < EPS)
+            if (abs(VI[i] - VI_unique[j]) < EPS)
             {
                 VP_pos = j;
-                TXX(j) += SXX(i);
-                TYY(j) += SYY(i);
-                TZZ(j) += SZZ(i);
+                SVI_unique[j] += SVI[i];
                 break;
             }
         }
         if (VP_pos== NU)
             cout << "error finding unique value" << endl;
     }
+    
+    VI = VI_unique;
+    SVI = SVI_unique;
+    
     //for (int i=0;i<NU;i++)
     //    cout << VP(i) << "\t" << TPM(i) << "\t" << TMP(i) << "\t" << TZZ(i) << endl;
     //TXX.array().abs();
@@ -799,34 +800,27 @@ void SW_Matrix::Unique_Solutions()
     //TZZ.array().abs();
 }
 
-void SW_Matrix::Signif_Solutions(double KXP,double KYP,double KZP)
+void SW_Matrix::Signif_Solutions()
 {
-    double CXX,CYY,CZZ;
-    double KX = KXP*2.0*M_PI;
-    double KY = KYP*2.0*M_PI;
-    double KZ = KZP*2.0*M_PI;
-    double ETS = 1.0e-25;
-    VectorXd SJN(NU),ZJN(NU);
+    double ETS = 1.0e-5;
+    vector<double> VI_signif,SVI_signif;
     IM = 0; MI = 0;
     VI.resize(0);
     SVI.resize(0);
     
     for (int k=0;k<NU;k++)
     {
-        //if (TXX(k) > ETS || TYY(k) > ETS || TZZ(k) > ETS )
+        if (SVI[k] > ETS )
         {
-            VI.push_back(VP(k));
-            CXX = TXX(k);
-            CYY = TYY(k);
-            CZZ = TZZ(k);
-            //cout << "CXX= " << CXX << "\t CYY= " << CYY << "\t CZZ= " << CZZ << endl;
-            SVI.push_back(CXX + CYY + CZZ - (pow(KX,2)*CXX + pow(KY,2)*CYY + pow(KZ/sqrt(2.0),2)*CZZ)/(pow(KX,2)+pow(KY,2)+pow(KZ/sqrt(2.0),2)));
-            MI++;
+            VI_signif.push_back(VI[k]);
+            SVI_signif.push_back(SVI[k]);
         }
     }
 
-    VI.resize(MI);
-    SVI.resize(MI);
+    VI = VI_signif;
+    SVI = SVI_signif;
+    
+    //SVI.resize(MI);
     //cout << "Numerical Result" << endl;
     //for (int i=0;i<MI;i++)
     //{
@@ -843,9 +837,9 @@ void SW_Matrix::Calc_SW(double KX, double KY, double KZ)
     CreateMatrix_DMy(KX,KY,KZ);
     Calc_Eigenvalues();
     Calc_Weights();
-    Calc_Intensities();
+    Calc_Intensities(KX,KY,KZ);
     Unique_Solutions();
-    Signif_Solutions(KX,KY,KZ);
+    Signif_Solutions();
 }
 
 vector<double> SW_Matrix::Get_Frequencies()
