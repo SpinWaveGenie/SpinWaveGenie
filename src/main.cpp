@@ -16,13 +16,17 @@
 #include <boost/random.hpp>
 #include <boost/thread.hpp>
 #include <boost/version.hpp>
+#include <boost/program_options.hpp>
 #include "SpinWave.h"
 #include "Initializer.h"
 #include "progressbar.h"
 
 using namespace Eigen;
-using namespace std;
 using namespace boost;
+namespace po = boost::program_options;
+#include <iostream>
+#include <iterator>
+using namespace std;
 
 struct mc_params
 {
@@ -159,10 +163,10 @@ public:
         
     }
     // Destructor
-    void Run(int i)
+    void Run(int i,string filename)
     {
         Init four_sl;
-        four_sl.read_input("4sl_cell.xml");
+        four_sl.read_input(filename);
         mc_params data;
         data.E_min = 0.0;
         data.E_max = 80.0;
@@ -184,7 +188,7 @@ public:
     }
 };
 
-int main(int argc, const char * argv[])
+int main(int argc, char * argv[])
 {
     /*Init four_sl;
 
@@ -224,12 +228,54 @@ int main(int argc, const char * argv[])
     pbar.finish();
     */
     
+    string filename;
+    int n_threads;
+    try {
+        po::options_description desc("Allowed options");
+        desc.add_options()
+        ("help", "produce help message")
+        ("input", po::value<string>(), "set input filename")
+        ("threads", po::value<int>(), "set number of threads")
+        ;
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+        if (vm.count("help")) {
+            cout << desc << "\n";
+            return 1;
+        }
+        if (vm.count("input")) {
+            cout << "input filename was set to "
+            << vm["input"].as<string>() << ".\n";
+            filename = vm["input"].as<string>();
+        } else {
+            cout << "input filename was not set.\n";
+            return 1;
+        }
+        if (vm.count("threads")) {
+            cout << "Using"
+            << vm["threads"].as<int>() << " processors.\n";
+            n_threads = vm["threads"].as<int>();
+        } else {
+            cout << "number of threads was not set. Using 1 processor.\n";
+            n_threads = 1;
+
+        }
+    }
+    catch(std::exception& e) {
+        cerr << "error: " << e.what() << "\n";
+        return 1;
+    }
+    catch(...) {
+        cerr << "Exception of unknown type!\n";
+    }
+    
     boost::thread_group g;
-    int n_threads = 12;
+
     ThreadClass tc(n_threads);
     for (int i=0;i<n_threads;i++)
     {
-        boost::thread *t = new boost::thread(&ThreadClass::Run, &tc,i);
+        boost::thread *t = new boost::thread(&ThreadClass::Run, &tc, i, filename);
         g.add_thread(t);
     }
     g.join_all();
