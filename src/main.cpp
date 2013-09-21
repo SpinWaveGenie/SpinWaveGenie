@@ -152,7 +152,9 @@ public:
     MatrixXd figure;
     ThreadClass(int n) // Constructor
     {
+#if EIGEN_WORLD_VERSION >= 3 && EIGEN_MAJOR_VERSION >= 1
         Eigen::initParallel();
+#endif
         nproc = n;
         npoints = 64;
         Epoints = 51;
