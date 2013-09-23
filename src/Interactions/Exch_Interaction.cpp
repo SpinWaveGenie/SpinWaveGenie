@@ -60,10 +60,12 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     
     complex<double> MXI (0.0,-1.0);
     complex<double> gamma_rs (0.0,0.0);
+    int count = 0;
     for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
     {
         double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
         gamma_rs += exp(MXI*dot_prod);
+        count++;
      }
     
     gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0

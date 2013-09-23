@@ -116,7 +116,10 @@ vector<vector<double> >* Cell::get_neighbors(boost::shared_ptr<Sublattice>& subl
         //   for two consecutive iterations. Number 5 suggested by Abinit code.
         //
         for (long supercellSize = 1;supercellSize<=5;supercellSize++)
-        {   bool new_results = 0;
+        {
+            //cout << supercellSize << endl;
+            bool new_results = 0;
+            {
             for (AtomIterator atom2=sublattice2_in->begin(); atom2!=sublattice2_in->end(); ++atom2)
             {
                 for (long n1=-supercellSize;n1<=supercellSize;n1++)
@@ -138,20 +141,22 @@ vector<vector<double> >* Cell::get_neighbors(boost::shared_ptr<Sublattice>& subl
                             {
                                 for (int k=0;k<results.size();k++)
                                 {
-                                    double difference = sqrt(pow(temp[0]-results[k][0],2) + pow(temp[1]-results[k][1],2) + pow(temp[2]-results[k][2],2));
-                                    if (difference < 1.0e-5)
+                                    double difference = temp[0]-results[k][0] + temp[1]-results[k][1] + temp[2]-results[k][2];
+                                    if (abs(difference) < 1.0e-5)
                                     {
                                         already_found = 1;
-                                        break;
                                     }
                                 }
                                 if (already_found==0)
+                                {
                                     new_results = 1;
                                     results.push_back(temp);
+                                }
                             }
                         }
                     }
                 }
+            }
             }
             if(!new_results)
                 break;
@@ -164,6 +169,7 @@ vector<vector<double> >* Cell::get_neighbors(boost::shared_ptr<Sublattice>& subl
     //{
     //    cout << neighborCache[name][i][0] << endl;
     //}
+    //cout << "done" << endl;
     return &neighborCache[name];
 }
 

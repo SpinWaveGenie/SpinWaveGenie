@@ -35,5 +35,4 @@ void Anis_X_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell,
     LN(r+M,r+M) -= 0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
     LN(r+M,r) -= 0.5*X*S*pow(cos(theta)*cos(phi)+XI*sin(phi),2);
     LN(r,r+M) -= 0.5*X*S*pow(cos(theta)*cos(phi)-XI*sin(phi),2);
-
 }

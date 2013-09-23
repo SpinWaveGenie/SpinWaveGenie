@@ -33,6 +33,7 @@ struct mc_params
     double x0,y0,z0;
     double E_min,E_max;
     int E_points;
+    unsigned seed;
     shared_ptr<SW_Builder> builder;
 };
 
@@ -106,18 +107,18 @@ VectorXd h(void *params)
     VectorXd integral,integral_sq;
     
 #if BOOST_VERSION / 100 % 1000 >= 47
-    boost::random::mt19937 gen;
+    boost::random::mt19937 gen(exp_data->seed);
     boost::random::uniform_real_distribution<double> die_x(1.8,2.2);
     boost::random::uniform_real_distribution<double> die_z(-3.2,-2.8);
 #else
-    boost::mt19937 gen;
+    boost::mt19937 gen(exp_data->seed);
     boost::uniform_real<double> dist_x(1.8,2.2);
     boost::uniform_real<double> dist_z(-3.2,-2.8);
     boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > die_x(gen, dist_x);
     boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > die_z(gen, dist_z);
 #endif
     integral.setZero(E_points);
-    for(int j=0;j!= 51;j++)
+    for(int j=0;j!=101;j++)
     {
 #if BOOST_VERSION / 100 % 1000 >= 47
         exp_data->x0 = die_x(gen);
@@ -131,7 +132,7 @@ VectorXd h(void *params)
         integral += result;
         //integral_sq += result*result;
     }
-    integral = integral/51.0;
+    integral = integral/101.0;
     /*double sigma = 0.0;
     for(int i=0;i!=integral.size();i++)
     {
@@ -156,8 +157,8 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 64;
-        Epoints = 51;
+        npoints = 201;
+        Epoints = 161;
         figure.setZero(Epoints,npoints);
     }
     ~ThreadClass()
@@ -174,6 +175,18 @@ public:
         data.E_max = 80.0;
         data.E_points = Epoints;
         data.builder = four_sl.get_builder();
+        
+#if BOOST_VERSION / 100 % 1000 >= 47
+        boost::random::mt19937 gen;
+        boost::random::uniform_int_distribution<unsigned> die(1);
+        data.seed = die(gen);
+#else
+        boost::mt19937 gen;
+        boost::uniform_int<unsigned> dist_x(1);
+        boost::variate_generator<boost::mt19937&, boost::uniform_int<unsigned> > die(gen, dist_x);
+        data.seed = die();
+#endif
+            
         double x0,y0,z0,x1,y1,z1;
         x0=2.0;x1=2.0;
         y0=-1.5;y1=1.5;
@@ -186,6 +199,7 @@ public:
             data.z0 = z0 + (z1-z0)*m/(npoints-1);
             cout << data.x0 << " " << data.y0 << " " << data.z0 << endl;
             figure.col(m) = h((void *)&data);
+            //cout << figure.col(m) << endl;
         }
     }
 };
