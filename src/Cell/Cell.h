@@ -20,7 +20,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
 
-//! SublatticeIterator class
+//! Iterates over sublattices in the Cell class.
 /*!
  The SublatticeIterator class iterates over sublattices stored in the Cell class. Example:
  \code{.cpp}
@@ -129,7 +129,7 @@ private:
     //! \param min minimum distance considered (Angstroms)
     //! \param max maximum distance considered (Angstroms)
     //! \return relative position of all neighboring atoms
-    std::vector<std::vector<double> >* get_neighbors(boost::shared_ptr<Sublattice>& sublattice1_in, boost::shared_ptr<Sublattice>& sublattice2_in, double min, double max);
+    std::vector<std::vector<double> >* getNeighbors(boost::shared_ptr<Sublattice>& sublattice1_in, boost::shared_ptr<Sublattice>& sublattice2_in, double min, double max);
     //! Finding the relative position of neighboring atoms is a relatively slow process,
     //! so we want to store the results so they can be reused. Therefore, we need a struct that quickly identifies when the input parameters are identical.
     struct FastCompare

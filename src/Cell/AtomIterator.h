@@ -4,6 +4,20 @@
 #include <vector>
 #include <boost/iterator/iterator_facade.hpp>
 
+/*!
+Iterates over a number of atomic positions, such 
+as those provided by the Sublattice or Neighbor class.
+Example:
+\code{.cpp}
+Neighbors neighborList(cell,sl_rp,sl_sp,min,max);
+AtomIterator nbrBegin = neighborList.begin();
+AtomIterator nbrEnd = neighborList.end();
+for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
+{
+    ...
+}
+\endcode
+*/
 class AtomIterator
 : public boost::iterator_facade<
 AtomIterator

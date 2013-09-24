@@ -52,10 +52,10 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     boost::shared_ptr<Sublattice> sl_rp = cell->getSublattice(sl_r);
     boost::shared_ptr<Sublattice> sl_sp = cell->getSublattice(sl_s);
     
-    Neighbors neighbor_list(cell,sl_rp,sl_sp,min,max);
+    Neighbors neighborList(cell,sl_rp,sl_sp,min,max);
     
-    AtomIterator nbrBegin = neighbor_list.begin();
-    AtomIterator nbrEnd = neighbor_list.end();
+    AtomIterator nbrBegin = neighborList.begin();
+    AtomIterator nbrEnd = neighborList.end();
     double z_rs = (double) distance(nbrBegin,nbrEnd);
     
     complex<double> MXI (0.0,-1.0);

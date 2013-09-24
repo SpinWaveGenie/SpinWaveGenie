@@ -1,4 +1,4 @@
-//! Sublattice class
+//! Describes a sublattice in the unit cell.
 /*!
  The Sublattice class stores the orientation of the magnetic moment and
  the atomic positions of a particular sublattice. In addition, it calculates rotation

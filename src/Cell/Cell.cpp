@@ -100,20 +100,20 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     sublatticeInfo[name]->addAtom(pos[0], pos[1], pos[2]);
 }
 
-vector<vector<double> >* Cell::get_neighbors(boost::shared_ptr<Sublattice>& sublattice1_in, boost::shared_ptr<Sublattice>& sublattice2_in , double min, double max)
+vector<vector<double> >* Cell::getNeighbors(boost::shared_ptr<Sublattice>& sl1, boost::shared_ptr<Sublattice>& sl2 , double min, double max)
 {
     vector<vector<double> > results;
     Vector3d dispRLU,dispAng(3);
     FastCompare name;
-    name.sl1 = sublattice1_in;
-    name.sl2 = sublattice2_in;
+    name.sl1 = sl1;
+    name.sl2 = sl2;
     name.min = min;
     name.max = max;
 
     if (neighborCache.find(name) == neighborCache.end() )
     {
         //no benefit to iterating over the first sublattice. Hence we choose the first element
-        AtomIterator atom1=sublattice1_in->begin();
+        AtomIterator atom1=sl1->begin();
         // Increase the size of the supercell until the list of neighbors does not change
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. if not a warning message will be printed.
@@ -122,7 +122,7 @@ vector<vector<double> >* Cell::get_neighbors(boost::shared_ptr<Sublattice>& subl
             //cout << supercellSize << endl;
             bool new_results = 0;
             {
-            for (AtomIterator atom2=sublattice2_in->begin(); atom2!=sublattice2_in->end(); ++atom2)
+            for (AtomIterator atom2=sl2->begin(); atom2!=sl2->end(); ++atom2)
             {
                 for (long n1=-supercellSize;n1<=supercellSize;n1++)
                 {
