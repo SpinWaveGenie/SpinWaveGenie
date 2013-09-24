@@ -5,14 +5,18 @@
 using namespace std;
 using namespace Eigen;
 
-/*Exch_Interaction::Exch_Interaction()
+Exch_Interaction::Exch_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
-    
-}*/
+ value = value_in;
+ sl_r = sl_r_in;
+ sl_s = sl_s_in;
+ min = min_in;
+ max = max_in;
+ 
+}
 
 void Exch_Interaction::Add_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
-
     value = value_in;
     sl_r = sl_r_in;
     sl_s = sl_s_in;

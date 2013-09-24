@@ -12,10 +12,7 @@
 #include "extern/pugixml.hpp"
 #include "Cell.h"
 #include "SW_Builder.h"
-#include "Exch_Interaction.h"
-#include "Anis_Z_Interaction.h"
-#include "Anis_X_Interaction.h"
-#include "DM_Y_Interaction.h"
+
 #include "progressbar.h"
 
 class Init

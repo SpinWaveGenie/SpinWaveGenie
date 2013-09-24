@@ -1,4 +1,8 @@
 #include "Initializer.h"
+#include "Exch_Interaction.h"
+#include "Anis_Z_Interaction.h"
+#include "Anis_X_Interaction.h"
+#include "DM_Y_Interaction.h"
 
 using namespace std;
 using namespace boost;
@@ -138,14 +142,14 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << atom2 << endl;
-                Exch_Interaction * exch1 = new Exch_Interaction;
+                Exch_Interaction * exch1 = new Exch_Interaction(value,atom1,atom2,min,max);
                 exch1->Add_Interaction(value,atom1,atom2,min,max);
                 builder->Add_Interaction(exch1);
                 if (atom1 != atom2)
                 {
                     cout << atom2 << atom1 << endl;
-                    Exch_Interaction * exch2 = new Exch_Interaction;
-                    exch2->Add_Interaction(value,atom2,atom1,min,max);
+                    Exch_Interaction * exch2 = new Exch_Interaction(value,atom2,atom1,min,max);
+                    //exch2->Add_Interaction(value,atom2,atom1,min,max);
                     builder->Add_Interaction(exch2);
                 }
             }

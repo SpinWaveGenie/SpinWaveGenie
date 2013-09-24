@@ -1,5 +1,5 @@
 #ifndef __AnisX_Interaction_H__
-#define __AnisX_Interaction_H__
+#define __AnisX_Interaction_H__ 1
 
 #include <string>
 #include <vector>

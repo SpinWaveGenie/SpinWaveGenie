@@ -26,13 +26,9 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
     SW.Set_Kpoint(K[0],K[1],K[2]);
     SW.Clear_Matrix();
     boost::ptr_vector<Interaction>::iterator iter;
-    double asdf = 0;
-
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        asdf++;
         iter->Update_Matrix(K,SW.cell,SW.LN);
     }
-    //cout << asdf << endl;
     return SW;
 }
