@@ -1,3 +1,6 @@
+#ifndef __DMY_Interaction_H__
+#define __DMY_Interaction_H__ 1
+
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
@@ -14,3 +17,5 @@ private:
     std::string sl_r,sl_s;
     double value,min,max;
 };
+
+#endif

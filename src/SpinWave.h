@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Oak Ridge National Laboratory. All rights reserved.
 //
 
-#ifndef __SpinWave__
-#define __SpinWave__
+#ifndef __SpinWave_H__
+#define __SpinWave_H__
 
 #define _USE_MATH_DEFINES
 #include <iostream>

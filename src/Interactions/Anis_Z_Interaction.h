@@ -1,3 +1,6 @@
+#ifndef __AnisZ_Interaction_H__
+#define __AnisZ_Interaction_H__ 1
+
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
@@ -15,3 +18,4 @@ private:
     double value;
 };
 
+#endif

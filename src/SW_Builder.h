@@ -1,3 +1,6 @@
+#ifndef __SW_Builder_H__
+#define __SW_Builder_H__ 1
+
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -15,3 +18,5 @@ private:
     boost::ptr_vector<Interaction> interactions;
     SpinWave SW;
 };
+
+#endif

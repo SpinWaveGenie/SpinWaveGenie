@@ -1,5 +1,5 @@
-#ifndef __Interaction_Class_H__
-#define __Interaction_Class_H__ 1
+#ifndef __Interaction_H__
+#define __Interaction_H__ 1
 
 #include <string>
 #include <vector>
@@ -15,4 +15,4 @@ public:
 private:
 };
 
-#endif // __Interaction_Class_H__ 
+#endif // __Interaction_H__ 
