@@ -7,15 +7,11 @@ using namespace Eigen;
 
 Exch_Interaction::Exch_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
- value = value_in;
- sl_r = sl_r_in;
- sl_s = sl_s_in;
- min = min_in;
- max = max_in;
+    this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
  
 }
 
-void Exch_Interaction::Add_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     value = value_in;
     sl_r = sl_r_in;
@@ -88,18 +84,19 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     //cout << "G2= " << G2 << endl;
 
     LN(r,r) += 0.25*z_rs*X*S*F(2,2);
-    LN(s,s) += 0.25*z_rs*X*S*F(2,2);
-    LN(r+M,r+M) += 0.25*z_rs*X*S*F(2,2);
-    LN(s+M,s+M) += 0.25*z_rs*X*S*F(2,2);
-    
     LN(r,s) += 0.25*z_rs*X*S*gamma_rs*G1;
-    LN(r+M,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G1);
-    LN(s,r) += 0.25*z_rs*X*S*gamma_rs*conj(G1);
-    LN(s+M,r+M) += 0.25*z_rs*X*S*conj(gamma_rs)*G1;
-    
     LN(r,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G2);
+
+    LN(s,r) += 0.25*z_rs*X*S*gamma_rs*conj(G1);
+    LN(s,s) += 0.25*z_rs*X*S*F(2,2);
     LN(s,r+M) += 0.25*z_rs*X*S*gamma_rs*conj(G2);
-                    
+
     LN(r+M,s) += 0.25*z_rs*X*S*conj(gamma_rs)*G2;
+    LN(r+M,r+M) += 0.25*z_rs*X*S*F(2,2);
+    LN(r+M,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G1);
+
     LN(s+M,r) += 0.25*z_rs*X*S*gamma_rs*G2;
+    LN(s+M,r+M) += 0.25*z_rs*X*S*conj(gamma_rs)*G1;
+    LN(s+M,s+M) += 0.25*z_rs*X*S*F(2,2);
+                    
 }

@@ -5,7 +5,13 @@
 using namespace std;
 using namespace Eigen;
 
-void DM_Y_Interaction::Add_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+DM_Y_Interaction::DM_Y_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+{
+    this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
+}
+
+
+void DM_Y_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     value = value_in;
     sl_r = sl_r_in;
@@ -71,8 +77,8 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     
     tmp = 0.5*X*S*z_rs*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
     LN(r,r) -= tmp;
-    LN(r+M,r+M) -= tmp;
     LN(s,s) -= tmp;
+    LN(r+M,r+M) -= tmp;
     LN(s+M,s+M) -= tmp;
         
     tmp1 = cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);
@@ -83,13 +89,14 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     //cout << tmp1 << '\t' << tmp2 << '\t' << tmp3 << endl;
     
     LN(r,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 - XI*tmp3);
-    LN(s,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
-    LN(r+M,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 + XI*tmp3);
-    LN(s+M,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 - XI*tmp3);
-    
-    LN(r+M,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 + XI*tmp3);
-    LN(s+M,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 + XI*tmp3);
-        
     LN(r,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 - XI*tmp3);
+
+    LN(s,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
     LN(s,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 - XI*tmp3);
+
+    LN(r+M,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 + XI*tmp3);
+    LN(r+M,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 + XI*tmp3);
+    
+    LN(s+M,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 + XI*tmp3);
+    LN(s+M,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 - XI*tmp3);
 }

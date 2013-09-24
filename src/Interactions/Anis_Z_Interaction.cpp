@@ -4,7 +4,12 @@ using namespace std;
 using namespace Eigen;
 
 
-void Anis_Z_Interaction::Add_Interaction(double value_in, string sl_r_in)
+Anis_Z_Interaction::Anis_Z_Interaction(double value_in, string sl_r_in)
+{
+    this->Update_Interaction(value_in, sl_r_in);
+}
+
+void Anis_Z_Interaction::Update_Interaction(double value_in, string sl_r_in)
 {
     value = value_in;
     sl_r = sl_r_in;
@@ -28,7 +33,7 @@ void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell,
     double X = value;
     
     LN(r,r) -= 0.5*X*S*(1.0-3.0*pow(cos(theta),2));
-    LN(r+M,r+M) -= 0.5*X*S*(1.0-3.0*pow(cos(theta),2));
     LN(r,r+M) -= 0.2*X*S*pow(sin(theta),2);
     LN(r+M,r) -= 0.2*X*S*pow(sin(theta),2);
+    LN(r+M,r+M) -= 0.5*X*S*(1.0-3.0*pow(cos(theta),2));
 }

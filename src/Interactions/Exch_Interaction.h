@@ -12,7 +12,7 @@ class Exch_Interaction: public Interaction
 {
 public:
     Exch_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
-    void Add_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
+    void Update_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
     void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN);
 private:
     std::string sl_r,sl_s;

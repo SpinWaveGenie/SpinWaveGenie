@@ -142,15 +142,11 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << atom2 << endl;
-                Exch_Interaction * exch1 = new Exch_Interaction(value,atom1,atom2,min,max);
-                exch1->Add_Interaction(value,atom1,atom2,min,max);
-                builder->Add_Interaction(exch1);
+                builder->Add_Interaction(new Exch_Interaction(value,atom1,atom2,min,max));
                 if (atom1 != atom2)
                 {
                     cout << atom2 << atom1 << endl;
-                    Exch_Interaction * exch2 = new Exch_Interaction(value,atom2,atom1,min,max);
-                    //exch2->Add_Interaction(value,atom2,atom1,min,max);
-                    builder->Add_Interaction(exch2);
+                    builder->Add_Interaction(new Exch_Interaction(value,atom2,atom1,min,max));
                 }
             }
         }
@@ -167,9 +163,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << atom2 << endl;
-                DM_Y_Interaction * dmy = new DM_Y_Interaction;
-                dmy->Add_Interaction(value,atom2,atom1,min,max);
-                builder->Add_Interaction(dmy);
+                builder->Add_Interaction(new DM_Y_Interaction(value,atom2,atom1,min,max));
             }
         }
     }
@@ -185,11 +179,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << endl;
-                Anis_Z_Interaction * anis_z = new Anis_Z_Interaction;
-                anis_z->Add_Interaction(value,atom1);
-                builder->Add_Interaction(anis_z);
-                //cout << atom1 << endl;
-                //builder->Add_Anis_Z(value,atom1);
+                builder->Add_Interaction(new Anis_Z_Interaction(value,atom1));
             }
         }
     }
@@ -205,11 +195,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << endl;
-                Anis_X_Interaction * anis_x = new Anis_X_Interaction;
-                anis_x->Add_Interaction(value,atom1);
-                builder->Add_Interaction(anis_x);
-                //cout << atom1 << endl;
-                //builder->Add_Anis_X(value,atom1);
+                builder->Add_Interaction(new Anis_X_Interaction(value,atom1));
             }
         }
         
