@@ -18,7 +18,7 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
 {
     Eigen::Vector3d K;
     Eigen::Matrix3d recip;
-    recip = cell->get_reciprocal_vectors();
+    recip = cell->getReciprocalVectors();
     K << KX,KY,KZ;
     //cout << "K before " << K.transpose() << endl;
     K = recip*K;

@@ -41,8 +41,8 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
 
-    boost::shared_ptr<Sublattice> sl_sp = cell->get_sublattice(sl_r);
-    boost::shared_ptr<Sublattice> sl_rp = cell->get_sublattice(sl_s);
+    boost::shared_ptr<Sublattice> sl_sp = cell->getSublattice(sl_r);
+    boost::shared_ptr<Sublattice> sl_rp = cell->getSublattice(sl_s);
     
     Neighbors neighbor_list(cell,sl_rp,sl_sp,min,max);
     
@@ -63,11 +63,11 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
             
     double X = value;
-    double S = cell->get_sublattice(sl_r)->getMoment()[0];
-    double theta_r = cell->get_sublattice(sl_r)->getMoment()[1];
-    double phi_r = cell->get_sublattice(sl_r)->getMoment()[2];
-    double theta_s = cell->get_sublattice(sl_s)->getMoment()[1];
-    double phi_s = cell->get_sublattice(sl_s)->getMoment()[2];
+    double S = cell->getSublattice(sl_r)->getMoment()[0];
+    double theta_r = cell->getSublattice(sl_r)->getMoment()[1];
+    double phi_r = cell->getSublattice(sl_r)->getMoment()[2];
+    double theta_s = cell->getSublattice(sl_s)->getMoment()[1];
+    double phi_s = cell->getSublattice(sl_s)->getMoment()[2];
     
     tmp = 0.5*X*S*z_rs*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
     LN(r,r) -= tmp;

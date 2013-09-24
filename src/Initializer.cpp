@@ -59,7 +59,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     }
     cout << basis << endl;
             
-    unit_cell->set_basis_vectors(scale,basis);*/
+    unit_cell->setBasisVectors(scale,basis);*/
     pugi::xml_node lattice_parameters = node.child("basevect");
     double a,b,c,alpha,beta,gamma;
     
@@ -87,7 +87,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     algorithm::trim(temp); // get rid of surrounding whitespace
     gamma = lexical_cast<double>(temp);
 
-    unit_cell->set_basis_vectors(a,b,c,alpha,beta,gamma);
+    unit_cell->setBasisVectors(a,b,c,alpha,beta,gamma);
 
     for (pugi::xml_node tool = node.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
@@ -105,7 +105,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
         cout << S << '\t' << theta << '\t' << phi << endl;
         new_sl->setMoment(S,theta*M_PI/180.0,phi*M_PI/180.0);
 
-        unit_cell->add_sublattice(name,new_sl);
+        unit_cell->addSublattice(name,new_sl);
         parser.clear();
         parser.str(tool.child_value("position"));
         while(parser.good())
@@ -114,7 +114,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
             parser >> x >> y >> z;
             if (parser.good())
             {
-                unit_cell->add_atom(name,x,y,z);
+                unit_cell->addAtom(name,x,y,z);
                 cout << x << '\t' << y << '\t' << z << endl;
             }
         }

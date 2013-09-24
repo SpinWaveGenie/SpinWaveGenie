@@ -40,17 +40,17 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     }
     assert(r!=-1 && s!=-1);
     
-    double S = cell->get_sublattice(sl_r)->getMoment()[0];
+    double S = cell->getSublattice(sl_r)->getMoment()[0];
         
     Matrix3d F;
-    F = cell->get_sublattice(sl_r)->getRotationMatrix()*
-        cell->get_sublattice(sl_s)->getInverseMatrix();
+    F = cell->getSublattice(sl_r)->getRotationMatrix()*
+        cell->getSublattice(sl_s)->getInverseMatrix();
     
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
 
-    boost::shared_ptr<Sublattice> sl_rp = cell->get_sublattice(sl_r);
-    boost::shared_ptr<Sublattice> sl_sp = cell->get_sublattice(sl_s);
+    boost::shared_ptr<Sublattice> sl_rp = cell->getSublattice(sl_r);
+    boost::shared_ptr<Sublattice> sl_sp = cell->getSublattice(sl_s);
     
     Neighbors neighbor_list(cell,sl_rp,sl_sp,min,max);
     

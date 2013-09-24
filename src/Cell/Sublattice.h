@@ -60,7 +60,7 @@ private:
     double spin, //!< magnitude of spin
     theta, //!< angle theta describing orientation of spin
     phi; //!< angle phi describing orientation of spin
-    std::vector<double> angles;
+    std::vector<double> angles; //!< spin, theta, phi
     Eigen::Matrix3d rotationMatrix, //!< rotation matrix describing moment along z
     inverseMatrix; //!< inverse for rotation matrix
     std::vector<std::vector<double> > position; //!< std::vector storing atomic positions.
