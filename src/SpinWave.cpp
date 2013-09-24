@@ -366,7 +366,7 @@ void SpinWave::Calc_Intensities()
     //double S = sl.CurrentItem()->getMoment()[0];
     
     SublatticeIterator sl = cell->begin();
-    double S = (*sl)->getMoment()[0];
+    double S = (*(*sl)->getMoment())[0];
 
 
     for(int L=0;L<M;L++) //n

@@ -40,7 +40,7 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     }
     assert(r!=-1 && s!=-1);
     
-    double S = cell->getSublattice(sl_r)->getMoment()[0];
+    double S = (*cell->getSublattice(sl_r)->getMoment())[0];
         
     Matrix3d F;
     F = cell->getSublattice(sl_r)->getRotationMatrix()*

@@ -17,7 +17,8 @@ void Init::read_input(string filename)
     pugi::xml_document doc;
     
     pugi::xml_parse_result result = doc.load_file(filename.c_str());
-    
+    std::cout << "Load result: " << result.description() << std::endl;
+    assert(result);
     pugi::xml_node tools = doc.child("spin_wave_genie");
     
     for (pugi::xml_node_iterator it = tools.begin(); it != tools.end(); ++it)

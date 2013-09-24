@@ -38,7 +38,7 @@ public:
     void setMoment(double spinInput, double thetaInput , double phiInput);
     //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
     //! \return coordinates [r,theta,phi]
-    std::vector<double> getMoment();
+    std::vector<double>* getMoment();
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
     Eigen::Matrix3d getRotationMatrix();

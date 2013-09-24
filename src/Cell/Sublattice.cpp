@@ -43,9 +43,9 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
     inverseMatrix = rotationMatrix.inverse();
 }
 
-vector<double> Sublattice::getMoment()
+vector<double>* Sublattice::getMoment()
 {
-    return angles;
+    return &angles;
 }
 
 Eigen::Matrix3d Sublattice::getRotationMatrix()

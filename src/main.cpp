@@ -269,7 +269,7 @@ int main(int argc, char * argv[])
             return 1;
         }
         if (vm.count("threads")) {
-            cout << "Using"
+            cout << "Using "
             << vm["threads"].as<int>() << " processors.\n";
             n_threads = vm["threads"].as<int>();
         } else {

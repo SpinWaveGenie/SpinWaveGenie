@@ -28,8 +28,8 @@ void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell,
     }
     assert(r!=-1);
         
-    double S = cell->getSublattice(sl_r)->getMoment()[0];
-    double theta = cell->getSublattice(sl_r)->getMoment()[1];
+    double S = (*cell->getSublattice(sl_r)->getMoment())[0];
+    double theta = (*cell->getSublattice(sl_r)->getMoment())[1];
     double X = value;
     
     LN(r,r) -= 0.5*X*S*(1.0-3.0*pow(cos(theta),2));
