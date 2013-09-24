@@ -5,9 +5,11 @@
 #include <iostream>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-//#include "Sublattice.h"
-#include "Cell.h"
+//#include "Cell.h"
 
+class Sublattice;
+class Cell;
+class AtomIterator;
 
 //! Finds neighbors of two sublattices between distances min and max.
 /*! Example:

@@ -1,3 +1,6 @@
+#ifndef __Exch_Interaction_H__
+#define __Exch_Interaction_H__
+
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
@@ -15,3 +18,5 @@ private:
     std::string sl_r,sl_s;
     double value,min,max;
 };
+
+#endif

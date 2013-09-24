@@ -1,17 +1,8 @@
 //
-//  Cell.h
-//  Spin Wave Genie
-//
-//  Created by Hahn, Steven E. on 2/6/13.
-//  Copyright (c) 2013 Oak Ridge National Laboratory. All rights reserved.
-//
-
 #ifndef __Cell_H__
 #define __Cell_H__
 
 #define _USE_MATH_DEFINES
-#include <cmath>
-#include <iostream>
 #include <Eigen/Dense>
 #include <vector>
 #include <map>
@@ -73,7 +64,7 @@ private:
     
 };
 
-//! Cell class
+//! Contains the basis vectors and a pointer to all sublattices in the unit cell.
 /*!
 The Cell class stores the basis vectors and a pointer to all sublattices in the unit cell. 
 Atomic positions inserted as a fraction of the basis vectors and converted to Angstroms.

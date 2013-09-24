@@ -9,7 +9,7 @@
 #include <sys/time.h>
 #include <iomanip>
 
-//! ProgressBar class
+//! Displays a progress bar on the screen.
 /*! The ProgressBar class displays a progress bar in the console as well as an estimate of the time remaining in hour:minute:second.
  */
 class ProgressBar
@@ -29,7 +29,7 @@ public:
     //!  forces progress bar to 100% and ends line
     void finish();
 private:
-    //! 
+    //!   
     void update_display();
     //!
     int value,max_value;

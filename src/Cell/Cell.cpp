@@ -1,4 +1,5 @@
 #include "Cell.h"
+#include <iostream>
 #include "AtomIterator.h"
 #include <boost/make_shared.hpp>
 

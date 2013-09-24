@@ -4,7 +4,6 @@
 #include "SpinWave.h"
 #include "Interaction.h"
 
-
 class SW_Builder
 {
 public:

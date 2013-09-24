@@ -1,10 +1,3 @@
-//! Describes a sublattice in the unit cell.
-/*!
- The Sublattice class stores the orientation of the magnetic moment and
- the atomic positions of a particular sublattice. In addition, it calculates rotation
- and inverse rotation matrices.
- */
-
 #ifndef __Sublattice_H__
 #define __Sublattice_H__
 
@@ -17,6 +10,12 @@
 
 class AtomIterator;
 
+//! Describes a sublattice in the unit cell.
+/*!
+ The Sublattice class stores the orientation of the magnetic moment and
+ the atomic positions of a particular sublattice. In addition, it calculates rotation
+ and inverse rotation matrices.
+ */
 class Sublattice
 {
 public:
