@@ -127,9 +127,8 @@ void SpinWave::Calc_Eigenvalues()
 
 void SpinWave::Calc_Weights()
 {
-    MatrixXcd XX;
+    MatrixXcdRowMajor XX;
     //VectorXcd tmp;
-    VectorXd AL(N);
     XY.resize(N,N);
     WW.resize(N);
     XX = ces.eigenvectors().adjoint();
@@ -139,12 +138,10 @@ void SpinWave::Calc_Weights()
     
     
     //MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
-    MatrixXi IPR;
+    MatrixXi IPR(N,N);
     int IR;
     int IFL;
-    IPR.resize(N,N);
     //IPR.setZero();
-    
     
     for(int ito=0;ito<50;ito++)
     {
@@ -185,20 +182,14 @@ void SpinWave::Calc_Weights()
         }
     }
     
-    
-    VectorXcd tmp1(N);
+    vector<results> AL(N);
     for (int L1=0;L1<N;L1++)
     {
-        //VectorXcd tmp1 = ces.eigenvectors().col(L1).array()*SS.array()*ces.eigenvectors().col(L1).conjugate().array();
         //cout << XX.row(L1).array() << endl;
         //cout << XX.row(L1).array()*SS.transpose().array()*XX.row(L1).conjugate().array() << endl;
-
-        tmp1 = XX.row(L1).array()*SS.transpose().array()*XX.row(L1).conjugate().array();
-        AL(L1) = tmp1.sum().real();
-        //tmp = ces.eigenvectors().col(L1).array()*SS.array();
-        //AL(L1) = tmp.dot(ces.eigenvectors().col(L1)).real();
-        //cout << ces.eigenvalues()[L1] << "\t" << AL(L1) << endl;
-        XX.row(L1) /= sqrt(abs(AL(L1)));
+        AL[L1].weight = (XX.row(L1).array()*SS.transpose().array()*XX.row(L1).conjugate().array()).sum().real();
+        XX.row(L1) /= sqrt(abs(AL[L1].weight));
+        AL[L1].index = L1;
         //cout << "XX= " << XX.row(L1) << endl;
     }
     
@@ -207,78 +198,27 @@ void SpinWave::Calc_Weights()
     // Reorder the XX's by the weights
     //
     
-    for(int L1=0;L1<N;L1++)
-    {
-        results tmp;
-        tmp.weight = AL(L1);
-        tmp.eigenvalue = ces.eigenvalues()[L1];
-        tmp.eigenvector = XX.row(L1);
-        eigenresults.push_back(tmp);
-    }
-    
-    /*for(int L1=0;L1<N;L1++)
-     {
-     pair<double, pair<complex<double>,VectorXcd> > tmp;
-     tmp.first = AL(L1);
-     tmp.second.first = ces.eigenvalues()[L1];
-     tmp.second.second = XX.row(L1);
-     eigen.push_back(tmp);
-     }*/
-    
-    sort(eigenresults.begin(),eigenresults.end());
+    sort(AL.begin(),AL.end());
     
     for(int L1=0;L1<N;L1++)
     {
-        WW(L1) = eigenresults[L1].eigenvalue.real(); //eigenvalue
+        WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
         //cout << "Eigenvalues= " << WW(L1) << endl;
-        XY.row(L1) = eigenresults[L1].eigenvector;   //eigenvector
+        XY.row(L1) = XX.row(AL[L1].index);   //eigenvector
     }
     
     //cout << XY << endl;
     //cout << LN << endl << endl << XX << endl << endl;
     
-    eigenresults.erase(eigenresults.begin(),eigenresults.end());
-    
-    //;eigen.erase (0,N);
-    
-    //cout << WW << endl;
-    //cout << endl;
-    
-    /*C     Now reorder the XXs
-     C
-     L1=1
-     L2=M+1
-     DO 750 L=1,N
-     if(AL(L).gt.0.) then
-     DO 751 J=1,N
-     XY(L1,J)=XX(L,J)
-     751     CONTINUE
-     WW(L1)=WR(L)
-     C       write(6,851) L,L1,AL(L),WW(L1)
-     851     format(' Positive AL: ',2I5,2E15.7)
-     L1=L1+1
-     else
-     if(L2.le.N) then
-     DO 752 J=1,N
-     XY(L2,J)=XX(L,J)
-     752     CONTINUE
-     WW(L2)=WR(L)
-     C       write(6,852) L,L2,AL(L),WW(L2)
-     852     format(' Negative AL: ',2I5,2E15.7)
-     endif
-     L2=L2+1
-     endif
-     750   CONTINUE*/
-    
+    //eigenresults.erase(eigenresults.begin(),eigenresults.end());
     
     //
     //Evalue inverse of XY or XIN
     //
     
-    
     XIN = XY.adjoint();
-    XIN.block(0,M,M,M) = -1.0*XIN.block(0,M,M,M);
-    XIN.block(M,0,M,M) = -1.0*XIN.block(M,0,M,M);
+    XIN.block(0,M,M,M) *= -1.0;//*XIN.block(0,M,M,M);
+    XIN.block(M,0,M,M) *= -1.0;//*XIN.block(M,0,M,M);
     
     //cout << "XY= " << endl << XY << endl;
     //cout << "XIN= " << endl << XIN << endl ;
@@ -286,40 +226,24 @@ void SpinWave::Calc_Weights()
     //cout << endl;
     //cout << (XY.inverse()*XY).block(0,0,5,5)  << endl ;
     //cout << XIN*XY << endl;
-    /*C
-     C     Evaluate inverse of XY or XIN
-     C
-     DO 801 L1=1,N
-     DO 802 L2=1,N
-     XIN(L1,L2)=CONJG(XY(L2,L1))
-     if(L1.le.M.and.L2.gt.M) then
-     XIN(L1,L2)=-XIN(L1,L2)
-     endif
-     if(L1.gt.M.and.L2.le.M) then
-     XIN(L1,L2)=-XIN(L1,L2)
-     endif
-     802   CONTINUE
-     801   CONTINUE*/
 }
 
 void SpinWave::Calc_Intensities()
 {
     complex<double> XI (0.0,1.0);
-    double KX = KXP;//*2.0*M_PI;
-    double KY = KYP;//*2.0*M_PI;
-    double KZ = KZP;//*2.0*M_PI;
-    vector<Matrix3d> V_array;
-    Matrix3d V_r,V_s;
-    MatrixXcd Intensities(M,3); Intensities.setZero();
+    double KX = KXP;
+    double KY = KYP;
+    double KZ = KZP;
+    //vector<Matrix3d> V_array;
+    Matrix3d V_r;//,V_s;
+    ArrayXXcd Intensities(M,3); Intensities.setZero();
     VectorXd SXX,SYY,SZZ;
     MatrixXcd C,SS;
     
     C.resize(2*M,2*M);
     SS.resize(3,3);
     SS.setZero();
-    
 
-    
     //for(sl.First();!sl.IsDone();sl.Next())
     //{
     //    V_array.push_back(sl.CurrentItem()->get_inv_matrix());
@@ -368,53 +292,38 @@ void SpinWave::Calc_Intensities()
     SublatticeIterator sl = cell->begin();
     double S = (*(*sl)->getMoment())[0];
 
-
-    for(int L=0;L<M;L++) //n
+    long L2 = 0;
+    for (sl = cell->begin(); sl!=cell->end();++sl) //r
     {
-        for(int L1=0;L1<3;L1++) //alpha
+        V_r = (*sl)->getInverseMatrix();
+        for(int L=0;L<M;L++) //n
         {
-            //sl.First();
-            sl = cell->begin();
-            for( int L2=0;L2<M;L2++) // r
+            for(int L1=0;L1<3;L1++) //alpha
             {
-                V_r = (*sl)->getInverseMatrix();
                 complex<double> Intensities_r = (V_r(L1,0) - XI*V_r(L1,1)) * XIN(L2,L+M)
                 +  (V_r(L1,0) + XI*V_r(L1,1)) * XIN(L2+M,L+M);
                 Intensities(L,L1) += Intensities_r;
-                ++sl;
             }
         }
+        L2++;
     }
     
-    //cout << XIN << endl;
     
-    /*for(int L1=0;L1<3;L1++)
-     {
-     for( int L2=0;L2<M;L2++)
-     {
-     Intensities.block(0,L1,M,1) += (V_array[L2](L1,0) - XI*V_array[L2](L1,1)) * XIN.block(L2, M, 1, M).transpose()
-     +(V_array[L2](L1,0) + XI*V_array[L2](L1,1)) * XIN.block(L2+M,M,1,M).transpose();
-     }
-     }*/
-    
-    
-    Intensities = Intensities.array().conjugate()*Intensities.array();
+    Intensities *= Intensities.conjugate();
     Intensities *= S/(4.0*M);
     
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
     
-    VI.clear();
-    SVI.clear();
-    
+    VI.reserve(M);
+    SVI.reserve(M);
     for (int i=0;i<M;i++)
     {
         VI.push_back(abs(WW[i+M]));
         //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
         SVI.push_back(SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2)));
     }
-    
     //WP = WW.segment(M,M).array().abs();
     //cout << "WP= " << WP << endl;
 }
@@ -518,8 +427,3 @@ vector<double> SpinWave::Get_Intensities()
 {
     return SVI;
 }
-
-/*VectorXd SpinWave::Get_Evector(double E_min, double E_max, double E_points)
-{
-    
-}*/

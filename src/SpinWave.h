@@ -20,11 +20,12 @@
 #include <boost/shared_ptr.hpp>
 #include "Cell.h"
 
+typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
+
 struct results
 {
     double weight;
-    std::complex<double> eigenvalue;
-    Eigen::VectorXcd eigenvector;
+    long index;
     // < operator reversed for sort!!!!
     bool operator<( const results& val ) const {
     	return weight > val.weight;
@@ -66,10 +67,9 @@ private:
     Eigen::MatrixXcd LN;
     Eigen::VectorXd SS;
     Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
-    std::vector<results> eigenresults;
     Eigen::VectorXd WW; // want to get rid of this
     std::vector<double> VI,SVI; 
-    Eigen::MatrixXcd XY,XIN; 
+    Eigen::MatrixXcd XY,XIN;
 };
 
 #endif /* defined(__SpinWave__) */
