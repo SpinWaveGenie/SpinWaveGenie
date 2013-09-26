@@ -12,7 +12,7 @@ SpinWave::SpinWave(boost::shared_ptr<Cell>& cell_in)
 {
 
     cell = cell_in;
-    M = (int) cell->size();
+    M = cell->size();
     N = 2*M;
     
     LN.resize(N,N); LN.setZero();
@@ -295,7 +295,7 @@ void SpinWave::Calc_Intensities()
     long L2 = 0;
     for (sl = cell->begin(); sl!=cell->end();++sl) //r
     {
-        V_r = (*sl)->getInverseMatrix();
+        V_r = (*(*sl)->getInverseMatrix());
         for(int L=0;L<M;L++) //n
         {
             for(int L1=0;L1<3;L1++) //alpha
@@ -307,7 +307,6 @@ void SpinWave::Calc_Intensities()
         }
         L2++;
     }
-    
     
     Intensities *= Intensities.conjugate();
     Intensities *= S/(4.0*M);
@@ -411,11 +410,11 @@ void SpinWave::Signif_Solutions()
 
 void SpinWave::Calc()
 {
-    Calc_Eigenvalues();
-    Calc_Weights();
-    Calc_Intensities();
-    //Unique_Solutions();
-    //Signif_Solutions();
+    this->Calc_Eigenvalues();
+    this->Calc_Weights();
+    this->Calc_Intensities();
+    //this->Unique_Solutions();
+    //this->Signif_Solutions();
 }
 
 vector<double> SpinWave::Get_Frequencies()

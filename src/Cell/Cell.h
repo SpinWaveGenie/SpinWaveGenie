@@ -107,7 +107,7 @@ public:
     void addAtom(std::string name, double x, double y, double z);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices
-    int size();
+    size_t size();
     //! \return Returns an iterator pointing to the first Sublattice element
     SublatticeIterator begin();
     //! \return Returns an iterator pointing to the final Sublattice element

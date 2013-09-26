@@ -20,7 +20,7 @@
 #include "SpinWave.h"
 #include "Initializer.h"
 #include "progressbar.h"
-
+#include <Eigen/Core>
 using namespace Eigen;
 using namespace boost;
 namespace po = boost::program_options;
@@ -34,7 +34,7 @@ struct mc_params
     double E_min,E_max;
     int E_points;
     unsigned seed;
-    shared_ptr<SW_Builder> builder;
+    boost::shared_ptr<SW_Builder> builder;
 };
 
 double f(double x,double y,double z)

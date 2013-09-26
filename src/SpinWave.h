@@ -62,7 +62,7 @@ private:
     void Calc_Intensities();
     void Unique_Solutions();
     void Signif_Solutions();
-    int M,N;
+    size_t M,N;
     int NU,MI,IM;
     Eigen::MatrixXcd LN;
     Eigen::VectorXd SS;

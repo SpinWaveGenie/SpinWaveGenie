@@ -179,7 +179,7 @@ vector<vector<double> >* Cell::getNeighbors(boost::shared_ptr<Sublattice>& sl1, 
     return &neighborCache[name];
 }
 
-int Cell::size()
+size_t Cell::size()
 {
     return sublatticeInfo.size();
 }

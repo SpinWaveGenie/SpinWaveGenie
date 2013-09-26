@@ -41,10 +41,10 @@ public:
     std::vector<double>* getMoment();
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
-    Eigen::Matrix3d getRotationMatrix();
+    Eigen::Matrix3d* getRotationMatrix();
     //! returns inverse rotation matrix as an Eigen::Matrix3d object
     //! \return inverse rotation matrix
-    Eigen::Matrix3d getInverseMatrix();
+    Eigen::Matrix3d* getInverseMatrix();
     //! add atom to the sublattice
     //! \param x x component of atomic position in Angstroms
     //! \param y y component of atomic position in Angstroms

@@ -41,7 +41,7 @@ void Init::save_input(string filename)
 
 void Init::parseCrystalNode(const pugi::xml_node &node)
 {
-    unit_cell = shared_ptr<Cell>(new Cell);
+    unit_cell = boost::shared_ptr<Cell>(new Cell);
     istringstream parser;
     double scale = node.child("basevect").attribute("scale").as_double();
     cout << scale << endl;
@@ -96,7 +96,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
     for (pugi::xml_node tool = node.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
-        shared_ptr<Sublattice> new_sl(new Sublattice());
+        boost::shared_ptr<Sublattice> new_sl(new Sublattice());
             
         string name(tool.child_value("name"));
         name.erase(std::remove_if(name.begin(),name.end(), ::isspace), name.end());
@@ -131,7 +131,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
     istringstream parser;
     double min,max;
     string atom1,atom2;
-    builder = shared_ptr<SW_Builder>(new SW_Builder(unit_cell));
+    builder = boost::shared_ptr<SW_Builder>(new SW_Builder(unit_cell));
     for (pugi::xml_node tool = node.child("exchange"); tool; tool = tool.next_sibling("exchange"))
     {
         double value = tool.attribute("value").as_double();

@@ -43,8 +43,8 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     double S = (*cell->getSublattice(sl_r)->getMoment())[0];
         
     Matrix3d F;
-    F = cell->getSublattice(sl_r)->getRotationMatrix()*
-        cell->getSublattice(sl_s)->getInverseMatrix();
+    F = (*cell->getSublattice(sl_r)->getRotationMatrix())*
+        (*cell->getSublattice(sl_s)->getInverseMatrix());
     
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;

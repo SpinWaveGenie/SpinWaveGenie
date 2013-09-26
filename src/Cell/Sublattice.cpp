@@ -48,14 +48,14 @@ vector<double>* Sublattice::getMoment()
     return &angles;
 }
 
-Eigen::Matrix3d Sublattice::getRotationMatrix()
+Eigen::Matrix3d* Sublattice::getRotationMatrix()
 {
-    return rotationMatrix;
+    return &rotationMatrix;
 }
 
-Eigen::Matrix3d Sublattice::getInverseMatrix()
+Eigen::Matrix3d* Sublattice::getInverseMatrix()
 {
-    return inverseMatrix;
+    return &inverseMatrix;
 }
 
 void Sublattice::addAtom(double x, double y, double z)
