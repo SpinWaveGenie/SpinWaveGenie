@@ -46,11 +46,8 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
                       
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
-
-    boost::shared_ptr<Sublattice> sl_sp = cell->getSublattice(sl_r);
-    boost::shared_ptr<Sublattice> sl_rp = cell->getSublattice(sl_s);
     
-    Neighbors neighborList(cell,sl_rp,sl_sp,min,max);
+    Neighbors neighborList(cell,sl_r,sl_s,min,max);
     
     AtomIterator nbrBegin = neighborList.begin();
     AtomIterator nbrEnd = neighborList.end();

@@ -6,7 +6,7 @@
 using namespace Eigen;
 using namespace std;
 
-Neighbors::Neighbors(boost::shared_ptr<Cell>& cell, boost::shared_ptr<Sublattice>& sl1, boost::shared_ptr<Sublattice>& sl2, double min, double max)
+Neighbors::Neighbors(boost::shared_ptr<Cell>& cell, string& sl1, string& sl2, double min, double max)
 {
     neighborList = cell->getNeighbors(sl1, sl2, min, max);
 }

@@ -2,42 +2,28 @@
 #include <iostream>
 #include "AtomIterator.h"
 #include <boost/make_shared.hpp>
+#include <boost/functional/hash.hpp>
 
 using namespace Eigen;
 using namespace std;
 
-bool Cell::FastCompare::operator ==(const FastCompare &other) const
+bool Cell::NeighborsKey::operator ==(const NeighborsKey &other) const
 {
     double error=1.0e-2;
-    if (sl1 == other.sl1 && sl2 == other.sl2 && abs(min - other.min)<error && abs(max - other.max)<error)
-        return true;
-    else
-        return false;
+    return (sl1.compare(other.sl1) == 0 && sl2.compare(other.sl2) == 0 && abs(min - other.min)<error && abs(max - other.max)<error);
 }
 
-bool Cell::FastCompare::operator < ( const FastCompare &other) const
+
+std::size_t Cell::KeyHasher::operator()(const NeighborsKey& key) const
 {
-    double error=1.0e-2;
-    bool answer;
-    if (abs(max - other.max) < error)
-    {
-        if (abs(min - other.min) < error)
-        {
-            if (sl2 == other.sl2)
-                answer = sl1->getName() < other.sl1->getName();
-            else
-                answer = sl2->getName() < other.sl2->getName();
-        }
-        else
-            answer = min < other.min;
-    }
-    else
-        answer = max < other.max;
-    
-    //std::cout << name1 << " " << name2 << " " << (name1 < name2) << answer << std::endl;
-    
-    return answer;
+    std::size_t seed = 0;
+    boost::hash_combine(seed, key.sl1);
+    boost::hash_combine(seed, key.sl2);
+    boost::hash_combine(seed, key.min);
+    boost::hash_combine(seed, key.max);
+    return seed;
 }
+
 
 void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double beta_deg, double gamma_deg)
 {
@@ -101,11 +87,11 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     sublatticeInfo[name]->addAtom(pos[0], pos[1], pos[2]);
 }
 
-vector<vector<double> >* Cell::getNeighbors(boost::shared_ptr<Sublattice>& sl1, boost::shared_ptr<Sublattice>& sl2 , double min, double max)
+vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double min, double max)
 {
     vector<vector<double> > results;
     Vector3d dispRLU,dispAng(3);
-    FastCompare name;
+    NeighborsKey name;
     name.sl1 = sl1;
     name.sl2 = sl2;
     name.min = min;
@@ -114,7 +100,7 @@ vector<vector<double> >* Cell::getNeighbors(boost::shared_ptr<Sublattice>& sl1, 
     if (neighborCache.find(name) == neighborCache.end() )
     {
         //no benefit to iterating over the first sublattice. Hence we choose the first element
-        AtomIterator atom1=sl1->begin();
+        AtomIterator atom1 = getSublattice(sl1)->begin();
         // Increase the size of the supercell until the list of neighbors does not change
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. if not a warning message will be printed.
@@ -123,7 +109,7 @@ vector<vector<double> >* Cell::getNeighbors(boost::shared_ptr<Sublattice>& sl1, 
             //cout << supercellSize << endl;
             bool new_results = 0;
             {
-            for (AtomIterator atom2=sl2->begin(); atom2!=sl2->end(); ++atom2)
+            for (AtomIterator atom2=getSublattice(sl2)->begin(); atom2!=getSublattice(sl2)->end(); ++atom2)
             {
                 for (long n1=-supercellSize;n1<=supercellSize;n1++)
                 {
@@ -169,7 +155,7 @@ vector<vector<double> >* Cell::getNeighbors(boost::shared_ptr<Sublattice>& sl1, 
             else if (supercellSize==5)
                cout << "Couldn't find all neighbors at specified distance" << endl;
         }
-        neighborCache.insert(pair<FastCompare,vector<vector<double> > >(name,results) );
+        neighborCache.insert(pair<NeighborsKey,vector<vector<double> > >(name,results) );
     }    
     //for (int i=0;i<neighborCache[name].size();i++)
     //{

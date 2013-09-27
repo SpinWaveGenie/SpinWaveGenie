@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
@@ -64,6 +65,10 @@ private:
     
 };
 
+
+
+
+
 //! Contains the basis vectors and a pointer to all sublattices in the unit cell.
 /*!
 The Cell class stores the basis vectors and a pointer to all sublattices in the unit cell. 
@@ -115,23 +120,27 @@ public:
 private:
     //! Finds neighbors of two sublattices between distances min and max.
     //! Used exclusively by NeighborIter
-    //! \param sublattice1_in pointer to first sublattice
-    //! \param sublattice2_in pointer to second sublattice
+    //! \param sublattice1_in name of first sublattice
+    //! \param sublattice2_in name of second sublattice
     //! \param min minimum distance considered (Angstroms)
     //! \param max maximum distance considered (Angstroms)
     //! \return relative position of all neighboring atoms
-    std::vector<std::vector<double> >* getNeighbors(boost::shared_ptr<Sublattice>& sublattice1_in, boost::shared_ptr<Sublattice>& sublattice2_in, double min, double max);
+    std::vector<std::vector<double> >* getNeighbors(std::string& sl1, std::string& sl2, double min, double max);
     //! Finding the relative position of neighboring atoms is a relatively slow process,
     //! so we want to store the results so they can be reused. Therefore, we need a struct that quickly identifies when the input parameters are identical.
-    struct FastCompare
+    struct NeighborsKey
     {
-        boost::shared_ptr<Sublattice> sl1, sl2;
+        std::string sl1, sl2;
         double min,max;
-        bool operator ==(const FastCompare &other) const;
-        bool operator < ( const FastCompare &other) const;
+        bool operator ==(const NeighborsKey &other) const;
+    };
+    struct KeyHasher
+    {
+        std::size_t operator()(const NeighborsKey& k) const;
     };
     //! stores the results of getNeighbors in a map so they can be reused.
-    std::map<FastCompare,std::vector<std::vector<double> > > neighborCache;
+    //std::map<FastCompare,std::vector<std::vector<double> > > neighborCache;
+    std::unordered_map<NeighborsKey, std::vector<std::vector<double> >,KeyHasher >neighborCache;
     //! basis vectors
     Eigen::Matrix3d basisVectors;
     //! reciprocal lattice vectors
