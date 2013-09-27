@@ -12,6 +12,8 @@
 #include <memory> 
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
+#include <boost/ptr_container/ptr_map.hpp>
+
 
 //! Iterates over sublattices in the Cell class.
 /*!
@@ -27,10 +29,11 @@
  }
  \endcode
  */
+
 class SublatticeIterator
 : public boost::iterator_facade<
 SublatticeIterator
-, std::unique_ptr<Sublattice>
+, Sublattice
 , boost::forward_traversal_tag
 >
 {
@@ -38,7 +41,7 @@ private:
     friend class boost::iterator_core_access;
     
 public:
-    explicit SublatticeIterator(std::unordered_map<std::string,std::unique_ptr<Sublattice> >::iterator _it)
+    explicit SublatticeIterator(boost::ptr_map<std::string,Sublattice>::iterator _it)
     : it(_it)
     {}
     
@@ -47,7 +50,7 @@ public:
     {}
     
 private:
-    std::unordered_map<std::string,std::unique_ptr<Sublattice> >::iterator it;
+    boost::ptr_map<std::string,Sublattice>::iterator it;
     
     void increment()
     {
@@ -59,15 +62,12 @@ private:
         return (it == other.it);
     }
     
-    std::unique_ptr<Sublattice>& dereference() const
+    Sublattice& dereference() const
     {
-        return it->second;
+        return *(it->second);
     }
     
 };
-
-
-
 
 
 //! Contains the basis vectors and a pointer to all sublattices in the unit cell.
@@ -102,7 +102,7 @@ public:
     //! \param name Unique name defining sublattice
     //! \param sl Pointer to Sublattice object
     //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
-    void addSublattice(std::string& name, std::unique_ptr<Sublattice>& sl);
+    void addSublattice(std::string& name, Sublattice* sl);
     //! Returns pointer to sublattice "name"
     //! \param name used to describe sublattice
     //! \return pointer to sublattice
@@ -147,7 +147,7 @@ private:
     //! reciprocal lattice vectors
     Eigen::Matrix3d reciprocalVectors;
     //! Pointers to all Sublattice objects;
-    std::unordered_map<std::string,std::unique_ptr<Sublattice> > sublatticeInfo;
+    boost::ptr_map<std::string, Sublattice> sublatticeInfo;
 };
 
 #endif // __Cell_H__ 

@@ -290,12 +290,12 @@ void SpinWave::Calc_Intensities()
     //double S = sl.CurrentItem()->getMoment()[0];
     
     SublatticeIterator sl = cell->begin();
-    double S = (*(*sl)->getMoment())[0];
+    double S = (*sl->getMoment())[0];
 
     long L2 = 0;
     for (sl = cell->begin(); sl!=cell->end();++sl) //r
     {
-        V_r = (*(*sl)->getInverseMatrix());
+        V_r = (*sl->getInverseMatrix());
         for(int L=0;L<M;L++) //n
         {
             for(int L1=0;L1<3;L1++) //alpha

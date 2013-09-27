@@ -22,7 +22,7 @@ void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell,
     int M = 0;
     for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
     {
-        if ( sl_r == (*sl)->getName())
+        if ( sl_r == sl->getName())
             r = M;
         M++;
     }

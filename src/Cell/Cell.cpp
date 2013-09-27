@@ -59,9 +59,9 @@ Eigen::Matrix3d Cell::getReciprocalVectors()
     return reciprocalVectors;
 }
 
-void Cell::addSublattice(std::string& name, unique_ptr<Sublattice>& sl)
+void Cell::addSublattice(std::string& name, Sublattice* sl)
 {
-    sublatticeInfo.insert( pair<string,unique_ptr<Sublattice> >(name,move(sl)));
+    sublatticeInfo.insert(name,sl);
 }
 
 Sublattice& Cell::getSublattice(string& name)
@@ -84,7 +84,10 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     
     //cout << "unscaled= " << unscaled_position.transpose() << endl;
     
-    sublatticeInfo[name]->addAtom(pos[0], pos[1], pos[2]);
+    sublatticeInfo[name].addAtom(pos[0], pos[1], pos[2]);
+    //auto it = sublatticeInfo.find(name);
+    //if (it == sublatticeInfo.end()) throw std::invalid_argument("entry not found");
+    //(*(it->second)).addAtom(pos[0], pos[1], pos[2]);
 }
 
 vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double min, double max)

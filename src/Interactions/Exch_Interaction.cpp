@@ -32,9 +32,9 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
         //cout << sl.CurrentItem()->get_name() << endl;
         //cout << iter->sl_r << endl;
         //cout << iter->sl_s << endl;
-        if ( sl_r == (*sl)->getName())
+        if ( sl_r == sl->getName())
             r = M;
-        if ( sl_s == (*sl)->getName())
+        if ( sl_s == sl->getName())
             s = M;
         M++;
     }
