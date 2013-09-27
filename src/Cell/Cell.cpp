@@ -1,7 +1,6 @@
 #include "Cell.h"
 #include <iostream>
 #include "AtomIterator.h"
-#include <boost/make_shared.hpp>
 #include <boost/functional/hash.hpp>
 
 using namespace Eigen;
@@ -43,7 +42,6 @@ void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double
                      b*cos(gamma),b*sin(gamma),0.0,
                      ci,cj,ck;
     reciprocalVectors = 2.0*M_PI*basisVectors.inverse();
-
 }
 
 void Cell::setBasisVectors(double scale, Eigen::Matrix3d basis)
@@ -61,15 +59,17 @@ Eigen::Matrix3d Cell::getReciprocalVectors()
     return reciprocalVectors;
 }
 
-void Cell::addSublattice(std::string name, boost::shared_ptr<Sublattice>& sl)
+void Cell::addSublattice(std::string& name, unique_ptr<Sublattice>& sl)
 {
-    sublatticeInfo.insert( pair<string,boost::shared_ptr<Sublattice> >(name,sl));
+    sublatticeInfo.insert( pair<string,unique_ptr<Sublattice> >(name,move(sl)));
 }
 
-boost::shared_ptr<Sublattice> Cell::getSublattice(string name)
+Sublattice& Cell::getSublattice(string& name)
 {
-    boost::shared_ptr<Sublattice> sublattice = sublatticeInfo[name];
-    return sublattice;
+    //return &(sublatticeInfo[name]);
+    auto it = sublatticeInfo.find(name);
+    if (it == sublatticeInfo.end()) throw std::invalid_argument("entry not found");
+    return *(it->second);
 }
 
 void Cell::addAtom(std::string name, double x, double y, double z)
@@ -100,7 +100,7 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
     if (neighborCache.find(name) == neighborCache.end() )
     {
         //no benefit to iterating over the first sublattice. Hence we choose the first element
-        AtomIterator atom1 = getSublattice(sl1)->begin();
+        AtomIterator atom1 = getSublattice(sl1).begin();
         // Increase the size of the supercell until the list of neighbors does not change
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. if not a warning message will be printed.
@@ -109,7 +109,7 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
             //cout << supercellSize << endl;
             bool new_results = 0;
             {
-            for (AtomIterator atom2=getSublattice(sl2)->begin(); atom2!=getSublattice(sl2)->end(); ++atom2)
+            for (AtomIterator atom2=getSublattice(sl2).begin(); atom2!=getSublattice(sl2).end(); ++atom2)
             {
                 for (long n1=-supercellSize;n1<=supercellSize;n1++)
                 {

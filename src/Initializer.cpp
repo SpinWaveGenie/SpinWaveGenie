@@ -96,7 +96,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
     for (pugi::xml_node tool = node.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
-        boost::shared_ptr<Sublattice> new_sl(new Sublattice());
+        unique_ptr<Sublattice> new_sl(new Sublattice());
             
         string name(tool.child_value("name"));
         name.erase(std::remove_if(name.begin(),name.end(), ::isspace), name.end());

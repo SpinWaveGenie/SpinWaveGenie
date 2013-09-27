@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include <boost/shared_ptr.hpp>
+#include <memory> 
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
 
@@ -29,7 +30,7 @@
 class SublatticeIterator
 : public boost::iterator_facade<
 SublatticeIterator
-, boost::shared_ptr<Sublattice>
+, std::unique_ptr<Sublattice>
 , boost::forward_traversal_tag
 >
 {
@@ -37,7 +38,7 @@ private:
     friend class boost::iterator_core_access;
     
 public:
-    explicit SublatticeIterator(std::map<std::string,boost::shared_ptr<Sublattice> >::iterator _it)
+    explicit SublatticeIterator(std::unordered_map<std::string,std::unique_ptr<Sublattice> >::iterator _it)
     : it(_it)
     {}
     
@@ -46,7 +47,7 @@ public:
     {}
     
 private:
-    std::map<std::string,boost::shared_ptr<Sublattice> >::iterator it;
+    std::unordered_map<std::string,std::unique_ptr<Sublattice> >::iterator it;
     
     void increment()
     {
@@ -58,7 +59,7 @@ private:
         return (it == other.it);
     }
     
-    boost::shared_ptr<Sublattice>& dereference() const
+    std::unique_ptr<Sublattice>& dereference() const
     {
         return it->second;
     }
@@ -101,11 +102,11 @@ public:
     //! \param name Unique name defining sublattice
     //! \param sl Pointer to Sublattice object
     //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
-    void addSublattice(std::string name, boost::shared_ptr<Sublattice>& sl);
+    void addSublattice(std::string& name, std::unique_ptr<Sublattice>& sl);
     //! Returns pointer to sublattice "name"
     //! \param name used to describe sublattice
     //! \return pointer to sublattice
-    boost::shared_ptr<Sublattice> getSublattice(std::string name);
+    Sublattice& getSublattice(std::string& name);
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.
@@ -146,7 +147,7 @@ private:
     //! reciprocal lattice vectors
     Eigen::Matrix3d reciprocalVectors;
     //! Pointers to all Sublattice objects;
-    std::map<std::string,boost::shared_ptr<Sublattice> > sublatticeInfo;
+    std::unordered_map<std::string,std::unique_ptr<Sublattice> > sublatticeInfo;
 };
 
 #endif // __Cell_H__ 
