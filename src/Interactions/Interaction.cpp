@@ -1,22 +1,7 @@
 #include "Interaction.h"
 
 using namespace std;
-bool Interaction::equals( Interaction& other)
-{
-    vector<string> sl1 = this->sublattices();
-    vector<string> sl2 = other.sublattices();
-    if (sl1.size() != sl2.size())
-        return false;
-    else
-    {
-        for (size_t index = 0;index < sl1.size();index++)
-        {
-            if (sl1[index] != sl2[index])
-                return false;
-        }
-    }
-    return true;
-}
+
 
 bool Interaction::operator<(const Interaction& other) const
 {

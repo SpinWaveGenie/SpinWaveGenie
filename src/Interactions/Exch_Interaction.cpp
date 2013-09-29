@@ -28,14 +28,14 @@ vector<string> Exch_Interaction::sublattices() const
     return sl;
 }
 
-void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
-{   
+void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
+{
     //find location of r,s
     int r= -1;
     int s= -1;
     
     int M=0;
-    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)       
+    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
     {
         //cout << sl.CurrentItem()->get_name() << endl;
         //cout << iter->sl_r << endl;
@@ -48,15 +48,29 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     }
     assert(r!=-1 && s!=-1);
     
-    double S = (*cell->getSublattice(sl_r).getMoment())[0];
-        
-    Matrix3d F;
+    S = (*cell->getSublattice(sl_r).getMoment())[0];
+    
     F = (*cell->getSublattice(sl_r).getRotationMatrix())*
-        (*cell->getSublattice(sl_s).getInverseMatrix());
+    (*cell->getSublattice(sl_s).getInverseMatrix());
     
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
+    
+    G1 = complex<double>(F(0,0) + F(1,1),F(1,0)-F(0,1));
+    G1 *= -0.5;
+    
+    G2 = complex<double>(F(0,0) - F(1,1),-F(1,0)-F(0,1));
+    G2 *= -0.5;
+    
+    X = value;
+    
+    //cout << "G1= " << G1 << endl;
+    //cout << "G2= " << G2 << endl;
+    
+}
 
+void Exch_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+{
     Neighbors neighborList(cell,sl_r,sl_s,min,max);
     
     AtomIterator nbrBegin = neighborList.begin();
@@ -69,22 +83,17 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     {
         double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
         gamma_rs += exp(MXI*dot_prod);
-     }
+    }
     
     gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
     //cout << "z_rs= " << z_rs << endl;
     //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
     
-    complex<double> G1 (F(0,0) + F(1,1),F(1,0)-F(0,1));
-    G1 *= -0.5;
-    
-    complex<double> G2 (F(0,0) - F(1,1),-F(1,0)-F(0,1));
-    G2 *= -0.5;
-        
-    double X = value;
-                
-    //cout << "G1= " << G1 << endl;
-    //cout << "G2= " << G2 << endl;
+}
+
+void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+{   
+
     switch (quadrant)
     {
         case 0:

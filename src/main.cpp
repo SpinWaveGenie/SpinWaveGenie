@@ -151,6 +151,7 @@ class ThreadClass {
 public:
     int npoints,nproc,Epoints;
     MatrixXd figure;
+    boost::mutex io_mutex; // The iostreams are not guaranteed to be thread-safe!
     ThreadClass(int n) // Constructor
     {
 #if EIGEN_WORLD_VERSION >= 3 && EIGEN_MAJOR_VERSION >= 1
@@ -169,7 +170,9 @@ public:
     void Run(int i,string filename)
     {
         Init four_sl;
+        boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
         four_sl.read_input(filename);
+        scoped_lock.unlock();
         mc_params data;
         data.E_min = 0.0;
         data.E_max = 80.0;
@@ -197,7 +200,9 @@ public:
             data.x0 = x0 + (x1-x0)*m/(npoints-1);
             data.y0 = y0 + (y1-y0)*m/(npoints-1);
             data.z0 = z0 + (z1-z0)*m/(npoints-1);
+            scoped_lock.lock();
             cout << data.x0 << " " << data.y0 << " " << data.z0 << endl;
+            scoped_lock.unlock();
             figure.col(m) = h((void *)&data);
             //cout << figure.col(m) << endl;
         }

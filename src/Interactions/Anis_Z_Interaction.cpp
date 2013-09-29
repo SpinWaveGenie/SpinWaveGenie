@@ -22,9 +22,9 @@ vector<string> Anis_Z_Interaction::sublattices() const
     return sl;
 }
 
-void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+void Anis_Z_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
 {
-        //find location of r
+    //find location of r
     int r= -1;
     int M = 0;
     for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
@@ -34,28 +34,39 @@ void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell,
         M++;
     }
     assert(r!=-1);
-        
+    
     double S = (*cell->getSublattice(sl_r).getMoment())[0];
     double theta = (*cell->getSublattice(sl_r).getMoment())[1];
     double X = value;
     
+    LNrr = -0.5*X*S*(1.0-3.0*pow(cos(theta),2));
+    LNrrM = -0.5*X*S*pow(sin(theta),2);
+    LNrMr = -0.5*X*S*pow(sin(theta),2);
+    LNrMrM = -0.5*X*S*(1.0-3.0*pow(cos(theta),2));
+}
+
+void Anis_Z_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+{
+}
+
+void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+{
     switch (quadrant)
     {
         case 0:
-            LN(r,r) -= 0.5*X*S*(1.0-3.0*pow(cos(theta),2));
+            LN(r,r) += LNrr;
             break;
         case 1:
-            LN(r+M,r) -= 0.2*X*S*pow(sin(theta),2);
+            LN(r+M,r) += LNrMr;
             break;
         case 2:
-            LN(r,r+M) -= 0.2*X*S*pow(sin(theta),2);
+            LN(r,r+M) += LNrrM;
             break;
         case 3:
-            LN(r+M,r+M) -= 0.5*X*S*(1.0-3.0*pow(cos(theta),2));
+            LN(r+M,r+M) += LNrMrM;
             break;
         default:
             //cout << "error: case must be between 0 and 3" << endl;
             break;
     }
-    
 }

@@ -28,17 +28,12 @@ vector<string> DM_Y_Interaction::sublattices() const
     return sl;
 }
 
-void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+void DM_Y_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
 {
-    double tmp;
-    complex<double> tmp1,tmp2,tmp3;
-    complex<double> XI (0.0,1.0);
-
     //find location of r,s
-    int r= -1;
-    int s= -1;
-    
-    int M=0;
+    r= -1;
+    s= -1;
+    M=0;
     for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
     {
         //cout << sl.CurrentItem()->get_name() << endl;
@@ -51,10 +46,26 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
         M++;
     }
     assert(r!=-1 && s!=-1);
-                      
+    
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
     
+    double X = value;
+    double S = (*cell->getSublattice(sl_r).getMoment())[0];
+    double theta_r = (*cell->getSublattice(sl_r).getMoment())[1];
+    double phi_r = (*cell->getSublattice(sl_r).getMoment())[2];
+    double theta_s = (*cell->getSublattice(sl_s).getMoment())[1];
+    double phi_s = (*cell->getSublattice(sl_s).getMoment())[2];
+    
+    value0 = -0.5*X*S*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
+    value1 = -0.25*X*S*cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);
+    value2 = -0.25*X*S*sin(theta_r)*sin(phi_s);
+    value3 = -0.25*X*S*sin(theta_s)*sin(phi_r);
+    
+}
+
+void DM_Y_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+{
     Neighbors neighborList(cell,sl_r,sl_s,min,max);
     
     AtomIterator nbrBegin = neighborList.begin();
@@ -68,53 +79,37 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
         double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
         gamma_rs += exp(MXI*dot_prod);
     }
-        
+    
     gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
     //cout << "z_rs= " << z_rs << endl;
     //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
-            
-    double X = value;
-    double S = (*cell->getSublattice(sl_r).getMoment())[0];
-    double theta_r = (*cell->getSublattice(sl_r).getMoment())[1];
-    double phi_r = (*cell->getSublattice(sl_r).getMoment())[2];
-    double theta_s = (*cell->getSublattice(sl_s).getMoment())[1];
-    double phi_s = (*cell->getSublattice(sl_s).getMoment())[2];
     
-    tmp = 0.5*X*S*z_rs*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
+}
 
-        
-    tmp1 = cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);
-    tmp2 = sin(theta_r)*sin(phi_s);
-    tmp3 = sin(theta_s)*sin(phi_r);
-        
-    //cout << "r= " << r << ", s= " << s << endl;
-    //cout << tmp1 << '\t' << tmp2 << '\t' << tmp3 << endl;
-    
-
-
-
-    
+void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+{
+    complex<double> XI (0.0,1.0);
     switch (quadrant)
     {
         case 0:
-            LN(r,r) -= tmp;
-            LN(r,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 - XI*tmp3);
-            LN(s,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
-            LN(s,s) -= tmp;
+            LN(r,r) += z_rs*value0;
+            LN(r,s) += z_rs*conj(gamma_rs)*(value1 - XI*value2 - XI*value3);
+            LN(s,r) += z_rs*gamma_rs*(value1 + XI*value2 + XI*value3);
+            LN(s,s) += z_rs*value0;
             break;
         case 1:
-            LN(r,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 - XI*tmp3);
-            LN(s,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 - XI*tmp3);
+            LN(r,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 - XI*value3);
+            LN(s,r+M) += z_rs*gamma_rs*(value1 + XI*value2 - XI*value3);
             break;
         case 2:
-            LN(r+M,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 + XI*tmp3);
-            LN(s+M,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 + XI*tmp3);
+            LN(r+M,s) += z_rs*conj(gamma_rs)*(value1 - XI*value2 + XI*value3);
+            LN(s+M,r) += z_rs*gamma_rs*(value1 - XI*value2 + XI*value3);
             break;
         case 3:
-            LN(r+M,r+M) -= tmp;
-            LN(r+M,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 + XI*tmp3);
-            LN(s+M,s+M) -= tmp;
-            LN(s+M,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 - XI*tmp3);
+            LN(r+M,r+M) += z_rs*value0;
+            LN(r+M,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 + XI*value3);
+            LN(s+M,s+M) += z_rs*value0;
+            LN(s+M,r+M) += z_rs*gamma_rs*(value1 - XI*value2 - XI*value3);
             break;
         default:
             //cout << "error: case must be between 0 and 3" << endl;

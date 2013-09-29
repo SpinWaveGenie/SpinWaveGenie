@@ -13,11 +13,19 @@ class Exch_Interaction: public Interaction
 public:
     Exch_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
     void Update_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
+    void calcConstantValues(boost::shared_ptr<Cell> cell);
+    void calcChangingValues(boost::shared_ptr<Cell> cell, Eigen::Vector3d K);
     void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN, int quadrant);
     std::vector<std::string> sublattices() const;
 private:
     std::string sl_r,sl_s;
+    int r,s,M;
     double value,min,max;
+    double S,X;
+    std::complex<double> G1,G2;
+    Eigen::Matrix3d F;
+    double z_rs;
+    std::complex<double> gamma_rs;
 };
 
 #endif
