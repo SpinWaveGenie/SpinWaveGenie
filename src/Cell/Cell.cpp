@@ -66,10 +66,7 @@ void Cell::addSublattice(std::string& name, Sublattice* sl)
 
 Sublattice& Cell::getSublattice(string& name)
 {
-    //return &(sublatticeInfo[name]);
-    auto it = sublatticeInfo.find(name);
-    if (it == sublatticeInfo.end()) throw std::invalid_argument("entry not found");
-    return *(it->second);
+    return sublatticeInfo[name];
 }
 
 void Cell::addAtom(std::string name, double x, double y, double z)
