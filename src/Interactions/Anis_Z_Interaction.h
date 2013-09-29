@@ -13,7 +13,8 @@ class Anis_Z_Interaction: public Interaction
 public:
     Anis_Z_Interaction(double value_in, std::string sl_r_in);
     void Update_Interaction(double value_in, std::string sl_r_in);
-    void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN);
+    void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN, int quadrant);
+    std::vector<std::string> sublattices() const;
 private:
     std::string sl_r;
     double value;

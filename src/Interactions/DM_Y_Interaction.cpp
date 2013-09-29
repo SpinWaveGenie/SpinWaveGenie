@@ -20,7 +20,15 @@ void DM_Y_Interaction::Update_Interaction(double value_in, string sl_r_in,string
     max = max_in;
 }
 
-void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN)
+vector<string> DM_Y_Interaction::sublattices() const
+{
+    vector<string> sl;
+    sl.push_back(sl_r);
+    sl.push_back(sl_s);
+    return sl;
+}
+
+void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
 {
     double tmp;
     complex<double> tmp1,tmp2,tmp3;
@@ -73,10 +81,7 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     double phi_s = (*cell->getSublattice(sl_s).getMoment())[2];
     
     tmp = 0.5*X*S*z_rs*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
-    LN(r,r) -= tmp;
-    LN(s,s) -= tmp;
-    LN(r+M,r+M) -= tmp;
-    LN(s+M,s+M) -= tmp;
+
         
     tmp1 = cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);
     tmp2 = sin(theta_r)*sin(phi_s);
@@ -85,15 +90,34 @@ void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     //cout << "r= " << r << ", s= " << s << endl;
     //cout << tmp1 << '\t' << tmp2 << '\t' << tmp3 << endl;
     
-    LN(r,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 - XI*tmp3);
-    LN(r,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 - XI*tmp3);
 
-    LN(s,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
-    LN(s,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 - XI*tmp3);
 
-    LN(r+M,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 + XI*tmp3);
-    LN(r+M,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 + XI*tmp3);
+
     
-    LN(s+M,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 + XI*tmp3);
-    LN(s+M,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 - XI*tmp3);
+    switch (quadrant)
+    {
+        case 0:
+            LN(r,r) -= tmp;
+            LN(r,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 - XI*tmp3);
+            LN(s,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 + XI*tmp3);
+            LN(s,s) -= tmp;
+            break;
+        case 1:
+            LN(r,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 - XI*tmp3);
+            LN(s,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 + XI*tmp2 - XI*tmp3);
+            break;
+        case 2:
+            LN(r+M,s) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 - XI*tmp2 + XI*tmp3);
+            LN(s+M,r) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 + XI*tmp3);
+            break;
+        case 3:
+            LN(r+M,r+M) -= tmp;
+            LN(r+M,s+M) -= 0.25*X*S*z_rs*conj(gamma_rs)*(tmp1 + XI*tmp2 + XI*tmp3);
+            LN(s+M,s+M) -= tmp;
+            LN(s+M,r+M) -= 0.25*X*S*z_rs*gamma_rs*(tmp1 - XI*tmp2 - XI*tmp3);
+            break;
+        default:
+            //cout << "error: case must be between 0 and 3" << endl;
+            break;
+    }
 }

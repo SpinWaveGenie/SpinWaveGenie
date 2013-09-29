@@ -20,7 +20,15 @@ void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string
     max = max_in;
 }
 
-void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN)
+vector<string> Exch_Interaction::sublattices() const
+{
+    vector<string> sl;
+    sl.push_back(sl_r);
+    sl.push_back(sl_s);
+    return sl;
+}
+
+void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
 {   
     //find location of r,s
     int r= -1;
@@ -49,7 +57,6 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
 
-
     Neighbors neighborList(cell,sl_r,sl_s,min,max);
     
     AtomIterator nbrBegin = neighborList.begin();
@@ -58,12 +65,10 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     
     complex<double> MXI (0.0,-1.0);
     complex<double> gamma_rs (0.0,0.0);
-    int count = 0;
     for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
     {
         double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
         gamma_rs += exp(MXI*dot_prod);
-        count++;
      }
     
     gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
@@ -80,21 +85,30 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
                 
     //cout << "G1= " << G1 << endl;
     //cout << "G2= " << G2 << endl;
-
-    LN(r,r) += 0.25*z_rs*X*S*F(2,2);
-    LN(r,s) += 0.25*z_rs*X*S*gamma_rs*G1;
-    LN(r,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G2);
-
-    LN(s,r) += 0.25*z_rs*X*S*gamma_rs*conj(G1);
-    LN(s,s) += 0.25*z_rs*X*S*F(2,2);
-    LN(s,r+M) += 0.25*z_rs*X*S*gamma_rs*conj(G2);
-
-    LN(r+M,s) += 0.25*z_rs*X*S*conj(gamma_rs)*G2;
-    LN(r+M,r+M) += 0.25*z_rs*X*S*F(2,2);
-    LN(r+M,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G1);
-
-    LN(s+M,r) += 0.25*z_rs*X*S*gamma_rs*G2;
-    LN(s+M,r+M) += 0.25*z_rs*X*S*conj(gamma_rs)*G1;
-    LN(s+M,s+M) += 0.25*z_rs*X*S*F(2,2);
-                    
+    switch (quadrant)
+    {
+        case 0:
+            LN(r,r) += 0.25*z_rs*X*S*F(2,2);
+            LN(r,s) += 0.25*z_rs*X*S*gamma_rs*G1;
+            LN(s,r) += 0.25*z_rs*X*S*gamma_rs*conj(G1);
+            LN(s,s) += 0.25*z_rs*X*S*F(2,2);
+            break;
+        case 1:
+            LN(r,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G2);
+            LN(s,r+M) += 0.25*z_rs*X*S*gamma_rs*conj(G2);
+            break;
+        case 2:
+            LN(r+M,s) += 0.25*z_rs*X*S*conj(gamma_rs)*G2;
+            LN(s+M,r) += 0.25*z_rs*X*S*gamma_rs*G2;
+            break;
+        case 3:
+            LN(r+M,r+M) += 0.25*z_rs*X*S*F(2,2);
+            LN(r+M,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G1);
+            LN(s+M,r+M) += 0.25*z_rs*X*S*conj(gamma_rs)*G1;
+            LN(s+M,s+M) += 0.25*z_rs*X*S*F(2,2);
+            break;
+        default:
+            //cout << "error: case must be between 0 and 3" << endl;
+            break;
+    }
 }
