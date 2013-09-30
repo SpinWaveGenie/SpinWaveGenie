@@ -51,11 +51,11 @@ void DM_Y_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     //cout << endl;
     
     double X = value;
-    double S = (*cell->getSublattice(sl_r).getMoment())[0];
-    double theta_r = (*cell->getSublattice(sl_r).getMoment())[1];
-    double phi_r = (*cell->getSublattice(sl_r).getMoment())[2];
-    double theta_s = (*cell->getSublattice(sl_s).getMoment())[1];
-    double phi_s = (*cell->getSublattice(sl_s).getMoment())[2];
+    double S = cell->getSublattice(sl_r).getMoment();
+    double theta_r = cell->getSublattice(sl_r).getTheta();
+    double phi_r = cell->getSublattice(sl_r).getPhi();
+    double theta_s = cell->getSublattice(sl_s).getTheta();
+    double phi_s = cell->getSublattice(sl_s).getPhi();
     
     value0 = -0.5*X*S*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
     value1 = -0.25*X*S*cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);

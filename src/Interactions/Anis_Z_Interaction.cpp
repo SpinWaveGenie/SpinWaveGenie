@@ -25,8 +25,8 @@ vector<string> Anis_Z_Interaction::sublattices() const
 void Anis_Z_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
 {
     //find location of r
-    int r= -1;
-    int M = 0;
+    r= -1;
+    M = 0;
     for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
     {
         if ( sl_r == sl->getName())
@@ -34,9 +34,9 @@ void Anis_Z_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
         M++;
     }
     assert(r!=-1);
-    
-    double S = (*cell->getSublattice(sl_r).getMoment())[0];
-    double theta = (*cell->getSublattice(sl_r).getMoment())[1];
+
+    double S = cell->getSublattice(sl_r).getMoment();
+    double theta = cell->getSublattice(sl_r).getTheta();
     double X = value;
     
     LNrr = -0.5*X*S*(1.0-3.0*pow(cos(theta),2));

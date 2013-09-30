@@ -38,7 +38,13 @@ public:
     void setMoment(double spinInput, double thetaInput , double phiInput);
     //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
     //! \return coordinates [r,theta,phi]
-    std::vector<double>* getMoment();
+    double getMoment();
+    //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
+    //! \return coordinates [r,theta,phi]
+    double getTheta();
+    //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
+    //! \return coordinates [r,theta,phi]
+    double getPhi();
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
     Eigen::Matrix3d* getRotationMatrix();
@@ -59,7 +65,7 @@ private:
     double spin, //!< magnitude of spin
     theta, //!< angle theta describing orientation of spin
     phi; //!< angle phi describing orientation of spin
-    std::vector<double> angles; //!< spin, theta, phi
+    //std::vector<double> angles; //!< spin, theta, phi
     Eigen::Matrix3d rotationMatrix, //!< rotation matrix describing moment along z
     inverseMatrix; //!< inverse for rotation matrix
     std::vector<std::vector<double> > position; //!< std::vector storing atomic positions.

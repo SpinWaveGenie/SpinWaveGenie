@@ -35,9 +35,9 @@ void Anis_X_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     }
     assert(r!=-1);
     
-    double S = (*cell->getSublattice(sl_r).getMoment())[0];
-    double theta = (*cell->getSublattice(sl_r).getMoment())[1];
-    double phi = (*cell->getSublattice(sl_r).getMoment())[2];
+    double S = cell->getSublattice(sl_r).getMoment();
+    double theta = cell->getSublattice(sl_r).getTheta();
+    double phi = cell->getSublattice(sl_r).getPhi();
     double X = value;
     
     LNrr = -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));

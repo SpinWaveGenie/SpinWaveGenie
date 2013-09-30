@@ -31,8 +31,8 @@ vector<string> Exch_Interaction::sublattices() const
 void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
 {
     //find location of r,s
-    int r= -1;
-    int s= -1;
+    r= -1;
+    s= -1;
     
     int M=0;
     for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
@@ -48,7 +48,7 @@ void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     }
     assert(r!=-1 && s!=-1);
     
-    S = (*cell->getSublattice(sl_r).getMoment())[0];
+    S = cell->getSublattice(sl_r).getMoment();
     
     F = (*cell->getSublattice(sl_r).getRotationMatrix())*
     (*cell->getSublattice(sl_s).getInverseMatrix());

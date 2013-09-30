@@ -22,11 +22,7 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
     
     assert(phiInput <= 2.0*M_PI && phiInput >= 0.0);
     phi = phiInput;
-    
-    angles.push_back(spin);
-    angles.push_back(theta);
-    angles.push_back(phi);
-    
+
     /*
     rotation matrix defined in equation A.1 in J. Phys.: Condens. Matter 21 (2009) 216001 
     */
@@ -43,10 +39,21 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
     inverseMatrix = rotationMatrix.inverse();
 }
 
-vector<double>* Sublattice::getMoment()
+double Sublattice::getMoment()
 {
-    return &angles;
+    return spin;
 }
+
+double Sublattice::getTheta()
+{
+    return theta;
+}
+
+double Sublattice::getPhi()
+{
+    return phi;
+}
+
 
 Eigen::Matrix3d* Sublattice::getRotationMatrix()
 {
