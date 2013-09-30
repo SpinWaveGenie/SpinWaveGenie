@@ -118,7 +118,7 @@ VectorXd h(void *params)
     boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > die_z(gen, dist_z);
 #endif
     integral.setZero(E_points);
-    for(int j=0;j!=801;j++)
+    for(int j=0;j!=51;j++)
     {
 #if BOOST_VERSION / 100 % 1000 >= 47
         exp_data->x0 = die_x(gen);
@@ -132,7 +132,7 @@ VectorXd h(void *params)
         integral += result;
         //integral_sq += result*result;
     }
-    integral = integral/801.0;
+    integral = integral/51.0;
     /*double sigma = 0.0;
     for(int i=0;i!=integral.size();i++)
     {

@@ -91,8 +91,28 @@ void Exch_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
 }
 
 void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
-{   
+{
     switch (quadrant)
+    {
+        case 0:
+            LN(r,r) += 0.5*z_rs*X*S*F(2,2);
+            LN(r,s) += 0.25*z_rs*X*S*(gamma_rs*G1+conj(gamma_rs)*conj(G1));
+            break;
+        case 1:
+            LN(r,s+M) += 0.25*z_rs*X*S*(conj(gamma_rs)*G2+gamma_rs*conj(G2));
+            break;
+        case 2:
+            LN(r+M,s) += 0.25*z_rs*X*S*(conj(gamma_rs)*G2+gamma_rs*conj(G2));
+            break;
+        case 3:
+            LN(r+M,r+M) += 0.5*z_rs*X*S*F(2,2);
+            LN(r+M,s+M) += 0.25*z_rs*X*S*(conj(gamma_rs)*conj(G1)+gamma_rs*G1);
+            break;
+        default:
+            //cout << "error: case must be between 0 and 3" << endl;
+            break;
+    }
+    /*switch (quadrant)
     {
         case 0:
             LN(r,r) += 0.25*z_rs*X*S*F(2,2);
@@ -117,5 +137,5 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
         default:
             //cout << "error: case must be between 0 and 3" << endl;
             break;
-    }
+    }*/
 }
