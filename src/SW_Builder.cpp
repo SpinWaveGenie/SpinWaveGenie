@@ -1,4 +1,5 @@
 #include "SW_Builder.h"
+#include <iostream>
 
 using namespace std;
 
@@ -28,7 +29,6 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
     //cout << "K after " << K.transpose() << endl;
     SW.Set_Kpoint(K[0],K[1],K[2]);
     SW.Clear_Matrix();
-    //sort(interactions.begin(),interactions.end());
     boost::ptr_vector<Interaction>::iterator iter;
     int quad = 0;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
@@ -36,12 +36,11 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
         iter->calcChangingValues(this->cell,K);
         iter->Update_Matrix(K,this->cell,SW.LN,quad);
         iter->Update_Matrix(K,this->cell,SW.LN,quad+1);
+        iter->Update_Matrix(K,this->cell,SW.LN,quad+2);
+        iter->Update_Matrix(K,this->cell,SW.LN,quad+3);
     }
-    quad = 2;
-    for (iter = interactions.begin(); iter != interactions.end(); iter++)
-    {
-        iter->Update_Matrix(K,this->cell,SW.LN,quad);
-        iter->Update_Matrix(K,this->cell,SW.LN,quad+1);
-    }
+    
+    //cout << "LN" << endl;
+    //cout << SW.LN << endl;
     return SW;
 }

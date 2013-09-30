@@ -45,7 +45,6 @@ void SpinWave::Set_Kpoint(double KX, double KY, double KZ)
 
 void SpinWave::Calc_Eigenvalues()
 {
-    int i;
     //MatrixXcd test;
     // testing if LN is a normal matrix
     // http://en.wikipedia.org/wiki/Normal_matrix
@@ -90,7 +89,7 @@ void SpinWave::Calc_Eigenvalues()
     //     Test eigenvalue condition
     //
     
-    for (i=0;i<N;i++)
+    for (int i=0;i<N;i++)
     {
         complex<double> lambda = ces.eigenvalues()[i];
         VectorXcd v = ces.eigenvectors().col(i);
@@ -129,7 +128,7 @@ void SpinWave::Calc_Weights()
 {
     MatrixXcdRowMajor XX;
     //VectorXcd tmp;
-    XY.resize(N,N);
+    //XY.resize(N,N);
     WW.resize(N);
     XX = ces.eigenvectors().adjoint();
     
@@ -139,11 +138,12 @@ void SpinWave::Calc_Weights()
     
     //MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
     MatrixXi IPR(N,N);
+    VectorXcd TEST(N);
     int IR;
     int IFL;
     //IPR.setZero();
-    
-    for(int ito=0;ito<50;ito++)
+    int maxIterations = 50;
+    for(int ito=0;ito<maxIterations;ito++)
     {
         //cout << "iteration # " << ito << endl;
         
@@ -163,6 +163,7 @@ void SpinWave::Calc_Weights()
             }
         }
         if (IR != -1)
+            TEST = ortho_test.diagonal();
             break;
         
         for (int L1=0;L1<N;L1++)
@@ -174,25 +175,23 @@ void SpinWave::Calc_Weights()
                 {
                     for(int J=0;J<N;J++)
                     {
-                        XX(L1,J) = XX(L1,J) - XX(L2,J)*ortho_test(L1,L2)/ortho_test(L2,L2);
+                        XX(L1,J) -= XX(L2,J)*ortho_test(L1,L2)/ortho_test(L2,L2);
                     }
                     IFL = 1;
                 }
             }
         }
+        if (ito==maxIterations-1)
+            TEST = ortho_test.diagonal();        
     }
     
     vector<results> AL(N);
     for (int L1=0;L1<N;L1++)
     {
-        //cout << XX.row(L1).array() << endl;
-        //cout << XX.row(L1).array()*SS.transpose().array()*XX.row(L1).conjugate().array() << endl;
-        AL[L1].weight = (XX.row(L1).array()*SS.transpose().array()*XX.row(L1).conjugate().array()).sum().real();
-        XX.row(L1) /= sqrt(abs(AL[L1].weight));
+        AL[L1].weight = TEST[L1].real();
         AL[L1].index = L1;
-        //cout << "XX= " << XX.row(L1) << endl;
+        XX.row(L1) /= sqrt(abs(AL[L1].weight));
     }
-    
     
     //
     // Reorder the XX's by the weights
@@ -204,9 +203,8 @@ void SpinWave::Calc_Weights()
     {
         WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
         //cout << "Eigenvalues= " << WW(L1) << endl;
-        XY.row(L1) = XX.row(AL[L1].index);   //eigenvector
+        XX.row(L1).swap(XX.row(AL[L1].index));   //eigenvector
     }
-    
     //cout << XY << endl;
     //cout << LN << endl << endl << XX << endl << endl;
     
@@ -216,7 +214,7 @@ void SpinWave::Calc_Weights()
     //Evalue inverse of XY or XIN
     //
     
-    XIN = XY.adjoint();
+    XIN = XX.adjoint();
     XIN.block(0,M,M,M) *= -1.0;//*XIN.block(0,M,M,M);
     XIN.block(M,0,M,M) *= -1.0;//*XIN.block(M,0,M,M);
     

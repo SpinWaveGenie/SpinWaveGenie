@@ -34,7 +34,7 @@ void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     r= -1;
     s= -1;
     
-    int M=0;
+    M=0;
     for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
     {
         //cout << sl.CurrentItem()->get_name() << endl;
@@ -75,10 +75,10 @@ void Exch_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
     
     AtomIterator nbrBegin = neighborList.begin();
     AtomIterator nbrEnd = neighborList.end();
-    double z_rs = (double) distance(nbrBegin,nbrEnd);
+    z_rs = (double) distance(nbrBegin,nbrEnd);
     
     complex<double> MXI (0.0,-1.0);
-    complex<double> gamma_rs (0.0,0.0);
+    gamma_rs = complex<double>(0.0,0.0);
     for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
     {
         double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
@@ -88,12 +88,10 @@ void Exch_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
     gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
     //cout << "z_rs= " << z_rs << endl;
     //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
-    
 }
 
 void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
 {   
-
     switch (quadrant)
     {
         case 0:

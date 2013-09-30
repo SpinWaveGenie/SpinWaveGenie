@@ -73,7 +73,7 @@ void DM_Y_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
     double z_rs = (double) distance(nbrBegin,nbrEnd);
     
     complex<double> MXI (0.0,-1.0);
-    complex<double> gamma_rs (0.0,0.0);
+    gamma_rs = complex<double>(0.0,0.0);
     for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
     {
         double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
