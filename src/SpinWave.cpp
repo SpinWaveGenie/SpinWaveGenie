@@ -145,6 +145,7 @@ void SpinWave::Calc_Weights()
     int maxIterations = 50;
     for(int ito=0;ito<maxIterations;ito++)
     {
+        cout << "ito= " << ito << endl;
         //cout << "iteration # " << ito << endl;
         
         MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
@@ -162,10 +163,13 @@ void SpinWave::Calc_Weights()
                 }
             }
         }
+        //cout << ortho_test << endl;
+        //cout << "IR= " << IR << endl;
         if (IR != -1)
+        {
             TEST = ortho_test.diagonal();
             break;
-        
+        }
         for (int L1=0;L1<N;L1++)
         {
             IFL = 0;
@@ -198,16 +202,53 @@ void SpinWave::Calc_Weights()
     //
     
     sort(AL.begin(),AL.end());
-    
+
+    cout << "AL.index= " << endl;
     for(int L1=0;L1<N;L1++)
     {
         WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
-        //cout << "Eigenvalues= " << WW(L1) << endl;
-        XX.row(L1).swap(XX.row(AL[L1].index));   //eigenvector
+        cout << AL[L1].index << " ";
+
     }
-    //cout << XY << endl;
-    //cout << LN << endl << endl << XX << endl << endl;
+    cout << endl;
+    int old_index;
+    for(int L1=0;L1<N;L1++)
+    {
+        for(int L2=L1;L2<N;L2++)
+        {
+            if( L1 == AL[L2].index)
+            {
+                old_index = L2;
+                break;
+            }
+        }
+        XX.row(L1).swap(XX.row(AL[L1].index));   //eigenvector
+        AL[old_index].index = AL[L1].index;
+        AL[L1].index = L1;
+        /*
+        cout << "swap " << L1 << " " << old_index << endl;
+        cout << "AL.index= " << endl;
+        for(int L1=0;L1<N;L1++)
+        {
+            cout << AL[L1].index << " ";
+        }
+        cout << endl;
+        cout << "Normalized eigenvectors:" << endl;
+        cout << XX << endl;*/
+    }
     
+
+    /*cout <<"Eigenvalues: " << endl ;
+    cout << ces.eigenvalues().transpose() << endl;
+    cout << "Weights: " << endl;
+    cout << TEST.transpose() << endl;
+    cout <<"Sorted Eigenvalues: " << endl;
+    cout << WW.transpose() << endl;
+    cout << "Eigenvectors: " << endl;
+    cout << ces.eigenvectors() << endl;
+    cout << "Normalized eigenvectors:" << endl;
+    cout << XX << endl;
+    */
     //eigenresults.erase(eigenresults.begin(),eigenresults.end());
     
     //
@@ -383,8 +424,8 @@ void SpinWave::Signif_Solutions()
     double ETS = 1.0e-5;
     vector<double> VI_signif,SVI_signif;
     IM = 0; MI = 0;
-    VI.resize(0);
-    SVI.resize(0);
+    //VI.resize(0);
+    //SVI.resize(0);
     
     for (int k=0;k<NU;k++)
     {

@@ -130,10 +130,11 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
                             if (norm < max && norm > min)
                             {
                                 // check if relativeDistance has already been calculated
+                                //cout << relativeDistance[0] << " " << relativeDistance[1] << " " << relativeDistance[2] << endl;
                                 for (int k=0;k<results.size();k++)
                                 {
-                                    double difference = relativeDistance[0]-results[k][0] + relativeDistance[1]-results[k][1] + relativeDistance[2]-results[k][2];
-                                    if (abs(difference) < 1.0e-5)
+                                    double difference = pow(relativeDistance[0]-results[k][0],2) + pow(relativeDistance[1]-results[k][1],2) + pow(relativeDistance[2]-results[k][2],2);
+                                    if (difference < 1.0e-5)
                                     {
                                         already_found = 1;
                                         break;
@@ -156,12 +157,13 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
                cout << "Couldn't find all neighbors at specified distance" << endl;
         }
         neighborCache.insert(pair<NeighborsKey,vector<vector<double> > >(name,results) );
-    }    
-    //for (int i=0;i<neighborCache[name].size();i++)
-    //{
-    //    cout << neighborCache[name][i][0] << endl;
-    //}
-    //cout << "done" << endl;
+    }
+    /*cout << name.sl1 << " " << name.sl2 << endl;
+    for (int i=0;i<neighborCache[name].size();i++)
+    {
+        cout << neighborCache[name][i][0] << " " << neighborCache[name][i][1] << " " <<neighborCache[name][i][2] << endl;
+    }
+    cout << "done" << endl;*/
     return &neighborCache[name];
 }
 
