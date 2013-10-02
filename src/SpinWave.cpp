@@ -145,7 +145,7 @@ void SpinWave::Calc_Weights()
     int maxIterations = 50;
     for(int ito=0;ito<maxIterations;ito++)
     {
-        cout << "ito= " << ito << endl;
+        //cout << "ito= " << ito << endl;
         //cout << "iteration # " << ito << endl;
         
         MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
@@ -203,14 +203,19 @@ void SpinWave::Calc_Weights()
     
     sort(AL.begin(),AL.end());
 
-    cout << "AL.index= " << endl;
+    //cout << "AL.index= " << endl;
     for(int L1=0;L1<N;L1++)
     {
         WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
-        cout << AL[L1].index << " ";
+        //cout << AL[L1].index << " ";
 
     }
-    cout << endl;
+    //cout << endl;
+    
+    
+    //Swap rows to reflect ordering of eigenvalues.
+    //The swap moves row L1 to a new position and the index must be
+    //updated to reflect this.
     int old_index;
     for(int L1=0;L1<N;L1++)
     {
@@ -224,17 +229,7 @@ void SpinWave::Calc_Weights()
         }
         XX.row(L1).swap(XX.row(AL[L1].index));   //eigenvector
         AL[old_index].index = AL[L1].index;
-        AL[L1].index = L1;
-        /*
-        cout << "swap " << L1 << " " << old_index << endl;
-        cout << "AL.index= " << endl;
-        for(int L1=0;L1<N;L1++)
-        {
-            cout << AL[L1].index << " ";
-        }
-        cout << endl;
-        cout << "Normalized eigenvectors:" << endl;
-        cout << XX << endl;*/
+        //AL[L1].index = L1;
     }
     
 
@@ -280,8 +275,8 @@ void SpinWave::Calc_Intensities()
     MatrixXcd C,SS;
     
     C.resize(2*M,2*M);
-    SS.resize(3,3);
-    SS.setZero();
+    //SS.resize(3,3);
+    //SS.setZero();
 
     //for(sl.First();!sl.IsDone();sl.Next())
     //{
