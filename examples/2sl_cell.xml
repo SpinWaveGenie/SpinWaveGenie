@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spin_wave_genie>
+    <crystal>
+        <basevect scale="1.0">
+             <a> 1.0 </a>
+             <b> 1.0 </b>
+             <c> 1.414 </c>
+             <alpha> 90 </alpha>
+             <beta> 90 </beta>
+             <gamma> 90 </gamma>
+        </basevect>
+        <sublattice>
+            <name> Fe1 </name>
+            <moment coord="spherical">
+                2.5 90.0 180.0
+            </moment>
+            <position units="fractional">
+                0.5 0.0 0.0
+                0.0 0.5 0.5
+            </position>
+        </sublattice>
+        <sublattice>
+            <name> Fe2 </name>
+            <moment coord="spherical">
+                2.5 90.0 0.0
+            </moment>
+            <position units="fractional">
+                0.0 0.5 0.0
+                0.5 0.0 0.5
+            </position>
+        </sublattice>
+    </crystal>
+    <interaction>
+        <exchange value="-5.0" >
+            Fe1 Fe2 0.7 0.8
+        </exchange>
+        <anis_x value="0.0046">
+            Fe1
+            Fe2
+        </anis_x>
+        <anis_z value="0.0013">
+            Fe1
+            Fe2
+        </anis_z>
+    </interaction>
+</spin_wave_genie>

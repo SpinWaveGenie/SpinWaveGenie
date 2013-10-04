@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spin_wave_genie>
+    <crystal>
+        <basevect scale="1.0">
+             <a> 1.0 </a>
+             <b> 10.0 </b>
+             <c> 10.0 </c>
+             <alpha> 90 </alpha>
+             <beta> 90 </beta>
+             <gamma> 90 </gamma>
+        </basevect>
+        <sublattice>
+            <name> S1 </name>
+            <moment coord="spherical">
+                1.0 0.0 0.0
+            </moment>
+            <position units="fractional">
+                0.0 0.0 0.0
+                0.5 0.0 0.0
+            </position>
+        </sublattice>
+    </crystal>
+    <interaction>
+        <exchange value="1.0">
+            S1 S1 0.45 0.55
+        </exchange>
+    </interaction>
+</spin_wave_genie>

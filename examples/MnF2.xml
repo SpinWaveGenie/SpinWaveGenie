@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spin_wave_genie>
+    <crystal>
+        <basevect scale="1.0">
+             <a> 4.873 </a>
+             <b> 4.873 </b>
+             <c> 3.130 </c>
+             <alpha> 90 </alpha>
+             <beta> 90 </beta>
+             <gamma> 90 </gamma>
+        </basevect>
+        <sublattice>
+            <name> Mn1 </name>
+            <moment coord="spherical">
+                2.5 0.0 0.0
+            </moment>
+            <position units="fractional">
+                0.0 0.0 0.0
+            </position>
+        </sublattice>
+        <sublattice>
+            <name> Mn2 </name>
+            <moment coord="spherical">
+                2.5 180.0 0.0
+            </moment>
+            <position units="fractional">
+                0.5 0.5 0.5
+            </position>
+        </sublattice>
+    </crystal>
+    <interaction>
+        <exchange value="0.064">
+            Mn1 Mn1 3.1 3.2
+            Mn2 Mn2 3.1 3.2
+        </exchange>
+        <exchange value="-0.31" >
+            Mn1 Mn2 3.7 3.8
+        </exchange>
+        <anis_z value="0.022">
+            Mn1
+            Mn2
+        </anis_z>
+    </interaction>
+</spin_wave_genie>
