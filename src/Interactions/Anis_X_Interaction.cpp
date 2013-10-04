@@ -50,6 +50,16 @@ void Anis_X_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector
 {
 }
 
+void Anis_X_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements)
+{
+        complex<double> XI (0.0,1.0);
+        double S = cell->getSublattice(sl_r).getMoment();
+        double theta = cell->getSublattice(sl_r).getTheta();
+        double phi = cell->getSublattice(sl_r).getPhi();
+        elements[r] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*cos(phi)*(cos(theta)*cos(phi)+XI*sin(phi));
+        elements[r+M] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*cos(phi)*(cos(theta)*cos(phi)-XI*sin(phi));
+}
+
 void Anis_X_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
 {
 

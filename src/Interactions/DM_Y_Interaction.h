@@ -15,6 +15,7 @@ public:
     void Update_Interaction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void calcConstantValues(boost::shared_ptr<Cell> cell);
     void calcChangingValues(boost::shared_ptr<Cell> cell, Eigen::Vector3d K);
+    void checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements);
     void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN,int quadrant);
     std::vector<std::string> sublattices() const;
 private:

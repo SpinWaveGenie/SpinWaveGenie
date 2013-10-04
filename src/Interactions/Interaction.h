@@ -16,6 +16,7 @@ public:
     virtual bool operator<(const Interaction& other) const;
     virtual void calcConstantValues(boost::shared_ptr<Cell> cell) = 0;
     virtual void calcChangingValues(boost::shared_ptr<Cell> cell, Eigen::Vector3d K) = 0;
+    virtual void checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements) = 0;
     //! virtual method for adding terms to the matrix LN
     //! \param K reciprocal lattice point currently being simulated.
     //! \param cell pointer to Cell object containing magnetic ground state information

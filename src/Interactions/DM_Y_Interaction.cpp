@@ -86,6 +86,11 @@ void DM_Y_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
     
 }
 
+void DM_Y_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements)
+{
+}
+
+
 void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
 {
     complex<double> XI (0.0,1.0);

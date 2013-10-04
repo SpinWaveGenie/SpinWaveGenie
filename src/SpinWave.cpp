@@ -83,7 +83,7 @@ void SpinWave::Calc_Eigenvalues()
     if (ces.info() != Success)
         cout << ces.info() << endl;
     
-    //cout << ces.eigenvalues() << endl;
+    cout << ces.eigenvalues() << endl;
     
     //
     //     Test eigenvalue condition

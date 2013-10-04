@@ -12,6 +12,7 @@ class SW_Builder
 public:
     SW_Builder(boost::shared_ptr<Cell>& cell_in);
     void Add_Interaction(Interaction * in);
+    Eigen::VectorXcd checkFirstOrderTerms();
     SpinWave Create_Element(double KX, double KY, double KZ);
 private:
     boost::shared_ptr<Cell> cell;

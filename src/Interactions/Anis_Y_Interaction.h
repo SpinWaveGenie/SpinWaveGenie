@@ -1,5 +1,5 @@
-#ifndef __AnisZ_Interaction_H__
-#define __AnisZ_Interaction_H__ 1
+#ifndef __Anis_Y_Interaction_H__
+#define __Anis_Y_Interaction_H__ 1
 
 #include <string>
 #include <vector>
@@ -8,11 +8,17 @@
 #include "Cell.h"
 #include "Interaction.h"
 
-class Anis_Z_Interaction: public Interaction
+//!
+/*!
+ */
+class Anis_Y_Interaction: public Interaction
 {
 public:
-    Anis_Z_Interaction(double value_in, std::string sl_r_in);
+    //!
+    Anis_Y_Interaction(double value_in, std::string sl_r_in);
+    //!
     void Update_Interaction(double value_in, std::string sl_r_in);
+    //!
     void calcConstantValues(boost::shared_ptr<Cell> cell);
     void calcChangingValues(boost::shared_ptr<Cell> cell, Eigen::Vector3d K);
     void checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements);
@@ -22,7 +28,7 @@ private:
     std::string sl_r;
     double value;
     int r,M;
-    std::complex<double> LNrr,LNrrM,LNrMr,LNrMrM;
+    std::complex<double> LNrr,LNrrM,LNrMr;
 };
 
 #endif

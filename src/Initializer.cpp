@@ -1,6 +1,7 @@
 #include "Initializer.h"
 #include "Exch_Interaction.h"
 #include "Anis_Z_Interaction.h"
+#include "Anis_Y_Interaction.h"
 #include "Anis_X_Interaction.h"
 #include "DM_Y_Interaction.h"
 
@@ -183,6 +184,23 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
                 builder->Add_Interaction(new Anis_Z_Interaction(value,atom1));
             }
         }
+    }
+    
+    for (pugi::xml_node tool = node.child("anis_y"); tool; tool = tool.next_sibling("anis_y"))
+    {
+        double value = tool.attribute("value").as_double();
+        parser.clear();
+        parser.str(tool.child_value());
+        while(parser.good())
+        {
+            parser >> atom1;
+            if(parser.good())
+            {
+                cout << atom1 << endl;
+                builder->Add_Interaction(new Anis_Y_Interaction(value,atom1));
+            }
+        }
+        
     }
     
     for (pugi::xml_node tool = node.child("anis_x"); tool; tool = tool.next_sibling("anis_x"))
