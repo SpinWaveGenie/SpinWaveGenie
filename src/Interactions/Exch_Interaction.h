@@ -22,7 +22,7 @@ private:
     std::string sl_r,sl_s;
     int r,s,M;
     double value,min,max;
-    double Sr,Ss,X;
+    double Sr,Ss;
     std::complex<double> G1,G2;
     Eigen::Matrix3d Frs;
     double z_rs;

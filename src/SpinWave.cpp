@@ -76,8 +76,8 @@ void SpinWave::Calc_Eigenvalues()
     
     LN = LN*2.0;
     
-    
-    //cout << LN << endl;
+    cout << "LN= " << endl;
+    cout << LN.real() << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
@@ -159,7 +159,7 @@ void SpinWave::Calc_Weights()
                 {
                     IPR(L1,L2) = 1;
                     IR = -1;
-                    cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
+                    //cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
                 }
             }
         }

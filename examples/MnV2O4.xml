@@ -12,7 +12,7 @@
         <sublattice>
             <name> Mn0 </name>
             <moment coord="spherical">
-                1.0 180.0 0.0
+                2.5 180.0 0.0
             </moment>
             <position units="fractional">
                0.000      0.000      0.000
@@ -24,7 +24,7 @@
         <sublattice>
             <name> Mn1 </name>
             <moment coord="spherical">
-                1.0 180.0 0.0
+                2.5 180.0 0.0
             </moment>
             <position units="fractional">
                 0.750      0.250      0.750
@@ -36,7 +36,7 @@
         <sublattice>
             <name> V0 </name>
             <moment coord="spherical">
-                1.0 48.5826895819 270.0
+                1.0 63.6122000388 270.0
             </moment>
             <position units="fractional">
                 0.875      0.125      0.375
@@ -48,7 +48,7 @@
         <sublattice>
             <name> V1 </name>
             <moment coord="spherical">
-                1.0 48.5826895819 90.0
+                1.0 63.6122000388 90.0
             </moment>
             <position units="fractional">
                 0.125      0.375      0.875
@@ -60,7 +60,7 @@
         <sublattice>
             <name> V2 </name>
             <moment coord="spherical">
-                1.0 48.5826895819 270.0
+                1.0 63.6122000388 270.0
             </moment>
             <position units="fractional">
                 0.375      0.875      0.125
@@ -72,7 +72,7 @@
         <sublattice>
             <name> V3 </name>
             <moment coord="spherical">
-                1.0 48.5826895819 90.0
+                1.0 63.6122000388 90.0
             </moment>
             <position units="fractional">
                 0.625      0.625      0.625
@@ -83,7 +83,7 @@
         </sublattice>
     </crystal>
     <interaction>
-        <exchange value="-4.3">
+        <exchange value="1.12">
             Mn0 V0 0.41 0.42
             Mn0 V1 0.41 0.42
             Mn0 V2 0.41 0.42
@@ -93,27 +93,27 @@
             Mn1 V2 0.41 0.42
             Mn1 V3 0.41 0.42
         </exchange>
-        <exchange value="-10.0" >
+        <exchange value="9.8" >
             V0 V1 0.35 0.36
             V2 V3 0.35 0.36
         </exchange>
-        <exchange value="-3.0" >
+        <exchange value="3.0" >
             V0 V2 0.35 0.36
             V0 V3 0.35 0.36
             V1 V2 0.35 0.36
             V1 V3 0.35 0.36
         </exchange>
-        <anis_z value="1.0">
+        <anis_z value="0.096">
             Mn0
             Mn1
         </anis_z>
-        <anis_z value="-0.5">
+        <anis_z value="-2.7">
             V0
             V1
             V2
             V3
         </anis_z>
-        <anis_y value="6.0">
+        <anis_y value="4.0">
             V0
             V1
             V2

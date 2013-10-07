@@ -26,7 +26,7 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     Init four_sl;
-    four_sl.read_input("/Users/svh/Documents/spin_wave_genie/build/2sl_cell.xml");
+    four_sl.read_input("/Users/svh/Documents/spin_wave_genie/release/MnV2O4.xml");
     boost::shared_ptr<SW_Builder> builder = four_sl.get_builder();
     
     Eigen::VectorXcd check = builder->checkFirstOrderTerms();
@@ -50,12 +50,12 @@ int main(int argc, char * argv[])
     for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
     {
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
-    }
+    }*/
 
-    int npoints = 11;
+    int npoints = 2;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=0.0;x1=1.0;
-    y0=0.0;y1=0.0;
+    x0=2.0;x1=2.0;
+    y0=2.0;y1=2.0;
     z0=0.0;z1=0.0;
     for(int m=0;m<npoints;m++)
     {
@@ -76,6 +76,6 @@ int main(int argc, char * argv[])
             it2++;
         } 
         cout << endl;
-    }*/
+    }
     return 0;
 }
