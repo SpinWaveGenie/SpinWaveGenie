@@ -66,7 +66,7 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
         iter->Update_Matrix(K,SW.cell,SW.LN,quad+3);
     }
     
-    //cout << "LN" << endl;
-    //cout << SW.LN << endl;
+    cout << "LN" << endl;
+    cout << SW.LN << endl;
     return SW;
 }

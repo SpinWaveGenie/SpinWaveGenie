@@ -77,13 +77,13 @@ void SpinWave::Calc_Eigenvalues()
     LN = LN*2.0;
     
     cout << "LN= " << endl;
-    cout << LN.real() << endl;
+    cout << LN << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
     
-    cout << ces.eigenvalues() << endl;
+    //cout << ces.eigenvalues() << endl;
     
     //
     //     Test eigenvalue condition

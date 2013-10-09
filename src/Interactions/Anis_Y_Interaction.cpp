@@ -53,7 +53,7 @@ void Anis_Y_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eige
     double phi = cell->getSublattice(sl_r).getPhi();
     elements[r] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*sin(phi)*(cos(theta)*sin(phi)-XI*cos(phi));
     elements[r+M] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*sin(phi)*(cos(theta)*sin(phi)+XI*cos(phi));
-    cout << "Anis_Y" << endl;
+    //cout << "Anis_Y" << endl;
 }
 
 void Anis_Y_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
