@@ -1,4 +1,5 @@
 #include "SpinWave.h"
+#include <Eigen/Cholesky>
 
 using namespace Eigen;
 using namespace std;
@@ -76,14 +77,28 @@ void SpinWave::Calc_Eigenvalues()
     
     LN = LN*2.0;
     
-    cout << "LN= " << endl;
-    cout << LN << endl;
+    cout << KXP << KYP << KZP << endl;
+    LLT<MatrixXcd> lltOfA(LN);
+    MatrixXcd H = lltOfA.matrixL();
+    MatrixXcd Ht = H.transpose();
+    
+    MatrixXcd Ltest = H*LN*Ht;
+    
+    ces.compute(Ltest);
+    if (ces.info() != Success)
+        cout << ces.info() << endl;
+    
+    cout << ces.eigenvalues().transpose() << endl;
+    
+
+    //cout << "LN= " << endl;
+    //cout << LN << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
     
-    //cout << ces.eigenvalues() << endl;
+    cout << ces.eigenvalues().transpose() << endl << endl;
     
     //
     //     Test eigenvalue condition
