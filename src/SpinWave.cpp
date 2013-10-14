@@ -77,7 +77,7 @@ void SpinWave::Calc_Eigenvalues()
     
     LN = LN*2.0;
     
-    cout << KXP << KYP << KZP << endl;
+    /*cout << KXP << KYP << KZP << endl;
     LLT<MatrixXcd> lltOfA(LN);
     MatrixXcd H = lltOfA.matrixL();
     MatrixXcd Ht = H.transpose();
@@ -89,7 +89,7 @@ void SpinWave::Calc_Eigenvalues()
         cout << ces.info() << endl;
     
     cout << ces.eigenvalues().transpose() << endl;
-    
+    */
 
     //cout << "LN= " << endl;
     //cout << LN << endl;
@@ -98,7 +98,7 @@ void SpinWave::Calc_Eigenvalues()
     if (ces.info() != Success)
         cout << ces.info() << endl;
     
-    cout << ces.eigenvalues().transpose() << endl << endl;
+    //cout << ces.eigenvalues().transpose() << endl << endl;
     
     //
     //     Test eigenvalue condition
@@ -285,6 +285,7 @@ void SpinWave::Calc_Intensities()
     double KZ = KZP;
     //vector<Matrix3d> V_array;
     Matrix3d V_r;//,V_s;
+    double S_r;
     ArrayXXcd Intensities(M,3); Intensities.setZero();
     VectorXd SXX,SYY,SZZ;
     MatrixXcd C,SS;
@@ -338,27 +339,28 @@ void SpinWave::Calc_Intensities()
     //CellIter sl(cell);
     //double S = sl.CurrentItem()->getMoment()[0];
     
-    SublatticeIterator sl = cell->begin();
-    double S = sl->getMoment();
+    // sl = cell->begin();
+    //double S = ;
 
     long L2 = 0;
-    for (sl = cell->begin(); sl!=cell->end();++sl) //r
+    for (SublatticeIterator sl = cell->begin(); sl!=cell->end();++sl) //r
     {
         V_r = (*sl->getInverseMatrix());
+        S_r = sl->getMoment();
         for(int L=0;L<M;L++) //n
         {
             for(int L1=0;L1<3;L1++) //alpha
             {
                 complex<double> Intensities_r = (V_r(L1,0) - XI*V_r(L1,1)) * XIN(L2,L+M)
                 +  (V_r(L1,0) + XI*V_r(L1,1)) * XIN(L2+M,L+M);
-                Intensities(L,L1) += Intensities_r;
+                Intensities(L,L1) += sqrt(S_r)*Intensities_r;
             }
         }
         L2++;
     }
     
     Intensities *= Intensities.conjugate();
-    Intensities *= S/(4.0*M);
+    Intensities *= 1.0/(4.0*M);
     
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
