@@ -1,5 +1,6 @@
 #include "SpinWave.h"
 #include <Eigen/Cholesky>
+#include <iomanip>
 
 using namespace Eigen;
 using namespace std;
@@ -92,7 +93,7 @@ void SpinWave::Calc_Eigenvalues()
     */
 
     //cout << "LN= " << endl;
-    //cout << LN << endl;
+    //cout << fixed << setprecision(4) << LN << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
@@ -201,7 +202,10 @@ void SpinWave::Calc_Weights()
             }
         }
         if (ito==maxIterations-1)
-            TEST = ortho_test.diagonal();        
+        {
+            TEST = ortho_test.diagonal();
+            cout << "Error calculating frequencies" << endl;
+        }
     }
     
     vector<results> AL(N);

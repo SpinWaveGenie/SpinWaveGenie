@@ -23,8 +23,7 @@ private:
     int r,s,M;
     double value,min,max;
     double Sr,Ss;
-    std::complex<double> G1,G2;
-    Eigen::Matrix3d Frs;
+    Eigen::Matrix3d Frs,Fsr;
     double z_rs;
     std::complex<double> gamma_rs;
 };

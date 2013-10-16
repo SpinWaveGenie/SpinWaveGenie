@@ -61,6 +61,7 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
     {
         iter->calcChangingValues(SW.cell,K);
         iter->Update_Matrix(K,SW.cell,SW.LN,quad);
+        //cout << SW.LN(0,2) << endl;
         iter->Update_Matrix(K,SW.cell,SW.LN,quad+1);
         iter->Update_Matrix(K,SW.cell,SW.LN,quad+2);
         iter->Update_Matrix(K,SW.cell,SW.LN,quad+3);

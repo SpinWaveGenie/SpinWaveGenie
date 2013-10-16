@@ -50,8 +50,8 @@ void Anis_Z_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eige
     double S = cell->getSublattice(sl_r).getMoment();
     double theta = cell->getSublattice(sl_r).getTheta();
     
-    elements[r] -= sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
-    elements[r+M] -= sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
+    elements[r] += sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
+    elements[r+M] += sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
 }
 
 void Anis_Z_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)

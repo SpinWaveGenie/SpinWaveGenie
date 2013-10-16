@@ -14,7 +14,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <random>
-#include <boost/random.hpp>
 #include <boost/thread.hpp>
 #include <boost/version.hpp>
 #include <boost/program_options.hpp>
@@ -34,7 +33,6 @@ struct mc_params
     double x0,y0,z0;
     double E_min,E_max;
     int E_points;
-    unsigned seed;
     boost::shared_ptr<SW_Builder> builder;
 };
 
@@ -123,33 +121,23 @@ VectorXd h(void *params)
     int E_points = exp_data->E_points;
     VectorXd integral,integral_sq;
     
-#if BOOST_VERSION / 100 % 1000 >= 47
-    boost::random::mt19937 gen(exp_data->seed);
-    boost::random::uniform_real_distribution<double> die_x(1.8,2.2);
-    boost::random::uniform_real_distribution<double> die_z(-3.2,-2.8);
-#else
-    boost::mt19937 gen(exp_data->seed);
-    boost::uniform_real<double> dist_x(1.8,2.2);
-    boost::uniform_real<double> dist_z(-3.2,-2.8);
-    boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > die_x(gen, dist_x);
-    boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > die_z(gen, dist_z);
-#endif
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dist_x(1.8,2.2);
+    std::uniform_real_distribution<double> dist_z(-3.2,-2.8);
+        
+    int npoints = 201;
     integral.setZero(E_points);
-    for(int j=0;j!=201;j++)
+    for(int j=0;j!=npoints;j++)
     {
-#if BOOST_VERSION / 100 % 1000 >= 47
-        exp_data->x0 = die_x(gen);
-        exp_data->z0 = die_z(gen);
-#else
-        exp_data->x0 = die_x();
-        exp_data->z0 = die_z();
-#endif
+        exp_data->x0 = dist_x(gen);
+        exp_data->z0 = dist_z(gen);
         //cout << x << " " << y << " " << z << endl;
         VectorXd result = g(params);
         integral += result;
         //integral_sq += result*result;
     }
-    integral = integral/201.0;
+    integral = integral/(double)npoints;
     /*double sigma = 0.0;
     for(int i=0;i!=integral.size();i++)
     {
@@ -196,17 +184,6 @@ public:
         data.E_points = Epoints;
         data.builder = four_sl.get_builder();
         
-#if BOOST_VERSION / 100 % 1000 >= 47
-        boost::random::mt19937 gen;
-        boost::random::uniform_int_distribution<unsigned> die(1);
-        data.seed = die(gen);
-#else
-        boost::mt19937 gen;
-        boost::uniform_int<unsigned> dist_x(1);
-        boost::variate_generator<boost::mt19937&, boost::uniform_int<unsigned> > die(gen, dist_x);
-        data.seed = die();
-#endif
-            
         double x0,y0,z0,x1,y1,z1;
         x0=2.0;x1=2.0;
         y0=-1.5;y1=1.5;

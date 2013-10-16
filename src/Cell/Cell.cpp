@@ -99,8 +99,8 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
 
     if (neighborCache.find(name) == neighborCache.end() )
     {
-        //no benefit to iterating over the first sublattice. Hence we choose the first element
         AtomIterator atom1 = getSublattice(sl1).begin();
+        //no benefit to iterating over the first sublattice. Hence we choose the first element
         // Increase the size of the supercell until the list of neighbors does not change
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. if not a warning message will be printed.
@@ -108,7 +108,6 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
         {
             //cout << supercellSize << endl;
             bool new_results = 0;
-            {
             for (AtomIterator atom2=getSublattice(sl2).begin(); atom2!=getSublattice(sl2).end(); ++atom2)
             {
                 for (long n1=-supercellSize;n1<=supercellSize;n1++)
@@ -149,7 +148,6 @@ vector<vector<double> >* Cell::getNeighbors(string& sl1, string& sl2 , double mi
                         }
                     }
                 }
-            }
             }
             if(!new_results)
                 break;
