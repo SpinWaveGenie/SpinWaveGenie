@@ -121,9 +121,9 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     
     complex<double> G2rs = -0.5*complex<double>(Frs(0,0) - Frs(1,1),-Frs(1,0)-Frs(0,1));
     
-    //complex<double> G1sr = -0.5*complex<double>(Fsr(0,0) + Fsr(1,1),Fsr(1,0)-Fsr(0,1));
+    complex<double> G1sr = -0.5*complex<double>(Fsr(0,0) + Fsr(1,1),Fsr(1,0)-Fsr(0,1));
     
-    //complex<double> G2sr = -0.5*complex<double>(Fsr(0,0) - Fsr(1,1),-Fsr(1,0)-Fsr(0,1));
+    complex<double> G2sr = -0.5*complex<double>(Fsr(0,0) - Fsr(1,1),-Fsr(1,0)-Fsr(0,1));
 
     double X = value*sqrt(Sr*Ss);
     switch (quadrant)
@@ -131,18 +131,18 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
         case 0:
             //cout << "G2rs  G2sr" << endl;
             //cout << G2rs << " " << G2sr << endl;
-            LN(r,r) += 0.5*z_rs*value*Ss*(Frs(2,2));
-            LN(r,s) += 0.5*z_rs*X*conj(gamma_rs)*G1rs;
+            LN(r,r) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
+            LN(r,s) += 0.25*z_rs*X*conj(gamma_rs)*(G1rs+conj(G1sr));
             break;
         case 1:
-            LN(r,s+M) += 0.5*z_rs*X*conj(gamma_rs)*(conj(G2rs));
+            LN(r,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G2rs)+conj(G2sr));
             break;
         case 2:
-            LN(r+M,s) += 0.5*z_rs*X*conj(gamma_rs)*(G2rs);
+            LN(r+M,s) += 0.25*z_rs*X*conj(gamma_rs)*(G2rs+G2sr);
             break;
         case 3:
-            LN(r+M,r+M) += 0.5*z_rs*value*Ss*(Frs(2,2));
-            LN(r+M,s+M) += 0.5*z_rs*X*conj(gamma_rs)*conj(G1rs);
+            LN(r+M,r+M) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
+            LN(r+M,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G1rs)+G1sr);
             break;
         default:
             cout << "error: case must be between 0 and 3" << endl;
@@ -152,7 +152,7 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
     {
         case 0:
             LN(r,r) += 0.25*z_rs*value*Ss*Frs(2,2);
-            LN(r,s) += 0.25*z_rs*X*gamma_rs*G1rs;
+            LN(r,s) += 0.25*z_rs*X*conj(gamma_rs)*G1rs;
             LN(s,r) += 0.25*z_rs*X*gamma_rs*conj(G1rs);
             LN(s,s) += 0.25*z_rs*value*Sr*Frs(2,2);
             break;
@@ -167,7 +167,7 @@ void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, M
         case 3:
             LN(r+M,r+M) += 0.25*z_rs*value*Ss*Frs(2,2);
             LN(r+M,s+M) += 0.25*z_rs*X*conj(gamma_rs)*conj(G1rs);
-            LN(s+M,r+M) += 0.25*z_rs*X*conj(gamma_rs)*G1rs;
+            LN(s+M,r+M) += 0.25*z_rs*X*gamma_rs*G1rs;
             LN(s+M,s+M) += 0.25*z_rs*value*Sr*Frs(2,2);
             break;
         default:

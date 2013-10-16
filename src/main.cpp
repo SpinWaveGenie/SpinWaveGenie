@@ -26,7 +26,7 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     Init four_sl;
-    four_sl.read_input("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4.xml");
+    four_sl.read_input("/Users/svh/Documents/spin_wave_genie/release/MnV2O4.xml");
     boost::shared_ptr<SW_Builder> builder = four_sl.get_builder();
     
     Eigen::VectorXcd check = builder->checkFirstOrderTerms();
@@ -53,27 +53,27 @@ int main(int argc, char * argv[])
         cout << sqrt(pow((*nbr)[0],2) + pow((*nbr)[1],2) + pow((*nbr)[2],2)) << endl;
     }
 
-    int npoints = 9;
+    int npoints = 121;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=0.0;x1=0.0;
+    x0=2.0;x1=2.0;
     y0=0.0;y1=0.0;
-    z0=0.0;z1=8.0;
+    z0=0.0;z1=3.0;
     for(int m=0;m<npoints;m++)
     {
         x = x0 + (x1-x0)*m/(npoints-1);
         y = y0 + (y1-y0)*m/(npoints-1);
         z = z0 + (z1-z0)*m/(npoints-1);
-        cout << "Pos." << endl;
-        cout << x << " " << y << " " <<z << endl;
+        //cout << "Pos." << endl;
+        cout << x << " " << y << " " <<z << " ";
         SpinWave test = builder->Create_Element(x,y,z);
         test.Calc();
         vector<double> frequencies = test.Get_Frequencies();
         vector<double> intensities = test.Get_Intensities();
-        cout << "Freq.  Int." << endl;
+        //cout << "Freq.  Int." << endl;
         vector<double>::iterator it2 = intensities.begin();
         for(vector<double>::iterator it = frequencies.begin();it!=frequencies.end();it++)
         {
-            cout << (*it) << "  " << (*it2) << endl;
+            cout << (*it) << "  ";
             it2++;
         } 
         cout << endl;
