@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <new>
+#include <functional>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -27,7 +28,7 @@ public:
     boost::shared_ptr<SW_Builder> get_builder();
     
 private:
-    std::map< std::string, boost::function< void (const pugi::xml_node&) > > m_parser_map; //!< Map for dispatching parsers based on node type
+    std::map< std::string, std::function< void (const pugi::xml_node&) > > m_parser_map; //!< Map for dispatching parsers based on node type
     boost::shared_ptr<Cell> unit_cell;
     boost::shared_ptr<SW_Builder> builder;
     void parseCrystalNode(const pugi::xml_node &node);

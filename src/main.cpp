@@ -33,7 +33,7 @@ int main(int argc, char * argv[])
     
     cout << check << endl;
     
-    boost::shared_ptr<Cell> cell = four_sl.get_cell();
+    /*boost::shared_ptr<Cell> cell = four_sl.get_cell();
     
     string sl_r = "Mn0";
     string sl_s = "V0";
@@ -51,20 +51,20 @@ int main(int argc, char * argv[])
     {
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
         cout << sqrt(pow((*nbr)[0],2) + pow((*nbr)[1],2) + pow((*nbr)[2],2)) << endl;
-    }
+    }*/
 
-    int npoints = 121;
+    int npoints = 121000;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=2.0;x1=2.0;
+    x0=-1.5;x1=0.0;
     y0=0.0;y1=0.0;
-    z0=0.0;z1=3.0;
+    z0=-1.5;z1=0.0;
     for(int m=0;m<npoints;m++)
     {
         x = x0 + (x1-x0)*m/(npoints-1);
         y = y0 + (y1-y0)*m/(npoints-1);
         z = z0 + (z1-z0)*m/(npoints-1);
         //cout << "Pos." << endl;
-        cout << x << " " << y << " " <<z << " ";
+        //cout << x << " " << y << " " <<z << " ";
         SpinWave test = builder->Create_Element(x,y,z);
         test.Calc();
         vector<double> frequencies = test.Get_Frequencies();
@@ -73,10 +73,10 @@ int main(int argc, char * argv[])
         vector<double>::iterator it2 = intensities.begin();
         for(vector<double>::iterator it = frequencies.begin();it!=frequencies.end();it++)
         {
-            cout << (*it) << "  ";
+            //cout << (*it) << "  ";
             it2++;
         } 
-        cout << endl;
+        //cout << endl;
     }
     return 0;
 }

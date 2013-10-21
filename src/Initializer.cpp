@@ -1,3 +1,4 @@
+#include <functional>
 #include "Initializer.h"
 #include "Exch_Interaction.h"
 #include "Anis_Z_Interaction.h"
@@ -26,7 +27,7 @@ void Init::read_input(string filename)
     {    
         string name = it->name();
         pugi::xml_node node = tools.child(name.c_str());
-        std::map< std::string, boost::function< void (const pugi::xml_node&) > >::iterator parser;
+        std::map< std::string, std::function< void (const pugi::xml_node&) > >::iterator parser;
         parser = m_parser_map.find(name);
         if (parser != m_parser_map.end())
             parser->second(node);
@@ -103,7 +104,12 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
         name.erase(std::remove_if(name.begin(),name.end(), ::isspace), name.end());
         cout << name << endl;
         new_sl->setName(name);
-                
+        
+        string type(tool.child_value("type"));
+        type.erase(std::remove_if(type.begin(),type.end(), ::isspace), type.end());
+        cout << type << endl;
+        new_sl->setType(type);
+        
         parser.clear();
         parser.str(tool.child_value("moment"));
         double S,theta,phi;

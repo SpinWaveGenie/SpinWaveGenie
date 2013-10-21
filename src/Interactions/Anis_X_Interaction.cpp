@@ -62,8 +62,6 @@ void Anis_X_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eige
 
 void Anis_X_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
 {
-
-    
     switch (quadrant)
     {
         case 0:

@@ -14,6 +14,16 @@ string Sublattice::getName()
     return name;
 }
 
+void Sublattice::setType(string typeInput)
+{
+    type = typeInput;
+}
+
+string Sublattice::getType()
+{
+    return type;
+}
+
 void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
 {
     spin = spinInput;

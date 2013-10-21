@@ -30,6 +30,13 @@ public:
     //! returns name of a given sublattice
     //! \return name of sublattice
     std::string getName();
+    //! use AtomIterator to iterate over atoms in sublattice
+    //! set type to describe magnetic form factor used in the calculation of intensities;
+    //! \param typeInput a std::string argument
+    void setType(std::string typeInput );
+    //! returns name of a given sublattice
+    //! \return name of sublattice
+    std::string getType();
     //! set moment in spherical coordinates r,theta,phi
     /*! \param spin_input magnitude of spin moment
      \param theta_input angle 0 <= theta <= pi
@@ -62,6 +69,7 @@ public:
     AtomIterator end();
 private:
     std::string name; //!< name describing the sublattice
+    std::string type; //!< type describing the magnetic form factor
     double spin, //!< magnitude of spin
     theta, //!< angle theta describing orientation of spin
     phi; //!< angle phi describing orientation of spin
