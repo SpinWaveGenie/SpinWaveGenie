@@ -14,7 +14,7 @@ public:
     SW_Builder(Cell& cell_in);
     void Add_Interaction(Interaction* in);
     Eigen::VectorXcd checkFirstOrderTerms();
-    SpinWave Create_Element(double KX, double KY, double KZ);
+    SpinWave* Create_Element(double KX, double KY, double KZ);
 private:
     Cell cell;
     boost::ptr_vector<Interaction> interactions;

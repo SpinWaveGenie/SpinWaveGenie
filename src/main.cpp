@@ -58,10 +58,10 @@ int e_test(unsigned dim, const double *x, void *data,
 
     //sum += 1.0/exp(-a*pow(u,2));
     //cout << exp_data->x0 << '\t' << x[0] << '\t' << exp_data->y0 << '\t' << exp_data->z0 << endl;
-    SpinWave test = exp_data->builder.Create_Element(exp_data->x0,x[0],exp_data->z0);
-    test.Calc();
-    vector<double> frequencies = test.Get_Frequencies();
-    vector<double> intensities = test.Get_Intensities();
+    SpinWave* test = exp_data->builder.Create_Element(exp_data->x0,x[0],exp_data->z0);
+    test->Calc();
+    vector<double> frequencies = test->Get_Frequencies();
+    vector<double> intensities = test->Get_Intensities();
     
     double u = x[0] - exp_data->y0;
     for(size_t k=0;k!=frequencies.size();k++)

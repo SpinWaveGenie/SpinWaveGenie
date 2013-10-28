@@ -49,7 +49,7 @@ Eigen::VectorXcd SW_Builder::checkFirstOrderTerms()
 }
 
 
-SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
+SpinWave* SW_Builder::Create_Element(double KX,double KY,double KZ)
 {
     Eigen::Vector3d K;
     Eigen::Matrix3d recip;
@@ -64,7 +64,6 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
     int quad = 0;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        //iter->calcConstantValues(SW.cell);
         iter->calcChangingValues(SW.cell,K);
         iter->Update_Matrix(K,SW.cell,SW.LN,quad);
         //cout << SW.LN(0,2) << endl;
@@ -75,5 +74,5 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
     
     //cout << "LN" << endl;
     //cout << SW.LN << endl;
-    return SW;
+    return &SW;
 }

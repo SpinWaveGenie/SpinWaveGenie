@@ -84,6 +84,8 @@ SpinWave::SpinWave(Cell& cell_in)
 void SpinWave::Clear_Matrix()
 {
     LN.setZero();
+    VI.clear();
+    SVI.clear();
 }
 
 void SpinWave::Set_Kpoint(double KX, double KY, double KZ)
