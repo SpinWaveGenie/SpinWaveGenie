@@ -5,7 +5,7 @@ LINK_LIBRARIES(${Boost_LIBRARIES})
 #add_subdirectory(Interactions)
 
 file(GLOB SRCS *.cpp *.h)
-file(GLOB EXTERN_SRCS extern/*.cpp extern/*.h)
+file(GLOB EXTERN_SRCS extern/*.cpp extern/*.c extern/*.h)
 file(GLOB CELL_SRCS Cell/*.cpp Cell/*.h)
 file(GLOB INTERACTIONS_SRCS Interactions/*.cpp Interactions/*.h)
 
