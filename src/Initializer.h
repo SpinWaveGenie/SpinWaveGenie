@@ -19,18 +19,19 @@
 class Init
 {
 public:
+    Init(std::string filename);
     //! reads input from xml file "filename"
     void read_input(std::string filename);
     void save_input(std::string filename);
     // saves Cell into xml file "filename"
     // not yet implemented
-    boost::shared_ptr<Cell> get_cell();
-    boost::shared_ptr<SW_Builder> get_builder();
+    Cell get_cell();
+    SW_Builder get_builder();
     
 private:
     std::map< std::string, std::function< void (const pugi::xml_node&) > > m_parser_map; //!< Map for dispatching parsers based on node type
-    boost::shared_ptr<Cell> unit_cell;
-    boost::shared_ptr<SW_Builder> builder;
+    Cell unit_cell;
+    SW_Builder builder;
     void parseCrystalNode(const pugi::xml_node &node);
     void parseInteractionNode(const pugi::xml_node &node);
     void parseKpointsNode(const pugi::xml_node &node);

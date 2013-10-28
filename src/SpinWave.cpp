@@ -58,11 +58,11 @@ SpinWave::SpinWave()
     
 }
 
-SpinWave::SpinWave(boost::shared_ptr<Cell>& cell_in)
+SpinWave::SpinWave(Cell& cell_in)
 {
 
     cell = cell_in;
-    M = cell->size();
+    M = cell.size();
     N = 2*M;
     
     LN.resize(N,N); LN.setZero();
@@ -395,7 +395,7 @@ void SpinWave::Calc_Intensities()
     //double S = ;
 
     long L2 = 0;
-    for (SublatticeIterator sl = cell->begin(); sl!=cell->end();++sl) //r
+    for (SublatticeIterator sl = cell.begin(); sl!=cell.end();++sl) //r
     {
         V_r = (*sl->getInverseMatrix());
         S_r = sl->getMoment();

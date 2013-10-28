@@ -3,7 +3,13 @@
 
 using namespace std;
 
-SW_Builder::SW_Builder(boost::shared_ptr<Cell>& cell_in)
+
+SW_Builder::SW_Builder()
+{
+    
+}
+
+SW_Builder::SW_Builder(Cell& cell_in)
 {
     cell = cell_in;
     SpinWave temp(cell);
@@ -20,7 +26,7 @@ void SW_Builder::Add_Interaction(Interaction* in)
 Eigen::VectorXcd SW_Builder::checkFirstOrderTerms()
 {
     int M=0;
-    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
+    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         M++;
     }
@@ -47,7 +53,7 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
 {
     Eigen::Vector3d K;
     Eigen::Matrix3d recip;
-    recip = cell->getReciprocalVectors();
+    recip = cell.getReciprocalVectors();
     K << KX,KY,KZ;
     //cout << "K before " << K.transpose() << endl;
     K = recip*K;
@@ -58,6 +64,7 @@ SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
     int quad = 0;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
+        //iter->calcConstantValues(SW.cell);
         iter->calcChangingValues(SW.cell,K);
         iter->Update_Matrix(K,SW.cell,SW.LN,quad);
         //cout << SW.LN(0,2) << endl;

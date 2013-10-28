@@ -9,6 +9,11 @@ Anis_Z_Interaction::Anis_Z_Interaction(double value_in, string sl_r_in)
     this->Update_Interaction(value_in, sl_r_in);
 }
 
+Interaction* Anis_Z_Interaction::do_clone() const
+{
+    return new Anis_Z_Interaction(*this);
+}
+
 void Anis_Z_Interaction::Update_Interaction(double value_in, string sl_r_in)
 {
     value = value_in;
@@ -22,12 +27,12 @@ vector<string> Anis_Z_Interaction::sublattices() const
     return sl;
 }
 
-void Anis_Z_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
+void Anis_Z_Interaction::calcConstantValues(Cell& cell)
 {
     //find location of r
     r= -1;
     M = 0;
-    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
+    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         if ( sl_r == sl->getName())
             r = M;
@@ -35,8 +40,8 @@ void Anis_Z_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     }
     assert(r!=-1);
 
-    double S = cell->getSublattice(sl_r).getMoment();
-    double theta = cell->getSublattice(sl_r).getTheta();
+    double S = cell.getSublattice(sl_r).getMoment();
+    double theta = cell.getSublattice(sl_r).getTheta();
     double X = value;
     
     LNrr = -0.5*X*S*(1.0-3.0*pow(cos(theta),2));
@@ -45,20 +50,20 @@ void Anis_Z_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     LNrMrM = -0.5*X*S*(1.0-3.0*pow(cos(theta),2));
 }
 
-void Anis_Z_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements)
+void Anis_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
-    double S = cell->getSublattice(sl_r).getMoment();
-    double theta = cell->getSublattice(sl_r).getTheta();
+    double S = cell.getSublattice(sl_r).getMoment();
+    double theta = cell.getSublattice(sl_r).getTheta();
     
     elements[r] += sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
     elements[r+M] += sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
 }
 
-void Anis_Z_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+void Anis_Z_Interaction::calcChangingValues(Cell& cell, Vector3d K)
 {
 }
 
-void Anis_Z_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+void Anis_Z_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
 {
     switch (quadrant)
     {

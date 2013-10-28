@@ -6,9 +6,9 @@
 using namespace Eigen;
 using namespace std;
 
-Neighbors::Neighbors(boost::shared_ptr<Cell>& cell, string& sl1, string& sl2, double min, double max)
+Neighbors::Neighbors(Cell& cell, string& sl1, string& sl2, double min, double max)
 {
-    neighborList = cell->getNeighbors(sl1, sl2, min, max);
+    neighborList = cell.getNeighbors(sl1, sl2, min, max);
 }
 
 AtomIterator Neighbors::begin()

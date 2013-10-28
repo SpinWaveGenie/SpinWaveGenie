@@ -8,6 +8,12 @@ Anis_X_Interaction::Anis_X_Interaction(double value_in, string sl_r_in)
     this->Update_Interaction(value_in, sl_r_in);
 }
 
+Interaction* Anis_X_Interaction::do_clone() const
+{
+    return new Anis_X_Interaction(*this);
+
+}
+
 void Anis_X_Interaction::Update_Interaction(double value_in, string sl_r_in)
 {
     value = value_in;
@@ -21,13 +27,13 @@ vector<string> Anis_X_Interaction::sublattices() const
     return sl;
 }
 
-void Anis_X_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
+void Anis_X_Interaction::calcConstantValues(Cell& cell)
 {
     complex<double> XI (0.0,1.0);
     //find location of r,s
     r= -1;
     M = 0;
-    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
+    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         if ( sl_r == sl->getName())
             r = M;
@@ -35,9 +41,9 @@ void Anis_X_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     }
     assert(r!=-1);
     
-    double S = cell->getSublattice(sl_r).getMoment();
-    double theta = cell->getSublattice(sl_r).getTheta();
-    double phi = cell->getSublattice(sl_r).getPhi();
+    double S = cell.getSublattice(sl_r).getMoment();
+    double theta = cell.getSublattice(sl_r).getTheta();
+    double phi = cell.getSublattice(sl_r).getPhi();
     double X = value;
     
     LNrr = -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
@@ -46,21 +52,21 @@ void Anis_X_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     LNrMrM = -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
 }
 
-void Anis_X_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+void Anis_X_Interaction::calcChangingValues(Cell& cell, Vector3d K)
 {
 }
 
-void Anis_X_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements)
+void Anis_X_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
         complex<double> XI (0.0,1.0);
-        double S = cell->getSublattice(sl_r).getMoment();
-        double theta = cell->getSublattice(sl_r).getTheta();
-        double phi = cell->getSublattice(sl_r).getPhi();
+        double S = cell.getSublattice(sl_r).getMoment();
+        double theta = cell.getSublattice(sl_r).getTheta();
+        double phi = cell.getSublattice(sl_r).getPhi();
         elements[r] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*cos(phi)*(cos(theta)*cos(phi)+XI*sin(phi));
         elements[r+M] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*cos(phi)*(cos(theta)*cos(phi)-XI*sin(phi));
 }
 
-void Anis_X_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+void Anis_X_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
 {
     switch (quadrant)
     {

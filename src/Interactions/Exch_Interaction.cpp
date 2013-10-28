@@ -11,6 +11,12 @@ Exch_Interaction::Exch_Interaction(double value_in, string sl_r_in,string sl_s_i
  
 }
 
+Interaction* Exch_Interaction::do_clone() const
+{
+    return new Exch_Interaction(*this);
+}
+
+
 void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     value = value_in;
@@ -28,14 +34,14 @@ vector<string> Exch_Interaction::sublattices() const
     return sl;
 }
 
-void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
+void Exch_Interaction::calcConstantValues(Cell& cell)
 {
     //find location of r,s
     r= -1;
     s= -1;
     
     M=0;
-    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
+    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         //cout << sl.CurrentItem()->get_name() << endl;
         //cout << iter->sl_r << endl;
@@ -51,14 +57,14 @@ void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     
     assert(r!=-1 && s!=-1);
     
-    Sr = cell->getSublattice(sl_r).getMoment();
-    Ss = cell->getSublattice(sl_s).getMoment();
+    Sr = cell.getSublattice(sl_r).getMoment();
+    Ss = cell.getSublattice(sl_s).getMoment();
 
-    Frs = (*cell->getSublattice(sl_r).getRotationMatrix())*
-    (*cell->getSublattice(sl_s).getInverseMatrix());
+    Frs = (*cell.getSublattice(sl_r).getRotationMatrix())*
+    (*cell.getSublattice(sl_s).getInverseMatrix());
     
-    Fsr = (*cell->getSublattice(sl_s).getRotationMatrix())*
-    (*cell->getSublattice(sl_r).getInverseMatrix());
+    Fsr = (*cell.getSublattice(sl_s).getRotationMatrix())*
+    (*cell.getSublattice(sl_r).getInverseMatrix());
     
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
@@ -68,7 +74,7 @@ void Exch_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     
 }
 
-void Exch_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+void Exch_Interaction::calcChangingValues(Cell& cell, Vector3d K)
 {
     Neighbors neighborList(cell,sl_r,sl_s,min,max);
     
@@ -93,7 +99,7 @@ void Exch_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
     //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
 }
 
-void Exch_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, VectorXcd &elements )
+void Exch_Interaction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
 {
         
     complex<double> F1rs(Frs(0,2),Frs(1,2));
@@ -114,7 +120,7 @@ void Exch_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Vector
     elements[r+M] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*(F1rs+F2sr);
 }
 
-void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+void Exch_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
 {
     
     complex<double> G1rs = -0.5*complex<double>(Frs(0,0) + Frs(1,1),Frs(1,0)-Frs(0,1));

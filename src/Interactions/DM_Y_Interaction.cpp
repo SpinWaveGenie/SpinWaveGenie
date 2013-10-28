@@ -10,6 +10,11 @@ DM_Y_Interaction::DM_Y_Interaction(double value_in, string sl_r_in,string sl_s_i
     this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
+Interaction* DM_Y_Interaction::do_clone() const
+{
+    return new DM_Y_Interaction(*this);
+
+}
 
 void DM_Y_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
@@ -28,13 +33,13 @@ vector<string> DM_Y_Interaction::sublattices() const
     return sl;
 }
 
-void DM_Y_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
+void DM_Y_Interaction::calcConstantValues(Cell& cell)
 {
     //find location of r,s
     r= -1;
     s= -1;
     M=0;
-    for (SublatticeIterator sl=cell->begin(); sl!=cell->end(); ++sl)
+    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         //cout << sl.CurrentItem()->get_name() << endl;
         //cout << iter->sl_r << endl;
@@ -51,11 +56,11 @@ void DM_Y_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     //cout << endl;
     
     double X = value;
-    double S = cell->getSublattice(sl_r).getMoment();
-    double theta_r = cell->getSublattice(sl_r).getTheta();
-    double phi_r = cell->getSublattice(sl_r).getPhi();
-    double theta_s = cell->getSublattice(sl_s).getTheta();
-    double phi_s = cell->getSublattice(sl_s).getPhi();
+    double S = cell.getSublattice(sl_r).getMoment();
+    double theta_r = cell.getSublattice(sl_r).getTheta();
+    double phi_r = cell.getSublattice(sl_r).getPhi();
+    double theta_s = cell.getSublattice(sl_s).getTheta();
+    double phi_s = cell.getSublattice(sl_s).getPhi();
     
     value0 = -0.5*X*S*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
     value1 = -0.25*X*S*cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);
@@ -64,7 +69,7 @@ void DM_Y_Interaction::calcConstantValues(boost::shared_ptr<Cell> cell)
     
 }
 
-void DM_Y_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d K)
+void DM_Y_Interaction::calcChangingValues(Cell& cell, Vector3d K)
 {
     Neighbors neighborList(cell,sl_r,sl_s,min,max);
     
@@ -86,12 +91,12 @@ void DM_Y_Interaction::calcChangingValues(boost::shared_ptr<Cell> cell, Vector3d
     
 }
 
-void DM_Y_Interaction::checkFirstOrderTerms(boost::shared_ptr<Cell> cell, Eigen::VectorXcd &elements)
+void DM_Y_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
 }
 
 
-void DM_Y_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN, int quadrant)
+void DM_Y_Interaction::Update_Matrix(Vector3d K,Cell& cell, MatrixXcd &LN, int quadrant)
 {
     complex<double> XI (0.0,1.0);
     switch (quadrant)

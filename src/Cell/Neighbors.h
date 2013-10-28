@@ -34,7 +34,7 @@ public:
     //! \param min minimum distance considered (Angstroms)
     //! \param max maximum distance considered (Angstroms)
     // returns relative position of all neighboring atoms
-    Neighbors(boost::shared_ptr<Cell>& cell, std::string& sl1, std::string& sl2, double min, double max);
+    Neighbors(Cell& cell, std::string& sl1, std::string& sl2, double min, double max);
     //! \return Returns an iterator pointing to the first element of the neighbor list
     AtomIterator begin();
     //! \return Returns an iterator pointing to the first element of the neighbor list

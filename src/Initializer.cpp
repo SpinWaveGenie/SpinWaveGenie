@@ -9,6 +9,12 @@
 using namespace std;
 using namespace boost;
 
+
+Init::Init(string filename)
+{
+    read_input(filename);
+}
+
 void Init::read_input(string filename)
 {    //Sublattice Fe1,Fe2;
     
@@ -43,7 +49,7 @@ void Init::save_input(string filename)
 
 void Init::parseCrystalNode(const pugi::xml_node &node)
 {
-    unit_cell = boost::shared_ptr<Cell>(new Cell);
+    //unit_cell = boost::shared_ptr<Cell>(new Cell);
     istringstream parser;
     double scale = node.child("basevect").attribute("scale").as_double();
     cout << scale << endl;
@@ -94,7 +100,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     algorithm::trim(temp); // get rid of surrounding whitespace
     gamma = lexical_cast<double>(temp);
 
-    unit_cell->setBasisVectors(a,b,c,alpha,beta,gamma);
+    unit_cell.setBasisVectors(a,b,c,alpha,beta,gamma);
 
     for (pugi::xml_node tool = node.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
@@ -117,7 +123,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
         cout << S << '\t' << theta << '\t' << phi << endl;
         new_sl.setMoment(S,theta*M_PI/180.0,phi*M_PI/180.0);
 
-        unit_cell->addSublattice(name,new_sl);
+        unit_cell.addSublattice(name,new_sl);
         parser.clear();
         parser.str(tool.child_value("position"));
         while(parser.good())
@@ -126,7 +132,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
             parser >> x >> y >> z;
             if (parser.good())
             {
-                unit_cell->addAtom(name,x,y,z);
+                unit_cell.addAtom(name,x,y,z);
                 cout << x << '\t' << y << '\t' << z << endl;
             }
         }
@@ -138,7 +144,9 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
     istringstream parser;
     double min,max;
     string atom1,atom2;
-    builder = boost::shared_ptr<SW_Builder>(new SW_Builder(unit_cell));
+    //builder = boost::shared_ptr<SW_Builder>(new SW_Builder(unit_cell));
+    SW_Builder temp(unit_cell);
+    builder = temp;
     for (pugi::xml_node tool = node.child("exchange"); tool; tool = tool.next_sibling("exchange"))
     {
         double value = tool.attribute("value").as_double();
@@ -150,11 +158,11 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << atom2 << endl;
-                builder->Add_Interaction(new Exch_Interaction(value,atom1,atom2,min,max));
+                builder.Add_Interaction(new Exch_Interaction(value,atom1,atom2,min,max));
                 if (atom1 != atom2)
                 {
                     cout << atom2 << atom1 << endl;
-                    builder->Add_Interaction(new Exch_Interaction(value,atom2,atom1,min,max));
+                    builder.Add_Interaction(new Exch_Interaction(value,atom2,atom1,min,max));
                 }
             }
         }
@@ -171,7 +179,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << atom2 << endl;
-                builder->Add_Interaction(new DM_Y_Interaction(value,atom2,atom1,min,max));
+                builder.Add_Interaction(new DM_Y_Interaction(value,atom2,atom1,min,max));
             }
         }
     }
@@ -187,7 +195,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << endl;
-                builder->Add_Interaction(new Anis_Z_Interaction(value,atom1));
+                builder.Add_Interaction(new Anis_Z_Interaction(value,atom1));
             }
         }
     }
@@ -203,7 +211,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << endl;
-                builder->Add_Interaction(new Anis_Y_Interaction(value,atom1));
+                builder.Add_Interaction(new Anis_Y_Interaction(value,atom1));
             }
         }
         
@@ -220,7 +228,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             if(parser.good())
             {
                 cout << atom1 << endl;
-                builder->Add_Interaction(new Anis_X_Interaction(value,atom1));
+                builder.Add_Interaction(new Anis_X_Interaction(value,atom1));
             }
         }
         
@@ -249,7 +257,7 @@ void Init::parseKpointsNode(const pugi::xml_node &node)
                     x = x0 + (x1-x0)*n/(npoints-1);
                     y = y0 + (y1-y0)*n/(npoints-1);
                     z = z0 + (z1-z0)*n/(npoints-1);
-                    SpinWave test = builder->Create_Element(x,y,z);
+                    SpinWave test = builder.Create_Element(x,y,z);
                     //cout << x << " " << y << " " << z << endl;
                     test.Calc();
                     vector<double> frequencies = test.Get_Frequencies();
@@ -265,12 +273,12 @@ void Init::parseKpointsNode(const pugi::xml_node &node)
     }
 }
 
-boost::shared_ptr<Cell> Init::get_cell()
+Cell Init::get_cell()
 {
     return unit_cell;
 }
 
-boost::shared_ptr<SW_Builder> Init::get_builder()
+SW_Builder Init::get_builder()
 {
     return builder;
 }

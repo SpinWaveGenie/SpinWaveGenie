@@ -43,7 +43,7 @@ public:
     //! Use SW_Builder to generate SpinWave instance
     friend class SW_Builder;
     SpinWave();
-    SpinWave(boost::shared_ptr<Cell>& cell_in );
+    SpinWave(Cell& cell_in );
     //!
     void Set_Kpoint(double KX, double KY, double KZ);
     void Clear_Matrix();
@@ -55,7 +55,7 @@ public:
     //Eigen::MatrixXcd get_Matrix();
 private:
     double KXP,KYP,KZP;
-    boost::shared_ptr<Cell> cell;
+    Cell cell;
     Eigen::Vector3d kpoint;
     void Calc_Eigenvalues();
     void Calc_Weights();

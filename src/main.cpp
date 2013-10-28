@@ -13,7 +13,6 @@
 #include <sstream>
 #include <vector>
 #include <boost/thread.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/program_options.hpp>
 #include <thread>
 #include "SpinWave.h"
@@ -33,7 +32,7 @@ struct mc_params
     double x0,y0,z0;
     double E_min,E_max;
     int E_points;
-    boost::shared_ptr<SW_Builder> builder;
+    SW_Builder builder;
 };
 
 int e_test(unsigned dim, const double *x, void *data,
@@ -59,7 +58,7 @@ int e_test(unsigned dim, const double *x, void *data,
 
     //sum += 1.0/exp(-a*pow(u,2));
     //cout << exp_data->x0 << '\t' << x[0] << '\t' << exp_data->y0 << '\t' << exp_data->z0 << endl;
-    SpinWave test = exp_data->builder->Create_Element(exp_data->x0,x[0],exp_data->z0);
+    SpinWave test = exp_data->builder.Create_Element(exp_data->x0,x[0],exp_data->z0);
     test.Calc();
     vector<double> frequencies = test.Get_Frequencies();
     vector<double> intensities = test.Get_Intensities();
@@ -125,111 +124,6 @@ int f_test(unsigned dim, const double *x, void *data,
     return 0;
 }
 
-
-/*int main(int argc, char * argv[])
-{
-    Init four_sl;
-    four_sl.read_input("/Users/svh/Documents/spin_wave_genie/release/4sl_cell.xml");
-    boost::shared_ptr<SW_Builder> builder = four_sl.get_builder();
-    
-    Eigen::VectorXcd check = builder->checkFirstOrderTerms();
-    
-    cout << check << endl;
-    
-   // boost::shared_ptr<Cell> cell = four_sl.get_cell();
-   //
-   // string sl_r = "Mn0";
-   // string sl_s = "V0";
-   // double min = 0.41;
-   // double max = 0.42;
-    
-   // Neighbors neighborList(cell,sl_r,sl_s,min,max);
-    
-   // AtomIterator nbrBegin = neighborList.begin();
-   // AtomIterator nbrEnd = neighborList.end();
-   // int z_rs = distance(nbrBegin,nbrEnd);
-    
-    // cout << "z_rs= " << z_rs << endl;
-    // for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
-    // {
-    //    cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
-    //    cout << sqrt(pow((*nbr)[0],2) + pow((*nbr)[1],2) + pow((*nbr)[2],2)) << endl;
-    // }
-
-    int npoints = 51;
-    double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=2.0;x1=2.0;
-    y0=-1.5;y1=1.5;
-    z0=-3.0;z1=-3.0;
-    
-    //double *xmin, *xmax;
-    double tol;//, *val, *err;
-    unsigned dim, maxEval;
-    
-    unsigned Epoints = 41;
-    double Emin = 0.0;
-    double Emax = 80.0;
-    
-    mc_params data;
-    data.E_min = Emin;
-    data.E_max = Emax;
-    data.E_points = Epoints;
-    data.builder = four_sl.get_builder();
-    Eigen::MatrixXd figure;
-    figure.setZero(npoints,Epoints);
-
-    dim = 2;
-    tol = 1.0e-4;
-    maxEval = 0;
-    
-    vector<double> xmin(dim);
-    vector<double> xmax(dim);
-    
-    xmin[0] = 1.8;
-    xmax[0] = 2.2;
-    xmin[1] = -3.2;
-    xmax[1] = -2.8;
-    
-    for(int m=0;m<npoints;m++)
-    {
-        x = x0 + (x1-x0)*m/(npoints-1);
-        y = y0 + (y1-y0)*m/(npoints-1);
-        z = z0 + (z1-z0)*m/(npoints-1);
-        //cout << "Pos." << endl;
-        cout << x << " " << y << " " <<z << endl;
-        
-        data.y0 = y;
-        
-        vector<double> val(Epoints);
-        vector<double> err(Epoints);
-        
-        
-        hcubature(Epoints, f_test, (void *)&data,
-                 dim, &xmin[0], &xmax[0],
-                 maxEval, tol, 0, ERROR_INDIVIDUAL, &val[0], &err[0]);
-        
-        //for(int i = 0;i!=Epoints;i++)
-        //{
-        //    double energy = Emin + (Emax-Emin)*(double)i/(double)(Epoints-1);
-        //    cout << energy << "  " << val[i] << "  " << err[i] << endl;;
-        //}
-        for(int n=0;n<Epoints;n++)
-        {
-            figure(m,n) = val[n];
-        }
-        
-        cout << endl;
-    }
-
-    std::ofstream file("test.txt");
-    if (file.is_open())
-    {
-        file << figure << '\n';
-    }
-    
-    return 0;
-}*/
-
 class ThreadClass {
 public:
     int npoints,nproc,Epoints;
@@ -242,9 +136,9 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 51;
+        npoints = 101;
         pointsDone = 0;
-        Epoints = 41;
+        Epoints = 81;
         figure.setZero(Epoints,npoints);
     }
     ~ThreadClass()
@@ -252,11 +146,11 @@ public:
         
     }
     // Destructor
-    void Run(int i,string filename)
+    void Run(int i, Init& four_sl)
     {
-        Init four_sl;
         boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
-        four_sl.read_input(filename);
+        //Init four_sl(filename);
+        //four_sl.read_input(filename);
         scoped_lock.unlock();
         mc_params data;
         data.E_min = 0.0;
@@ -380,18 +274,20 @@ int main(int argc, char * argv[])
         cerr << "Exception of unknown type!\n";
     }
     
+    Init four_sl(filename);
+    
     boost::thread_group g;
     
     ThreadClass tc(n_threads);
     for (int i=0;i<n_threads;i++)
     {
-        boost::thread *t = new boost::thread(&ThreadClass::Run, &tc, i, filename);
+        boost::thread *t = new boost::thread(&ThreadClass::Run, &tc, i, four_sl);
         g.add_thread(t);
     }
     
-    ProgressBar pbar(51);
+    ProgressBar pbar(tc.npoints);
     pbar.start();
-    while(tc.pointsDone < 51)
+    while(tc.pointsDone < tc.npoints)
     {
         sleep(1);
         pbar.update(tc.pointsDone);
