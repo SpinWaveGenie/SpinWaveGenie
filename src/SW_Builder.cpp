@@ -10,12 +10,11 @@ SW_Builder::SW_Builder(boost::shared_ptr<Cell>& cell_in)
     SW = temp;
 }
 
-void SW_Builder::Add_Interaction(Interaction * in)
+void SW_Builder::Add_Interaction(Interaction* in)
 {
     in->calcConstantValues(this->cell);
     interactions.push_back(in);
     interactions.sort();
-
 }
 
 Eigen::VectorXcd SW_Builder::checkFirstOrderTerms()

@@ -98,26 +98,26 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
     for (pugi::xml_node tool = node.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
-        Sublattice* new_sl(new Sublattice());
+        Sublattice new_sl;
             
         string name(tool.child_value("name"));
         name.erase(std::remove_if(name.begin(),name.end(), ::isspace), name.end());
         cout << name << endl;
-        new_sl->setName(name);
+        new_sl.setName(name);
         
         string type(tool.child_value("type"));
         type.erase(std::remove_if(type.begin(),type.end(), ::isspace), type.end());
         cout << type << endl;
-        new_sl->setType(type);
+        new_sl.setType(type);
         
         parser.clear();
         parser.str(tool.child_value("moment"));
         double S,theta,phi;
         parser >> S >> theta >> phi;
         cout << S << '\t' << theta << '\t' << phi << endl;
-        new_sl->setMoment(S,theta*M_PI/180.0,phi*M_PI/180.0);
+        new_sl.setMoment(S,theta*M_PI/180.0,phi*M_PI/180.0);
 
-        unit_cell->addSublattice(name,std::move(new_sl));
+        unit_cell->addSublattice(name,new_sl);
         parser.clear();
         parser.str(tool.child_value("position"));
         while(parser.good())

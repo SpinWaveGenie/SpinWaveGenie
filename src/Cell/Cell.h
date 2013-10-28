@@ -12,7 +12,6 @@
 #include <memory> 
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
-#include <boost/ptr_container/ptr_map.hpp>
 
 
 //! Iterates over sublattices in the Cell class.
@@ -41,7 +40,7 @@ private:
     friend class boost::iterator_core_access;
     
 public:
-    explicit SublatticeIterator(boost::ptr_map<std::string,Sublattice>::iterator _it)
+    explicit SublatticeIterator(std::map<std::string,Sublattice>::iterator _it)
     : it(_it)
     {}
     
@@ -50,7 +49,7 @@ public:
     {}
     
 private:
-    boost::ptr_map<std::string,Sublattice>::iterator it;
+    std::map<std::string,Sublattice>::iterator it;
     
     void increment()
     {
@@ -64,7 +63,7 @@ private:
     
     Sublattice& dereference() const
     {
-        return *(it->second);
+        return it->second;
     }
     
 };
@@ -102,7 +101,7 @@ public:
     //! \param name Unique name defining sublattice
     //! \param sl Pointer to Sublattice object
     //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
-    void addSublattice(std::string& name, Sublattice* sl);
+    void addSublattice(std::string& name, Sublattice& sl);
     //! Returns pointer to sublattice "name"
     //! \param name used to describe sublattice
     //! \return pointer to sublattice
@@ -146,8 +145,8 @@ private:
     Eigen::Matrix3d basisVectors;
     //! reciprocal lattice vectors
     Eigen::Matrix3d reciprocalVectors;
-    //! Pointers to all Sublattice objects;
-    boost::ptr_map<std::string, Sublattice> sublatticeInfo;
+    //! map of all Sublattice objects;
+    std::map<std::string, Sublattice> sublatticeInfo;
 };
 
 #endif // __Cell_H__ 

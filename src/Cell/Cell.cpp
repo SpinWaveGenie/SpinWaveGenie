@@ -59,9 +59,9 @@ Eigen::Matrix3d Cell::getReciprocalVectors()
     return reciprocalVectors;
 }
 
-void Cell::addSublattice(std::string& name, Sublattice* sl)
+void Cell::addSublattice(std::string& name, Sublattice& sl)
 {
-    sublatticeInfo.insert(name,sl);
+    sublatticeInfo.insert(pair<string,Sublattice>(name,sl));
 }
 
 Sublattice& Cell::getSublattice(string& name)
