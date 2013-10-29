@@ -12,20 +12,19 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
-#include <random>
 #include <boost/thread.hpp>
-#include <boost/version.hpp>
 #include <boost/program_options.hpp>
+#include <thread>
 #include "SpinWave.h"
 #include "Initializer.h"
 #include "progressbar.h"
-#include <Eigen/Core>
+#include "Cell/Neighbors.h"
+#include "Cell/AtomIterator.h"
+#include "extern/cubature.h"
+
 using namespace Eigen;
 using namespace boost;
 namespace po = boost::program_options;
-#include <iostream>
-#include <iterator>
 using namespace std;
 
 struct mc_params
@@ -33,128 +32,102 @@ struct mc_params
     double x0,y0,z0;
     double E_min,E_max;
     int E_points;
-    boost::shared_ptr<SW_Builder> builder;
+    SW_Builder builder;
 };
 
-double f(double x,double y,double z)
+int e_test(unsigned dim, const double *x, void *data,
+           unsigned fdim, double *retval)
 {
-    Vector4d big_F,little_f,eval_points,weights;
-    big_F << 0.3972,0.6295,-0.0314,0.0044;
-    little_f << 13.2442,4.9034,0.3496,0.0;
+    mc_params *exp_data = reinterpret_cast<mc_params*>(data);
 
-    double f_Q = 0.0;
-    for(int k=0;k<4;k++)
-    {
-        double s = 2.0*M_PI/5.4*sqrt(pow(x,2) + pow(y,2) + 0.5*pow(z,2))/(4.0*M_PI);
-        f_Q += big_F[k]*exp(-1.0*little_f[k]*pow(s,2));
-    }
-    return f_Q;
-}
-
-VectorXd g(void *params)
-{
-    mc_params *exp_data = reinterpret_cast<mc_params*>(params);
-    double x = exp_data->x0;
-    double z = exp_data->z0;
     double E_min = exp_data->E_min;
     double E_max = exp_data->E_max;
     int E_points = exp_data->E_points;
-    
-    VectorXd integral;
+
+    Eigen::VectorXd integral;
     integral.setZero(E_points);
     
     double a,b,c;
     a = 1109.0;
     b = 0.0;
     c = 0.48;
-    double norm = sqrt((a*c-b*b)/(a*M_PI*M_PI));
     
-    double sigma = 1.0/sqrt(2.0*a);
+    //double norm = sqrt((a*c-b*b)/(a*M_PI*M_PI));
+    //double sigma = 1.0/sqrt(2.0*a);
     double sigma_energy = 1.0/sqrt(2.0*c);
-    
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<double> d(0.0,sigma);
- 
-    int npoints = 201;
-    double sum = 0.0;
-    for(int j=0;j!=npoints;j++)
-    {
-        double u = d(gen);
-        sum += 1.0/exp(-a*pow(u,2));
-        double y = exp_data->y0 + u;
-        //cout << x << '\t' << y << '\t' << z << endl;
-        double f_Q = f(x,y,z);
-        SpinWave test = exp_data->builder->Create_Element(x,y,z);
-        test.Calc();
-        vector<double> frequencies = test.Get_Frequencies();
-        vector<double> intensities = test.Get_Intensities();
-        for(size_t k=0;k!=frequencies.size();k++)
-        {
-            int min_bin = (int) (frequencies[k]-10.0*sigma_energy - E_min)*(E_points-1)/(E_max-E_min);
-            int max_bin = (int) (frequencies[k]+10.0*sigma_energy - E_min)*(E_points-1)/(E_max-E_min);
 
-            if (min_bin < 0)
-                min_bin = 0;
-            if (max_bin > E_points)
-                max_bin = E_points;
+    //sum += 1.0/exp(-a*pow(u,2));
+    //cout << exp_data->x0 << '\t' << x[0] << '\t' << exp_data->y0 << '\t' << exp_data->z0 << endl;
+    SpinWave* test = exp_data->builder.Create_Element(exp_data->x0,x[0],exp_data->z0);
+    test->Calc();
+    vector<double> frequencies = test->Get_Frequencies();
+    vector<double> intensities = test->Get_Intensities();
+    
+    double u = x[0] - exp_data->y0;
+    for(size_t k=0;k!=frequencies.size();k++)
+    {
+        int min_bin = (int) (frequencies[k]-7.0*sigma_energy - E_min)*(E_points-1)/(E_max-E_min);
+        int max_bin = (int) (frequencies[k]+7.0*sigma_energy - E_min)*(E_points-1)/(E_max-E_min);
+        
+        if (min_bin < 0)
+            min_bin = 0;
+        if (max_bin > E_points)
+            max_bin = E_points;
+        
+        //for(int i=0;i!=E_points;i++)
+        for(int i=min_bin;i!=max_bin;i++)
+        {
+            double energy = E_min + (E_max-E_min)*(double)i/(double)(E_points-1);
             
-            for(int i=min_bin;i!=max_bin;i++)
-            {
-                double energy = E_min + (E_max-E_min)*(double)i/(double)(E_points-1);
-                
-                //cout << energy << endl;
-                //cout << frequencies[k] << endl;
-                integral[i] += f_Q*f_Q*intensities[k]*exp(-c*pow((frequencies[k]-energy),2))*
-                                                      exp(-2.0*b*(frequencies[k]-energy)*u);
-                                                      //*exp(-a*pow(u,2));
-            }
+            //cout << energy << endl;
+            //cout << frequencies[k] << endl;
+            integral[i] += intensities[k]*exp(-c*pow(frequencies[k]-energy,2))*exp(-2.0*b*(frequencies[k]-energy)*u)*exp(-a*pow(u,2));
         }
     }
-    integral = integral*norm*M_PI/sum;
-    return integral;
+    
+    for(int i=0;i!=E_points;i++)
+    {
+        retval[i] = integral[i];
+    }
+    return 0;
 }
 
-VectorXd h(void *params)
+int f_test(unsigned dim, const double *x, void *data,
+           unsigned fdim, double *retval)
 {
-    mc_params *exp_data = reinterpret_cast<mc_params*>(params);
+    mc_params *exp_data = reinterpret_cast<mc_params*>(data);
+    double y = exp_data->y0;
+    //cout << x[0] << " " << x[1] << endl;
+    exp_data->x0 = x[0];
+    exp_data->z0 = x[1];
+    //cout << exp_data->x0 << " " << exp_data->z0 << endl;
     int E_points = exp_data->E_points;
-    VectorXd integral,integral_sq;
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dist_x(1.8,2.2);
-    std::uniform_real_distribution<double> dist_z(-3.2,-2.8);
-        
-    int npoints = 201;
+    Eigen::VectorXd integral;
     integral.setZero(E_points);
-    for(int j=0;j!=npoints;j++)
-    {
-        exp_data->x0 = dist_x(gen);
-        exp_data->z0 = dist_z(gen);
-        //cout << x << " " << y << " " << z << endl;
-        VectorXd result = g(params);
-        integral += result;
-        //integral_sq += result*result;
-    }
-    integral = integral/(double)npoints;
-    /*double sigma = 0.0;
-    for(int i=0;i!=integral.size();i++)
-    {
-        integral[i] = integral[i]/100001.0;
-        integral_sq[i] = integral_sq[i]/100001.0;
-        sigma += sqrt((integral_sq[i] - integral[i]*integral[i])/100000.0/100000.0);
-        
-    }
-    cout << "sigma = " << sigma << endl;;
-    */
-    //cout << A << endl;
-    return integral;
+    
+    double xmin, xmax;
+    double tol, *err;
+
+    tol = 1.0e-4;
+    xmin = y - 0.2;
+    xmax = y + 0.2;
+    
+    err = (double *) malloc(sizeof(double) * E_points);
+    
+    hcubature(E_points, e_test, (void *)exp_data,
+              1, &xmin, &xmax,
+              0, tol, 0, ERROR_INDIVIDUAL, retval, err);
+    
+    free(err);
+    
+    return 0;
 }
 
 class ThreadClass {
 public:
     int npoints,nproc,Epoints;
+    int pointsDone;
     MatrixXd figure;
     boost::mutex io_mutex; // The iostreams are not guaranteed to be thread-safe!
     ThreadClass(int n) // Constructor
@@ -163,8 +136,9 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 201;
-        Epoints = 161;
+        npoints = 101;
+        pointsDone = 0;
+        Epoints = 81;
         figure.setZero(Epoints,npoints);
     }
     ~ThreadClass()
@@ -172,11 +146,11 @@ public:
         
     }
     // Destructor
-    void Run(int i,string filename)
+    void Run(int i, Init& four_sl)
     {
-        Init four_sl;
         boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
-        four_sl.read_input(filename);
+        //Init four_sl(filename);
+        //four_sl.read_input(filename);
         scoped_lock.unlock();
         mc_params data;
         data.E_min = 0.0;
@@ -184,11 +158,18 @@ public:
         data.E_points = Epoints;
         data.builder = four_sl.get_builder();
         
+        double tol;
+        unsigned dim, maxEval;
+        
+        dim = 2;
+        tol = 1.0e-4;
+        maxEval = 0;
+        
         double x0,y0,z0,x1,y1,z1;
         x0=2.0;x1=2.0;
         y0=-1.5;y1=1.5;
         z0=-3.0;z1=-3.0;
-        for(int m=i;m<npoints;m=m+nproc)
+        /*for(int m=i;m<npoints;m=m+nproc)
         {
             //cout << n << endl;
             data.x0 = x0 + (x1-x0)*m/(npoints-1);
@@ -199,50 +180,58 @@ public:
             scoped_lock.unlock();
             figure.col(m) = h((void *)&data);
             //cout << figure.col(m) << endl;
+        }*/
+        
+        vector<double> xmin(dim);
+        vector<double> xmax(dim);
+        
+        xmin[0] = 1.8;
+        xmax[0] = 2.2;
+        xmin[1] = -3.2;
+        xmax[1] = -2.8;
+        
+        for(int m=i;m<npoints;m=m+nproc)
+        {
+            data.x0 = x0 + (x1-x0)*m/(npoints-1);
+            data.y0 = y0 + (y1-y0)*m/(npoints-1);
+            data.z0 = z0 + (z1-z0)*m/(npoints-1);
+            //cout << "Pos." << endl;
+            //cout << x << " " << y << " " <<z << endl;
+            //data.y0 = y;
+            
+            //scoped_lock.lock();
+            //cout << data.x0 << " " << data.y0 << " " << data.z0 << endl;
+            //scoped_lock.unlock();
+            
+            vector<double> val(Epoints);
+            vector<double> err(Epoints);
+        
+            hcubature(Epoints, f_test, (void *)&data,
+                      dim, &xmin[0], &xmax[0],
+                      maxEval, tol, 0, ERROR_INDIVIDUAL, &val[0], &err[0]);
+            
+            //for(int i = 0;i!=Epoints;i++)
+            //{
+            //    double energy = Emin + (Emax-Emin)*(double)i/(double)(Epoints-1);
+            //    cout << energy << "  " << val[i] << "  " << err[i] << endl;;
+            //}
+            
+            for(int n=0;n<Epoints;n++)
+            {
+                figure(n,m) = val[n];
+            }
+            scoped_lock.lock();
+            pointsDone++;
+            scoped_lock.unlock();
+            
+            //cout << endl;
         }
+
     }
 };
 
 int main(int argc, char * argv[])
 {
-    /*Init four_sl;
-
-    four_sl.read_input("4sl_cell.xml");
-    //shared_ptr<SW_Builder> asdf = four_sl.get_builder();
-    mc_params data;
-    data.E_min = 0.0;
-    data.E_max = 80.0;
-    data.E_points = 51;
-    data.builder = four_sl.get_builder();
-    
-    vector<double> E_array(data.E_points);
-    for(int i=0;i<data.E_points;i++)
-    {
-        E_array[i] = data.E_min + (data.E_max-data.E_min)*(double)i/(double)(data.E_points-1);
-    }
-    
-    double x0,y0,z0,x1,y1,z1;
-    x0=2.0;x1=2.0;
-    y0=0.0;y1=1.5;
-    z0=-3.0;z1=-3.0;
-    
-
-    MatrixXd figure(data.E_points,npoints);
-    ProgressBar pbar(npoints);
-    pbar.start();
-    for(int n=0;n!=npoints;n++)
-    {
-        pbar.update(n);
-        //cout << n << endl;
-        data.x0 = x0 + (x1-x0)*n/(npoints-1);
-        data.y0 = y0 + (y1-y0)*n/(npoints-1);
-        data.z0 = z0 + (z1-z0)*n/(npoints-1);
-        //cout << x << " " << y << " " << z << endl;
-        figure.col(n) = h((void *)&data);
-    }
-    pbar.finish();
-    */
-    
     string filename;
     int n_threads;
     try {
@@ -274,7 +263,7 @@ int main(int argc, char * argv[])
         } else {
             cout << "number of threads was not set. Using 1 processor.\n";
             n_threads = 1;
-
+            
         }
     }
     catch(std::exception& e) {
@@ -285,14 +274,27 @@ int main(int argc, char * argv[])
         cerr << "Exception of unknown type!\n";
     }
     
+    Init four_sl(filename);
+    
     boost::thread_group g;
-
+    
     ThreadClass tc(n_threads);
     for (int i=0;i<n_threads;i++)
     {
-        boost::thread *t = new boost::thread(&ThreadClass::Run, &tc, i, filename);
+        boost::thread *t = new boost::thread(&ThreadClass::Run, &tc, i, four_sl);
         g.add_thread(t);
     }
+    
+    ProgressBar pbar(tc.npoints);
+    pbar.start();
+    while(tc.pointsDone < tc.npoints)
+    {
+        sleep(1);
+        pbar.update(tc.pointsDone);
+    }
+    pbar.finish();
+    
+    
     g.join_all();
     
     std::ofstream file("test.txt");
@@ -300,11 +302,13 @@ int main(int argc, char * argv[])
     {
         file << tc.figure << '\n';
     }
-
+    
     /*for(int i=0;i!=E_array.size();i++)
-    {
-        cout << E_array[i] << '\t' << intensities[i] << endl;
-    }*/
-   
+     {
+     cout << E_array[i] << '\t' << intensities[i] << endl;
+     }*/
+    
     return 0;
 }
+
+

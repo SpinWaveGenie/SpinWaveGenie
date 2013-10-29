@@ -14,6 +14,7 @@
 #include <vector>
 #include <boost/thread.hpp>
 #include <boost/program_options.hpp>
+#include <boost/progress.hpp>
 #include <thread>
 #include "SpinWave.h"
 #include "Initializer.h"
@@ -136,9 +137,9 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 101;
+        npoints = 801;
         pointsDone = 0;
-        Epoints = 81;
+        Epoints = 641;
         figure.setZero(Epoints,npoints);
     }
     ~ThreadClass()
@@ -274,8 +275,8 @@ int main(int argc, char * argv[])
         cerr << "Exception of unknown type!\n";
     }
     
-    Init four_sl(filename);
     
+    Init four_sl(filename);
     boost::thread_group g;
     
     ThreadClass tc(n_threads);
@@ -285,16 +286,20 @@ int main(int argc, char * argv[])
         g.add_thread(t);
     }
     
-    ProgressBar pbar(tc.npoints);
-    pbar.start();
+    boost::unique_lock<boost::mutex> scoped_lock(tc.io_mutex);
+    double npoints = tc.npoints;
+    scoped_lock.unlock();
+    boost::progress_display show_progress(npoints);
+    int pointsDone = 0;
     while(tc.pointsDone < tc.npoints)
     {
         sleep(1);
-        pbar.update(tc.pointsDone);
+        scoped_lock.lock();
+        int diff = tc.pointsDone - pointsDone;
+        pointsDone = tc.pointsDone;
+        scoped_lock.unlock();
+        show_progress += diff;
     }
-    pbar.finish();
-    
-    
     g.join_all();
     
     std::ofstream file("test.txt");
