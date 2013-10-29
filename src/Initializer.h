@@ -14,8 +14,6 @@
 #include "Cell.h"
 #include "SW_Builder.h"
 
-#include "progressbar.h"
-
 class Init
 {
 public:

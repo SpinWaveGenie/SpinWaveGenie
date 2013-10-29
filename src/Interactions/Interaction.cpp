@@ -1,5 +1,4 @@
 #include "Interaction.h"
-
 using namespace std;
 
 
@@ -16,7 +15,7 @@ bool Interaction::operator<(const Interaction& other) const
             else if (sl1[index] > sl2[index])
                 return false;
         }
-        return true;
+        return false;
     }
     else
     {

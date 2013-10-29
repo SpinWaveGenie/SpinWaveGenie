@@ -21,6 +21,9 @@ void SW_Builder::Add_Interaction(Interaction* in)
     in->calcConstantValues(this->cell);
     interactions.push_back(in);
     interactions.sort();
+    //cout << "woof" << endl;
+
+
 }
 
 Eigen::VectorXcd SW_Builder::checkFirstOrderTerms()

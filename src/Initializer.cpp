@@ -32,6 +32,8 @@ void Init::read_input(string filename)
     for (pugi::xml_node_iterator it = tools.begin(); it != tools.end(); ++it)
     {    
         string name = it->name();
+        cout << name << endl;
+
         pugi::xml_node node = tools.child(name.c_str());
         std::map< std::string, std::function< void (const pugi::xml_node&) > >::iterator parser;
         parser = m_parser_map.find(name);
@@ -227,11 +229,11 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             parser >> atom1;
             if(parser.good())
             {
-                cout << atom1 << endl;
+                cout << value << " " << atom1 << endl;
                 builder.Add_Interaction(new Anis_X_Interaction(value,atom1));
             }
         }
-        
+
     }
 }
 

@@ -18,7 +18,6 @@
 #include <thread>
 #include "SpinWave.h"
 #include "Initializer.h"
-#include "progressbar.h"
 #include "Cell/Neighbors.h"
 #include "Cell/AtomIterator.h"
 #include "extern/cubature.h"
@@ -137,9 +136,9 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 801;
+        npoints = 401;
         pointsDone = 0;
-        Epoints = 641;
+        Epoints = 321;
         figure.setZero(Epoints,npoints);
     }
     ~ThreadClass()
@@ -148,7 +147,7 @@ public:
     }
     // Destructor
     void Run(int i, Init& four_sl)
-    {
+    {   
         boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
         //Init four_sl(filename);
         //four_sl.read_input(filename);
@@ -275,8 +274,8 @@ int main(int argc, char * argv[])
         cerr << "Exception of unknown type!\n";
     }
     
-    
     Init four_sl(filename);
+ 
     boost::thread_group g;
     
     ThreadClass tc(n_threads);
