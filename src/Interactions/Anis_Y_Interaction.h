@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include <boost/shared_ptr.hpp>
 #include "Cell.h"
 #include "Interaction.h"
 
@@ -25,6 +24,7 @@ public:
     void Update_Matrix(Eigen::Vector3d K, Cell& cell, Eigen::MatrixXcd &LN, int quadrant);
     std::vector<std::string> sublattices() const;
     virtual Interaction* do_clone() const;
+    virtual ~Anis_Y_Interaction(){};
 private:
     std::string sl_r;
     double value;

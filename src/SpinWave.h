@@ -17,7 +17,6 @@
 #include <Eigen/Eigenvalues>
 #include <cmath>
 #include <ctime>
-#include <boost/shared_ptr.hpp>
 #include "Cell.h"
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;

@@ -51,7 +51,6 @@ void Init::save_input(string filename)
 
 void Init::parseCrystalNode(const pugi::xml_node &node)
 {
-    //unit_cell = boost::shared_ptr<Cell>(new Cell);
     istringstream parser;
     double scale = node.child("basevect").attribute("scale").as_double();
     cout << scale << endl;
@@ -146,7 +145,6 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
     istringstream parser;
     double min,max;
     string atom1,atom2;
-    //builder = boost::shared_ptr<SW_Builder>(new SW_Builder(unit_cell));
     SW_Builder temp(unit_cell);
     builder = temp;
     for (pugi::xml_node tool = node.child("exchange"); tool; tool = tool.next_sibling("exchange"))

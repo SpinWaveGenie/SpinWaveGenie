@@ -4,7 +4,6 @@
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 //#include "Cell.h"
 
 class Sublattice;

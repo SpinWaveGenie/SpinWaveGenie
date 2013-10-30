@@ -8,7 +8,6 @@
 #include <map>
 #include <string>
 #include <unordered_map>
-#include <boost/shared_ptr.hpp>
 #include <memory> 
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"

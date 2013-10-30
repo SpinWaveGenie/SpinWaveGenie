@@ -5,7 +5,6 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
 class AtomIterator;

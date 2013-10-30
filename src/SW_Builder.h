@@ -2,7 +2,6 @@
 #define __SW_Builder_H__ 1
 
 #include <string>
-#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "SpinWave.h"
 #include "Interaction.h"

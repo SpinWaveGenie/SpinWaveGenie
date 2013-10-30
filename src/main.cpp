@@ -290,12 +290,13 @@ int main(int argc, char * argv[])
     scoped_lock.unlock();
     boost::progress_display show_progress(npoints);
     int pointsDone = 0;
-    while(tc.pointsDone < tc.npoints)
+    while(pointsDone < npoints)
     {
         sleep(1);
         scoped_lock.lock();
         int diff = tc.pointsDone - pointsDone;
         pointsDone = tc.pointsDone;
+        //cout << pointsDone << endl;
         scoped_lock.unlock();
         show_progress += diff;
     }

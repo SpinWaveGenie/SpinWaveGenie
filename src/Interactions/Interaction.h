@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include <boost/shared_ptr.hpp>
 #include "Cell.h"
 
 //! Base class for all classes describing magnetic interactions
@@ -23,6 +22,7 @@ public:
     //! \param LN matrix used to calculate spin wave frequencies and intensities
     virtual void Update_Matrix(Eigen::Vector3d K, Cell& cell, Eigen::MatrixXcd &LN, int quadrant) = 0;
     virtual Interaction* do_clone() const = 0;
+    virtual ~Interaction(){};
 private:
 };
 
