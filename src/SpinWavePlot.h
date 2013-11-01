@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "SW_builder.h"
+#include "SW_Builder.h"
 
 /* Abstract base class */
 // The abstract Coffee class defines the functionality of Coffee implemented by decorator
