@@ -2,17 +2,18 @@
 <spin_wave_genie>
     <crystal>
         <basevect scale="1.0">
-             <a> 1.0 </a>
-             <b> 1.0 </b>
-             <c> 1.414 </c>
+             <a> 5.4 </a>
+             <b> 5.4 </b>
+             <c> 7.63675323681 </c>
              <alpha> 90 </alpha>
              <beta> 90 </beta>
              <gamma> 90 </gamma>
         </basevect>
         <sublattice>
             <name> Fe1 </name>
+            <type> FE3 </type>
             <moment coord="spherical">
-                2.5 90.0 180.0
+                2.5 89.7 180.18
             </moment>
             <position units="fractional">
                 0.5 0.0 0.0
@@ -20,8 +21,9 @@
         </sublattice>
         <sublattice>
             <name> Fe2 </name>
+            <type> FE3 </type>
             <moment coord="spherical">
-                2.5 90.0 0.0
+                2.5 89.7 0.18
             </moment>
             <position units="fractional">
                 0.0 0.5 0.0
@@ -29,8 +31,9 @@
         </sublattice>
         <sublattice>
             <name> Fe3 </name>
+            <type> FE3 </type>
             <moment coord="spherical">
-                2.5 90.0 180.0
+                2.5 89.7 179.82
             </moment>
             <position units="fractional">
                 0.0 0.5 0.5
@@ -38,8 +41,9 @@
         </sublattice>
         <sublattice>
             <name> Fe4 </name>
+            <type> FE3 </type>
             <moment coord="spherical">
-                2.5 90.0 0.0
+                2.5 89.7 359.82
             </moment>
             <position units="fractional">
                 0.5 0.0 0.5
@@ -47,27 +51,35 @@
         </sublattice>
     </crystal>
     <interaction>
-        <exchange value="-5.0" >
-            Fe1 Fe2 0.7 0.8
-            Fe1 Fe4 0.7 0.8
-            Fe3 Fe2 0.7 0.8
-            Fe3 Fe4 0.7 0.8
+        <exchange value="-4.77475" >
+            Fe1 Fe2 3.78 4.32
+            Fe1 Fe4 3.78 4.32
+            Fe3 Fe2 3.78 4.32
+            Fe3 Fe4 3.78 4.32
         </exchange>
-        <exchange value="-0.0" >
-            Fe1 Fe1 0.95 1.05
-            Fe2 Fe2 0.95 1.05
-            Fe3 Fe3 0.95 1.05
-            Fe4 Fe4 0.95 1.05
-            Fe1 Fe3 0.95 1.05
-            Fe2 Fe4 0.95 1.05
+        <exchange value="-0.213504" >
+            Fe1 Fe1 5.3 5.5
+            Fe2 Fe2 5.3 5.5
+            Fe3 Fe3 5.3 5.5
+            Fe4 Fe4 5.3 5.5
+            Fe1 Fe3 5.3 5.5
+            Fe2 Fe4 5.3 5.5
         </exchange>
-        <anis_x value="0.0046">
+        <DM_y value="0.0739193" >
+            Fe4 Fe1 3.78 4.32
+            Fe2 Fe3 3.78 4.32
+        </DM_y>
+        <DM_z value="0.0278343" >
+            Fe4 Fe1 3.78 4.32
+            Fe3 Fe2 3.78 4.32
+        </DM_z>
+        <anis_x value="0.00545269">
             Fe1
             Fe2
             Fe3
             Fe4
         </anis_x>
-        <anis_z value="0.0013">
+        <anis_z value="0.00304881">
             Fe1
             Fe2
             Fe3
