@@ -37,9 +37,9 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 401;
+        npoints = 801;
         pointsDone = 0;
-        points = 321;
+        points = 641;
         figure.setZero(points,npoints);
         min = 0.0;
         max = 80.0;

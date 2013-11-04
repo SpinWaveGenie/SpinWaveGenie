@@ -5,6 +5,7 @@
 #include "Anis_Y_Interaction.h"
 #include "Anis_X_Interaction.h"
 #include "DM_Y_Interaction.h"
+#include "DM_Z_Interaction.h"
 
 using namespace std;
 using namespace boost;
@@ -180,6 +181,22 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             {
                 cout << atom1 << atom2 << endl;
                 builder.Add_Interaction(new DM_Y_Interaction(value,atom2,atom1,min,max));
+            }
+        }
+    }
+    
+    for (pugi::xml_node tool = node.child("DM_z"); tool; tool = tool.next_sibling("DM_z"))
+    {
+        double value = tool.attribute("value").as_double();
+        parser.clear();
+        parser.str(tool.child_value());
+        while(parser.good())
+        {
+            parser >> atom1 >> atom2 >> min >> max;
+            if(parser.good())
+            {
+                cout << atom1 << atom2 << endl;
+                builder.Add_Interaction(new DM_Z_Interaction(value,atom2,atom1,min,max));
             }
         }
     }
