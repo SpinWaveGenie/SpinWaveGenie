@@ -182,8 +182,8 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     else
         tmpz = kz;
     
-    cout << "** " << x[0] << " " << x[1] << " " << x[2] << endl;
-    cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
+    //cout << "** " << x[0] << " " << x[1] << " " << x[2] << endl;
+    //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
     vector<double> val = resolutionFunction.getCut(tmpx,tmpy,tmpz);
 

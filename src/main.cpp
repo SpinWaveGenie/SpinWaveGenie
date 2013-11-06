@@ -116,7 +116,7 @@ public:
             double z = z0 + (z1-z0)*m/(tnpoints-1);
             //cout << "Pos." << endl;
             //scoped_lock.lock();
-            cout << "**** " << x << " " << y << " " << z << endl;
+            //cout << "**** " << x << " " << y << " " << z << endl;
             //scoped_lock.unlock();
             vector<double> val = tmp.getCut(x,y,z);
             for(int n=0;n<tpoints;n++)
