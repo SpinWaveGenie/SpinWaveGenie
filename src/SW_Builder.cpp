@@ -51,7 +51,7 @@ Eigen::VectorXcd SW_Builder::checkFirstOrderTerms()
     return firstOrder;
 }
 
-SpinWave* SW_Builder::Create_Element(double KX,double KY,double KZ)
+SpinWave SW_Builder::Create_Element(double KX,double KY,double KZ)
 {
     Eigen::Vector3d K;
     Eigen::Matrix3d recip;
@@ -75,5 +75,5 @@ SpinWave* SW_Builder::Create_Element(double KX,double KY,double KZ)
     }
     //cout << "LN" << endl;
     //cout << SW.LN << endl;
-    return &SW;
+    return SW;
 }

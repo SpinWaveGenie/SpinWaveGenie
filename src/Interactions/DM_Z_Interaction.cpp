@@ -76,7 +76,7 @@ void DM_Z_Interaction::calcChangingValues(Cell& cell, Vector3d K)
     
     AtomIterator nbrBegin = neighborList.begin();
     AtomIterator nbrEnd = neighborList.end();
-    double z_rs = (double) distance(nbrBegin,nbrEnd);
+    z_rs = (double) distance(nbrBegin,nbrEnd);
     
     complex<double> MXI (0.0,-1.0);
     gamma_rs = complex<double>(0.0,0.0);
@@ -118,9 +118,9 @@ void DM_Z_Interaction::Update_Matrix(Vector3d K,Cell& cell, MatrixXcd &LN, int q
             break;
         case 3:
             LN(r+M,r+M) -= z_rs*tmp0;
-            LN(r+M,s+M) += z_rs*conj(gamma_rs)*(-tmp1 + XI*tmp2 + XI*tmp3 - tmp4);
+            LN(r+M,s+M) -= z_rs*conj(gamma_rs)*(-tmp1 + XI*tmp2 + XI*tmp3 - tmp4);
             LN(s+M,s+M) -= z_rs*tmp0;
-            LN(s+M,r+M) += z_rs*gamma_rs*(-tmp1 - XI*tmp2 - XI*tmp3 - tmp4);
+            LN(s+M,r+M) -= z_rs*gamma_rs*(-tmp1 - XI*tmp2 - XI*tmp3 - tmp4);
             break;
         default:
             //cout << "error: case must be between 0 and 3" << endl;

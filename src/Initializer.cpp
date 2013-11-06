@@ -179,7 +179,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             parser >> atom1 >> atom2 >> min >> max;
             if(parser.good())
             {
-                cout << atom1 << atom2 << endl;
+                cout << "DM along y " << atom1 << atom2 << endl;
                 builder.Add_Interaction(new DM_Y_Interaction(value,atom2,atom1,min,max));
             }
         }
@@ -274,10 +274,10 @@ void Init::parseKpointsNode(const pugi::xml_node &node)
                     x = x0 + (x1-x0)*n/(npoints-1);
                     y = y0 + (y1-y0)*n/(npoints-1);
                     z = z0 + (z1-z0)*n/(npoints-1);
-                    SpinWave* test = builder.Create_Element(x,y,z);
+                    SpinWave test = builder.Create_Element(x,y,z);
                     //cout << x << " " << y << " " << z << endl;
-                    test->Calc();
-                    vector<double> frequencies = test->Get_Frequencies();
+                    test.Calc();
+                    vector<double> frequencies = test.Get_Frequencies();
                     /*cout << endl;
                     for(int i=0;i!=frequencies.size();i++)
                     {

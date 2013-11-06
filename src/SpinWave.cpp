@@ -192,7 +192,7 @@ void SpinWave::Calc_Eigenvalues()
     */
 
     //cout << "LN= " << endl;
-    //cout << fixed << setprecision(4) << LN << endl;
+    //cout << LN << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
@@ -203,7 +203,7 @@ void SpinWave::Calc_Eigenvalues()
     //
     //     Test eigenvalue condition
     //
-    
+    //cout << ces.eigenvalues().size() << endl;
     for (int i=0;i<N;i++)
     {
         complex<double> lambda = ces.eigenvalues()[i];

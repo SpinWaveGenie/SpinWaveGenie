@@ -12,23 +12,40 @@ public:
     virtual ~SpinWavePlot(){};
 };
 
+struct TwoDimGaussian
+{
+    double a,b,c;
+    unsigned direction;
+    double tol;
+    SW_Builder builder;
+};
+
 class TwoDimensionResolutionFunction : SpinWavePlot{
 public:
-    TwoDimensionResolutionFunction(SW_Builder& builderInput, double min, double max, double points);
+    TwoDimensionResolutionFunction(){};
+    TwoDimensionResolutionFunction(TwoDimGaussian& info, double min, double max, double points);
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
     ~TwoDimensionResolutionFunction(){};
 private:
-    double MinimumEnergy,MaximumEnergy;
+    double MinimumEnergy,MaximumEnergy,tol;
+    double a,b,c;
     double kx,ky,kz;
-    unsigned EnergyPoints;
+    unsigned EnergyPoints,direction;
     SW_Builder builder;
+};
+
+struct axes_info
+{
+    bool x,y,z;
+    double dx,dy,dz;
+    double tol;
 };
 
 class IntegrateAxes : SpinWavePlot {
 public:
-    IntegrateAxes(SW_Builder& builderInput, double min, double max, double points);
+    IntegrateAxes(axes_info info, TwoDimensionResolutionFunction resFunction, double min, double max, double points);
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
     std::vector<double> getCut(double kx, double ky, double kz);
@@ -37,7 +54,11 @@ private:
     double MinimumEnergy,MaximumEnergy;
     double kx,ky,kz;
     unsigned EnergyPoints;
-    SW_Builder builder;
+    std::vector<double> xmin,xmax;
+    bool x,y,z;
+    double dx,dy,dz;
+    double tol;
+    TwoDimensionResolutionFunction resolutionFunction;
 };
 
 /*

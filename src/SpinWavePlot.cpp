@@ -13,12 +13,20 @@
 
 using namespace std;
 
-TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(SW_Builder& builderInput, double min, double max, double points)
+
+TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& info, double min, double max, double points)
 {
-    builder = builderInput;
+
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
+    
+    a = info.a;
+    b = info.b;
+    c = info.c;
+    tol = info.tol;
+    direction = info.direction;
+    builder = info.builder;
 }
 
 int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *fval)
@@ -26,28 +34,45 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     assert(fdim == EnergyPoints);
     assert(dim == 1);
     
-    double a,b,c;
-    a = 1109.0;
-    b = 0.0;
-    c = 0.48;
+    //double a,b,c;
+    //a = 1109.0;
+    //b = 0.0;
+    //c = 0.48;
     
     for(int i=0;i!=EnergyPoints;i++)
     {
         fval[i] = 0.0;
     }
 
-    SpinWave* test = builder.Create_Element(kx,x[0],kz);
-    test->Calc();
-    vector<double> frequencies = test->Get_Frequencies();
-    vector<double> intensities = test->Get_Intensities();
+    SpinWave test;
+    double u;
+    switch (direction)
+    {
+        case 0:
+            test = builder.Create_Element(x[0],ky,kz);
+            u = x[0] - kx;
+            break;
+        case 1:
+            test = builder.Create_Element(kx,x[0],kz);
+            u = x[0] - ky;
+            break;
+        case 2:
+            test = builder.Create_Element(kx,ky,x[0]);
+            u = x[0] - kz;
+            break;
+    }
+    //cout << kx << " " << ky << " " << x[0] << " " << u << endl;
+
+    test.Calc();
+    vector<double> frequencies = test.Get_Frequencies();
+    vector<double> intensities = test.Get_Intensities();
     double sigma_energy = 1.0/sqrt(2.0*c);
 
-    double u = x[0] - ky;
     for(size_t k=0;k!=frequencies.size();k++)
     {
-        //cout << frequencies[k] << " " << intensities[k] << "  ";
-        long min_bin = (long) (frequencies[k]-7.0*sigma_energy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-        long max_bin = (long) (frequencies[k]+7.0*sigma_energy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
+        long min_bin = (long) (frequencies[k]-14.0*sigma_energy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long max_bin = (long) (frequencies[k]+14.0*sigma_energy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
         
         if (min_bin < 0)
             min_bin = 0;
@@ -58,6 +83,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         {
             double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
             fval[i] += intensities[k]*exp(-c*pow(frequencies[k]-energy,2))*exp(-2.0*b*(frequencies[k]-energy)*u)*exp(-a*pow(u,2));
+            //cout << i <<  " " << intensities[k]*exp(-c*pow(frequencies[k]-energy,2))*exp(-2.0*b*(frequencies[k]-energy)*u) << " " ;
         }
     }
     //cout << endl;
@@ -66,8 +92,8 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
         cout << energy << " " << fval[i] << " ";
     }
-    cout << endl;*/
-    
+    cout << endl;
+    */
     return 0;
 }
 
@@ -84,10 +110,22 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     kz = kzIn;
     
     double xmin, xmax;
-    double tol = 1.0e-4;
     
-    xmin = ky - 0.2;
-    xmax = ky + 0.2;
+    switch (direction)
+    {
+        case 0:
+            xmin = kx - 0.2;
+            xmax = kx + 0.2;
+            break;
+        case 1:
+            xmin = ky - 0.2;
+            xmax = ky + 0.2;
+            break;
+        case 2:
+            xmin = kz - 0.2;
+            xmax = kz + 0.2;
+            break;
+    }
     
     vector<double> fval(EnergyPoints);
     vector<double> err(EnergyPoints);
@@ -97,19 +135,54 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     return fval;
 }
 
-
-IntegrateAxes::IntegrateAxes(SW_Builder& builderInput, double min, double max, double points)
+IntegrateAxes::IntegrateAxes(axes_info info, TwoDimensionResolutionFunction resFunction, double min, double max, double points)
 {
-    builder = builderInput;
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
+    resolutionFunction = resFunction;
+
+    x = info.x;
+    y = info.y;
+    z = info.z;
+    dx = info.dx;
+    dy = info.dy;
+    dz = info.dz;
+    tol = info.tol;
 }
+
+
 
 int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)
 {
-    TwoDimensionResolutionFunction tmp(builder, MinimumEnergy, MaximumEnergy, EnergyPoints);
-    vector<double> val = tmp.getCut(x[0],ky,x[1]);
+    double tmpx,tmpy,tmpz;
+    
+    size_t placeholder = 0;
+    if(x)
+    {
+        tmpx = x[placeholder];
+        placeholder++;
+    }
+    else
+        tmpx = kx;
+        
+    if(y)
+    {
+        tmpy = x[placeholder];
+        placeholder++;
+    }
+    else
+        tmpy = ky;
+    if(z)
+    {
+        tmpz = x[placeholder];
+        placeholder++;
+    }
+    else
+        tmpz = kz;
+    
+    
+    vector<double> val = resolutionFunction.getCut(tmpx,tmpy,tmpz);
 
     for(int i=0;i!=EnergyPoints;i++)
      {
@@ -133,20 +206,30 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     ky = kyIn;
     kz = kzIn;
     
-    vector<double> xmin(2);
-    vector<double> xmax(2);
-    
-    xmin[0] = kx-0.2;
-    xmax[0] = kx+0.2;
-    xmin[1] = kz-0.2;
-    xmax[1] = kz+0.2;
-    
-    double tol = 1.0e-4;
+    int dim = 0;
+    if (x)
+    {
+        dim++;
+        xmin.push_back(kx - dx);
+        xmax.push_back(kx + dx);
+    }
+    if (y)
+    {
+        dim++;
+        xmin.push_back(ky - dy);
+        xmax.push_back(ky + dy);
+    }
+    if (z)
+    {
+        dim++;
+        xmin.push_back(kz - dz);
+        xmax.push_back(kz + dz);
+    }
     
     vector<double> fval(EnergyPoints);
     vector<double> err(EnergyPoints);
     
-    hcubature(EnergyPoints,IntegrateAxes::calc, this, 2, &xmin[0], &xmax[0], 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+    hcubature(EnergyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
     
     /*for(int i=0;i!=EnergyPoints;i++)
     {

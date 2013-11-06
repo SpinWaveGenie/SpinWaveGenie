@@ -63,9 +63,12 @@ void DM_Y_Interaction::calcConstantValues(Cell& cell)
     double phi_s = cell.getSublattice(sl_s).getPhi();
     
     value0 = -0.5*X*S*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
-    value1 = -0.25*X*S*cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s);
+    value1 = -0.25*X*S*(cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s));
+
     value2 = -0.25*X*S*sin(theta_r)*sin(phi_s);
     value3 = -0.25*X*S*sin(theta_s)*sin(phi_r);
+    
+    //cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
     
 }
 
@@ -75,7 +78,7 @@ void DM_Y_Interaction::calcChangingValues(Cell& cell, Vector3d K)
     
     AtomIterator nbrBegin = neighborList.begin();
     AtomIterator nbrEnd = neighborList.end();
-    double z_rs = (double) distance(nbrBegin,nbrEnd);
+    z_rs = (double) distance(nbrBegin,nbrEnd);
     
     complex<double> MXI (0.0,-1.0);
     gamma_rs = complex<double>(0.0,0.0);
@@ -99,6 +102,8 @@ void DM_Y_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elemen
 void DM_Y_Interaction::Update_Matrix(Vector3d K,Cell& cell, MatrixXcd &LN, int quadrant)
 {
     complex<double> XI (0.0,1.0);
+    //cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
+    //cout << z_rs << " " << endl;
     switch (quadrant)
     {
         case 0:
