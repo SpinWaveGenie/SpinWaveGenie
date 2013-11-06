@@ -44,7 +44,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         fval[i] = 0.0;
     }
 
-    SpinWave test;
+    SpinWave* test;
     double u;
     switch (direction)
     {
@@ -64,9 +64,9 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     
     //cout << kx << " " << ky << " " << x[0] << " " << u << endl;
 
-    test.Calc();
-    vector<double> frequencies = test.Get_Frequencies();
-    vector<double> intensities = test.Get_Intensities();
+    test->Calc();
+    vector<double> frequencies = test->Get_Frequencies();
+    vector<double> intensities = test->Get_Intensities();
     double sigma_energy = 1.0/sqrt(2.0*c);
 
     for(size_t k=0;k!=frequencies.size();k++)
