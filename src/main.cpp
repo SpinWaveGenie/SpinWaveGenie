@@ -37,7 +37,7 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 11;
+        npoints = 101;
         pointsDone = 0;
         points = 101;
         figure.setZero(points,npoints);
@@ -86,7 +86,7 @@ public:
         resinfo.a = 579.7;
         resinfo.b = -20.0;
         resinfo.c = 1.3;
-        resinfo.tol = 1.0e-4;
+        resinfo.tol = 1.0e-1;
         resinfo.direction = 2;
         resinfo.builder = builder;
          
@@ -97,7 +97,7 @@ public:
         axesinfo.dx = 0.2;
         axesinfo.dy = 0.2;
         axesinfo.dz = 0.05;
-        axesinfo.tol = 1.0e-4;
+        axesinfo.tol = 1.0e-1;
         
         scoped_lock.lock();
         double tmin = min;

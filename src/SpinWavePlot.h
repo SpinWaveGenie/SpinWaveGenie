@@ -56,7 +56,7 @@ private:
     unsigned EnergyPoints;
     bool x,y,z;
     double dx,dy,dz;
-    double tol;
+    double tol,volume;
     TwoDimensionResolutionFunction resolutionFunction;
 };
 

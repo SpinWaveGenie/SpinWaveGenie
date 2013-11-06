@@ -83,10 +83,17 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         for(int i=min_bin;i!=max_bin;i++)
         {
             double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-            fval[i] += intensities[k]*exp(-c*pow(frequencies[k]-energy,2))*exp(-2.0*b*(frequencies[k]-energy)*u)*exp(-a*pow(u,2));
+            fval[i] += intensities[k]*exp(-1.0*(c*pow(frequencies[k]-energy,2)+2.0*b*(frequencies[k]-energy)*u+a*pow(u,2)));
             //cout << i <<  " " << intensities[k]*exp(-c*pow(frequencies[k]-energy,2))*exp(-2.0*b*(frequencies[k]-energy)*u) << " " ;
         }
     }
+    
+    double tmp = (a*c-b*b)/(M_PI*M_PI);
+    for(int i=0;i!=EnergyPoints;i++)
+    {
+        fval[i] *= tmp;
+    }
+    
     //cout << endl;
     /*for(int i=0;i!=EnergyPoints;i++)
     {
@@ -189,7 +196,7 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
 
     for(int i=0;i!=EnergyPoints;i++)
      {
-     retval[i] = val[i];
+     retval[i] = val[i]/volume;
      //double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
      //cout << energy << " " << val[i] << " ";
      }
@@ -212,23 +219,29 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     std::vector<double> xmin,xmax;
     
     int dim = 0;
+    volume = 1.0;
     if (x)
     {
         dim++;
         xmin.push_back(kx - dx);
         xmax.push_back(kx + dx);
+        volume *= 2.0*dx;
     }
     if (y)
     {
         dim++;
         xmin.push_back(ky - dy);
         xmax.push_back(ky + dy);
+        volume *= 2.0*dy;
+
     }
     if (z)
     {
         dim++;
         xmin.push_back(kz - dz);
         xmax.push_back(kz + dz);
+        volume *= 2.0*dz;
+
     }
     
     //cout << "** " << kx << " " << ky << " " << kz << endl;
