@@ -13,40 +13,40 @@
             <name> Fe1 </name>
             <type> FE3 </type>
             <moment coord="spherical">
-                2.5 89.7 180.18
-            </moment>
-            <position units="fractional">
-                0.5 0.0 0.0
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> Fe2 </name>
-            <type> FE3 </type>
-            <moment coord="spherical">
-                2.5 89.7 0.18
+                2.5 89.7043537777 180.18334649444
             </moment>
             <position units="fractional">
                 0.0 0.5 0.0
             </position>
         </sublattice>
         <sublattice>
-            <name> Fe3 </name>
+            <name> Fe2 </name>
             <type> FE3 </type>
             <moment coord="spherical">
-                2.5 89.7 179.82
+                2.5 89.7043537777 0.18334649444
             </moment>
             <position units="fractional">
                 0.0 0.5 0.5
             </position>
         </sublattice>
         <sublattice>
-            <name> Fe4 </name>
+            <name> Fe3 </name>
             <type> FE3 </type>
             <moment coord="spherical">
-                2.5 89.7 359.82
+                2.5 89.7043537777 179.816653506
             </moment>
             <position units="fractional">
                 0.5 0.0 0.5
+            </position>
+        </sublattice>
+        <sublattice>
+            <name> Fe4 </name>
+            <type> FE3 </type>
+            <moment coord="spherical">
+                2.5 89.7043537777 359.816653506
+            </moment>
+            <position units="fractional">
+                0.5 0.0 0.0
             </position>
         </sublattice>
     </crystal>
