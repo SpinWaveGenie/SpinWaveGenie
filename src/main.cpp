@@ -37,7 +37,7 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 101;
+        npoints = 11;
         pointsDone = 0;
         points = 101;
         figure.setZero(points,npoints);
@@ -93,9 +93,10 @@ public:
         axes_info axesinfo;
         axesinfo.x = true;
         axesinfo.y = true;
-        axesinfo.z = false;
+        axesinfo.z = true;
         axesinfo.dx = 0.2;
         axesinfo.dy = 0.2;
+        axesinfo.dz = 0.05;
         axesinfo.tol = 1.0e-4;
         
         scoped_lock.lock();
@@ -115,7 +116,7 @@ public:
             double z = z0 + (z1-z0)*m/(tnpoints-1);
             //cout << "Pos." << endl;
             //scoped_lock.lock();
-            //cout << x << " " << y << " " << z << endl;
+            cout << "**** " << x << " " << y << " " << z << endl;
             //scoped_lock.unlock();
             vector<double> val = tmp.getCut(x,y,z);
             for(int n=0;n<tpoints;n++)

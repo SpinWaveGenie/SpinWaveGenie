@@ -61,6 +61,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
             u = x[0] - kz;
             break;
     }
+    
     //cout << kx << " " << ky << " " << x[0] << " " << u << endl;
 
     test.Calc();
@@ -181,6 +182,8 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     else
         tmpz = kz;
     
+    cout << "** " << x[0] << " " << x[1] << " " << x[2] << endl;
+    cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
     vector<double> val = resolutionFunction.getCut(tmpx,tmpy,tmpz);
 
@@ -206,6 +209,8 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     ky = kyIn;
     kz = kzIn;
     
+    std::vector<double> xmin,xmax;
+    
     int dim = 0;
     if (x)
     {
@@ -226,6 +231,10 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
         xmax.push_back(kz + dz);
     }
     
+    //cout << "** " << kx << " " << ky << " " << kz << endl;
+    //cout << xmin[0] << " " << xmin[1] << " " << xmin[2] << endl;
+    //cout << xmax[0] << " " << xmax[1] << " " << xmax[2] << endl;
+
     vector<double> fval(EnergyPoints);
     vector<double> err(EnergyPoints);
     

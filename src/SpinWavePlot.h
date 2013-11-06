@@ -54,7 +54,6 @@ private:
     double MinimumEnergy,MaximumEnergy;
     double kx,ky,kz;
     unsigned EnergyPoints;
-    std::vector<double> xmin,xmax;
     bool x,y,z;
     double dx,dy,dz;
     double tol;
