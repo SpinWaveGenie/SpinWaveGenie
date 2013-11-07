@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "SW_Builder.h"
+#include "SpinWave.h"
 
 /* Abstract base class */
 // The abstract Coffee class defines the functionality of Coffee implemented by decorator
@@ -17,7 +17,7 @@ struct TwoDimGaussian
     double a,b,c;
     unsigned direction;
     double tol;
-    SW_Builder builder;
+    SpinWave SW;
 };
 
 class TwoDimensionResolutionFunction : SpinWavePlot{
@@ -33,7 +33,7 @@ private:
     double a,b,c;
     double kx,ky,kz;
     unsigned EnergyPoints,direction;
-    SW_Builder builder;
+    SpinWave SW;
 };
 
 struct axes_info

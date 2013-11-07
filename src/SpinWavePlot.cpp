@@ -26,7 +26,7 @@ TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& i
     c = info.c;
     tol = info.tol;
     direction = info.direction;
-    builder = info.builder;
+    SW = info.SW;
 }
 
 int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *fval)
@@ -44,29 +44,28 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         fval[i] = 0.0;
     }
 
-    SpinWave* test;
     double u;
     switch (direction)
     {
         case 0:
-            test = builder.Create_Element(x[0],ky,kz);
+            SW.createMatrix(x[0],ky,kz);
             u = x[0] - kx;
             break;
         case 1:
-            test = builder.Create_Element(kx,x[0],kz);
+            SW.createMatrix(kx,x[0],kz);
             u = x[0] - ky;
             break;
         case 2:
-            test = builder.Create_Element(kx,ky,x[0]);
+            SW.createMatrix(kx,ky,x[0]);
             u = x[0] - kz;
             break;
     }
     
     //cout << kx << " " << ky << " " << x[0] << " " << u << endl;
 
-    test->Calc();
-    vector<double> frequencies = test->Get_Frequencies();
-    vector<double> intensities = test->Get_Intensities();
+    SW.Calc();
+    vector<double> frequencies = SW.Get_Frequencies();
+    vector<double> intensities = SW.Get_Intensities();
     double sigma_energy = 1.0/sqrt(2.0*c);
 
     for(size_t k=0;k!=frequencies.size();k++)

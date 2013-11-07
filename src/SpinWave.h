@@ -18,6 +18,8 @@
 #include <cmath>
 #include <ctime>
 #include "Cell.h"
+#include <boost/ptr_container/ptr_vector.hpp>
+#include "Interaction.h"
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
 
@@ -42,10 +44,12 @@ public:
     //! Use SW_Builder to generate SpinWave instance
     friend class SW_Builder;
     SpinWave();
-    SpinWave(Cell& cell_in );
+    SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);
     //!
     void Set_Kpoint(double KX, double KY, double KZ);
     void Clear_Matrix();
+    Eigen::VectorXcd checkFirstOrderTerms();
+    void createMatrix(double KX,double KY,double KZ);
     void Calc();
     std::vector<double> Get_Frequencies();
     std::vector<double> Get_Intensities();
@@ -69,6 +73,8 @@ private:
     Eigen::VectorXd WW; // want to get rid of this
     std::vector<double> VI,SVI; 
     Eigen::MatrixXcd XY,XIN;
+    boost::ptr_vector<Interaction> interactions;
+
 };
 
 #endif /* defined(__SpinWave__) */

@@ -64,7 +64,8 @@ int main(int argc, char * argv[])
         z = z0 + (z1-z0)*m/(npoints-1);
         cout << "Pos." << endl;
         cout << x << " " << y << " " << z << endl;
-        SpinWave test = builder.Create_Element(x,y,z);
+        SpinWave test = builder.Create_Element();
+        test.createMatrix(x,y,z);
         test.Calc();
         vector<double> frequencies = test.Get_Frequencies();
         vector<double> intensities = test.Get_Intensities();

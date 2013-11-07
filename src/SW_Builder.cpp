@@ -6,14 +6,11 @@ using namespace std;
 
 SW_Builder::SW_Builder()
 {
-    
 }
 
 SW_Builder::SW_Builder(Cell& cell_in)
 {
     cell = cell_in;
-    SpinWave temp(cell);
-    SW = temp;
 }
 
 void SW_Builder::Add_Interaction(Interaction* in)
@@ -32,45 +29,16 @@ Eigen::VectorXcd SW_Builder::checkFirstOrderTerms()
     }
     Eigen::VectorXcd firstOrder;
     firstOrder.setZero(2*M);
-    boost::ptr_vector<Interaction>::iterator iter;
-    for (iter = interactions.begin(); iter != interactions.end(); iter++)
-    {
-        /*vector<string> sls = iter->sublattices();
-        for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
-        {
-            cout << (*iter2) << " ";
-        }
-        cout << endl;*/
-        //firstOrder.setZero(2*M);
-        iter->checkFirstOrderTerms(this->cell,firstOrder);
-        //cout << firstOrder[2] << " " << firstOrder[8] << endl;
-    }
     return firstOrder;
 }
 
-SpinWave* SW_Builder::Create_Element(double KX,double KY,double KZ)
+SpinWave SW_Builder::Create_Element()
 {
-    Eigen::Vector3d K;
-    Eigen::Matrix3d recip;
-    recip = cell.getReciprocalVectors();
-    K << KX,KY,KZ;
-    //cout << "K before " << K.transpose() << endl;
-    K = recip*K;
-    //cout << "K after " << K.transpose() << endl;
-    SW.Set_Kpoint(K[0],K[1],K[2]);
-    SW.Clear_Matrix();
-    boost::ptr_vector<Interaction>::iterator iter;
-    int quad = 0;
-    for (iter = interactions.begin(); iter != interactions.end(); iter++)
+    SpinWave SW(cell,interactions);
+    Eigen::VectorXcd firstOrder = SW.checkFirstOrderTerms();
+    if (firstOrder.norm() > 0.001)
     {
-        iter->calcChangingValues(SW.cell,K);
-        iter->Update_Matrix(K,SW.cell,SW.LN,quad);
-        //cout << SW.LN(0,2) << endl;
-        iter->Update_Matrix(K,SW.cell,SW.LN,quad+1);
-        iter->Update_Matrix(K,SW.cell,SW.LN,quad+2);
-        iter->Update_Matrix(K,SW.cell,SW.LN,quad+3);
+        //cout << "Warning! Nonzero first order terms present." << endl;
     }
-    //cout << "LN" << endl;
-    //cout << SW.LN << endl;
-    return &SW;
+    return SW;
 }

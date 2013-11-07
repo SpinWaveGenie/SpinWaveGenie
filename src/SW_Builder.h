@@ -6,6 +6,7 @@
 #include "SpinWave.h"
 #include "Interaction.h"
 
+
 class SW_Builder
 {
 public:
@@ -13,11 +14,10 @@ public:
     SW_Builder(Cell& cell_in);
     void Add_Interaction(Interaction* in);
     Eigen::VectorXcd checkFirstOrderTerms();
-    SpinWave* Create_Element(double KX, double KY, double KZ);
+    SpinWave Create_Element();
 private:
     Cell cell;
     boost::ptr_vector<Interaction> interactions;
-    SpinWave SW;
 };
 
 #endif
