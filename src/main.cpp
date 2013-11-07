@@ -119,7 +119,7 @@ public:
         {
             np_lock.lock();
             int m = nextPoint;
-            if (m > npoints)
+            if (m >= npoints)
             {
                 break;
             }
