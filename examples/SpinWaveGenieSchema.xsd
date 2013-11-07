@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="SpinWaveGenieSchema" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:swg="SpinWaveGenieSchema">
+    <xsd:complexType name="SublatticeType">
+    	<xsd:all>
+    		<xsd:element name="name" type="xsd:string" minOccurs="1"
+    			maxOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="moment" type="swg:MomentType"
+    			maxOccurs="1" minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="atomicpositions" maxOccurs="1" minOccurs="1">
+    			<xsd:complexType>
+    				<xsd:sequence>
+    					<xsd:element name="position"
+    						type="swg:PositionType" maxOccurs="unbounded" minOccurs="1">
+    					</xsd:element>
+    				</xsd:sequence>
+    			</xsd:complexType>
+    		</xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="MomentType">
+    	<xsd:all>
+    		<xsd:element name="magnitude" type="xsd:double" maxOccurs="1" minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="theta" type="xsd:double" maxOccurs="1" minOccurs="1"></xsd:element>
+    		<xsd:element name="phi" maxOccurs="1" minOccurs="1" type="xsd:double">
+    		</xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PositionType">
+    	<xsd:all>
+    		<xsd:element name="x" type="xsd:double"></xsd:element>
+    		<xsd:element name="y" type="xsd:double"></xsd:element>
+    		<xsd:element name="z" type="xsd:double"></xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="ExchangeType">
+    	<xsd:all>
+    		<xsd:element name="value" type="xsd:double" maxOccurs="1"
+    			minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="mindist" type="xsd:double" maxOccurs="1"
+    			minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="maxdist" type="xsd:double" maxOccurs="1"
+    			minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="pairs" maxOccurs="1" minOccurs="1">
+    			<xsd:complexType>
+    				<xsd:sequence>
+    					<xsd:element name="pair" type="swg:PairType" maxOccurs="unbounded" minOccurs="1">
+    					</xsd:element>
+    				</xsd:sequence>
+    			</xsd:complexType>
+    		</xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="AnisotropyType">
+    	<xsd:all>
+    		<xsd:element name="value" type="xsd:double" maxOccurs="1"
+    			minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="direction" type="swg:PositionType" maxOccurs="1" minOccurs="1"></xsd:element>
+    		<xsd:element name="sublattices">
+    			<xsd:complexType>
+    				<xsd:sequence>
+    					<xsd:element name="name" type="xsd:string"
+    						maxOccurs="unbounded" minOccurs="1">
+    					</xsd:element>
+    				</xsd:sequence>
+    			</xsd:complexType>
+    		</xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="CellType">
+    	<xsd:all>
+    		<xsd:element name="latticevectors"
+    			type="swg:LatticeVectorsType" maxOccurs="1" minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="moments" maxOccurs="1" minOccurs="1">
+    			<xsd:complexType>
+    				<xsd:sequence>
+    					<xsd:element name="sublattice"
+    						type="swg:SublatticeType" maxOccurs="unbounded" minOccurs="1">
+    					</xsd:element>
+    				</xsd:sequence>
+    			</xsd:complexType></xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="LatticeVectorsType">
+    	<xsd:all>
+    		<xsd:element name="a" maxOccurs="1" minOccurs="1">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:double">
+    					<xsd:minExclusive value="0.0"></xsd:minExclusive>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="b" maxOccurs="1" minOccurs="1">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:double">
+    					<xsd:minExclusive value="0.0"></xsd:minExclusive>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="c" maxOccurs="1" minOccurs="1">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:double">
+    					<xsd:minExclusive value="0.0"></xsd:minExclusive>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="alpha" maxOccurs="1" minOccurs="1">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:double">
+    					<xsd:minInclusive value="0.0"></xsd:minInclusive>
+    					<xsd:maxInclusive value="360.0"></xsd:maxInclusive>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="beta" maxOccurs="1" minOccurs="1">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:double">
+    					<xsd:maxInclusive value="360.0"></xsd:maxInclusive>
+    					<xsd:minInclusive value="0"></xsd:minInclusive>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    		<xsd:element name="gamma" maxOccurs="1" minOccurs="1">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:double">
+    					<xsd:maxInclusive value="360"></xsd:maxInclusive>
+    					<xsd:minInclusive value="0"></xsd:minInclusive>
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="InteractionsType">
+    	<xsd:all>
+    		<xsd:element name="Anisotropy"
+    			type="swg:AnisotropyGroupType" maxOccurs="1" minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="Exchange" type="swg:ExchangeGroupType"
+    			maxOccurs="1" minOccurs="0">
+    		</xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+
+    <xsd:element name="spinwavegenie">
+    	<xsd:complexType>
+    		<xsd:all>
+    			<xsd:element name="cell" type="swg:CellType" maxOccurs="1" minOccurs="1"></xsd:element>
+    			<xsd:element name="interactions"
+    				type="swg:InteractionsType" maxOccurs="1" minOccurs="1">
+    			</xsd:element>
+    		</xsd:all>
+    	</xsd:complexType></xsd:element>
+
+    <xsd:complexType name="PairType">
+    	<xsd:all>
+    		<xsd:element name="name1" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+    		<xsd:element name="name2" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="AnisotropyGroupType">
+    	<xsd:sequence>
+    		<xsd:element name="group" type="swg:AnisotropyType" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ExchangeGroupType">
+    	<xsd:sequence>
+    		<xsd:element name="group" type="swg:ExchangeType" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

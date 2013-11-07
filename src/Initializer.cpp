@@ -19,8 +19,8 @@ Init::Init(string filename)
 void Init::read_input(string filename)
 {    //Sublattice Fe1,Fe2;
     
-    m_parser_map["crystal"] = bind(&Init::parseCrystalNode, this, _1);
-    m_parser_map["interaction"] = bind(&Init::parseInteractionNode, this, _1);
+    m_parser_map["cell"] = bind(&Init::parseCrystalNode, this, _1);
+    m_parser_map["interactions"] = bind(&Init::parseInteractionNode, this, _1);
     m_parser_map["kpoints"] = bind(&Init::parseKpointsNode, this, _1);
     
     pugi::xml_document doc;
@@ -28,7 +28,7 @@ void Init::read_input(string filename)
     pugi::xml_parse_result result = doc.load_file(filename.c_str());
     std::cout << "Load result: " << result.description() << std::endl;
     assert(result);
-    pugi::xml_node tools = doc.child("spin_wave_genie");
+    pugi::xml_node tools = doc.child("spinwavegenie");
     
     for (pugi::xml_node_iterator it = tools.begin(); it != tools.end(); ++it)
     {    
@@ -52,30 +52,7 @@ void Init::save_input(string filename)
 
 void Init::parseCrystalNode(const pugi::xml_node &node)
 {
-    istringstream parser;
-    double scale = node.child("basevect").attribute("scale").as_double();
-    cout << scale << endl;
-    
-    /*parser.str(node.child_value("basevect"));
-    Eigen::Matrix3d basis;
-    int i = 0;
-    while(parser.good())
-    {
-        double x,y,z;
-        parser >> x >> y >> z;
-        if (parser.good())
-        {
-            //cout << x << '\t' << y << '\t' << z << endl;
-            basis(i,0) = x;
-            basis(i,1) = y;
-            basis(i,2) = z;
-            i++;
-        }
-    }
-    cout << basis << endl;
-            
-    unit_cell->setBasisVectors(scale,basis);*/
-    pugi::xml_node lattice_parameters = node.child("basevect");
+    pugi::xml_node lattice_parameters = node.child("latticevectors");
     double a,b,c,alpha,beta,gamma;
     
     string temp = lattice_parameters.child_value("a");
@@ -101,49 +78,81 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     temp = lattice_parameters.child_value("gamma");
     algorithm::trim(temp); // get rid of surrounding whitespace
     gamma = lexical_cast<double>(temp);
+    
+    cout << a << " " << b << " " << c << " " << alpha << " " << beta << " " << gamma << endl;
 
     unit_cell.setBasisVectors(a,b,c,alpha,beta,gamma);
 
-    for (pugi::xml_node tool = node.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
+    pugi::xml_node moments = node.child("moments");
+    
+    /*cout << "woof" << endl;
+    pugi::xml_node tool = moments.child("sublattice");
+    cout << tool.child_value("name") << endl;
+    tool = tool.next_sibling("sublattice");
+    cout << tool.child_value("name") << endl;
+    cout << "woof" << endl;*/
+    
+    for (pugi::xml_node tool = moments.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
         Sublattice new_sl;
             
         string name(tool.child_value("name"));
-        name.erase(std::remove_if(name.begin(),name.end(), ::isspace), name.end());
+        algorithm::trim(name);
         cout << name << endl;
         new_sl.setName(name);
         
         string type(tool.child_value("type"));
-        type.erase(std::remove_if(type.begin(),type.end(), ::isspace), type.end());
+        algorithm::trim(type);
         cout << type << endl;
         new_sl.setType(type);
         
-        parser.clear();
-        parser.str(tool.child_value("moment"));
         double S,theta,phi;
-        parser >> S >> theta >> phi;
+        
+        temp = tool.child("moment").child_value("magnitude");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        S = lexical_cast<double>(temp);
+        
+        temp = tool.child("moment").child_value("theta");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        theta = lexical_cast<double>(temp)*M_PI/180.0;
+        
+        temp = tool.child("moment").child_value("phi");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        phi = lexical_cast<double>(temp)*M_PI/180.0;
+        
         cout << S << '\t' << theta << '\t' << phi << endl;
-        new_sl.setMoment(S,theta*M_PI/180.0,phi*M_PI/180.0);
+
+        new_sl.setMoment(S,theta,phi);
 
         unit_cell.addSublattice(name,new_sl);
-        parser.clear();
-        parser.str(tool.child_value("position"));
-        while(parser.good())
+        
+        pugi::xml_node atomicpositions = tool.child("atomicpositions");
+        for (pugi::xml_node position = atomicpositions.child("position"); position; position = position.next_sibling("position"))
         {
             double x,y,z;
-            parser >> x >> y >> z;
-            if (parser.good())
-            {
-                unit_cell.addAtom(name,x,y,z);
-                cout << x << '\t' << y << '\t' << z << endl;
-            }
+            temp = position.child_value("x");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            x = lexical_cast<double>(temp);
+            
+            temp = position.child_value("y");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            y = lexical_cast<double>(temp);
+            
+            temp = position.child_value("z");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            z = lexical_cast<double>(temp);
+            
+            cout << x << '\t' << y << '\t' << z << endl;
+           
+            unit_cell.addAtom(name,x,y,z);
+            
         }
     }
 }
 
 void Init::parseInteractionNode(const pugi::xml_node &node)
 {
-    istringstream parser;
+    /*istringstream parser;
     double min,max;
     string atom1,atom2;
     SW_Builder temp(unit_cell);
@@ -167,9 +176,92 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
                 }
             }
         }
+    }*/
+    
+     //double min,max;
+     //string atom1,atom2;
+     SW_Builder buildertemp(unit_cell);
+     builder = buildertemp;
+    
+     pugi::xml_node exchange = node.child("Exchange");
+     for (pugi::xml_node tool = exchange.child("group"); tool; tool = tool.next_sibling("group"))
+     {
+         cout << "Exchange: " << endl;
+         string temp = tool.child_value("value");
+         algorithm::trim(temp); // get rid of surrounding whitespace
+         double value = lexical_cast<double>(temp);
+         
+         temp = tool.child_value("mindist");
+         algorithm::trim(temp); // get rid of surrounding whitespace
+         double min = lexical_cast<double>(temp);
+         
+         temp = tool.child_value("maxdist");
+         algorithm::trim(temp); // get rid of surrounding whitespace
+         double max = lexical_cast<double>(temp);
+
+         pugi::xml_node pairs = tool.child("pairs");
+         for (pugi::xml_node pair = pairs.child("pair"); pair; pair = pair.next_sibling("pair"))
+         {
+             string atom1 = pair.child_value("name1");
+             string atom2 = pair.child_value("name2");
+             
+             cout << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
+             builder.Add_Interaction(new Exch_Interaction(value,atom1,atom2,min,max));
+             if (atom1 != atom2)
+             {
+                 cout << atom2 << " " << atom1 << endl;
+                 builder.Add_Interaction(new Exch_Interaction(value,atom2,atom1,min,max));
+             }
+         }
+     }
+    
+    pugi::xml_node anisotropy = node.child("Anisotropy");
+    
+    for (pugi::xml_node tool = anisotropy.child("group"); tool; tool = tool.next_sibling("group"))
+    {
+        cout << "Anisotropy: " << endl;
+        string temp = tool.child_value("value");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        double value = lexical_cast<double>(temp);
+        
+        double x,y,z;
+        
+        temp = tool.child("direction").child_value("x");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        x = lexical_cast<double>(temp);
+        
+        temp = tool.child("direction").child_value("y");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        y = lexical_cast<double>(temp);
+        
+        temp = tool.child("direction").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        z = lexical_cast<double>(temp);
+    
+        cout << x << '\t' << y << '\t' << z << endl;
+            
+
+        pugi::xml_node sublattices = tool.child("sublattices");
+        for (pugi::xml_node name = sublattices.child("name"); name; name = name.next_sibling("name"))
+        {
+            string atom1 = name.child_value();
+            cout << "woof " << atom1 << endl;
+            if ( x > 0.99 && y < 0.01 && z < 0.01)
+            {
+                builder.Add_Interaction(new Anis_X_Interaction(value,atom1));
+            }
+            else if (x < 0.01 && y > 0.99 && z < 0.01)
+            {
+                builder.Add_Interaction(new Anis_Y_Interaction(value,atom1));
+            }
+            else if (x < 0.01 && y < 0.01 && z > 0.99)
+            {
+                builder.Add_Interaction(new Anis_Z_Interaction(value,atom1));
+            }
+        }
     }
     
-    for (pugi::xml_node tool = node.child("DM_y"); tool; tool = tool.next_sibling("DM_y"))
+    /*for (pugi::xml_node tool = node.child("DM_y"); tool; tool = tool.next_sibling("DM_y"))
     {
         double value = tool.attribute("value").as_double();
         parser.clear();
@@ -249,7 +341,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             }
         }
 
-    }
+    }*/
 }
 
 void Init::parseKpointsNode(const pugi::xml_node &node)

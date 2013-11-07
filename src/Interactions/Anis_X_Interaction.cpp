@@ -1,4 +1,5 @@
 #include "Anis_X_Interaction.h"
+#include <iostream>
 
 using namespace std;
 using namespace Eigen;
@@ -35,6 +36,7 @@ void Anis_X_Interaction::calcConstantValues(Cell& cell)
     M = 0;
     for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
+        //cout << sl_r << " " << sl->getName() << endl;
         if ( sl_r == sl->getName())
             r = M;
         M++;

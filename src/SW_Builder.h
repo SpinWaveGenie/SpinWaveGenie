@@ -13,7 +13,6 @@ public:
     SW_Builder();
     SW_Builder(Cell& cell_in);
     void Add_Interaction(Interaction* in);
-    Eigen::VectorXcd checkFirstOrderTerms();
     SpinWave Create_Element();
 private:
     Cell cell;
