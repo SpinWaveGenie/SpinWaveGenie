@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spin_wave_genie>
-    <crystal>
-        <basevect scale="1.0">
-             <a> 1.0 </a>
-             <b> 10.0 </b>
-             <c> 10.0 </c>
-             <alpha> 90 </alpha>
-             <beta> 90 </beta>
-             <gamma> 90 </gamma>
-        </basevect>
-        <sublattice>
-            <name> S1 </name>
-            <moment coord="spherical">
-                1.0 0.0 0.0
-            </moment>
-            <position units="fractional">
-                0.0 0.0 0.0
-                0.5 0.0 0.0
-            </position>
-        </sublattice>
-    </crystal>
-    <interaction>
-        <exchange value="1.0">
-            S1 S1 0.45 0.55
-        </exchange>
-    </interaction>
-</spin_wave_genie>
+<spinwavegenie xmlns="SpinWaveGenieSchema" xmlns:swg="http://www.example.org/SpinWaveGenieSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SpinWaveGenieSchema SpinWaveGenieSchema.xsd ">
+  <cell>
+    <latticevectors>
+      <a>1.0</a>
+      <b>10.0</b>
+      <c>10.0</c>
+      <alpha> 90 </alpha>
+      <beta> 90 </beta>
+      <gamma> 90 </gamma>
+    </latticevectors>
+    <moments>
+      <sublattice>
+        <name> Spin0 </name>
+        <type> None </type>
+        <moment>
+          <magnitude>1.0</magnitude>
+          <theta>0.0</theta>
+          <phi>0.0</phi>
+        </moment>
+        <atomicpositions>
+          <position>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+          </position>
+          <position>
+            <x>0.5</x>
+            <y>0.0</y>
+            <z>0.0</z>
+          </position>
+        </atomicpositions>
+      </sublattice>
+    </moments>    
+  </cell>
+  <interactions>
+      <Exchange>
+        <group>
+            <value>1.0</value>
+            <mindist>0.49</mindist>
+            <maxdist>0.51</maxdist>
+            <pairs>
+                <pair><name1>Spin0</name1><name2>Spin0</name2></pair>
+            </pairs>
+        </group>
+    </Exchange>
+  </interactions>
+</spinwavegenie>

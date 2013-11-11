@@ -1,44 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spin_wave_genie>
-    <crystal>
-        <basevect scale="1.0">
-             <a> 4.873 </a>
-             <b> 4.873 </b>
-             <c> 3.130 </c>
-             <alpha> 90 </alpha>
-             <beta> 90 </beta>
-             <gamma> 90 </gamma>
-        </basevect>
-        <sublattice>
-            <name> Mn1 </name>
-            <moment coord="spherical">
-                2.5 0.0 0.0
-            </moment>
-            <position units="fractional">
-                0.0 0.0 0.0
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> Mn2 </name>
-            <moment coord="spherical">
-                2.5 180.0 0.0
-            </moment>
-            <position units="fractional">
-                0.5 0.5 0.5
-            </position>
-        </sublattice>
-    </crystal>
-    <interaction>
-        <exchange value="0.064">
-            Mn1 Mn1 3.1 3.2
-            Mn2 Mn2 3.1 3.2
-        </exchange>
-        <exchange value="-0.31" >
-            Mn1 Mn2 3.7 3.8
-        </exchange>
-        <anis_z value="0.022">
-            Mn1
-            Mn2
-        </anis_z>
-    </interaction>
-</spin_wave_genie>
+<swg:spinwavegenie xmlns:swg="SpinWaveGenieSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SpinWaveGenieSchema SpinWaveGenieSchema.xsd ">
+  <swg:cell>
+    <swg:latticevectors>
+      <swg:a>4.873</swg:a>
+      <swg:b>4.873</swg:b>
+      <swg:c>3.130</swg:c>
+      <swg:alpha>90.0</swg:alpha>
+      <swg:beta>90.0</swg:beta>
+      <swg:gamma>90.0</swg:gamma>
+    </swg:latticevectors>
+    <swg:moments>
+      <swg:sublattice>
+        <swg:name>Mn0</swg:name>
+        <swg:type>MN2</swg:type>
+        <swg:moment>
+          <swg:magnitude>2.5</swg:magnitude>
+          <swg:theta>0.0</swg:theta>
+          <swg:phi>0.0</swg:phi>
+        </swg:moment>
+        <swg:atomicpositions>
+          <swg:position>
+            <swg:x>0.0</swg:x>
+            <swg:y>0.0</swg:y>
+            <swg:z>0.0</swg:z>
+          </swg:position>
+        </swg:atomicpositions>
+      </swg:sublattice>
+      <swg:sublattice>
+      	<swg:name>Mn1</swg:name>
+      	<swg:type>MN2</swg:type>
+      	<swg:moment>
+      		<swg:magnitude>2.5</swg:magnitude>
+      		<swg:theta>180.0</swg:theta>
+      		<swg:phi>0.0</swg:phi>
+      	</swg:moment>
+      	<swg:atomicpositions>
+      		<swg:position>
+      			<swg:x>0.5</swg:x>
+      			<swg:y>0.5</swg:y>
+      			<swg:z>0.5</swg:z>
+      		</swg:position>
+      	</swg:atomicpositions>
+      </swg:sublattice>
+    </swg:moments>
+  </swg:cell>
+  <swg:interactions>
+    <swg:Anisotropy>
+      <swg:group>
+        <swg:value>0.064</swg:value>
+        <swg:direction>
+          <swg:x>0.0</swg:x>
+          <swg:y>0.0</swg:y>
+          <swg:z>1.0</swg:z>
+        </swg:direction>
+        <swg:sublattices>
+          <swg:name>Mn0</swg:name>
+          <swg:name>Mn1</swg:name>
+        </swg:sublattices>
+      </swg:group>
+    </swg:Anisotropy>
+    <swg:Exchange>
+      <swg:group>
+        <swg:value>-0.31</swg:value>
+        <swg:mindist>3.1</swg:mindist>
+        <swg:maxdist>3.2</swg:maxdist>
+        <swg:pairs>
+          <swg:pair>
+            <swg:name1>Mn0</swg:name1>
+            <swg:name2>Mn1</swg:name2>
+          </swg:pair>
+        </swg:pairs>
+      </swg:group>
+    </swg:Exchange>
+  </swg:interactions>
+</swg:spinwavegenie>

@@ -84,14 +84,12 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     unit_cell.setBasisVectors(a,b,c,alpha,beta,gamma);
 
     pugi::xml_node moments = node.child("moments");
-    
-    /*cout << "woof" << endl;
+    /* 
     pugi::xml_node tool = moments.child("sublattice");
     cout << tool.child_value("name") << endl;
     tool = tool.next_sibling("sublattice");
     cout << tool.child_value("name") << endl;
-    cout << "woof" << endl;*/
-    
+    */
     for (pugi::xml_node tool = moments.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
         Sublattice new_sl;
@@ -152,34 +150,6 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
 void Init::parseInteractionNode(const pugi::xml_node &node)
 {
-    /*istringstream parser;
-    double min,max;
-    string atom1,atom2;
-    SW_Builder temp(unit_cell);
-    builder = temp;
-    for (pugi::xml_node tool = node.child("exchange"); tool; tool = tool.next_sibling("exchange"))
-    {
-        double value = tool.attribute("value").as_double();
-        parser.clear();
-        parser.str(tool.child_value());
-        while(parser.good())
-        {
-            parser >> atom1 >> atom2 >> min >> max;
-            if(parser.good())
-            {
-                cout << atom1 << atom2 << endl;
-                builder.Add_Interaction(new Exch_Interaction(value,atom1,atom2,min,max));
-                if (atom1 != atom2)
-                {
-                    cout << atom2 << atom1 << endl;
-                    builder.Add_Interaction(new Exch_Interaction(value,atom2,atom1,min,max));
-                }
-            }
-        }
-    }*/
-    
-     //double min,max;
-     //string atom1,atom2;
      SW_Builder buildertemp(unit_cell);
      builder = buildertemp;
     
@@ -215,6 +185,61 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
          }
      }
     
+    pugi::xml_node DzyaloshinskyMoriya = node.child("DzyaloshinskyMoriya");
+    for (pugi::xml_node tool = DzyaloshinskyMoriya.child("group"); tool; tool = tool.next_sibling("group"))
+    {
+        cout << "Dzyaloshinsky-Moriya: " << endl;
+        string temp = tool.child_value("value");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        double value = lexical_cast<double>(temp);
+        
+        temp = tool.child_value("min");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        double min = lexical_cast<double>(temp);
+        
+        temp = tool.child_value("max");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        double max = lexical_cast<double>(temp);
+        
+        double x,y,z;
+        
+        temp = tool.child("direction").child_value("x");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        x = lexical_cast<double>(temp);
+        
+        temp = tool.child("direction").child_value("y");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        y = lexical_cast<double>(temp);
+        
+        temp = tool.child("direction").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        z = lexical_cast<double>(temp);
+        
+        cout << x << '\t' << y << '\t' << z << endl;
+        
+        pugi::xml_node pairs = tool.child("pairs");
+        for (pugi::xml_node pair = pairs.child("pair"); pair; pair = pair.next_sibling("pair"))
+        {
+            string atom1 = pair.child_value("name1");
+            string atom2 = pair.child_value("name2");
+            
+            cout << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
+            
+            if ( x > 0.99 && y < 0.01 && z < 0.01)
+            {
+                cout << "Error: Dzyaloshinsky-Moriya along X not yet implemented!" << endl;
+            }
+            else if (x < 0.01 && y > 0.99 && z < 0.01)
+            {
+                builder.Add_Interaction(new DM_Y_Interaction(value,atom1,atom2,min,max));
+            }
+            else if (x < 0.01 && y < 0.01 && z > 0.99)
+            {
+                builder.Add_Interaction(new DM_Z_Interaction(value,atom1,atom2,min,max));
+            }
+        }
+    }
+    
     pugi::xml_node anisotropy = node.child("Anisotropy");
     
     for (pugi::xml_node tool = anisotropy.child("group"); tool; tool = tool.next_sibling("group"))
@@ -245,7 +270,6 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
         for (pugi::xml_node name = sublattices.child("name"); name; name = name.next_sibling("name"))
         {
             string atom1 = name.child_value();
-            cout << "woof " << atom1 << endl;
             if ( x > 0.99 && y < 0.01 && z < 0.01)
             {
                 builder.Add_Interaction(new Anis_X_Interaction(value,atom1));
@@ -260,88 +284,6 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             }
         }
     }
-    
-    /*for (pugi::xml_node tool = node.child("DM_y"); tool; tool = tool.next_sibling("DM_y"))
-    {
-        double value = tool.attribute("value").as_double();
-        parser.clear();
-        parser.str(tool.child_value());
-        while(parser.good())
-        {
-            parser >> atom1 >> atom2 >> min >> max;
-            if(parser.good())
-            {
-                cout << "DM along y " << atom1 << atom2 << endl;
-                builder.Add_Interaction(new DM_Y_Interaction(value,atom2,atom1,min,max));
-            }
-        }
-    }
-    
-    for (pugi::xml_node tool = node.child("DM_z"); tool; tool = tool.next_sibling("DM_z"))
-    {
-        double value = tool.attribute("value").as_double();
-        parser.clear();
-        parser.str(tool.child_value());
-        while(parser.good())
-        {
-            parser >> atom1 >> atom2 >> min >> max;
-            if(parser.good())
-            {
-                cout << atom1 << atom2 << endl;
-                builder.Add_Interaction(new DM_Z_Interaction(value,atom2,atom1,min,max));
-            }
-        }
-    }
-    
-    for (pugi::xml_node tool = node.child("anis_z"); tool; tool = tool.next_sibling("anis_z"))
-    {
-        double value = tool.attribute("value").as_double();
-        parser.clear();
-        parser.str(tool.child_value());
-        while(parser.good())
-        {
-            parser >> atom1;
-            if(parser.good())
-            {
-                cout << atom1 << endl;
-                builder.Add_Interaction(new Anis_Z_Interaction(value,atom1));
-            }
-        }
-    }
-    
-    for (pugi::xml_node tool = node.child("anis_y"); tool; tool = tool.next_sibling("anis_y"))
-    {
-        double value = tool.attribute("value").as_double();
-        parser.clear();
-        parser.str(tool.child_value());
-        while(parser.good())
-        {
-            parser >> atom1;
-            if(parser.good())
-            {
-                cout << atom1 << endl;
-                builder.Add_Interaction(new Anis_Y_Interaction(value,atom1));
-            }
-        }
-        
-    }
-    
-    for (pugi::xml_node tool = node.child("anis_x"); tool; tool = tool.next_sibling("anis_x"))
-    {
-        double value = tool.attribute("value").as_double();
-        parser.clear();
-        parser.str(tool.child_value());
-        while(parser.good())
-        {
-            parser >> atom1;
-            if(parser.good())
-            {
-                cout << value << " " << atom1 << endl;
-                builder.Add_Interaction(new Anis_X_Interaction(value,atom1));
-            }
-        }
-
-    }*/
 }
 
 void Init::parseKpointsNode(const pugi::xml_node &node)

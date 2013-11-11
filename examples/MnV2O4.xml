@@ -1,113 +1,273 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spin_wave_genie>
-    <crystal>
-        <basevect scale="1.0">
-             <a> 0.70710678118 </a>
-             <b> 0.70710678118 </b>
-             <c> 1.0 </c>
-             <alpha> 90 </alpha>
-             <beta> 90 </beta>
-             <gamma> 90 </gamma>
-        </basevect>
-        <sublattice>
-            <name> Mn0 </name>
-            <moment coord="spherical">
-                2.5 0.0 0.0
-            </moment>
-            <position units="fractional">
-               0.0 0.25 0.125
-               0.5 0.75 0.625
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> Mn1 </name>
-            <moment coord="spherical">
-                2.5 0.0 0.0
-            </moment>
-            <position units="fractional">
-               0.5 0.25 0.375
-               0.0 0.75 0.875
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> V0 </name>
-            <moment coord="spherical">
-                1.0 115.03662377 270.0
-            </moment>
-            <position units="fractional">
-                0.0 0.0 0.5
-                0.5 0.5 0.0
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> V1 </name>
-            <moment coord="spherical">
-                1.0 115.03662377 0.0
-            </moment>
-            <position units="fractional">
-                0.75 0.25 0.75
-                0.25 0.75 0.25
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> V2 </name>
-            <moment coord="spherical">
-                1.0 115.03662377 90.0
-            </moment>
-            <position units="fractional">
-                0.5 0.0 0.0
-                0.0 0.5 0.5
-            </position>
-        </sublattice>
-        <sublattice>
-            <name> V3 </name>
-            <moment coord="spherical">
-                1.0 115.03662377 180.0
-            </moment>
-            <position units="fractional">
-                0.75 0.75 0.25
-                0.25 0.25 0.75
-            </position>
-        </sublattice>
-    </crystal>
-    <interaction>
-        <exchange value="-1.8">
-            Mn0 V0 0.41 0.42
-            Mn0 V1 0.41 0.42
-            Mn0 V2 0.41 0.42
-            Mn0 V3 0.41 0.42
-            Mn1 V0 0.41 0.42
-            Mn1 V1 0.41 0.42
-            Mn1 V2 0.41 0.42
-            Mn1 V3 0.41 0.42
-        </exchange>
-        <exchange value="-10.2" >
-            V1 V3 0.35 0.36
-            V0 V2 0.35 0.36
-        </exchange>
-        <exchange value="-3.0" >
-            V0 V1 0.35 0.36
-            V0 V3 0.35 0.36
-            V2 V1 0.35 0.36
-            V2 V3 0.35 0.36
-        </exchange>
-        <anis_z value="0.1">
-            Mn0
-            Mn1
-        </anis_z>
-        <anis_z value="-0.7">
-            V0
-            V1
-            V2
-            V3
-        </anis_z>
-        <anis_x value="4.8">
-            V1
-            V3
-        </anis_x>
-        <anis_y value="4.8">
-            V0
-            V2
-        </anis_y>
-    </interaction>
-</spin_wave_genie>
+<spinwavegenie xmlns:swg="SpinWaveGenieSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SpinWaveGenieSchema SpinWaveGenieSchema.xsd ">
+  <cell>
+    <latticevectors>
+      <a>6.0104</a>
+      <b>6.0104</b>
+      <c>8.5</c>
+      <alpha>90.0</alpha>
+      <beta>90.0</beta>
+      <gamma>90.0</gamma>
+    </latticevectors>
+    <moments>
+      <sublattice>
+        <name>Mn0</name>
+        <type>MN2</type>
+        <moment>
+          <magnitude>2.5</magnitude>
+          <theta>0.0</theta>
+          <phi>0.0</phi>
+        </moment>
+        <atomicpositions>
+          <position>
+            <x>0.0</x>
+            <y>0.25</y>
+            <z>0.125</z>
+          </position>
+          <position>
+          	<x>0.5</x>
+          	<y>0.75</y>
+          	<z>0.625</z>
+          </position>
+        </atomicpositions>
+      </sublattice>
+      <sublattice>
+      	<name>Mn1</name>
+      	<type>MN2</type>
+      	<moment>
+      		<magnitude>2.5</magnitude>
+      		<theta>0.0</theta>
+      		<phi>0.0</phi>
+      	</moment>
+      	<atomicpositions>
+      		<position>
+      			<x>0.5</x>
+      			<y>0.25</y>
+      			<z>0.375</z>
+      		</position>
+      		<position>
+      			<x>0.0</x>
+      			<y>0.75</y>
+      			<z>0.875</z>
+      		</position>
+      	</atomicpositions>
+      </sublattice>
+      <sublattice>
+      	<name>V0</name>
+      	<type>V3</type>
+      	<moment>
+      		<magnitude>1.0</magnitude>
+      		<theta>145.3</theta>
+      		<phi>270.0</phi>
+      	</moment>
+      	<atomicpositions>
+      		<position>
+      			<x>0.0</x>
+      			<y>0.0</y>
+      			<z>0.5</z>
+      		</position>
+      		<position>
+      			<x>0.5</x>
+      			<y>0.5</y>
+      			<z>0.0</z>
+      		</position>
+      	</atomicpositions>
+      </sublattice>
+      <sublattice>
+      	<name>V1</name>
+      	<type>V3</type>
+      	<moment>
+      		<magnitude>1.0</magnitude>
+      		<theta>145.3</theta>
+      		<phi>0.0</phi>
+      	</moment>
+      	<atomicpositions>
+      		<position>
+      			<x>0.75</x>
+      			<y>0.25</y>
+      			<z>0.75</z>
+      		</position>
+      		<position>
+      			<x>0.25</x>
+      			<y>0.75</y>
+      			<z>0.25</z>
+      		</position>
+      	</atomicpositions>
+      </sublattice>
+      <sublattice>
+      	<name>V2</name>
+      	<type>V3</type>
+      	<moment>
+      		<magnitude>1.0</magnitude>
+      		<theta>145.3</theta>
+      		<phi>90.0</phi>
+      	</moment>
+      	<atomicpositions>
+      		<position>
+      			<x>0.5</x>
+      			<y>0.0</y>
+      			<z>0.0</z>
+      		</position>
+      		<position>
+      			<x>0.0</x>
+      			<y>0.5</y>
+      			<z>0.5</z>
+      		</position>
+      	</atomicpositions>
+      </sublattice>
+      <sublattice>
+      	<name>V3</name>
+      	<type>V3</type>
+      	<moment>
+      		<magnitude>1.0</magnitude>
+      		<theta>145.3</theta>
+      		<phi>180.0</phi>
+      	</moment>
+      	<atomicpositions>
+      		<position>
+      			<x>0.75</x>
+      			<y>0.75</y>
+      			<z>0.25</z>
+      		</position>
+      		<position>
+      			<x>0.25</x>
+      			<y>0.25</y>
+      			<z>0.75</z>
+      		</position>
+      	</atomicpositions>
+      </sublattice>
+    </moments>
+  </cell>
+  <interactions>
+  	<Exchange>
+  		<group>
+  			<value>-1.8</value>
+  			<mindist>3.48</mindist>
+  			<maxdist>3.57</maxdist>
+  			<pairs>
+  				<pair>
+  					<name1>Mn0</name1>
+  					<name2>V0</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn0</name1>
+  					<name2>V1</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn0</name1>
+  					<name2>V2</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn0</name1>
+  					<name2>V3</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn1</name1>
+  					<name2>V0</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn1</name1>
+  					<name2>V1</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn1</name1>
+  					<name2>V2</name2>
+  				</pair>
+  				<pair>
+  					<name1>Mn1</name1>
+  					<name2>V3</name2>
+  				</pair>
+  			</pairs>
+  		</group>
+  		<group>
+  			<value>-3.0</value>
+  			<mindist>2.975</mindist>
+  			<maxdist>3.06</maxdist>
+  			<pairs>
+  				<pair>
+  					<name1>V0</name1>
+  					<name2>V2</name2>
+  				</pair>
+  				<pair>
+  					<name1>V1</name1>
+  					<name2>V3</name2>
+  				</pair>
+  			</pairs>
+  		</group>
+  		<group>
+  			<value>-3.0</value>
+  			<mindist>2.975</mindist>
+  			<maxdist>3.06</maxdist>
+  			<pairs>
+  				<pair>
+  					<name1>V0</name1>
+  					<name2>V1</name2>
+  				</pair>
+  				<pair>
+  					<name1>V0</name1>
+  					<name2>V3</name2>
+  				</pair>
+  				<pair>
+  					<name1>V2</name1>
+  					<name2>V1</name2>
+  				</pair>
+  				<pair>
+  					<name1>V2</name1>
+  					<name2>V3</name2>
+  				</pair>
+  			</pairs>
+  		</group>
+  	</Exchange>
+  	<Anisotropy>
+  		<group>
+  			<value>0.4</value>
+  			<direction>
+  				<x>0.0</x>
+  				<y>0.0</y>
+  				<z>1.0</z>
+  			</direction>
+  			<sublattices>
+  				<name>Mn0</name>
+  				<name>Mn1</name>
+  			</sublattices>
+  		</group>
+  		<group>
+  			<value>-0.7</value>
+  			<direction>
+  				<x>0.0</x>
+  				<y>0.0</y>
+  				<z>1.0</z>
+  			</direction>
+  			<sublattices>
+  				<name>V0</name>
+  				<name>V1</name>
+  				<name>V2</name>
+  				<name>V3</name>
+  			</sublattices>
+  		</group>
+  		<group>
+  			<value>3.72048</value>
+  			<direction>
+  				<x>1.0</x>
+  				<y>0.0</y>
+  				<z>0.0</z>
+  			</direction>
+  			<sublattices>
+  				<name>V1</name>
+  				<name>V3</name>
+  			</sublattices>
+  		</group>
+  		<group>
+  			<value>3.72048</value>
+  			<direction>
+  				<x>0.0</x>
+  				<y>1.0</y>
+  				<z>0.0</z>
+  			</direction>
+  			<sublattices>
+  				<name>V0</name>
+  				<name>V2</name>
+  			</sublattices>
+  		</group>
+  	</Anisotropy></interactions>
+</spinwavegenie>

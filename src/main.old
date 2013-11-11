@@ -55,7 +55,6 @@ public:
         boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
         SW_Builder builder = four_sl.get_builder();
         scoped_lock.unlock();
-        
         boost::unique_lock<boost::mutex> np_lock(np_mutex);
         np_lock.unlock();
 
@@ -70,7 +69,7 @@ public:
         resinfo.c = 0.48;
         resinfo.tol = 1.0e-2;
         resinfo.direction = 1;
-        resinfo.builder = builder;
+        resinfo.SW = builder.Create_Element();
         
         axes_info axesinfo;
         axesinfo.x = true;
@@ -124,7 +123,7 @@ public:
                 break;
             }
             nextPoint++;
-            cout << m << endl;
+            //cout << m << endl;
             np_lock.unlock();
             double x = x0 + (x1-x0)*m/(tnpoints-1);
             double y = y0 + (y1-y0)*m/(tnpoints-1);
