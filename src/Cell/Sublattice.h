@@ -19,7 +19,7 @@ class Sublattice
 {
 public:
     //! Initializer
-    Sublattice() {};
+    Sublattice();
     //! Destructor
     ~Sublattice() {};
     //! use AtomIterator to iterate over atoms in sublattice

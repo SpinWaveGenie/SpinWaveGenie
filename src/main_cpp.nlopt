@@ -1,0 +1,279 @@
+#include <cmath>
+#include <nlopt.hpp>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include "SpinWave.h"
+#include "Initializer.h"
+#include "Cell.h"
+#include "Cell/Neighbors.h"
+#include "Cell/AtomIterator.h"
+#include "Exch_Interaction.h"
+#include "Anis_X_Interaction.h"
+#include "Anis_Y_Interaction.h"
+#include "Anis_Z_Interaction.h"
+
+using namespace std;
+using namespace Eigen;
+
+double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
+{
+    
+    return 0.0;
+}
+
+double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
+{
+    cout << "x[i] = ";
+    for (size_t i = 0; i<6;i++)
+        cout << x[i] << " ";
+    cout << endl;
+    double diff_sq = 0.0;
+    //my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
+    if (!grad.empty())
+    {
+        cout << "error: no gradient available" << endl;
+    }
+    
+    double KX=0.0, KY = 0.0, KZ = 0.0;
+
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_largeangle.xml");
+    Cell cell = four_sl.get_cell();
+    
+    double Jab = cos(64.9633762304*M_PI/180.0)*(2.0*x[1] + 2.0*x[2] + x[4] - x[5])*2.0/15.0;
+    cout << Jab << endl;
+    //double Jab = x[0];
+    SW_Builder builder(cell);
+
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V0","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V1","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V2",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V2","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V3",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V3","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V0","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V1","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V2",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V2","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V3",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction(Jab,"V3","Mn1",3.48,3.57));
+
+    builder.Add_Interaction(new Exch_Interaction(x[1],"V0","V2",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[1],"V2","V0",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[1],"V1","V3",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[1],"V3","V1",2.975,3.06));
+    
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V0","V1",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V1","V0",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V0","V3",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V3","V0",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V1","V2",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V2","V1",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V2","V3",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction(x[2],"V3","V2",2.975,3.06));
+    
+    builder.Add_Interaction(new Anis_Z_Interaction(x[3],"Mn0"));
+    builder.Add_Interaction(new Anis_Z_Interaction(x[3],"Mn1"));
+    
+    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V1"));
+    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V3"));
+    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V0"));
+    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V2"));
+    
+    builder.Add_Interaction(new Anis_X_Interaction(x[5],"V1"));
+    builder.Add_Interaction(new Anis_X_Interaction(x[5],"V3"));
+    builder.Add_Interaction(new Anis_Y_Interaction(x[5],"V0"));
+    builder.Add_Interaction(new Anis_Y_Interaction(x[5],"V2"));
+
+    SpinWave SW = builder.Create_Element();
+    
+    SW.createMatrix(KX,KY,KZ);
+    SW.Calc();
+    
+    vector<double> frequencies = SW.Get_Frequencies();
+    
+    std::sort(frequencies.begin(), frequencies.end());
+    
+    diff_sq += pow(frequencies[0]-2.0,2);
+    
+    //double min_freq = 15.0;
+    
+    //if(frequencies[2]<min_freq)
+    //    diff_sq +=10.0;
+    
+    KZ = 0.25;
+    
+    SW.createMatrix(KX,KY,KZ);
+    SW.Calc();
+    
+    frequencies = SW.Get_Frequencies();
+    
+    std::sort(frequencies.begin(), frequencies.end());
+    
+    diff_sq += pow(frequencies[0]-5.7,2);
+    
+    //if(frequencies[2]<min_freq)
+    //    diff_sq +=10.0;
+    
+    KZ = 0.5;
+    
+    SW.createMatrix(KX,KY,KZ);
+    SW.Calc();
+    
+    frequencies = SW.Get_Frequencies();
+    
+    std::sort(frequencies.begin(), frequencies.end());
+    
+    diff_sq += pow(frequencies[1]-9.23,2);
+    
+    //if(frequencies[2]<min_freq)
+    //    diff_sq +=10.0;
+    
+    KZ = 0.75;
+    
+    SW.createMatrix(KX,KY,KZ);
+    SW.Calc();
+    
+    frequencies = SW.Get_Frequencies();
+    
+    std::sort(frequencies.begin(), frequencies.end());
+    
+    diff_sq += pow(frequencies[1]-9.92,2);
+    
+    //if(frequencies[2]<min_freq)
+    //    diff_sq +=10.0;
+    
+    
+    KZ = 1.0;
+    
+    SW.createMatrix(KX,KY,KZ);
+    SW.Calc();
+    
+    frequencies = SW.Get_Frequencies();
+    
+    std::sort(frequencies.begin(), frequencies.end());
+    
+    diff_sq += pow(frequencies[1]-10.66,2);
+    
+    //if(frequencies[2]<min_freq)
+    //    diff_sq +=10.0;
+    
+    //cout << "Jab = " << Jab << endl;
+    cout << "diff_sq = " << diff_sq << endl;;
+    
+    return diff_sq;
+}
+
+
+/*typedef struct {
+    double a, b;
+} my_constraint_data;
+*/
+
+double myconstraint(const std::vector<double> &x, std::vector<double> &grad, void *data)
+{
+    /*my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
+    double a = d->a, b = d->b;
+    if (!grad.empty()) {
+        grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
+        grad[1] = -1.0;
+    }*/
+    
+    double theta = 37.4*M_PI/180.0;
+    double Jab = x[0];
+    double Jbb = x[1];
+    double Jbbp = x[2];
+    //double Daz = x[3];
+    double Dbz = x[4];
+    double Dby = x[5];
+    
+    double constraint = 60.0*Jab*cos(theta) -16*Jbb*pow(sin(theta),2) + 16*Jbb*pow(cos(theta),2) -16*Jbbp*pow(sin(theta),2) +16*Jbbp*pow(cos(theta),2) + 8.0*Dbz*pow(sin(theta),2) -8.0*Dbz*pow(cos(theta),2) + 8.0*Dby*pow(cos(theta),2) -8.0*Dby*pow(sin(theta),2) ;
+    
+    //double constraint = 60.0*Jab + 16.0*Jbb + 16.0*Jbbp -8.0*Dbz + 8.0*Dby;
+    
+    cout << "constraint = " << constraint << endl;
+    return -1.0*constraint;
+}
+
+int main()
+{
+    //nlopt::opt opt(nlopt::LD_MMA, 2);
+    //std::vector<double> lb(2);
+    //lb[0] = -HUGE_VAL; lb[1] = 0;
+    //opt.set_lower_bounds(lb);
+    
+    //my_constraint_data data[2] = { {2,0}, {-1,1} };
+    //opt.add_inequality_constraint(myconstraint, &data[0], 1e-8);
+    //opt.add_inequality_constraint(myconstraint, &data[1], 1e-8);
+    
+    nlopt::opt opt(nlopt::LN_COBYLA, 6);
+    std::vector<double> ub(6);
+    ub[0] = 0.0;
+    ub[1] = 0.0;
+    ub[2] = 0.0;
+    ub[3] = 2.0;
+    ub[4] = 2.0;
+    ub[5] = 10.0;
+    opt.set_upper_bounds(ub);
+    std::vector<double> lb(6);
+    lb[0] = 0.0;
+    lb[1] = -20.0;
+    lb[2] = -10.0;
+    lb[3] = -2.0;
+    lb[4] = -2.0;
+    lb[5] = 0.0;
+    opt.set_lower_bounds(lb);
+    opt.set_min_objective(myfunc_4sl, NULL);
+    //opt.add_inequality_constraint(myconstraint,NULL, 1e-8);
+    opt.set_xtol_rel(1.0e-3);
+    std::vector<double> x(6);
+    /*x[0] = -3.0;
+    x[1] = -3.0;
+    x[2] = -3.0;
+    x[3] = 0.4;
+    x[4] = -0.7;
+    x[5] = 3.72048;
+    */
+    x[0] = 0.0;
+    x[1] = -10.2;
+    x[2] = -3.0;
+    x[3] = 0.1;
+    x[4] = -0.7;
+    x[5] = 4.8;
+ 
+    double minf = 0.0;
+    
+    nlopt::result result = opt.optimize(x, minf);
+    
+    cout << result << endl;
+    
+    cout << minf << endl;
+    
+    cout << "results:" << endl;
+    for (vector<double>::iterator it = x.begin(); it!=x.end();it++)
+        cout << (*it) << " ";
+    cout << endl;
+    cout << "chi_squared = " << minf << endl;
+    cout << "reduced chi_squared = " << minf/1.0 << endl;
+    
+    
+    /*vector<double> gradient;
+    
+    for (long i = 0; i!=x.size();i++)
+    {
+        cout << endl;
+        cout << "x[" << i << "] = " << x[i] << endl;
+        vector<double> xtemp = x;
+        for (int j=-10;j!=11;j++)
+        {
+            xtemp[i] = x[i] + x[i]*(double)j/50.0;
+            cout << xtemp[i] << "  " << (myfunc_4sl(xtemp,gradient,NULL) - minf)/1.0 - 1.0 << endl;
+        }
+    }*/
+    return 0;
+}

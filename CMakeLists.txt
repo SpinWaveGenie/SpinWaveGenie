@@ -2,6 +2,8 @@ project(spin_wave_genie)
 
 cmake_minimum_required(VERSION 2.8)
 
+#ENABLE_TESTING()
+
 macro(remove_cxx_flag flag)
   string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endmacro()
@@ -20,5 +22,9 @@ elseif(APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++11 -stdlib=libc++ -msse4")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 find_package(Eigen3 REQUIRED)
-find_package(Boost 1.5 REQUIRED COMPONENTS system thread program_options)
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost 1.5 REQUIRED COMPONENTS system thread program_options unit_test_framework)
+
 add_subdirectory(src)
+add_subdirectory(test)
+ 

@@ -4,6 +4,13 @@
 
 using namespace std;
 
+Sublattice::Sublattice()
+{
+    this->setName("");
+    this->setType("None");
+    this->setMoment(1.0,0.0,0.0);
+}
+
 void Sublattice::setName(string nameInput)
 {
     name = nameInput;
@@ -26,16 +33,25 @@ string Sublattice::getType()
 
 void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
 {
-    spin = spinInput;
-    assert(thetaInput <= M_PI && thetaInput >= 0.0);
-    theta = thetaInput;
+    assert(spinInput > 0.0);
     
-    assert(phiInput <= 2.0*M_PI && phiInput >= 0.0);
+    spin = spinInput;
+    
+    assert(thetaInput >= 0.0 && thetaInput <= M_PI);
+    
+    while (phiInput > 2.0*M_PI)
+    {
+        phiInput -= 2.0*M_PI;
+    }
+    while (phiInput < 0.0)
+    {
+        phiInput += 2.0*M_PI;
+    }
+    
+    theta = thetaInput;
     phi = phiInput;
 
-    /*
-    rotation matrix defined in equation A.1 in J. Phys.: Condens. Matter 21 (2009) 216001 
-    */
+    //rotation matrix defined in equation A.1 in J. Phys.: Condens. Matter 21 (2009) 216001
     rotationMatrix(0,0) = cos(theta)*cos(phi);
     rotationMatrix(0,1) = cos(theta)*sin(phi);
     rotationMatrix(0,2) = -1.0*sin(theta);
@@ -64,7 +80,6 @@ double Sublattice::getPhi()
     return phi;
 }
 
-
 Eigen::Matrix3d* Sublattice::getRotationMatrix()
 {
     return &rotationMatrix;
@@ -77,7 +92,6 @@ Eigen::Matrix3d* Sublattice::getInverseMatrix()
 
 void Sublattice::addAtom(double x, double y, double z)
 {
-    //written to compile with C++03 compiler 
     double tmp[3] = {x,y,z};
     std::vector<double> pos(&tmp[0], &tmp[0]+3);
     position.push_back(pos);

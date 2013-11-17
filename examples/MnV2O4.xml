@@ -141,7 +141,7 @@
   <interactions>
   	<Exchange>
   		<group>
-  			<value>-1.8</value>
+  			<value>-2.27288</value>
   			<mindist>3.48</mindist>
   			<maxdist>3.57</maxdist>
   			<pairs>
@@ -180,7 +180,7 @@
   			</pairs>
   		</group>
   		<group>
-  			<value>-3.0</value>
+  			<value>-8.56749</value>
   			<mindist>2.975</mindist>
   			<maxdist>3.06</maxdist>
   			<pairs>
@@ -195,7 +195,7 @@
   			</pairs>
   		</group>
   		<group>
-  			<value>-3.0</value>
+  			<value>0.0</value>
   			<mindist>2.975</mindist>
   			<maxdist>3.06</maxdist>
   			<pairs>
@@ -220,7 +220,7 @@
   	</Exchange>
   	<Anisotropy>
   		<group>
-  			<value>0.4</value>
+  			<value>0.116467</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -232,7 +232,7 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>-0.7</value>
+  			<value>0.121134</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>

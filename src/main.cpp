@@ -51,11 +51,11 @@ int main(int argc, char * argv[])
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
     }
 
-    int npoints = 11;
+    int npoints = 101;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=0.0;x1=1.0;
+    x0=0.0;x1=0.0;
     y0=0.0;y1=0.0;
-    z0=0.0;z1=0.0;
+    z0=0.0;z1=1.0;
     for(int m=0;m<npoints;m++)
     {
         //sleep(1);

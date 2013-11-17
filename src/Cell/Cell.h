@@ -12,7 +12,6 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
 
-
 //! Iterates over sublattices in the Cell class.
 /*!
  The SublatticeIterator class iterates over sublattices stored in the Cell class. Example:
