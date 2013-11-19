@@ -18,6 +18,7 @@
 #include <cmath>
 #include <ctime>
 #include "Cell.h"
+#include "Cell/Neighbors.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "Interaction.h"
 

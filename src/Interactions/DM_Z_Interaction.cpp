@@ -1,5 +1,4 @@
 #include "DM_Z_Interaction.h"
-#include "../Cell/AtomIterator.h"
 #include "../Cell/Neighbors.h"
 
 using namespace std;
@@ -68,38 +67,20 @@ void DM_Z_Interaction::calcConstantValues(Cell& cell)
     tmp3 = 0.25*X*S*cos(theta_s)*cos(phi_r-phi_s);
     tmp4 = 0.25*X*S*sin(phi_r-phi_s);
     
+    neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+    z_rs = neighbors.getNumberNeighbors();
 }
 
-void DM_Z_Interaction::calcChangingValues(Cell& cell, Vector3d K)
-{
-    Neighbors neighborList(cell,sl_r,sl_s,min,max);
-    
-    AtomIterator nbrBegin = neighborList.begin();
-    AtomIterator nbrEnd = neighborList.end();
-    z_rs = (double) distance(nbrBegin,nbrEnd);
-    
-    complex<double> MXI (0.0,-1.0);
-    gamma_rs = complex<double>(0.0,0.0);
-    for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
-    {
-        double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
-        gamma_rs += exp(MXI*dot_prod);
-    }
-    
-    gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
-    //cout << "z_rs= " << z_rs << endl;
-    //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
-    
-}
 
 void DM_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
 }
 
 
-void DM_Z_Interaction::Update_Matrix(Vector3d K,Cell& cell, MatrixXcd &LN, int quadrant)
+void DM_Z_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
 {
     complex<double> XI (0.0,1.0);
+    gamma_rs = neighbors.getGamma(K);
     switch (quadrant)
     {
         case 0:

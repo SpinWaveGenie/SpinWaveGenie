@@ -1,5 +1,5 @@
 #include "Exch_Interaction.h"
-#include "../Cell/AtomIterator.h"
+#include <iostream>
 #include "../Cell/Neighbors.h"
 
 using namespace std;
@@ -28,9 +28,9 @@ void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string
 
 vector<string> Exch_Interaction::sublattices() const
 {
-    vector<string> sl;
-    sl.push_back(sl_r);
-    sl.push_back(sl_s);
+    vector<string> sl = {sl_r,sl_s};
+    //sl.push_back(sl_r);
+    //sl.push_back(sl_s);
     return sl;
 }
 
@@ -66,37 +66,15 @@ void Exch_Interaction::calcConstantValues(Cell& cell)
     Fsr = (*cell.getSublattice(sl_s).getRotationMatrix())*
     (*cell.getSublattice(sl_r).getInverseMatrix());
     
+    neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+    z_rs = neighbors.getNumberNeighbors();
+    
     //cout << r << "\t" << s << endl << F << endl;
     //cout << endl;
     
     //cout << "G1= " << G1 << endl;
     //cout << "G2= " << G2 << endl;
     
-}
-
-void Exch_Interaction::calcChangingValues(Cell& cell, Vector3d K)
-{
-    Neighbors neighborList(cell,sl_r,sl_s,min,max);
-    
-    AtomIterator nbrBegin = neighborList.begin();
-    AtomIterator nbrEnd = neighborList.end();
-    z_rs = (double) distance(nbrBegin,nbrEnd);
-    
-    complex<double> MXI (0.0,-1.0);
-    gamma_rs = complex<double>(0.0,0.0);
-    for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
-    {
-        double dot_prod = K[0]*(*nbr)[0] + K[1]*(*nbr)[1] + K[2]*(*nbr)[2];
-        gamma_rs += exp(MXI*dot_prod);
-        //cout << K[0]/M_PI << "  " << K[1]/M_PI << "  " << K[2]/M_PI << endl;
-        //cout << (*nbr)[0] << "  " << (*nbr)[1] << "  " << (*nbr)[2] << " " << MXI*dot_prod/M_PI << endl;
-        //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
-
-    }
-    
-    gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
-    //cout << "z_rs= " << z_rs << endl;
-    //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
 }
 
 void Exch_Interaction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
@@ -107,11 +85,6 @@ void Exch_Interaction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
     complex<double> F1sr(Fsr(0,2),Fsr(1,2));
     complex<double> F2sr(Fsr(2,0),Fsr(2,1));
     
-    Neighbors neighborList(cell,sl_r,sl_s,min,max);
-    AtomIterator nbrBegin = neighborList.begin();
-    AtomIterator nbrEnd = neighborList.end();
-    z_rs = (double) distance(nbrBegin,nbrEnd);
-        
     //elements[r] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*(conj(F1rs));
     //elements[s] -= sqrt(Ss)*Sr/(2.0*sqrt(2.0))*z_rs*value*(conj(F2rs));
     //elements[r+M] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*(F1rs);
@@ -120,7 +93,7 @@ void Exch_Interaction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
     elements[r+M] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*(F1rs+F2sr);
 }
 
-void Exch_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
+void Exch_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
 {
     
     complex<double> G1rs = -0.5*complex<double>(Frs(0,0) + Frs(1,1),Frs(1,0)-Frs(0,1));
@@ -131,7 +104,10 @@ void Exch_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int 
     
     complex<double> G2sr = -0.5*complex<double>(Fsr(0,0) - Fsr(1,1),-Fsr(1,0)-Fsr(0,1));
 
+    gamma_rs = neighbors.getGamma(K);
+    
     double X = value*sqrt(Sr*Ss);
+    
     switch (quadrant)
     {
         case 0:

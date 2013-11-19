@@ -11,6 +11,7 @@
 #include <memory> 
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
+#include "Matrices.h"
 
 //! Iterates over sublattices in the Cell class.
 /*!
@@ -26,7 +27,6 @@
  }
  \endcode
  */
-
 class SublatticeIterator
 : public boost::iterator_facade<
 SublatticeIterator
@@ -48,24 +48,20 @@ public:
     
 private:
     std::map<std::string,Sublattice>::iterator it;
-    
     void increment()
     {
         ++it;
     }
-    
     bool equal(SublatticeIterator const& other) const
     {
         return (it == other.it);
     }
-    
     Sublattice& dereference() const
     {
         return it->second;
     }
     
 };
-
 
 //! Contains the basis vectors and a pointer to all sublattices in the unit cell.
 /*!
@@ -75,8 +71,6 @@ Atomic positions inserted as a fraction of the basis vectors and converted to An
 class Cell
 {
 public:
-    //! Use Neighbors class to iterate over the relative position of neighboring atoms of a particular sublattice
-    friend class Neighbors;
     //! Set basis vectors from variable a,b,c,alpha,beta,gamma.
     //! \param a     Distance a in Angstroms
     //! \param b     Distance b in Angstroms
@@ -88,13 +82,13 @@ public:
     //! Set basis vectors as Eigen::Matrix3d object. May be multiplied by double "scale"
     //! \param scale Double used to scale basis vectors
     //! \param basis Basis vectors as rows in an Eigen::Matrix3d object
-    void setBasisVectors(double scale, Eigen::Matrix3d basis);
+    void setBasisVectors(double scale, Matrix3 basis);
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    Eigen::Matrix3d getBasisVectors();
+    Matrix3 getBasisVectors();
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    Eigen::Matrix3d getReciprocalVectors();
+    Matrix3 getReciprocalVectors();
     //! Add sublattice to cell
     //! \param name Unique name defining sublattice
     //! \param sl Pointer to Sublattice object
@@ -116,35 +110,11 @@ public:
     //! \return Returns an iterator pointing to the final Sublattice element
     SublatticeIterator end();
 private:
-    //! Finds neighbors of two sublattices between distances min and max.
-    //! Used exclusively by NeighborIter
-    //! \param sublattice1_in name of first sublattice
-    //! \param sublattice2_in name of second sublattice
-    //! \param min minimum distance considered (Angstroms)
-    //! \param max maximum distance considered (Angstroms)
-    //! \return relative position of all neighboring atoms
-    std::vector<std::vector<double> >* getNeighbors(std::string& sl1, std::string& sl2, double min, double max);
-    //! Finding the relative position of neighboring atoms is a relatively slow process,
-    //! so we want to store the results so they can be reused. Therefore, we need a struct that quickly identifies when the input parameters are identical.
-    struct NeighborsKey
-    {
-        std::string sl1, sl2;
-        double min,max;
-        bool operator ==(const NeighborsKey &other) const;
-    };
-    struct KeyHasher
-    {
-        std::size_t operator()(const NeighborsKey& k) const;
-    };
-    //! stores the results of getNeighbors in a map so they can be reused.
-    //std::map<FastCompare,std::vector<std::vector<double> > > neighborCache;
-    std::unordered_map<NeighborsKey, std::vector<std::vector<double> >,KeyHasher >neighborCache;
     //! basis vectors
-    Eigen::Matrix3d basisVectors;
+    Matrix3 basisVectors;
     //! reciprocal lattice vectors
-    Eigen::Matrix3d reciprocalVectors;
+    Matrix3 reciprocalVectors;
     //! map of all Sublattice objects;
     std::map<std::string, Sublattice> sublatticeInfo;
 };
-
 #endif // __Cell_H__ 

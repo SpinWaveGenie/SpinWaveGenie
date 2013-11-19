@@ -59,11 +59,7 @@ void Anis_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elem
     elements[r+M] += sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
 }
 
-void Anis_Z_Interaction::calcChangingValues(Cell& cell, Vector3d K)
-{
-}
-
-void Anis_Z_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
+void Anis_Z_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
 {
     switch (quadrant)
     {

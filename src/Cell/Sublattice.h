@@ -5,9 +5,11 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <string>
-#include <boost/iterator/iterator_facade.hpp>
+//#include <boost/iterator/iterator_facade.hpp>
+#include "Matrices.h"
 
-class AtomIterator;
+//class Vector3;
+//class Vector3Iterator;
 
 //! Describes a sublattice in the unit cell.
 /*!
@@ -53,19 +55,20 @@ public:
     double getPhi();
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
-    Eigen::Matrix3d* getRotationMatrix();
+    Matrix3* getRotationMatrix();
     //! returns inverse rotation matrix as an Eigen::Matrix3d object
     //! \return inverse rotation matrix
-    Eigen::Matrix3d* getInverseMatrix();
+    Matrix3* getInverseMatrix();
     //! add atom to the sublattice
     //! \param x x component of atomic position in Angstroms
     //! \param y y component of atomic position in Angstroms
     //! \param z z component of atomic position in Angstroms
     void addAtom(double x, double y, double z);
+    typedef Vector3Iterator Iterator;
     //! returns iterator to first atomic position;
-    AtomIterator begin();
+    Iterator begin();
     //! returns iterator to final atomic position;
-    AtomIterator end();
+    Iterator end();
 private:
     std::string name; //!< name describing the sublattice
     std::string type; //!< type describing the magnetic form factor
@@ -73,8 +76,8 @@ private:
     theta, //!< angle theta describing orientation of spin
     phi; //!< angle phi describing orientation of spin
     //std::vector<double> angles; //!< spin, theta, phi
-    Eigen::Matrix3d rotationMatrix, //!< rotation matrix describing moment along z
+    Matrix3 rotationMatrix, //!< rotation matrix describing moment along z
     inverseMatrix; //!< inverse for rotation matrix
-    std::vector<std::vector<double> > position; //!< std::vector storing atomic positions.
+    std::vector<Vector3> position; //!< std::vector storing atomic positions.
 };
 #endif // __Sublattice_H__

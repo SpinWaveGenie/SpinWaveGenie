@@ -1,7 +1,9 @@
 #include "SpinWave.h"
+#include "Cell/Matrices.h"
 #include <Eigen/Cholesky>
 #include <iomanip>
 #include <unordered_map>
+#include "Cell/Neighbors.h"
 
 
 using namespace Eigen;
@@ -81,6 +83,8 @@ SpinWave::SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in
     {
         SS(j) = -1.0;
     }
+    
+    
 }
 
 Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
@@ -105,8 +109,8 @@ Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
 
 void SpinWave::createMatrix(double KX,double KY,double KZ)
 {
-    Eigen::Vector3d K;
-    Eigen::Matrix3d recip;
+    Vector3 K;
+    Matrix3 recip;
     recip = cell.getReciprocalVectors();
     K << KX,KY,KZ;
     //cout << "K before " << K.transpose() << endl;
@@ -118,12 +122,10 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     int quad = 0;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        iter->calcChangingValues(cell,K);
-        iter->Update_Matrix(K,cell,LN,quad);
-        //cout << SW.LN(0,2) << endl;
-        iter->Update_Matrix(K,cell,LN,quad+1);
-        iter->Update_Matrix(K,cell,LN,quad+2);
-        iter->Update_Matrix(K,cell,LN,quad+3);
+        iter->Update_Matrix(K,LN,quad);
+        iter->Update_Matrix(K,LN,quad+1);
+        iter->Update_Matrix(K,LN,quad+2);
+        iter->Update_Matrix(K,LN,quad+3);
     }
     //cout << "LN" << endl;
     //cout << SW.LN << endl;
@@ -385,8 +387,7 @@ void SpinWave::Calc_Intensities()
     double KX = KXP;
     double KY = KYP;
     double KZ = KZP;
-    //vector<Matrix3d> V_array;
-    Matrix3d V_r;//,V_s;
+    Matrix3 V_r;//,V_s;
     double S_r,formFactor;
     ArrayXXcd Intensities(M,3); Intensities.setZero();
     VectorXd SXX,SYY,SZZ;

@@ -62,14 +62,9 @@ void Anis_Y_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elem
     //cout << "Anis_Y" << endl;
 }
 
-void Anis_Y_Interaction::calcChangingValues(Cell& cell, Vector3d K)
-{
-}
 
-void Anis_Y_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
+void Anis_Y_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
 {
-
-    
     switch (quadrant)
     {
         case 0:

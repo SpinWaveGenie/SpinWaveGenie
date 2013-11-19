@@ -1,6 +1,5 @@
-#include "Sublattice.h"
 #include <iostream>
-#include "AtomIterator.h"
+#include "Sublattice.h"
 
 using namespace std;
 
@@ -80,28 +79,28 @@ double Sublattice::getPhi()
     return phi;
 }
 
-Eigen::Matrix3d* Sublattice::getRotationMatrix()
+Matrix3* Sublattice::getRotationMatrix()
 {
     return &rotationMatrix;
 }
 
-Eigen::Matrix3d* Sublattice::getInverseMatrix()
+Matrix3* Sublattice::getInverseMatrix()
 {
     return &inverseMatrix;
 }
 
 void Sublattice::addAtom(double x, double y, double z)
 {
-    double tmp[3] = {x,y,z};
-    std::vector<double> pos(&tmp[0], &tmp[0]+3);
+    Vector3 pos(x,y,z);
     position.push_back(pos);
 }
 
-AtomIterator Sublattice::begin()
+Sublattice::Iterator Sublattice::begin()
 {
-    return AtomIterator(position.begin());
+    return Iterator(position.begin());
 }
-AtomIterator Sublattice::end()
+
+Sublattice::Iterator Sublattice::end()
 {
-    return AtomIterator(position.end());
+    return Iterator(position.end());
 }

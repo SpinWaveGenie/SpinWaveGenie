@@ -54,10 +54,6 @@ void Anis_X_Interaction::calcConstantValues(Cell& cell)
     LNrMrM = -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
 }
 
-void Anis_X_Interaction::calcChangingValues(Cell& cell, Vector3d K)
-{
-}
-
 void Anis_X_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
         complex<double> XI (0.0,1.0);
@@ -68,7 +64,7 @@ void Anis_X_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elem
         elements[r+M] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*cos(phi)*(cos(theta)*cos(phi)-XI*sin(phi));
 }
 
-void Anis_X_Interaction::Update_Matrix(Vector3d K, Cell& cell, MatrixXcd &LN, int quadrant)
+void Anis_X_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
 {
     switch (quadrant)
     {
