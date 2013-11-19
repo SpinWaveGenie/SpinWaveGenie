@@ -1,7 +1,9 @@
 #include <iostream>
 #include "Sublattice.h"
 
-using namespace std;
+using std::string;
+using std::cout;
+using std::endl;
 
 Sublattice::Sublattice()
 {

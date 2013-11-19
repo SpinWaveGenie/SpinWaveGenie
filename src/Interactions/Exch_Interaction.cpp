@@ -41,7 +41,7 @@ void Exch_Interaction::calcConstantValues(Cell& cell)
     s= -1;
     
     M=0;
-    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
+    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         //cout << sl.CurrentItem()->get_name() << endl;
         //cout << iter->sl_r << endl;

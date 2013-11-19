@@ -2,9 +2,10 @@
 #include "Neighbors.h"
 #include "Cell.h"
 
-
-using namespace Eigen;
-using namespace std;
+using std::string;
+using std::complex;
+using std::cout;
+using std::endl;
 
 Neighbors::Neighbors()
 {

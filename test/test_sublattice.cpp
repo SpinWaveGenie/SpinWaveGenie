@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( rotation_matrices_test )
 
     test.setMoment(2.0,M_PI/2.0,M_PI);
     RotationMatrix = test.getRotationMatrix();
-    Matrix3 *InverseMatrix = test.getInverseMatrix();
+    InverseMatrix = test.getInverseMatrix();
     Matrix3 IdentityTest = (*InverseMatrix)*(*RotationMatrix);
     BOOST_CHECK(IdentityTest.isIdentity());
 }

@@ -16,7 +16,6 @@
 #include "SpinWave.h"
 #include "Initializer.h"
 #include "Cell/Neighbors.h"
-#include "Cell/AtomIterator.h"
 
 using namespace boost;
 using namespace std;
@@ -39,26 +38,26 @@ int main(int argc, char * argv[])
     double min = 0.0;
     double max = 5.0;
     
-    Neighbors neighborList(cell,sl_r,sl_s,min,max);
-    
-    AtomIterator nbrBegin = neighborList.begin();
-    AtomIterator nbrEnd = neighborList.end();
+    Neighbors neighborList;
+    neighborList.findNeighbors(cell,sl_r,sl_s,min,max);
+    Neighbors::Iterator nbrBegin = neighborList.begin();
+    Neighbors::Iterator nbrEnd = neighborList.end();
     int z_rs = distance(nbrBegin,nbrEnd);
     
     cout << "z_rs= " << z_rs << endl;
-    for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
+    for(Neighbors::Iterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
     {
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
     }
 
-    int npoints = 3;
+    int npoints = 100001;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=0.00001;x1=2.00000;
+    x0=0.0;x1=0.0;
     y0=0.0;y1=0.0;
-    z0=0.0;z1=0.0;
+    z0=0.0;z1=1.0;
     for(int m=0;m<npoints;m++)
     {
-        sleep(1);
+        //sleep(1);
         if(npoints==1)
         {
             x = x0 ;
@@ -71,19 +70,18 @@ int main(int argc, char * argv[])
             y = y0 + (y1-y0)*m/(npoints-1);
             z = z0 + (z1-z0)*m/(npoints-1);
         }
-
-        cout << "Pos." << endl;
-        cout << x << " " << y << " " << z << endl;
+        //cout << "Pos." << endl;
+        cout << x << " " << y << " " << z << " ";// << endl;
         SpinWave test = builder.Create_Element();
         test.createMatrix(x,y,z);
         test.Calc();
         vector<double> frequencies = test.Get_Frequencies();
         vector<double> intensities = test.Get_Intensities();
-        cout << "Freq.  Int." << endl;
+        //cout << "Freq.  Int." << endl;
         vector<double>::iterator it2 = intensities.begin();
         for(vector<double>::iterator it = frequencies.begin();it!=frequencies.end();it++)
         {
-            cout << (*it) << "  " << (*it2) << endl;
+            cout << (*it) << "  ";// << (*it2) ;//<< endl;
             it2++;
         }
         cout << endl;

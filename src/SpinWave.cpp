@@ -446,7 +446,7 @@ void SpinWave::Calc_Intensities()
     //double S = ;
 
     long L2 = 0;
-    for (SublatticeIterator sl = cell.begin(); sl!=cell.end();++sl) //r
+    for (Cell::Iterator sl = cell.begin(); sl!=cell.end();++sl) //r
     {
         V_r = (*sl->getInverseMatrix());
         S_r = sl->getMoment();

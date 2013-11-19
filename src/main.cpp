@@ -33,8 +33,8 @@ int main(int argc, char * argv[])
     
     Cell cell = four_sl.get_cell();
     
-    string sl_r = "V0";
-    string sl_s = "V1";
+    string sl_r = "Mn0";
+    string sl_s = "Mn1";
     double min = 0.0;
     double max = 5.0;
     
@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
     }
 
-    int npoints = 100001;
+    int npoints = 101;
     double x,y,z,x0,y0,z0,x1,y1,z1;
     x0=0.0;x1=0.0;
     y0=0.0;y1=0.0;

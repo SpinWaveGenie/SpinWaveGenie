@@ -33,7 +33,7 @@ void Anis_Y_Interaction::calcConstantValues(Cell& cell)
     //find location of r,s
     r= -1;
     M = 0;
-    for (SublatticeIterator sl=cell.begin(); sl!=cell.end(); ++sl)
+    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
     {
         if ( sl_r == sl->getName())
             r = M;

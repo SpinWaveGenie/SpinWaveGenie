@@ -106,9 +106,10 @@ public:
     //! \return number of sublattices
     size_t size();
     //! \return Returns an iterator pointing to the first Sublattice element
-    SublatticeIterator begin();
+    typedef SublatticeIterator Iterator;
+    Iterator begin();
     //! \return Returns an iterator pointing to the final Sublattice element
-    SublatticeIterator end();
+    Iterator end();
 private:
     //! basis vectors
     Matrix3 basisVectors;

@@ -1,11 +1,11 @@
 #include "Cell.h"
-//#include "Double3.h"
 #include "Matrices.h"
 #include <iostream>
 
-using namespace Eigen;
-using namespace std;
-
+using std::pair;
+using std::string;
+using std::cout;
+using std::endl;
 
 void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double beta_deg, double gamma_deg)
 {
@@ -53,13 +53,13 @@ Sublattice& Cell::getSublattice(string& name)
 
 void Cell::addAtom(std::string name, double x, double y, double z)
 {
-    Vector3d scaled_position;
+    Vector3 scaled_position;
     scaled_position << x,y,z;
     
     //cout << "scaled= " << scaled_position.transpose() << endl;
     //cout << basisVectors << endl;
     
-    Vector3d pos = basisVectors*scaled_position;
+    Vector3 pos = basisVectors*scaled_position;
     
     //cout << "unscaled= " << unscaled_position.transpose() << endl;
     
@@ -71,14 +71,14 @@ size_t Cell::size()
     return sublatticeInfo.size();
 }
 
-SublatticeIterator Cell::begin()
+Cell::Iterator Cell::begin()
 {
-    return SublatticeIterator(sublatticeInfo.begin());
+    return Iterator(sublatticeInfo.begin());
 }
 
-SublatticeIterator Cell::end()
+Cell::Iterator Cell::end()
 {
-    return SublatticeIterator(sublatticeInfo.end());
+    return Iterator(sublatticeInfo.end());
 }
 
 
