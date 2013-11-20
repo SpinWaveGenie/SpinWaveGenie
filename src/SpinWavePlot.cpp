@@ -33,12 +33,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
 {
     assert(fdim == EnergyPoints);
     assert(dim == 1);
-    
-    //double a,b,c;
-    //a = 1109.0;
-    //b = 0.0;
-    //c = 0.48;
-    
+        
     for(int i=0;i!=EnergyPoints;i++)
     {
         fval[i] = 0.0;
