@@ -22,16 +22,13 @@ typedef Eigen::Matrix <double, 3, 3> Matrix3;
 typedef Eigen::Matrix<double, Dynamic, Dynamic> Matrix;
 typedef Eigen::Matrix<double, Dynamic, Dynamic, RowMajor> MatrixRowMajor;
 
-
 /*!
  Iterates over a number of atomic positions, such
  as those provided by the Sublattice or Neighbor class.
  Example:
  \code{.cpp}
  Neighbors neighborList(cell,sl_rp,sl_sp,min,max);
- Double3Iterator nbrBegin = neighborList.begin();
- Double3Iterator nbrEnd = neighborList.end();
- for(Double3Iterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
+ for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
  {
  ...
  }

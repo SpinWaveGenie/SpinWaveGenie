@@ -13,14 +13,11 @@ class Cell;
 /*! Example:
  \code{.cpp}
  Neighbors neighborList(cell,sl_rp,sl_sp,min,max);
- AtomIterator nbrBegin = neighborList.begin();
- AtomIterator nbrEnd = neighborList.end();
- for(AtomIterator nbr=nbrBegin;nbr!=nbrEnd;++nbr)
+ for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
  {
      ...
  }
  \endcode
- 
 */
 
 class Neighbors

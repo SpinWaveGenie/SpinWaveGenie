@@ -5,11 +5,8 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <string>
-//#include <boost/iterator/iterator_facade.hpp>
 #include "Matrices.h"
 
-//class Vector3;
-//class Vector3Iterator;
 
 //! Describes a sublattice in the unit cell.
 /*!
