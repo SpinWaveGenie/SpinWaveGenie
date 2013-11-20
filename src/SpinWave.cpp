@@ -10,52 +10,6 @@ using namespace Eigen;
 using namespace std;
 
 
-double form_factor(string type, double x,double y,double z)
-{
-    Vector4d big_F,little_f,eval_points,weights;
-    std::map<string,std::vector<double> > coeff;
-
-    std::vector<double> tmp = {0.408600, 28.810900,  0.607700,  8.543700, -0.029500,  0.276800,  0.012300};
-    coeff.insert(std::pair<std::string,std::vector<double> >("V0", tmp));
-    tmp = {0.444400, 32.647900,  0.568300,  9.097100, -0.228500,  0.021800,  0.215000};
-    coeff.insert(std::pair<std::string,std::vector<double> >("V1", tmp));
-    tmp = {0.408500, 23.852600,  0.609100,  8.245600, -0.167600,  0.041500,  0.149600};
-    coeff.insert(std::pair<std::string,std::vector<double> >("V2", tmp));
-    tmp = {0.359800, 19.336399,  0.663200,  7.617200, -0.306400,  0.029600,  0.283500};
-    coeff.insert(std::pair<std::string,std::vector<double> >("V3", tmp));
-    tmp = {0.310600, 16.816000,  0.719800,  7.048700, -0.052100,  0.302000,  0.022100};
-    coeff.insert(std::pair<std::string,std::vector<double> >("V4", tmp));
-    tmp = {0.243800, 24.962900,  0.147200, 15.672800,  0.618900,  6.540300, -0.010500};
-    coeff.insert(std::pair<std::string,std::vector<double> >("MN0", tmp));
-    tmp = {-0.013800,  0.421300,  0.423100, 24.667999,  0.590500,  6.654500, -0.001000};
-    coeff.insert(std::pair<std::string,std::vector<double> >("MN1", tmp));
-    tmp = {0.422000, 17.684000,  0.594800,  6.005000,  0.004300, -0.609000, -0.021900};
-    coeff.insert(std::pair<std::string,std::vector<double> >("MN2", tmp));
-    tmp = {0.419800, 14.282900,  0.605400,  5.468900,  0.924100, -0.008800, -0.949800};
-    coeff.insert(std::pair<std::string,std::vector<double> >("MN3", tmp));
-    tmp = {0.376000, 12.566100,  0.660200,  5.132900, -0.037200,  0.563000,  0.001100};
-    coeff.insert(std::pair<std::string,std::vector<double> >("MN4", tmp));
-    //coeff[FE0]   0.070600, 35.008499,  0.358900, 15.358300,  0.581900,  5.560600, -0.011400
-    //coeff[FE1]   0.125100, 34.963299,  0.362900, 15.514400,  0.522300,  5.591400, -0.010500
-    //coeff[FE2]   0.026300, 34.959702,  0.366800, 15.943500,  0.618800,  5.593500, -0.011900
-    tmp = {0.397200, 13.244200,  0.629500,  4.903400, -0.031400,  0.349600,  0.004400};
-    coeff.insert(std::pair<std::string,std::vector<double> >("FE3",tmp));
-    //coeff[FE4]   0.378200, 11.380000,  0.655600,  4.592000, -0.034600,  0.483300,  0.000500
-    
-    //big_F << 0.3972,0.6295,-0.0314,0.0044;
-    //little_f << 13.2442,4.9034,0.3496,0.0;
-    
-    vector<double> F = coeff[type];
-    double s = sqrt(pow(x,2) + pow(y,2) + pow(z,2))/(4.0*M_PI);
-    double f_Q = F[6];
-    for(int k=0;k<3;k++)
-    {
-        f_Q += F[2*k]*exp(-1.0*F[2*k+1]*pow(s,2));
-    }
-    return f_Q;
-}
-
-
 SpinWave::SpinWave()
 {
     
@@ -63,7 +17,6 @@ SpinWave::SpinWave()
 
 SpinWave::SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in)
 {
-
     cell = cell_in;
     interactions = interactions_in;
     M = cell.size();
@@ -83,8 +36,6 @@ SpinWave::SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in
     {
         SS(j) = -1.0;
     }
-    
-    
 }
 
 Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
@@ -363,8 +314,7 @@ void SpinWave::Calc_Weights()
     cout << "Normalized eigenvectors:" << endl;
     cout << XX << endl;
     */
-    //eigenresults.erase(eigenresults.begin(),eigenresults.end());
-    
+   
     //
     //Evalue inverse of XY or XIN
     //
@@ -388,77 +338,24 @@ void SpinWave::Calc_Intensities()
     double KY = KYP;
     double KZ = KZP;
     Matrix3 V_r;//,V_s;
-    double S_r,formFactor;
+    double S_r,ff;
     ArrayXXcd Intensities(M,3); Intensities.setZero();
     VectorXd SXX,SYY,SZZ;
-    MatrixXcd C,SS;
     
-    C.resize(2*M,2*M);
-    //SS.resize(3,3);
-    //SS.setZero();
-
-    //for(sl.First();!sl.IsDone();sl.Next())
-    //{
-    //    V_array.push_back(sl.CurrentItem()->get_inv_matrix());
-    //}
-        
-    //typedef std::map<> >::iterator it_type;
-    //for(it_type iterator = m.begin(); iterator != m.end(); iterator++) {
-    
-    /*for(int L=0;L<2*M;L++)
-     {
-     for(int alpha=0;alpha<3;alpha++) //r
-     {
-     for( int beta=0;beta<3;beta++) // s
-     {
-     for(int r=0;r<M;r++) //r
-     {
-     V_r = V_array[r];
-     for( int s=0;s<M;s++) // s
-     {
-     V_s = V_array[s];
-     
-     C(s,r) = 0.25*(V_r(alpha,0)+XI*V_r(alpha,1))*(V_s(beta,0)-XI*V_s(beta,1));
-     C(s,r+M) = 0.25*(V_r(alpha,0)-XI*V_r(alpha,1))*(V_s(beta,0)-XI*V_s(beta,1));
-     C(s+M,r+M) = 0.25*(V_r(alpha,0)-XI*V_r(alpha,1))*(V_s(beta,0)+XI*V_s(beta,1));
-     C(s+M,r) = 0.25*(V_r(alpha,0)+XI*V_r(alpha,1))*(V_s(beta,0)+XI*V_s(beta,1));
-     }
-     }
-     //cout << C << endl << endl;
-     for(int r=0;r<2*M;r++) //r
-     {
-     for( int s=0;s<2*M;s++) // s
-     {
-     SS(alpha,beta) -= conj(XIN(r,L))*XIN(s,L)*C(s,r);
-     }
-     }
-     }
-     }
-     std::cout << fixed;
-     cout << setprecision(5) << -1.0*SS*S/M << endl << endl;
-     SS.setZero();
-     }*/
-    
-    //CellIter sl(cell);
-    //double S = sl.CurrentItem()->getMoment()[0];
-    
-    // sl = cell->begin();
-    //double S = ;
-
     long L2 = 0;
     for (Cell::Iterator sl = cell.begin(); sl!=cell.end();++sl) //r
     {
         V_r = (*sl->getInverseMatrix());
         S_r = sl->getMoment();
-        string type = sl->getType();
-        formFactor = form_factor(type,KX,KY,KZ);
+        formFactor.setType(sl->getType());
+        ff = formFactor.getFormFactor(KX,KY,KZ);
         for(int L=0;L<M;L++) //n
         {
             for(int L1=0;L1<3;L1++) //alpha
             {
                 complex<double> Intensities_r = (V_r(L1,0) - XI*V_r(L1,1)) * XIN(L2,L+M)
                 +  (V_r(L1,0) + XI*V_r(L1,1)) * XIN(L2+M,L+M);
-                Intensities(L,L1) += sqrt(S_r)*formFactor*Intensities_r;
+                Intensities(L,L1) += sqrt(S_r)*ff*Intensities_r;
             }
         }
         L2++;

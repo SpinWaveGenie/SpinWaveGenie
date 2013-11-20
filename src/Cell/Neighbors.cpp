@@ -71,12 +71,14 @@ void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min,
     
     numberNeighbors = neighborList.size();
     
-    /*cout << name.sl1 << " " << name.sl2 << endl;
+    /*
+     cout << name.sl1 << " " << name.sl2 << endl;
      for (int i=0;i<neighborCache[name].size();i++)
      {
      cout << neighborCache[name][i][0] << " " << neighborCache[name][i][1] << " " <<neighborCache[name][i][2] << endl;
      }
-     cout << "done" << endl;*/
+     cout << "done" << endl;
+    */
 }
 
 complex<double> Neighbors::getGamma(Vector3 K)
@@ -87,9 +89,6 @@ complex<double> Neighbors::getGamma(Vector3 K)
     {
         double dot_prod = K.dot(*nbr);
         gamma_rs += exp(MXI*dot_prod);
-        //cout << K[0]/M_PI << "  " << K[1]/M_PI << "  " << K[2]/M_PI << endl;
-        //cout << (*nbr)[0] << "  " << (*nbr)[1] << "  " << (*nbr)[2] << " " << MXI*dot_prod/M_PI << endl;
-        //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
     }
     return gamma_rs/numberNeighbors;
 }

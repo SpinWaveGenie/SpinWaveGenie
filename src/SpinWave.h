@@ -21,6 +21,7 @@
 #include "Cell/Neighbors.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "Interaction.h"
+#include "MagneticFormFactor.h"
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
 
@@ -75,6 +76,7 @@ private:
     std::vector<double> VI,SVI; 
     Eigen::MatrixXcd XY,XIN;
     boost::ptr_vector<Interaction> interactions;
+    MagneticFormFactor formFactor;
 
 };
 
