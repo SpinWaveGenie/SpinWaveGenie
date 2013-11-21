@@ -16,7 +16,6 @@
 #include "SpinWavePlot.h"
 #include "Initializer.h"
 #include <boost/thread.hpp>
-#include <boost/atomic.hpp>
 #include <boost/program_options.hpp>
 #include <boost/progress.hpp>
 
@@ -27,24 +26,24 @@ using namespace Eigen;
 
 class ThreadClass {
 public:
-    boost::atomic<int> npoints,nproc,points;
-    boost::atomic<double> min,max;
-    boost::atomic<int> pointsDone,nextPoint;
+    int npoints,nproc,points;
+    double min,max;
+    int pointsDone,nextPoint;
     MatrixXd figure;
-    boost::mutex io_mutex; // The iostreams are not guaranteed to be thread-safe!
+    boost::mutex io_mutex,np_mutex; // The iostreams are not guaranteed to be thread-safe!
     ThreadClass(int n) // Constructor
     {
 #if EIGEN_WORLD_VERSION >= 3 && EIGEN_MAJOR_VERSION >= 1
         Eigen::initParallel();
 #endif
-        nproc.store(n);
-        npoints.store(26);
-        pointsDone.store(0);
-        nextPoint.store(0);
-        points.store(21);
-        figure.setZero(points.load(),npoints.load());
-        min.store(0.0);
-        max.store(80.0);
+        nproc = n;
+        npoints = 101;
+        pointsDone = 0;
+        nextPoint = 0;
+        points = 81;
+        figure.setZero(points,npoints);
+        min = 0.0;
+        max = 80.0;
     }
     ~ThreadClass()
     {
@@ -56,6 +55,8 @@ public:
         boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
         SW_Builder builder = four_sl.get_builder();
         scoped_lock.unlock();
+        boost::unique_lock<boost::mutex> np_lock(np_mutex);
+        np_lock.unlock();
 
         double x0,y0,z0,x1,y1,z1;
         x0=2.0;x1=2.0;
@@ -103,24 +104,27 @@ public:
         axesinfo.tol = 1.0e-1;
         */
         
-        double tmin = min.load();
-        double tmax = max.load();
-        int tpoints = points.load();
-        int tnpoints = npoints.load();
+        scoped_lock.lock();
+        double tmin = min;
+        double tmax = max;
+        int tpoints = points;
+        int tnpoints = npoints;
+        scoped_lock.unlock();
 
         TwoDimensionResolutionFunction res(resinfo, tmin,tmax, tpoints);
         IntegrateAxes tmp(axesinfo,res,tmin,tmax,tpoints);
         //for(int m=i;m<tnpoints;m=m+tnproc)
         while (true)
         {
-            int m = nextPoint.load();
-
-            if (m >= tnpoints)
+            np_lock.lock();
+            int m = nextPoint;
+            if (m >= npoints)
             {
                 break;
             }
+            nextPoint++;
             //cout << m << endl;
-            nextPoint.fetch_add(1);
+            np_lock.unlock();
             double x = x0 + (x1-x0)*m/(tnpoints-1);
             double y = y0 + (y1-y0)*m/(tnpoints-1);
             double z = z0 + (z1-z0)*m/(tnpoints-1);
@@ -133,7 +137,9 @@ public:
             {
                 figure(n,m) = val[n];
             }
-            pointsDone.fetch_add(1);
+            scoped_lock.lock();
+            pointsDone++;
+            scoped_lock.unlock();
         }
     }
 };
@@ -192,24 +198,20 @@ int main(int argc, char * argv[])
         boost::thread *t = new boost::thread(&ThreadClass::Run, &tc, i, four_sl);
         g.add_thread(t);
     }
-    
     boost::unique_lock<boost::mutex> scoped_lock(tc.io_mutex);
-    scoped_lock.unlock();
     double npoints = tc.npoints;
+    scoped_lock.unlock();
     boost::progress_display show_progress(npoints);
     int pointsDone = 0;
     while(pointsDone < npoints)
     {
         sleep(1);
-        int diff = tc.pointsDone.load() - pointsDone;
-        if (diff > 0)
-        {
-            scoped_lock.lock();
-            show_progress += diff;
-            scoped_lock.unlock();
-            pointsDone = tc.pointsDone.load();
-        }
+        scoped_lock.lock();
+        int diff = tc.pointsDone - pointsDone;
+        pointsDone = tc.pointsDone;
         //cout << pointsDone << endl;
+        scoped_lock.unlock();
+        show_progress += diff;
     }
     g.join_all();
     
@@ -218,6 +220,7 @@ int main(int argc, char * argv[])
     {
         file << tc.figure << '\n';
     }
+    
     return 0;
 }
 
