@@ -15,9 +15,9 @@ bool Interaction::operator<(const Interaction& other) const
             else if (sl1[index] > sl2[index])
                 return false;
         }
-        return false;
+        return true;
     }
-    else
+    else // sl1.size() > sl2.size()
     {
         for (size_t index = 0;index < sl2.size();index++)
         {
@@ -30,4 +30,14 @@ bool Interaction::operator<(const Interaction& other) const
     }
 }
 
+
+bool Interaction::operator==(const Interaction& other) const
+{
+    vector<string> sl1 = this->sublattices();
+    vector<string> sl2 = other.sublattices();
+    if (sl1[0].compare(sl2[0])==0)
+        return true;
+    else
+        return false;
+}
 

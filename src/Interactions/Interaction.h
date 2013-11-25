@@ -15,6 +15,7 @@ class Interaction
 public:
     virtual std::vector<std::string> sublattices() const = 0;
     bool operator<(const Interaction& other) const;
+    bool operator==(const Interaction& other) const;
     virtual void calcConstantValues(Cell& cell) = 0;
     virtual void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements) = 0;
     //! virtual method for adding terms to the matrix LN
