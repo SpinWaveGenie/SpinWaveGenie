@@ -1,5 +1,5 @@
 #include "Anis_Y_Interaction.h"
-
+#include <iostream>
 using namespace std;
 using namespace Eigen;
 
@@ -49,6 +49,10 @@ void Anis_Y_Interaction::calcConstantValues(Cell& cell)
     LNrr = -0.5*X*S*(pow(cos(theta),2)*pow(sin(phi),2)+pow(cos(phi),2)-2.0*pow(sin(theta),2)*pow(sin(phi),2));
     LNrrM = -0.5*X*S*pow(cos(theta)*sin(phi)+XI*cos(phi),2);
     LNrMr = -0.5*X*S*pow(cos(theta)*sin(phi)-XI*cos(phi),2);
+    
+    cout << "working Y implementation" << endl;
+    cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << endl;
+
 }
 
 void Anis_Y_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)

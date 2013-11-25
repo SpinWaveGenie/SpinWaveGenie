@@ -8,7 +8,6 @@
 #include "Initializer.h"
 #include "Cell.h"
 #include "Cell/Neighbors.h"
-#include "Cell/AtomIterator.h"
 #include "Exch_Interaction.h"
 #include "Anis_X_Interaction.h"
 #include "Anis_Y_Interaction.h"
@@ -17,34 +16,111 @@
 using namespace std;
 using namespace Eigen;
 
-double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
+/*typedef struct {
+ double a, b;
+ } my_constraint_data;
+ */
+
+double myconstraint(const std::vector<double> &x, std::vector<double> &grad, void *data)
 {
+    /*my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
+     double a = d->a, b = d->b;
+     if (!grad.empty()) {
+     grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
+     grad[1] = -1.0;
+     }*/
     
-    return 0.0;
+    double theta = 129.0*M_PI/180.0;
+    double Jab = x[0];
+    double Jbb = x[1];
+    double Jbbp = x[2];
+    //double Daz = x[3];
+    double Dbz = x[4];
+    double Dby = x[5];
+    
+    double constraint = 24.0*2.5*Jab*cos(theta) -16*Jbb*pow(sin(theta),2) + 16*Jbb*pow(cos(theta),2) -16*Jbbp*pow(sin(theta),2) +16*Jbbp*pow(cos(theta),2) + 8.0*Dbz*pow(sin(theta),2) -8.0*Dbz*pow(cos(theta),2) + 8.0*Dby*pow(cos(theta),2) -8.0*Dby*pow(sin(theta),2) ;
+    
+    //double constraint = 60.0*Jab + 16.0*Jbb + 16.0*Jbbp -8.0*Dbz + 8.0*Dby;
+    
+    cout << "constraint = " << constraint << endl;
+    return -1.0*constraint;
 }
 
 double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
 {
-    cout << "x[i] = ";
-    for (size_t i = 0; i<6;i++)
-        cout << x[i] << " ";
-    cout << endl;
-    double diff_sq = 0.0;
-    //my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
     if (!grad.empty())
     {
         cout << "error: no gradient available" << endl;
     }
     
     double KX=0.0, KY = 0.0, KZ = 0.0;
+    double theta = 129.0*M_PI/180.0;
 
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_largeangle.xml");
-    Cell cell = four_sl.get_cell();
+    Cell cell;
+    cell.setBasisVectors(6.0104,6.0104,8.5,90.0,90.0,90.0);
     
-    double Jab = cos(64.9633762304*M_PI/180.0)*(2.0*x[1] + 2.0*x[2] + x[4] - x[5])*2.0/15.0;
-    cout << Jab << endl;
-    //double Jab = x[0];
+    Sublattice Mn0;
+    string name = "Mn0";
+    Mn0.setName(name);
+    Mn0.setType("MN2");
+    Mn0.setMoment(2.5,0.0,0.0);
+    cell.addSublattice(name,Mn0);
+    cell.addAtom(name,0.0,0.25,0.125);
+    cell.addAtom(name,0.5,0.75,0.625);
+    
+    Sublattice Mn1;
+    name = "Mn1";
+    Mn1.setName(name);
+    Mn1.setType("MN2");
+    Mn1.setMoment(2.5,0.0,0.0);
+    cell.addSublattice(name,Mn1);
+    cell.addAtom(name,0.5,0.25,0.375);
+    cell.addAtom(name,0.0,0.75,0.875);
+    
+    Sublattice V0;
+    name = "V0";
+    V0.setName(name);
+    V0.setType("V3");
+    V0.setMoment(1.0,theta,3.0*M_PI/2.0);
+    cell.addSublattice(name,V0);
+    cell.addAtom(name,0.0,0.0,0.5);
+    cell.addAtom(name,0.5,0.5,0.0);
+    
+    Sublattice V1;
+    name = "V1";
+    V1.setName(name);
+    V1.setType("V3");
+    V1.setMoment(1.0,theta,0.0);
+    cell.addSublattice(name,V1);
+    cell.addAtom(name,0.75,0.25,0.75);
+    cell.addAtom(name,0.25,0.75,0.25);
+    
+    Sublattice V2;
+    name = "V2";
+    V2.setName(name);
+    V2.setType("V3");
+    V2.setMoment(1.0,theta,M_PI/2.0);
+    cell.addSublattice(name,V2);
+    cell.addAtom(name,0.5,0.0,0.0);
+    cell.addAtom(name,0.0,0.5,0.5);
+    
+    Sublattice V3;
+    name = "V3";
+    V3.setName(name);
+    V3.setType("V3");
+    V3.setMoment(1.0,theta,M_PI);
+    cell.addSublattice(name,V3);
+    cell.addAtom(name,0.75,0.75,0.25);
+    cell.addAtom(name,0.25,0.25,0.75);
+    
     SW_Builder builder(cell);
+    
+    double Jab = -2.0/15.0*cos(theta)*(2.0*x[1] + 2.0*x[2] + x[4] - x[5]);
+    cout << "x[i] = ";
+    cout << Jab <<  " ";
+    for (size_t i = 1; i<6;i++)
+        cout << x[i] << " ";
+    cout << endl;
 
     builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V0",3.48,3.57));
     builder.Add_Interaction(new Exch_Interaction(Jab,"V0","Mn0",3.48,3.57));
@@ -96,15 +172,15 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     SW.Calc();
     
     vector<double> frequencies = SW.Get_Frequencies();
-    
+    double diff_sq = 0.0;
     std::sort(frequencies.begin(), frequencies.end());
     
     diff_sq += pow(frequencies[0]-2.0,2);
     
-    //double min_freq = 15.0;
+    double min_freq = 18.0;
     
-    //if(frequencies[2]<min_freq)
-    //    diff_sq +=10.0;
+    if(frequencies[2]<min_freq)
+        diff_sq +=10.0;
     
     KZ = 0.25;
     
@@ -170,35 +246,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
 }
 
 
-/*typedef struct {
-    double a, b;
-} my_constraint_data;
-*/
 
-double myconstraint(const std::vector<double> &x, std::vector<double> &grad, void *data)
-{
-    /*my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
-    double a = d->a, b = d->b;
-    if (!grad.empty()) {
-        grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
-        grad[1] = -1.0;
-    }*/
-    
-    double theta = 37.4*M_PI/180.0;
-    double Jab = x[0];
-    double Jbb = x[1];
-    double Jbbp = x[2];
-    //double Daz = x[3];
-    double Dbz = x[4];
-    double Dby = x[5];
-    
-    double constraint = 60.0*Jab*cos(theta) -16*Jbb*pow(sin(theta),2) + 16*Jbb*pow(cos(theta),2) -16*Jbbp*pow(sin(theta),2) +16*Jbbp*pow(cos(theta),2) + 8.0*Dbz*pow(sin(theta),2) -8.0*Dbz*pow(cos(theta),2) + 8.0*Dby*pow(cos(theta),2) -8.0*Dby*pow(sin(theta),2) ;
-    
-    //double constraint = 60.0*Jab + 16.0*Jbb + 16.0*Jbbp -8.0*Dbz + 8.0*Dby;
-    
-    cout << "constraint = " << constraint << endl;
-    return -1.0*constraint;
-}
 
 int main()
 {
@@ -215,7 +263,7 @@ int main()
     std::vector<double> ub(6);
     ub[0] = 0.0;
     ub[1] = 0.0;
-    ub[2] = 0.0;
+    ub[2] = 10.0;
     ub[3] = 2.0;
     ub[4] = 2.0;
     ub[5] = 10.0;
@@ -229,7 +277,7 @@ int main()
     lb[5] = 0.0;
     opt.set_lower_bounds(lb);
     opt.set_min_objective(myfunc_4sl, NULL);
-    //opt.add_inequality_constraint(myconstraint,NULL, 1e-8);
+    opt.add_inequality_constraint(myconstraint,NULL, 1e-8);
     opt.set_xtol_rel(1.0e-3);
     std::vector<double> x(6);
     /*x[0] = -3.0;
@@ -240,11 +288,11 @@ int main()
     x[5] = 3.72048;
     */
     x[0] = 0.0;
-    x[1] = -10.2;
-    x[2] = -3.0;
-    x[3] = 0.1;
-    x[4] = -0.7;
-    x[5] = 4.8;
+    x[1] = -10.2328;
+    x[2] = -2.04039;
+    x[3] = 0.158602 ;
+    x[4] = -0.674189;
+    x[5] = 7.33812;
  
     double minf = 0.0;
     
@@ -271,7 +319,7 @@ int main()
         vector<double> xtemp = x;
         for (int j=-10;j!=11;j++)
         {
-            xtemp[i] = x[i] + x[i]*(double)j/50.0;
+            xtemp[i] = x[i] + x[i]*(double)j/10.0;
             cout << xtemp[i] << "  " << (myfunc_4sl(xtemp,gradient,NULL) - minf)/1.0 - 1.0 << endl;
         }
     }*/

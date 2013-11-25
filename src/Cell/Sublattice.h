@@ -17,11 +17,8 @@
 class Sublattice
 {
 public:
-    //! Initializer
     Sublattice();
-    //! Destructor
     ~Sublattice() {};
-    //! use AtomIterator to iterate over atoms in sublattice
     //! set name to describe sublattice
     //! \param name_input a std::string argument
     void setName(std::string nameInput );
@@ -52,10 +49,10 @@ public:
     double getPhi();
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
-    Matrix3* getRotationMatrix();
+    Matrix3& getRotationMatrix();
     //! returns inverse rotation matrix as an Eigen::Matrix3d object
     //! \return inverse rotation matrix
-    Matrix3* getInverseMatrix();
+    Matrix3& getInverseMatrix();
     //! add atom to the sublattice
     //! \param x x component of atomic position in Angstroms
     //! \param y y component of atomic position in Angstroms

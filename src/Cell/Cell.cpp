@@ -1,6 +1,7 @@
 #include "Cell.h"
 #include "Matrices.h"
 #include <iostream>
+#include <stdexcept>
 
 using std::pair;
 using std::string;
@@ -21,8 +22,8 @@ void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double
     ck = c/sin(gamma)*sqrt(1.0-pow(cos(alpha),2)-pow(cos(beta),2)-pow(cos(gamma),2)+2.0*cos(alpha)*cos(beta)*cos(gamma));
     
     basisVectors << a,0.0,0.0,
-                     b*cos(gamma),b*sin(gamma),0.0,
-                     ci,cj,ck;
+                    b*cos(gamma),b*sin(gamma),0.0,
+                    ci,cj,ck;
     reciprocalVectors = 2.0*M_PI*basisVectors.inverse();
 }
 
@@ -41,14 +42,32 @@ Matrix3 Cell::getReciprocalVectors()
     return reciprocalVectors;
 }
 
-void Cell::addSublattice(std::string& name, Sublattice& sl)
+void Cell::addSublattice(Sublattice& sl)
 {
+    string name = sl.getName();
     sublatticeInfo.insert(pair<string,Sublattice>(name,sl));
 }
 
-Sublattice& Cell::getSublattice(string& name)
+Sublattice& Cell::getSublattice(string name)
 {
     return sublatticeInfo[name];
+}
+
+int Cell::getPosition(std::string name)
+{
+    int r = 0;
+    for (Iterator sl=begin(); sl!=end(); ++sl)
+    {
+        if ( name.compare(sl->getName()) == 0)
+            return r;
+        r++;
+    }
+    throw std::invalid_argument("sublattice not found");
+}
+
+int Cell::getNumberSublattices()
+{
+    return std::distance(begin(),end());
 }
 
 void Cell::addAtom(std::string name, double x, double y, double z)

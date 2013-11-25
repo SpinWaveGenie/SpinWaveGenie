@@ -9,7 +9,7 @@ Sublattice::Sublattice()
 {
     this->setName("");
     this->setType("None");
-    this->setMoment(1.0,0.0,0.0);
+    this->setMoment(0.0,0.0,0.0);
 }
 
 void Sublattice::setName(string nameInput)
@@ -34,7 +34,7 @@ string Sublattice::getType()
 
 void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
 {
-    assert(spinInput > 0.0);
+    assert(spinInput >= 0.0);
     
     spin = spinInput;
     
@@ -81,14 +81,14 @@ double Sublattice::getPhi()
     return phi;
 }
 
-Matrix3* Sublattice::getRotationMatrix()
+Matrix3& Sublattice::getRotationMatrix()
 {
-    return &rotationMatrix;
+    return rotationMatrix;
 }
 
-Matrix3* Sublattice::getInverseMatrix()
+Matrix3& Sublattice::getInverseMatrix()
 {
-    return &inverseMatrix;
+    return inverseMatrix;
 }
 
 void Sublattice::addAtom(double x, double y, double z)

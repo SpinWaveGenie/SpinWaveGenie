@@ -1,5 +1,5 @@
 #include "Anis_Z_Interaction.h"
-
+#include <iostream>
 using namespace std;
 using namespace Eigen;
 
@@ -48,6 +48,9 @@ void Anis_Z_Interaction::calcConstantValues(Cell& cell)
     LNrrM = -0.5*X*S*pow(sin(theta),2);
     LNrMr = -0.5*X*S*pow(sin(theta),2);
     LNrMrM = -0.5*X*S*(1.0-3.0*pow(cos(theta),2));
+    
+    cout << "working Z implementation" << endl;
+    cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << LNrMrM << endl;
 }
 
 void Anis_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)

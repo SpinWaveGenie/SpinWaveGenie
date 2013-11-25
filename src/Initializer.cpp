@@ -4,6 +4,7 @@
 #include "Anis_Z_Interaction.h"
 #include "Anis_Y_Interaction.h"
 #include "Anis_X_Interaction.h"
+#include "AnisotropyInteraction.h"
 #include "DM_Y_Interaction.h"
 #include "DM_Z_Interaction.h"
 
@@ -122,7 +123,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
         new_sl.setMoment(S,theta,phi);
 
-        unit_cell.addSublattice(name,new_sl);
+        unit_cell.addSublattice(new_sl);
         
         pugi::xml_node atomicpositions = tool.child("atomicpositions");
         for (pugi::xml_node position = atomicpositions.child("position"); position; position = position.next_sibling("position"))
@@ -265,23 +266,13 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
     
         cout << x << '\t' << y << '\t' << z << endl;
             
-
         pugi::xml_node sublattices = tool.child("sublattices");
         for (pugi::xml_node name = sublattices.child("name"); name; name = name.next_sibling("name"))
         {
             string atom1 = name.child_value();
-            if ( x > 0.99 && y < 0.01 && z < 0.01)
-            {
-                builder.Add_Interaction(new Anis_X_Interaction(value,atom1));
-            }
-            else if (x < 0.01 && y > 0.99 && z < 0.01)
-            {
-                builder.Add_Interaction(new Anis_Y_Interaction(value,atom1));
-            }
-            else if (x < 0.01 && y < 0.01 && z > 0.99)
-            {
-                builder.Add_Interaction(new Anis_Z_Interaction(value,atom1));
-            }
+            Vector3 direction(x,y,z);
+            //cout "direction= " << direction.transpose() << endl;
+            builder.Add_Interaction(new AnisotropyInteraction(value,direction,atom1));
         }
     }
 }

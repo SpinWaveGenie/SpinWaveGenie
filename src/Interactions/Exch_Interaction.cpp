@@ -60,11 +60,11 @@ void Exch_Interaction::calcConstantValues(Cell& cell)
     Sr = cell.getSublattice(sl_r).getMoment();
     Ss = cell.getSublattice(sl_s).getMoment();
 
-    Frs = (*cell.getSublattice(sl_r).getRotationMatrix())*
-    (*cell.getSublattice(sl_s).getInverseMatrix());
+    Frs = cell.getSublattice(sl_r).getRotationMatrix()*
+          cell.getSublattice(sl_s).getInverseMatrix();
     
-    Fsr = (*cell.getSublattice(sl_s).getRotationMatrix())*
-    (*cell.getSublattice(sl_r).getInverseMatrix());
+    Fsr = cell.getSublattice(sl_s).getRotationMatrix()*
+          cell.getSublattice(sl_r).getInverseMatrix();
     
     neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
     z_rs = neighbors.getNumberNeighbors();
@@ -103,8 +103,11 @@ void Exch_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
     complex<double> G1sr = -0.5*complex<double>(Fsr(0,0) + Fsr(1,1),Fsr(1,0)-Fsr(0,1));
     
     complex<double> G2sr = -0.5*complex<double>(Fsr(0,0) - Fsr(1,1),-Fsr(1,0)-Fsr(0,1));
+    
 
     gamma_rs = neighbors.getGamma(K);
+    
+    //cout << gamma_rs << endl;
     
     double X = value*sqrt(Sr*Ss);
     

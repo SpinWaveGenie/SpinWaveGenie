@@ -13,10 +13,8 @@
 
 using namespace std;
 
-
 TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& info, double min, double max, double points)
 {
-
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;

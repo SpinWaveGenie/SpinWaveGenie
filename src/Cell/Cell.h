@@ -93,14 +93,16 @@ public:
     //! \param name Unique name defining sublattice
     //! \param sl Pointer to Sublattice object
     //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
-    void addSublattice(std::string& name, Sublattice& sl);
+    void addSublattice(Sublattice& sl);
     //! Returns pointer to sublattice "name"
     //! \param name used to describe sublattice
     //! \return pointer to sublattice
-    Sublattice& getSublattice(std::string& name);
+    Sublattice& getSublattice(std::string name);
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.
+    int getPosition(std::string name);
+    int getNumberSublattices();
     void addAtom(std::string name, double x, double y, double z);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices

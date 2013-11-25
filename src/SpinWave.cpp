@@ -45,7 +45,7 @@ Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        /*vector<string> sls = iter->sublattices();
+         /*vector<string> sls = iter->sublattices();
          for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
          {
          cout << (*iter2) << " ";
@@ -54,6 +54,7 @@ Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
         //firstOrder.setZero(2*M);
         iter->checkFirstOrderTerms(this->cell,firstOrder);
         //cout << firstOrder[2] << " " << firstOrder[8] << endl;
+        //cout << firstOrder.transpose() << endl;
     }
     return firstOrder;
 }
@@ -77,6 +78,9 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
         iter->Update_Matrix(K,LN,quad+1);
         iter->Update_Matrix(K,LN,quad+2);
         iter->Update_Matrix(K,LN,quad+3);
+        //cout << "LN" << endl;
+        //cout << this->LN << endl;
+
     }
     //cout << "LN" << endl;
     //cout << SW.LN << endl;
@@ -144,7 +148,7 @@ void SpinWave::Calc_Eigenvalues()
     */
 
     //cout << "LN= " << endl;
-    //cout << LN << endl;
+    //cout << LN.norm() << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
@@ -345,7 +349,7 @@ void SpinWave::Calc_Intensities()
     long L2 = 0;
     for (Cell::Iterator sl = cell.begin(); sl!=cell.end();++sl) //r
     {
-        V_r = (*sl->getInverseMatrix());
+        V_r = sl->getInverseMatrix();
         S_r = sl->getMoment();
         formFactor.setType(sl->getType());
         ff = formFactor.getFormFactor(KX,KY,KZ);

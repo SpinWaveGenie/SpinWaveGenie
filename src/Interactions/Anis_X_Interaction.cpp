@@ -47,11 +47,13 @@ void Anis_X_Interaction::calcConstantValues(Cell& cell)
     double theta = cell.getSublattice(sl_r).getTheta();
     double phi = cell.getSublattice(sl_r).getPhi();
     double X = value;
-    
-    LNrr = -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
-    LNrrM = -0.5*X*S*pow(cos(theta)*cos(phi)-XI*sin(phi),2);
-    LNrMr = -0.5*X*S*pow(cos(theta)*cos(phi)+XI*sin(phi),2);
+    LNrr =   -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
+    LNrrM =  -0.5*X*S*pow(cos(theta)*cos(phi)-XI*sin(phi),2);
+    LNrMr =  -0.5*X*S*pow(cos(theta)*cos(phi)+XI*sin(phi),2);
     LNrMrM = -0.5*X*S*(pow(cos(theta),2)*pow(cos(phi),2)+pow(sin(phi),2)-2.0*pow(sin(theta),2)*pow(cos(phi),2));
+    
+    cout << "working X implementation" << endl;
+    cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << endl;
 }
 
 void Anis_X_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)

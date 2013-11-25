@@ -1,6 +1,6 @@
 include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR}  Interactions .)
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-LINK_LIBRARIES(${Boost_LIBRARIES})
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} /usr/local/Cellar/nlopt/2.4/lib)
+LINK_LIBRARIES(${Boost_LIBRARIES} nlopt)
 
 #add_subdirectory(Interactions)
 
