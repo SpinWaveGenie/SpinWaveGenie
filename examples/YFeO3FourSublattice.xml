@@ -84,7 +84,7 @@
           <y>0.0</y>
           <z>0.0</z>
         </direction>
-        <value>0.0046</value>
+        <value>-0.0046</value>
     	<sublattices>
     	  <name>Fe1</name>
     	  <name>Fe2</name>
@@ -98,7 +98,7 @@
           <y>0.0</y>
           <z>1.0</z>
         </direction>
-        <value>0.0013</value>
+        <value>-0.0013</value>
     	<sublattices>
     	  <name>Fe1</name>
     	  <name>Fe2</name>

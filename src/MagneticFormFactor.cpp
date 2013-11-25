@@ -129,7 +129,14 @@ void MagneticFormFactor::initializeMap()
 
 void MagneticFormFactor::setType(std::string type)
 {
-    F = coefficients[type];
+    if ( coefficients.find(type) == coefficients.end() )
+    {
+        F = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+    }
+    else
+    {
+        F = coefficients[type];
+    }
 }
 
 double MagneticFormFactor::getFormFactor(double x, double y, double z)

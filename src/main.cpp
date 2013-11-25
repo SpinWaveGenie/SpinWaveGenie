@@ -23,17 +23,17 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/test.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/YFeO3TwoSublattice.xml");
     SW_Builder builder = four_sl.get_builder();
         
     //cout << check << endl;
     
     Cell cell = four_sl.get_cell();
     
-    string sl_r = "Mn0";
-    string sl_s = "Mn1";
+    string sl_r = "Spin0";
+    string sl_s = "Spin1";
     double min = 0.0;
-    double max = 5.0;
+    double max = 1.0;
     
     Neighbors neighborList;
     neighborList.findNeighbors(cell,sl_r,sl_s,min,max);
@@ -47,9 +47,9 @@ int main(int argc, char * argv[])
 
     int npoints = 11;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=0.0;x1=0.0;
+    x0=0.0;x1=1.0;
     y0=0.0;y1=0.0;
-    z0=0.0;z1=1.0;
+    z0=0.0;z1=0.0;
     for(int m=0;m<npoints;m++)
     {
         //sleep(1);

@@ -220,7 +220,7 @@
   	</Exchange>
   	<Anisotropy>
   		<group>
-  			<value>0.116467</value>
+  			<value>-0.116467</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -232,7 +232,7 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>0.121134</value>
+  			<value>-0.121134</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -246,7 +246,7 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>3.72048</value>
+  			<value>-3.72048</value>
   			<direction>
   				<x>1.0</x>
   				<y>0.0</y>
@@ -258,7 +258,7 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>3.72048</value>
+  			<value>-3.72048</value>
   			<direction>
   				<x>0.0</x>
   				<y>1.0</y>
