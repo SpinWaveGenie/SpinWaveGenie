@@ -102,7 +102,6 @@ public:
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.
     int getPosition(std::string name);
-    int getNumberSublattices();
     void addAtom(std::string name, double x, double y, double z);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices

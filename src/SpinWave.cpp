@@ -71,16 +71,9 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     Set_Kpoint(K[0],K[1],K[2]);
     Clear_Matrix();
     boost::ptr_vector<Interaction>::iterator iter;
-    int quad = 0;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        iter->Update_Matrix(K,LN,quad);
-        iter->Update_Matrix(K,LN,quad+1);
-        iter->Update_Matrix(K,LN,quad+2);
-        iter->Update_Matrix(K,LN,quad+3);
-        //cout << "LN" << endl;
-        //cout << this->LN << endl;
-
+        iter->Update_Matrix(K,LN);
     }
     //cout << "LN" << endl;
     //cout << SW.LN << endl;

@@ -38,7 +38,7 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
     complex<double> XI (0.0,1.0);
     //find location of r
     r = cell.getPosition(sl_r);
-    M = cell.getNumberSublattices();
+    M = cell.size();
     double S = cell.getSublattice(sl_r).getMoment();
     Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
     
@@ -92,24 +92,12 @@ void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &e
     }
 }
 
-void AnisotropyInteraction::Update_Matrix(Vector3 K, Eigen::MatrixXcd &LN, int quadrant)
+void AnisotropyInteraction::Update_Matrix(Vector3 K, Eigen::MatrixXcd &LN)
 {
-    switch (quadrant)
-    {
-        case 0:
-            LN(r,r) += LNrr;
-            break;
-        case 1:
-            LN(r,r+M) += LNrrM;
-            break;
-        case 2:
-            LN(r+M,r) += LNrMr;
-            break;
-        case 3:
-            LN(r+M,r+M) += LNrMrM;
-            break;
-        default:
-            //cout << "error: case must be between 0 and 3" << endl;
-            break;
-    }
+
+    LN(r,r) += LNrr;
+    LN(r,r+M) += LNrrM;
+    LN(r+M,r) += LNrMr;
+    LN(r+M,r+M) += LNrMrM;
+
 }

@@ -29,16 +29,8 @@ vector<string> Anis_Z_Interaction::sublattices() const
 
 void Anis_Z_Interaction::calcConstantValues(Cell& cell)
 {
-    //find location of r
-    r= -1;
-    M = 0;
-    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
-    {
-        if ( sl_r == sl->getName())
-            r = M;
-        M++;
-    }
-    assert(r!=-1);
+    r = cell.getPosition(sl_r);
+    M = cell.size();
 
     double S = cell.getSublattice(sl_r).getMoment();
     double theta = cell.getSublattice(sl_r).getTheta();
@@ -62,24 +54,11 @@ void Anis_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elem
     elements[r+M] += sqrt(pow(S,3)/2.0)*value*sin(2.0*theta);
 }
 
-void Anis_Z_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
+void Anis_Z_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
-    switch (quadrant)
-    {
-        case 0:
-            LN(r,r) += LNrr;
-            break;
-        case 1:
-            LN(r+M,r) += LNrMr;
-            break;
-        case 2:
-            LN(r,r+M) += LNrrM;
-            break;
-        case 3:
-            LN(r+M,r+M) += LNrMrM;
-            break;
-        default:
-            //cout << "error: case must be between 0 and 3" << endl;
-            break;
-    }
+    LN(r,r) += LNrr;
+    LN(r+M,r) += LNrMr;
+    LN(r,r+M) += LNrrM;
+    LN(r+M,r+M) += LNrMrM;
+    
 }

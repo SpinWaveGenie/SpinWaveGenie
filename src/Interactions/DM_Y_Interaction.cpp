@@ -34,21 +34,9 @@ vector<string> DM_Y_Interaction::sublattices() const
 
 void DM_Y_Interaction::calcConstantValues(Cell& cell)
 {
-    //find location of r,s
-    r= -1;
-    s= -1;
-    M=0;
-    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
-    {
-        //cout << sl.CurrentItem()->get_name() << endl;
-        //cout << iter->sl_r << endl;
-        //cout << iter->sl_s << endl;
-        if ( sl_r == sl->getName())
-            r = M;
-        if ( sl_s == sl->getName())
-            s = M;
-        M++;
-    }
+    r = cell.getPosition(sl_r);
+    s = cell.getPosition(sl_s);
+    M = cell.size();
     assert(r!=-1 && s!=-1);
     
     //cout << r << "\t" << s << endl << F << endl;
@@ -77,36 +65,23 @@ void DM_Y_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elemen
 }
 
 
-void DM_Y_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
+void DM_Y_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
     complex<double> XI (0.0,1.0);
     gamma_rs = neighbors.getGamma(K);
     //cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
     //cout << z_rs << " " << endl;
-    switch (quadrant)
-    {
-        case 0:
-            LN(r,r) += z_rs*value0;
-            LN(r,s) += z_rs*conj(gamma_rs)*(value1 - XI*value2 - XI*value3);
-            LN(s,r) += z_rs*gamma_rs*(value1 + XI*value2 + XI*value3);
-            LN(s,s) += z_rs*value0;
-            break;
-        case 1:
-            LN(r,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 - XI*value3);
-            LN(s,r+M) += z_rs*gamma_rs*(value1 + XI*value2 - XI*value3);
-            break;
-        case 2:
-            LN(r+M,s) += z_rs*conj(gamma_rs)*(value1 - XI*value2 + XI*value3);
-            LN(s+M,r) += z_rs*gamma_rs*(value1 - XI*value2 + XI*value3);
-            break;
-        case 3:
-            LN(r+M,r+M) += z_rs*value0;
-            LN(r+M,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 + XI*value3);
-            LN(s+M,s+M) += z_rs*value0;
-            LN(s+M,r+M) += z_rs*gamma_rs*(value1 - XI*value2 - XI*value3);
-            break;
-        default:
-            //cout << "error: case must be between 0 and 3" << endl;
-            break;
-    }
+    LN(r,r) += z_rs*value0;
+    LN(r,s) += z_rs*conj(gamma_rs)*(value1 - XI*value2 - XI*value3);
+    LN(s,r) += z_rs*gamma_rs*(value1 + XI*value2 + XI*value3);
+    LN(s,s) += z_rs*value0;
+    LN(r,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 - XI*value3);
+    LN(s,r+M) += z_rs*gamma_rs*(value1 + XI*value2 - XI*value3);
+    LN(r+M,s) += z_rs*conj(gamma_rs)*(value1 - XI*value2 + XI*value3);
+    LN(s+M,r) += z_rs*gamma_rs*(value1 - XI*value2 + XI*value3);
+    LN(r+M,r+M) += z_rs*value0;
+    LN(r+M,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 + XI*value3);
+    LN(s+M,s+M) += z_rs*value0;
+    LN(s+M,r+M) += z_rs*gamma_rs*(value1 - XI*value2 - XI*value3);
+
 }

@@ -65,11 +65,6 @@ int Cell::getPosition(std::string name)
     throw std::invalid_argument("sublattice not found");
 }
 
-int Cell::getNumberSublattices()
-{
-    return std::distance(begin(),end());
-}
-
 void Cell::addAtom(std::string name, double x, double y, double z)
 {
     Vector3 scaled_position;

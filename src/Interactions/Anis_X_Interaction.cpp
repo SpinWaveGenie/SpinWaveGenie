@@ -31,18 +31,8 @@ vector<string> Anis_X_Interaction::sublattices() const
 void Anis_X_Interaction::calcConstantValues(Cell& cell)
 {
     complex<double> XI (0.0,1.0);
-    //find location of r,s
-    r= -1;
-    M = 0;
-    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
-    {
-        //cout << sl_r << " " << sl->getName() << endl;
-        if ( sl_r == sl->getName())
-            r = M;
-        M++;
-    }
-    assert(r!=-1);
-    
+    r = cell.getPosition(sl_r);
+    M = cell.size();
     double S = cell.getSublattice(sl_r).getMoment();
     double theta = cell.getSublattice(sl_r).getTheta();
     double phi = cell.getSublattice(sl_r).getPhi();
@@ -66,24 +56,10 @@ void Anis_X_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elem
         elements[r+M] -= sqrt(pow(S,3)*2.0)*value*sin(theta)*cos(phi)*(cos(theta)*cos(phi)-XI*sin(phi));
 }
 
-void Anis_X_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
+void Anis_X_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
-    switch (quadrant)
-    {
-        case 0:
             LN(r,r) += LNrr;
-            break;
-        case 1:
             LN(r,r+M) += LNrrM;
-            break;
-        case 2:
             LN(r+M,r) += LNrMr;
-            break;
-        case 3:
             LN(r+M,r+M) += LNrMrM;
-            break;
-        default:
-            //cout << "error: case must be between 0 and 3" << endl;
-            break;
-    }
 }

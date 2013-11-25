@@ -29,33 +29,14 @@ void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string
 vector<string> Exch_Interaction::sublattices() const
 {
     vector<string> sl = {sl_r,sl_s};
-    //sl.push_back(sl_r);
-    //sl.push_back(sl_s);
     return sl;
 }
 
 void Exch_Interaction::calcConstantValues(Cell& cell)
 {
-    //find location of r,s
-    r= -1;
-    s= -1;
-    
-    M=0;
-    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
-    {
-        //cout << sl.CurrentItem()->get_name() << endl;
-        //cout << iter->sl_r << endl;
-        //cout << iter->sl_s << endl;
-        if ( sl_r == sl->getName())
-            r = M;
-        if ( sl_s == sl->getName())
-            s = M;
-        M++;
-    }
-    
-    
-    
-    assert(r!=-1 && s!=-1);
+    r = cell.getPosition(sl_r);
+    s = cell.getPosition(sl_s);
+    M = cell.size();
     
     Sr = cell.getSublattice(sl_r).getMoment();
     Ss = cell.getSublattice(sl_s).getMoment();
@@ -93,7 +74,7 @@ void Exch_Interaction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
     elements[r+M] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*(F1rs+F2sr);
 }
 
-void Exch_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
+void Exch_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
     
     complex<double> G1rs = -0.5*complex<double>(Frs(0,0) + Frs(1,1),Frs(1,0)-Frs(0,1));
@@ -111,28 +92,15 @@ void Exch_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN, int quadrant)
     
     double X = value*sqrt(Sr*Ss);
     
-    switch (quadrant)
-    {
-        case 0:
-            //cout << "G2rs  G2sr" << endl;
-            //cout << G2rs << " " << G2sr << endl;
-            LN(r,r) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
-            LN(r,s) += 0.25*z_rs*X*conj(gamma_rs)*(G1rs+conj(G1sr));
-            break;
-        case 1:
-            LN(r,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G2rs)+conj(G2sr));
-            break;
-        case 2:
-            LN(r+M,s) += 0.25*z_rs*X*conj(gamma_rs)*(G2rs+G2sr);
-            break;
-        case 3:
-            LN(r+M,r+M) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
-            LN(r+M,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G1rs)+G1sr);
-            break;
-        default:
-            cout << "error: case must be between 0 and 3" << endl;
-            break;
-    }
+
+    //cout << "G2rs  G2sr" << endl;
+    //cout << G2rs << " " << G2sr << endl;
+    LN(r,r) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
+    LN(r,s) += 0.25*z_rs*X*conj(gamma_rs)*(G1rs+conj(G1sr));
+    LN(r,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G2rs)+conj(G2sr));
+    LN(r+M,s) += 0.25*z_rs*X*conj(gamma_rs)*(G2rs+G2sr);
+    LN(r+M,r+M) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
+    LN(r+M,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G1rs)+G1sr);
     /*switch (quadrant)
     {
         case 0:

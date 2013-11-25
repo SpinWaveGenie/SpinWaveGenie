@@ -20,7 +20,7 @@ public:
     //!
     void calcConstantValues(Cell& cell);
     void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
-    void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN, int quadrant);
+    void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
     std::vector<std::string> sublattices() const;
     virtual Interaction* do_clone() const;
     virtual ~Anis_Y_Interaction(){};
