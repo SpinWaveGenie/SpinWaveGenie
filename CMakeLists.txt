@@ -2,7 +2,7 @@ project(spin_wave_genie)
 
 cmake_minimum_required(VERSION 2.8)
 
-#ENABLE_TESTING()
+ENABLE_TESTING()
 
 macro(remove_cxx_flag flag)
   string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")

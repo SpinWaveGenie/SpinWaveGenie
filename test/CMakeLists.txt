@@ -4,9 +4,9 @@ include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR}  ${spin_wave_geni
 
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES} cell)
-add_executable(test_sublattice test_sublattice.cpp)
- 
-add_test(NAME test_sublattice COMMAND test_sublattice)
-
+add_executable(SublatticeTest SublatticeTest.cpp)
+add_executable(CellTest CellTest.cpp) 
+add_test(NAME SublatticeTest COMMAND SublatticeTest)
+add_test(NAME CellTest COMMAND CellTest)
 
 
