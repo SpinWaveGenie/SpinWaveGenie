@@ -1,0 +1,142 @@
+\documentclass[12pt]{report}
+\usepackage{amsmath}
+\usepackage{fullpage}
+%\usepackage{indentfirst}
+%\renewcommand{\baselinestretch}{1.25}
+
+%\usepackage[pdftex]{graphicx}
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny\bf +}}
+\def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
+
+\usepackage{color}
+\newcommand{\new}[1]{\textcolor{red}{#1}}
+
+\usepackage[export]{adjustbox}
+
+\textheight9in
+
+\begin{document}  
+\begin{center}
+\Large{Anisotropy Interaction}
+\end{center}
+
+Consider the single ion anisotropy term in the spin Hamiltonian
+\begin{equation}
+H = \sum_i D_i \,(\boldsymbol{S}_i \cdot \hat{n})^2
+\end{equation}
+
+where $\hat{n} = \left(u_x,u_y,u_z\right)$ is a unit vector and the subscript
+$i$ indicates an unique sublattice. $D_i$ is negative for easy-axis anisotropy
+and positive for easy-plane anisotropy. Solving this expression, we consider
+an alternative and more general expression for the single ion anisotropy.
+ 
+\begin{equation}
+\label{anisotropy}
+H = \sum_i \boldsymbol{S}_i \cdot \overline{\overline{A}}_i \cdot \boldsymbol{S}_i
+\end{equation}
+
+Comparing these two equations we determined these two expressions are
+equal when 
+
+\begin{equation}
+\overline{\overline{A}}_i = D_i \left( 
+\begin{matrix}
+u_x^2 & u_x u_y & u_x u_z \\
+u_x u_y & u_y^2 & u_y u_z \\
+u_x u_z & u_y u_z & u_z^2
+\end{matrix} 
+\right)
+\end{equation}
+
+which is clearly a symmetric matrix. The zeroth order energy can be calculated from eqn. 
+\ref{anisotropy} by treating the spins classically. To calculate the first and second order terms,
+in the Holstein-Primakoff expansion we rotate into the reference frame of each moment, 
+$\overline{\boldsymbol{S}}_i = \overline{\overline{U}}_i \cdot \boldsymbol{S}_i $ and calculate 
+terms in the form of a constant times 
+
+\begin{equation}
+\left( \overline{\overline{U}}^{-1}_i \boldsymbol{S}_i \right)_{\alpha}
+\left( \overline{\overline{U}}^{-1}_i \boldsymbol{S}_i \right)_{\beta}
+\end{equation}
+
+To simplify the notation, from now on I will drop the subscript $i$ and define $\overline{\overline{V}} = \overline{\overline{U}}^{-1}$. 
+
+
+\begin{align*}
+ (\overline{\overline{V}} \boldsymbol{S})_{\alpha} (\overline{\overline{V}} \boldsymbol{S})_{\beta} = \,\,\,
+ &V_{\alpha,0} V_{\beta,0} S_x S_x + V_{\alpha,0} V_{\beta,1} S_x S_y +V_{\alpha,0} V_{\beta,2} S_x S_z \\
+ &V_{\alpha,1} V_{\beta,0} S_y S_x + V_{\alpha,1} V_{\beta,1} S_y S_y +V_{\alpha,1} V_{\beta,2} S_y S_z \\
+  &V_{\alpha,2} V_{\beta,0} S_z S_x + V_{\alpha,2} V_{\beta,1} S_z S_y +V_{\alpha,2} V_{\beta,2} S_z S_z 
+ \end{align*} 
+
+The first order terms involve $S_x S_z, S_y S_z, S_z S_x,$ or $S_z S_y $ They are 
+
+\begin{equation}
+V_{\alpha,0} V_{\beta,2} S_x S_z + V_{\alpha,1} V_{\beta,2} S_y S_z +  V_{\alpha,2} V_{\beta,0} S_z S_x + V_{\alpha,2} V_{\beta,1} S_z S_y
+\end{equation}
+
+applying the Holstein-Primakoff formalism, this becomes
+
+\begin{equation}
+ (\overline{\overline{V}} \boldsymbol{S})_{\alpha} (\overline{\overline{V}} \boldsymbol{S})_{\beta} = \sqrt{\frac{S^3}{2}} \left( \nu^* a_i + \nu a_i^{\dagger} \right)
+\end{equation}
+where
+\begin{equation}
+\nu\left(\alpha,\beta\right) = V_{\alpha,2} V_{\beta,0} + V_{\alpha,0} V_{\beta,2} +i \left (  V_{\alpha,2} V_{\beta,1} + V_{\alpha,1} V_{\beta,2} \right)
+\end{equation}
+
+The second order terms include all that remain. They are 
+\begin{equation}
+ V_{\alpha,0} V_{\beta,0} S_x S_x + V_{\alpha,0} V_{\beta,1} S_x S_y
+ + V_{\alpha,1} V_{\beta,0} S_y S_x + V_{\alpha,1} V_{\beta,1} S_y S_y 
+  +V_{\alpha,2} V_{\beta,2} S_z S_z 
+\end{equation}
+
+Written in terms of spin operators $S_+,S_-,S_z$, this expression becomes
+
+\begin{align}
+ (\overline{\overline{V}} \boldsymbol{S})_{\alpha} (\overline{\overline{V}} \boldsymbol{S})_{\beta}&=\frac{1}{2} \left( \eta^* S_+ S_+ +  \eta S_- S_- + \zeta^* S_+ S_- + \zeta S_-S_+ \right) + V_{\alpha,2} V_{\beta,2} S_z S_z \\
+ \zeta\left(\alpha,\beta\right)  &= V_{\alpha,0} V_{\beta,0} + V_{\alpha,1} V_{\beta,1} +i \left (  V_{\alpha,1} V_{\beta,0} - V_{\alpha,0} V_{\beta,1} \right)\\
+ \eta\left(\alpha,\beta\right) &= V_{\alpha,0} V_{\beta,0} - V_{\alpha,0} V_{\beta,1} +i \left (  V_{\alpha,1} V_{\beta,0} + V_{\alpha,1} V_{\beta,1} \right)
+\end{align} 
+
+Applying the Holstein-Primakoff formalism and taking the Fourier transform, this becomes
+
+\begin{equation}
+S \left( \eta^* a_{-k} a_k +  \eta a_{k}^{\dagger} a_{-k}^{\dagger}  + \left(\zeta^* - 2\,V_{\alpha,2} V_{\beta,2}\right) a_k^{\dagger} a_k + \zeta a_k a_k^{\dagger} \right) \\
+\end{equation}
+
+The L Matrix (eqn. A4 in Phys. Rev. B  87 134416 (2013)), is divided into four quadrants with 
+terms $a_{-k} a_k $ (lower left), $a_k^{\dagger} a_{-k}^{\dagger}$ (upper right), $a_k a_k^{\dagger}$ (lower right), and $a_k^{\dagger} a_k$ (upper left).
+Including the single ion anisotropy modifies the L matrix as follows:
+
+(lower left)
+\begin{equation}
+L(r+M,r) = D_r S_r  \sum_{\alpha,\beta} A_r(\alpha,\beta) \eta_r(\alpha,\beta)^* 
+\end{equation}
+
+(upper right)
+
+\begin{equation}
+L(r,r+M) = D_r S_r  \sum_{\alpha,\beta} A_r(\alpha,\beta) \eta_r(\alpha,\beta) 
+\end{equation}
+ 
+ (upper left) = (lower right)
+ 
+ \begin{equation}
+L(r,r)  = L(r+M,r+M) =  D_r S_r  \sum_{\alpha,\beta} A_r(\alpha,\beta)\left( RE(\zeta_r(\alpha,\beta)) - \left(V_r\right)_{\alpha,2} \left(V\right)_{\beta,2} \right)
+ \end{equation}
+ 
+ Note:
+ 
+ 1) None of these terms explicitly depend on $k$ and therefore don't need to be recalculated at each $k$-point.
+ 
+ 2) One could rewrite these expressions to use only the upper or lower diagonal of A$_r$, reducing the number of terms in the sum from 9 to 6. However, these 
+ terms are only calculated once and stored for the remainder or the calculation and any performance benefit too small to measure.
+ 
+
+
+
+
+
+\end{document}

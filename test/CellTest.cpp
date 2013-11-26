@@ -7,5 +7,29 @@
 BOOST_AUTO_TEST_CASE( ConstructorsTest )
 {
     Cell test;
+}
+
+BOOST_AUTO_TEST_CASE( BasisVectors )
+{
+
+}
+
+BOOST_AUTO_TEST_CASE( AddSublattice )
+{
+
+}
+
+BOOST_AUTO_TEST_CASE( SublatticePosition )
+{
+    
+}
+
+BOOST_AUTO_TEST_CASE( AddAtom)
+{
+    
+}
+
+BOOST_AUTO_TEST_CASE(Iterator)
+{
     
 }
