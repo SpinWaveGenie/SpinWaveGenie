@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 SW_Builder::SW_Builder()
 {
 }
