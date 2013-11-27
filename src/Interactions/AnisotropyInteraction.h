@@ -16,7 +16,7 @@ class AnisotropyInteraction: public Interaction
 {
 public:
     //!
-    AnisotropyInteraction(double value_in,Vector3 direction, std::string sl_r_in);
+    AnisotropyInteraction(std::string name_in, double value_in,Vector3 direction, std::string sl_r_in);
     //!
     void UpdateInteraction(double value_in,Vector3 direction, std::string sl_r_in);
     //!
@@ -27,7 +27,7 @@ public:
     virtual Interaction* do_clone() const;
     virtual ~AnisotropyInteraction(){};
 private:
-    std::string sl_r;
+    std::string name,sl_r;
     Matrix3 directions;
     double value;
     int r,M;

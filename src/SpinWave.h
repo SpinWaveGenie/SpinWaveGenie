@@ -43,9 +43,9 @@ the spin wave frequencies and intensities.
 class SpinWave
 {
 public:
+    SpinWave();
     //! Use SW_Builder to generate SpinWave instance
     friend class SW_Builder;
-    SpinWave();
     SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);
     //!
     void Set_Kpoint(double KX, double KY, double KZ);
@@ -55,9 +55,6 @@ public:
     void Calc();
     std::vector<double> Get_Frequencies();
     std::vector<double> Get_Intensities();
-    //Eigen::VectorXd SpinWave::Get_Evector(double E_min, double E_max, double E_points);
-    //void save(std::string filename);
-    //Eigen::MatrixXcd get_Matrix();
 private:
     double KXP,KYP,KZP;
     Cell cell;

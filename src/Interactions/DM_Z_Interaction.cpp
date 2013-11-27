@@ -4,8 +4,9 @@
 using namespace std;
 using namespace Eigen;
 
-DM_Z_Interaction::DM_Z_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+DM_Z_Interaction::DM_Z_Interaction(string name_in, double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
+    name = name_in;
     this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 

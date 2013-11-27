@@ -32,12 +32,12 @@ void Cell::setBasisVectors(double scale, Matrix3 basis)
     basisVectors = scale*basis;
 }
 
-Matrix3 Cell::getBasisVectors()
+const Matrix3 Cell::getBasisVectors()
 {
     return basisVectors;
 }
 
-Matrix3 Cell::getReciprocalVectors()
+const Matrix3 Cell::getReciprocalVectors()
 {
     return reciprocalVectors;
 }
@@ -53,7 +53,7 @@ Sublattice& Cell::getSublattice(string name)
     return sublatticeInfo[name];
 }
 
-int Cell::getPosition(std::string name)
+const int Cell::getPosition(std::string name)
 {
     int r = 0;
     for (Iterator sl=begin(); sl!=end(); ++sl)
@@ -80,7 +80,7 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     sublatticeInfo[name].addAtom(pos[0], pos[1], pos[2]);
 }
 
-size_t Cell::size()
+const size_t Cell::size()
 {
     return sublatticeInfo.size();
 }

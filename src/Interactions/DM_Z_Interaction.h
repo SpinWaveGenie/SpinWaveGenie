@@ -12,7 +12,7 @@
 class DM_Z_Interaction: public Interaction
 {
 public:
-    DM_Z_Interaction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
+    DM_Z_Interaction(std::string name, double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void Update_Interaction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void calcConstantValues(Cell& cell);
     void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
@@ -22,7 +22,7 @@ public:
     virtual ~DM_Z_Interaction(){};
 private:
     Neighbors neighbors;
-    std::string sl_r,sl_s;
+    std::string name,sl_r,sl_s;
     int r,s,M;
     double value,min,max;
     double tmp0,tmp1,tmp2,tmp3,tmp4;

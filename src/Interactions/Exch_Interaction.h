@@ -13,7 +13,7 @@
 class Exch_Interaction: public Interaction
 {
 public:
-    Exch_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
+    Exch_Interaction(std::string name, double value, std::string sl_r,std::string sl_s, double min, double max);
     void Update_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
     void calcConstantValues(Cell& cell);
     void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
@@ -23,7 +23,7 @@ public:
     virtual ~Exch_Interaction(){};
 private:
     Neighbors neighbors;
-    std::string sl_r,sl_s;
+    std::string name,sl_r,sl_s;
     int r,s,M;
     double value,min,max;
     double Sr,Ss;

@@ -22,10 +22,9 @@ SpinWave::SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in
     M = cell.size();
     N = 2*M;
     
-    LN.resize(N,N); LN.setZero();
+    LN.setZero(N,N);
     
-    SS.resize(N);
-    SS.setZero();
+    SS.setZero(N);
     
     for (int j=0;j<M;j++)
     {

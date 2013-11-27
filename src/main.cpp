@@ -12,7 +12,6 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include "SpinWave.h"
 #include "Initializer.h"
 #include "Cell/Neighbors.h"
@@ -23,17 +22,17 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/YFeO3TwoSublattice.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_largeangle.xml");
     SW_Builder builder = four_sl.get_builder();
         
     //cout << check << endl;
     
     Cell cell = four_sl.get_cell();
     
-    string sl_r = "Spin0";
-    string sl_s = "Spin1";
+    string sl_r = "V0";
+    string sl_s = "V2";
     double min = 0.0;
-    double max = 1.0;
+    double max = 5.0;
     
     Neighbors neighborList;
     neighborList.findNeighbors(cell,sl_r,sl_s,min,max);
@@ -45,11 +44,12 @@ int main(int argc, char * argv[])
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
     }
 
-    int npoints = 11;
+    int npoints = 101;
     double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=0.0;x1=1.0;
+    x0=0.0;x1=0.0;
     y0=0.0;y1=0.0;
-    z0=0.0;z1=0.0;
+    z0=0.0;z1=1.0;
+    SpinWave test = builder.Create_Element();
     for(int m=0;m<npoints;m++)
     {
         //sleep(1);
@@ -67,17 +67,17 @@ int main(int argc, char * argv[])
         }
         //cout << "Pos." << endl;
         cout << x << " " << y << " " << z << " ";// << endl;
-        SpinWave test = builder.Create_Element();
         test.createMatrix(x,y,z);
         test.Calc();
         vector<double> frequencies = test.Get_Frequencies();
-        vector<double> intensities = test.Get_Intensities();
+        sort(frequencies.begin(),frequencies.end());
+        //vector<double> intensities = test.Get_Intensities();
         //cout << "Freq.  Int." << endl;
-        vector<double>::iterator it2 = intensities.begin();
+        //vector<double>::iterator it2 = intensities.begin();
         for(vector<double>::iterator it = frequencies.begin();it!=frequencies.end();it++)
         {
             cout << (*it) << "  ";// << (*it2) ;//<< endl;
-            it2++;
+            //it2++;
         }
         cout << endl;
     }

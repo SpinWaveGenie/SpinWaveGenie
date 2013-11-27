@@ -85,10 +85,10 @@ public:
     void setBasisVectors(double scale, Matrix3 basis);
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    Matrix3 getBasisVectors();
+    const Matrix3 getBasisVectors();
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    Matrix3 getReciprocalVectors();
+    const Matrix3 getReciprocalVectors();
     //! Add sublattice to cell
     //! \param name Unique name defining sublattice
     //! \param sl Pointer to Sublattice object
@@ -101,11 +101,11 @@ public:
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.
-    int getPosition(std::string name);
+    const int getPosition(std::string name);
     void addAtom(std::string name, double x, double y, double z);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices
-    size_t size();
+    const size_t size();
     //! \return Returns an iterator pointing to the first Sublattice element
     typedef SublatticeIterator Iterator;
     Iterator begin();
