@@ -52,7 +52,6 @@ void DM_Y_Interaction::calcConstantValues(Cell& cell)
     
     value0 = -0.5*X*S*(sin(theta_r)*cos(theta_s)*cos(phi_r) - cos(theta_r)*sin(theta_s)*cos(phi_s));
     value1 = -0.25*X*S*(cos(theta_r)*sin(theta_s)*cos(phi_r)-sin(theta_r)*cos(theta_s)*cos(phi_s));
-
     value2 = -0.25*X*S*sin(theta_r)*sin(phi_s);
     value3 = -0.25*X*S*sin(theta_s)*sin(phi_r);
     

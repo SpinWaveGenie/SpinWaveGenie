@@ -54,36 +54,61 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
             break;
     }
     
-    //cout << kx << " " << ky << " " << x[0] << " " << u << endl;
+    //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
 
-    SW.Calc();
-    vector<double> frequencies = SW.Get_Frequencies();
-    vector<double> intensities = SW.Get_Intensities();
-    double sigma_energy = 1.0/sqrt(2.0*c);
-
-    for(size_t k=0;k!=frequencies.size();k++)
+    double maximum = 1.0;
+    double fraction = 1.0e-3;
+    double minEnergy,maxEnergy;
+    
+    double d = log(maximum/fraction);
+    
+    if ((b*b - a*c)*u*u +c*d > 0.0)
     {
+    
+      SW.Calc();
+      vector<double> frequencies = SW.Get_Frequencies();
+      vector<double> intensities = SW.Get_Intensities();
+    
+      double firstSolution = (-b*u + sqrt((b*b - a*c)*u*u +c*d))/c;
+      double secondSolution = (a*u*u - d)/(c*firstSolution);
+    
+      //double checkSecond = (-b*u - sqrt((b*b - a*c)*u*u +c*d))/c;
+      //cout << secondSolution << " " << checkSecond << endl;
+    
+      minEnergy = min(firstSolution,secondSolution);
+      maxEnergy = max(firstSolution,secondSolution);
+    
+      //cout << minEnergy << " " << maxEnergy << endl;
+    
+      for(size_t k=0;k!=frequencies.size();k++)
+      {
         //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-        long min_bin = (long) (frequencies[k]-14.0*sigma_energy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-        long max_bin = (long) (frequencies[k]+14.0*sigma_energy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long min_bin = (long) (frequencies[k]+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long max_bin = (long) (frequencies[k]+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
         
         if (min_bin < 0)
             min_bin = 0;
-        if (max_bin > EnergyPoints)
+        else if (min_bin > EnergyPoints)
+            min_bin = EnergyPoints;
+        if (max_bin < 0)
+            max_bin = 0;
+        else if (max_bin > EnergyPoints)
             max_bin = EnergyPoints;
-                
+        
+        //cout << min_bin << " " << max_bin << endl;
+        
         for(int i=min_bin;i!=max_bin;i++)
         {
-            double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-            fval[i] += intensities[k]*exp(-1.0*(c*pow(frequencies[k]-energy,2)+2.0*b*(frequencies[k]-energy)*u+a*pow(u,2)));
-            //cout << i <<  " " << intensities[k]*exp(-c*pow(frequencies[k]-energy,2))*exp(-2.0*b*(frequencies[k]-energy)*u) << " " ;
+          double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
+          fval[i] += intensities[k]*exp(-1.0*(c*pow(frequencies[k]-energy,2)+2.0*b*(frequencies[k]-energy)*u+a*pow(u,2)));
         }
-    }
+      }
     
-    double tmp = (a*c-b*b)/(M_PI*M_PI);
-    for(int i=0;i!=EnergyPoints;i++)
-    {
+      double tmp = (a*c-b*b)/(M_PI*M_PI);
+      for(int i=0;i!=EnergyPoints;i++)
+      {
         fval[i] *= tmp;
+      }
     }
     
     //cout << endl;
@@ -111,19 +136,26 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     
     double xmin, xmax;
     
+    double maximum = 1.0;
+    double fraction = 1.0e-3;
+    
+    double d = log(maximum/fraction);
+
+    double diff = sqrt(c*d/(a*c-b*b));
+
     switch (direction)
     {
         case 0:
-            xmin = kx - 0.2;
-            xmax = kx + 0.2;
+            xmin = kx - diff;
+            xmax = kx + diff;
             break;
         case 1:
-            xmin = ky - 0.2;
-            xmax = ky + 0.2;
+            xmin = ky - diff;
+            xmax = ky + diff;
             break;
         case 2:
-            xmin = kz - 0.2;
-            xmax = kz + 0.2;
+            xmin = kz - diff;
+            xmax = kz + diff;
             break;
     }
     
@@ -150,8 +182,6 @@ IntegrateAxes::IntegrateAxes(axes_info info, TwoDimensionResolutionFunction resF
     dz = info.dz;
     tol = info.tol;
 }
-
-
 
 int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)
 {

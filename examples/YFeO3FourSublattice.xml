@@ -84,6 +84,7 @@
           <y>0.0</y>
           <z>0.0</z>
         </direction>
+        <name>Ka</name>
         <value>-0.0046</value>
     	<sublattices>
     	  <name>Fe1</name>
@@ -98,6 +99,7 @@
           <y>0.0</y>
           <z>1.0</z>
         </direction>
+        <name>Kc</name>
         <value>-0.0013</value>
     	<sublattices>
     	  <name>Fe1</name>
@@ -109,6 +111,7 @@
     </Anisotropy>   
     <Exchange>
         <group>
+            <name>J1</name>
             <value>-4.2</value>
             <mindist>3.8</mindist>
             <maxdist>4.3</maxdist>
@@ -120,6 +123,7 @@
             </pairs>
         </group>
         <group>
+            <name>J2</name>
             <value>-0.212143</value>
             <mindist>5.3</mindist>
             <maxdist>5.5</maxdist>
@@ -135,6 +139,7 @@
     </Exchange>
     <DzyaloshinskyMoriya>
     	<group>
+            <name>D1</name>
     		<value>0.073861</value>
     		<min>3.78</min>
     		<max>4.32</max>
@@ -155,6 +160,7 @@
     		</pairs>
     	</group>
     	<group>
+            <name>D2</name>
     		<value>0.0278289</value>
     		<min>3.78</min>
     		<max>4.32</max>

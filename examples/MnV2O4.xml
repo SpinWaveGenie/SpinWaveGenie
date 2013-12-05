@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spinwavegenie xmlns:swg="SpinWaveGenieSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SpinWaveGenieSchema SpinWaveGenieSchema.xsd ">
+<spinwavegenie xmlns="SpinWaveGenieSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SpinWaveGenieSchema SpinWaveGenieSchema.xsd ">
   <cell>
     <latticevectors>
       <a>6.0104</a>
@@ -57,7 +57,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>145.3</theta>
+      		<theta>116.909</theta>
       		<phi>270.0</phi>
       	</moment>
       	<atomicpositions>
@@ -78,7 +78,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>145.3</theta>
+      		<theta>116.909</theta>
       		<phi>0.0</phi>
       	</moment>
       	<atomicpositions>
@@ -99,7 +99,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>145.3</theta>
+      		<theta>116.909</theta>
       		<phi>90.0</phi>
       	</moment>
       	<atomicpositions>
@@ -120,7 +120,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>145.3</theta>
+      		<theta>116.909</theta>
       		<phi>180.0</phi>
       	</moment>
       	<atomicpositions>
@@ -140,8 +140,21 @@
   </cell>
   <interactions>
   	<Exchange>
+        <group>
+            <name>Jaa</name>
+  			<value>0.0</value>
+  			<mindist>3.65</mindist>
+  			<maxdist>3.7</maxdist>
+  			<pairs>
+  				<pair>
+  					<name1>Mn0</name1>
+  					<name2>Mn1</name2>
+  				</pair>
+  			</pairs>
+  		</group>
   		<group>
-  			<value>-2.27288</value>
+  			<name>Jab</name>
+  			<value>-1.92496</value>
   			<mindist>3.48</mindist>
   			<maxdist>3.57</maxdist>
   			<pairs>
@@ -180,7 +193,8 @@
   			</pairs>
   		</group>
   		<group>
-  			<value>-8.56749</value>
+  			<name>Jbb</name>	
+  			<value>-10.2</value>
   			<mindist>2.975</mindist>
   			<maxdist>3.06</maxdist>
   			<pairs>
@@ -195,7 +209,8 @@
   			</pairs>
   		</group>
   		<group>
-  			<value>0.0</value>
+  			<name>Jbbp</name>
+  			<value>-3.0</value>
   			<mindist>2.975</mindist>
   			<maxdist>3.06</maxdist>
   			<pairs>
@@ -220,7 +235,8 @@
   	</Exchange>
   	<Anisotropy>
   		<group>
-  			<value>-0.116467</value>
+  			<name>Daz</name>
+  			<value>-0.0655621</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -232,7 +248,8 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>-0.121134</value>
+  			<name>Dbz</name>
+  			<value>0.7</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -246,7 +263,8 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>-3.72048</value>
+  		  	<name>Dbx</name>
+  			<value>-4.8</value>
   			<direction>
   				<x>1.0</x>
   				<y>0.0</y>
@@ -258,7 +276,8 @@
   			</sublattices>
   		</group>
   		<group>
-  			<value>-3.72048</value>
+  		  	<name>Dby</name>
+  			<value>-4.8</value>
   			<direction>
   				<x>0.0</x>
   				<y>1.0</y>
@@ -269,5 +288,6 @@
   				<name>V2</name>
   			</sublattices>
   		</group>
-  	</Anisotropy></interactions>
+  	</Anisotropy>
+  </interactions>
 </spinwavegenie>

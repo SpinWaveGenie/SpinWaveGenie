@@ -22,17 +22,17 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_largeangle.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_JAA_JAB.xml");
     SW_Builder builder = four_sl.get_builder();
         
     //cout << check << endl;
     
     Cell cell = four_sl.get_cell();
     
-    string sl_r = "V0";
-    string sl_s = "V2";
+    string sl_r = "Mn0";
+    string sl_s = "Mn1";
     double min = 0.0;
-    double max = 5.0;
+    double max = 7.0;
     
     Neighbors neighborList;
     neighborList.findNeighbors(cell,sl_r,sl_s,min,max);

@@ -9,9 +9,8 @@
 #include "Cell.h"
 #include "Cell/Neighbors.h"
 #include "Exch_Interaction.h"
-#include "Anis_X_Interaction.h"
-#include "Anis_Y_Interaction.h"
-#include "Anis_Z_Interaction.h"
+#include "AnisotropyInteraction.h"
+
 
 using namespace std;
 using namespace Eigen;
@@ -21,20 +20,20 @@ using namespace Eigen;
  } my_constraint_data;
  */
 
-double myconstraint(const std::vector<double> &x, std::vector<double> &grad, void *data)
+/*double myconstraint(const std::vector<double> &x, std::vector<double> &grad, void *data)
 {
-    /*my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
-     double a = d->a, b = d->b;
-     if (!grad.empty()) {
-     grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
-     grad[1] = -1.0;
-     }*/
+     //my_constraint_data *d = reinterpret_cast<my_constraint_data*>(data);
+     //double a = d->a, b = d->b;
+     //if (!grad.empty()) {
+     //grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
+     //grad[1] = -1.0;
+     //}
     
     double theta = 129.0*M_PI/180.0;
     double Jab = x[0];
     double Jbb = x[1];
     double Jbbp = x[2];
-    //double Daz = x[3];
+    double Daz = x[3];
     double Dbz = x[4];
     double Dby = x[5];
     
@@ -44,7 +43,25 @@ double myconstraint(const std::vector<double> &x, std::vector<double> &grad, voi
     
     cout << "constraint = " << constraint << endl;
     return -1.0*constraint;
-}
+}*/
+
+
+/*double myconstraint(const std::vector<double> &x, std::vector<double> &grad, void *data)
+{
+ 
+  double Jab = x[1];
+  double Jbb = x[2];
+  double Jbbp = x[3];
+  //double Daz = x[4];
+  double Dbz = x[5];
+  double Dby = x[6];
+     
+  double theta = acos((15.0/2.0*Jab)/(2.0*Jbb + 2.0*Jbbp - Dbz + Dby));
+  if (isnan(theta))
+      return 1.0;
+    
+  return -1.0*theta;
+}*/
 
 double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
 {
@@ -53,9 +70,10 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
         cout << "error: no gradient available" << endl;
     }
     
-    double KX=0.0, KY = 0.0, KZ = 0.0;
-    double theta = 129.0*M_PI/180.0;
-
+    double theta = M_PI - acos((15.0/2.0*x[1])/(2.0*x[2] + 2.0*x[3] - x[5] + x[6]));
+    cout << "theta= " << theta*180.0/M_PI << " " << 180.0 - theta*180.0/M_PI << endl;
+    
+    
     Cell cell;
     cell.setBasisVectors(6.0104,6.0104,8.5,90.0,90.0,90.0);
     
@@ -64,7 +82,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     Mn0.setName(name);
     Mn0.setType("MN2");
     Mn0.setMoment(2.5,0.0,0.0);
-    cell.addSublattice(name,Mn0);
+    cell.addSublattice(Mn0);
     cell.addAtom(name,0.0,0.25,0.125);
     cell.addAtom(name,0.5,0.75,0.625);
     
@@ -73,7 +91,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     Mn1.setName(name);
     Mn1.setType("MN2");
     Mn1.setMoment(2.5,0.0,0.0);
-    cell.addSublattice(name,Mn1);
+    cell.addSublattice(Mn1);
     cell.addAtom(name,0.5,0.25,0.375);
     cell.addAtom(name,0.0,0.75,0.875);
     
@@ -82,7 +100,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     V0.setName(name);
     V0.setType("V3");
     V0.setMoment(1.0,theta,3.0*M_PI/2.0);
-    cell.addSublattice(name,V0);
+    cell.addSublattice(V0);
     cell.addAtom(name,0.0,0.0,0.5);
     cell.addAtom(name,0.5,0.5,0.0);
     
@@ -91,7 +109,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     V1.setName(name);
     V1.setType("V3");
     V1.setMoment(1.0,theta,0.0);
-    cell.addSublattice(name,V1);
+    cell.addSublattice(V1);
     cell.addAtom(name,0.75,0.25,0.75);
     cell.addAtom(name,0.25,0.75,0.25);
     
@@ -100,7 +118,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     V2.setName(name);
     V2.setType("V3");
     V2.setMoment(1.0,theta,M_PI/2.0);
-    cell.addSublattice(name,V2);
+    cell.addSublattice(V2);
     cell.addAtom(name,0.5,0.0,0.0);
     cell.addAtom(name,0.0,0.5,0.5);
     
@@ -109,65 +127,76 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     V3.setName(name);
     V3.setType("V3");
     V3.setMoment(1.0,theta,M_PI);
-    cell.addSublattice(name,V3);
+    cell.addSublattice(V3);
     cell.addAtom(name,0.75,0.75,0.25);
     cell.addAtom(name,0.25,0.25,0.75);
     
     SW_Builder builder(cell);
     
-    double Jab = -2.0/15.0*cos(theta)*(2.0*x[1] + 2.0*x[2] + x[4] - x[5]);
+    
     cout << "x[i] = ";
-    cout << Jab <<  " ";
-    for (size_t i = 1; i<6;i++)
+    for (size_t i = 0; i<6;i++)
         cout << x[i] << " ";
     cout << endl;
 
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V0",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V0","Mn0",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V1",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V1","Mn0",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V2",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V2","Mn0",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn0","V3",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V3","Mn0",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V0",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V0","Mn1",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V1",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V1","Mn1",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V2",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V2","Mn1",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"Mn1","V3",3.48,3.57));
-    builder.Add_Interaction(new Exch_Interaction(Jab,"V3","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jaa",x[0],"Mn0","Mn1",3.0,5.0));
+    builder.Add_Interaction(new Exch_Interaction("Jaa",x[0],"Mn1","Mn0",3.0,5.0));
+    
+    
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn0","V0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V0","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn0","V1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V1","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn0","V2",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V2","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn0","V3",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V3","Mn0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn1","V0",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V0","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn1","V1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V1","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn1","V2",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V2","Mn1",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"Mn1","V3",3.48,3.57));
+    builder.Add_Interaction(new Exch_Interaction("Jab",x[1],"V3","Mn1",3.48,3.57));
+    
+    builder.Add_Interaction(new Exch_Interaction("Jbb",x[2],"V0","V2",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbb",x[2],"V2","V0",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbb",x[2],"V1","V3",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbb",x[2],"V3","V1",2.975,3.06));
+    
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V0","V1",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V1","V0",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V0","V3",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V3","V0",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V1","V2",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V2","V1",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V2","V3",2.975,3.06));
+    builder.Add_Interaction(new Exch_Interaction("Jbbp",x[3],"V3","V2",2.975,3.06));
+    
+    //string name_in, double value_in, Vector3 unitVectorIn, string sl_r_in
+    
+    Vector3 xhat(1.0,0.0,0.0);
+    Vector3 yhat(0.0,1.0,0.0);
+    Vector3 zhat(0.0,0.0,1.0);
 
-    builder.Add_Interaction(new Exch_Interaction(x[1],"V0","V2",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[1],"V2","V0",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[1],"V1","V3",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[1],"V3","V1",2.975,3.06));
+    builder.Add_Interaction(new AnisotropyInteraction("Daz",x[4],zhat,"Mn0"));
+    builder.Add_Interaction(new AnisotropyInteraction("Daz",x[4],zhat,"Mn1"));
     
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V0","V1",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V1","V0",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V0","V3",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V3","V0",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V1","V2",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V2","V1",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V2","V3",2.975,3.06));
-    builder.Add_Interaction(new Exch_Interaction(x[2],"V3","V2",2.975,3.06));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbz",x[5],zhat,"V1"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbz",x[5],zhat,"V3"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbz",x[5],zhat,"V0"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbz",x[5],zhat,"V2"));
     
-    builder.Add_Interaction(new Anis_Z_Interaction(x[3],"Mn0"));
-    builder.Add_Interaction(new Anis_Z_Interaction(x[3],"Mn1"));
-    
-    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V1"));
-    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V3"));
-    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V0"));
-    builder.Add_Interaction(new Anis_Z_Interaction(x[4],"V2"));
-    
-    builder.Add_Interaction(new Anis_X_Interaction(x[5],"V1"));
-    builder.Add_Interaction(new Anis_X_Interaction(x[5],"V3"));
-    builder.Add_Interaction(new Anis_Y_Interaction(x[5],"V0"));
-    builder.Add_Interaction(new Anis_Y_Interaction(x[5],"V2"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbx",x[6],xhat,"V1"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbx",x[6],xhat,"V3"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dby",x[6],yhat,"V0"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dby",x[6],yhat,"V2"));
 
     SpinWave SW = builder.Create_Element();
     
+    
+    double KX=0.0, KY = 0.0, KZ = 0.0;
     SW.createMatrix(KX,KY,KZ);
     SW.Calc();
     
@@ -175,12 +204,14 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     double diff_sq = 0.0;
     std::sort(frequencies.begin(), frequencies.end());
     
-    diff_sq += pow(frequencies[0]-2.0,2);
+    diff_sq += pow((frequencies[0]-2.0)/0.12,2);
     
-    double min_freq = 18.0;
     
-    if(frequencies[2]<min_freq)
-        diff_sq +=10.0;
+    cout << frequencies[0] << " " << 2.0 << endl;
+    //double min_freq = 18.0;
+    
+    //if(frequencies[2]<min_freq)
+    //   diff_sq +=10.0;
     
     KZ = 0.25;
     
@@ -191,7 +222,7 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     
     std::sort(frequencies.begin(), frequencies.end());
     
-    diff_sq += pow(frequencies[0]-5.7,2);
+    diff_sq += pow((frequencies[0]-5.7)/0.31,2);
     
     //if(frequencies[2]<min_freq)
     //    diff_sq +=10.0;
@@ -205,7 +236,8 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     
     std::sort(frequencies.begin(), frequencies.end());
     
-    diff_sq += pow(frequencies[1]-9.23,2);
+    diff_sq += pow((frequencies[0]-9.23)/0.85,2);
+    diff_sq += pow((frequencies[1]-10.44)/0.35,2);
     
     //if(frequencies[2]<min_freq)
     //    diff_sq +=10.0;
@@ -219,7 +251,9 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     
     std::sort(frequencies.begin(), frequencies.end());
     
-    diff_sq += pow(frequencies[1]-9.92,2);
+    diff_sq += pow((frequencies[1]-9.92)/0.72,2);
+    diff_sq += pow((frequencies[1]-10.38)/0.29,2);
+
     
     //if(frequencies[2]<min_freq)
     //    diff_sq +=10.0;
@@ -234,7 +268,8 @@ double myfunc_4sl(const std::vector<double> &x, std::vector<double> &grad, void 
     
     std::sort(frequencies.begin(), frequencies.end());
     
-    diff_sq += pow(frequencies[1]-10.66,2);
+    diff_sq += pow((frequencies[0]-10.65)/0.48,2);
+    diff_sq += pow((frequencies[1]-10.66)/0.46,2);
     
     //if(frequencies[2]<min_freq)
     //    diff_sq +=10.0;
@@ -259,40 +294,37 @@ int main()
     //opt.add_inequality_constraint(myconstraint, &data[0], 1e-8);
     //opt.add_inequality_constraint(myconstraint, &data[1], 1e-8);
     
-    nlopt::opt opt(nlopt::LN_COBYLA, 6);
-    std::vector<double> ub(6);
-    ub[0] = 0.0;
-    ub[1] = 0.0;
-    ub[2] = 10.0;
-    ub[3] = 2.0;
-    ub[4] = 2.0;
-    ub[5] = 10.0;
+    nlopt::opt opt(nlopt::LN_COBYLA, 7);
+    std::vector<double> ub(7);
+    ub[0] =  1.0;
+    ub[1] = -1.0;
+    ub[2] =-10.2;
+    ub[3] = -3.0;
+    ub[4] =  1.0;
+    ub[5] =  0.7;
+    ub[6] = -4.8;
     opt.set_upper_bounds(ub);
-    std::vector<double> lb(6);
-    lb[0] = 0.0;
-    lb[1] = -20.0;
-    lb[2] = -10.0;
-    lb[3] = -2.0;
-    lb[4] = -2.0;
-    lb[5] = 0.0;
+    std::vector<double> lb(7);
+    lb[0] =  0.0;
+    lb[1] = -3.0;
+    lb[2] =-10.2;
+    lb[3] = -3.0;
+    lb[4] = -1.0;
+    lb[5] =  0.7;
+    lb[6] = -4.8;
     opt.set_lower_bounds(lb);
     opt.set_min_objective(myfunc_4sl, NULL);
-    opt.add_inequality_constraint(myconstraint,NULL, 1e-8);
-    opt.set_xtol_rel(1.0e-3);
-    std::vector<double> x(6);
-    /*x[0] = -3.0;
-    x[1] = -3.0;
-    x[2] = -3.0;
-    x[3] = 0.4;
-    x[4] = -0.7;
-    x[5] = 3.72048;
-    */
-    x[0] = 0.0;
-    x[1] = -10.2328;
-    x[2] = -2.04039;
-    x[3] = 0.158602 ;
-    x[4] = -0.674189;
-    x[5] = 7.33812;
+    //opt.add_inequality_constraint(myconstraint,NULL, 1e-8);
+    opt.set_xtol_rel(1.0e-5);
+    std::vector<double> x(7);
+    
+    x[0] =  0.0;
+    x[1] = -1.8;
+    x[2] =-10.2;
+    x[3] = -3.0;
+    x[4] = -0.1 ;
+    x[5] =  0.7;
+    x[6] = -4.8;
  
     double minf = 0.0;
     
