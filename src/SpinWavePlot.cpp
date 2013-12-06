@@ -167,6 +167,63 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     return fval;
 }
 
+EnergyResolutionFunction::EnergyResolutionFunction(OneDimGaussian& info, double min, double max, double points)
+{
+    MinimumEnergy = min;
+    MaximumEnergy = max;
+    EnergyPoints = points;
+    
+    fwhm = info.fwhm;
+    tol = info.tol;
+    SW = info.SW;
+}
+
+std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
+{
+
+    vector<double> fval(EnergyPoints);
+    for(int i=0;i!=EnergyPoints;i++)
+    {
+        fval[i] = 0.0;
+    }
+    
+    //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
+    
+    SW.createMatrix(kx,ky,kz);
+    SW.Calc();
+    vector<double> frequencies = SW.Get_Frequencies();
+    vector<double> intensities = SW.Get_Intensities();
+    
+    double a = -4.0*log(2)/pow(fwhm,2);
+    
+    for(size_t k=0;k!=frequencies.size();k++)
+    {
+        for(int i=0;i!=EnergyPoints;i++)
+        {
+            double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
+            fval[i] += intensities[k]*exp(a*pow(frequencies[k]-energy,2));
+        }
+    }
+    
+    double tmp = 2*sqrt(log(2))/(fwhm*sqrt(M_PI));
+    for(int i=0;i!=EnergyPoints;i++)
+    {
+        fval[i] *= tmp;
+    }
+    
+    //cout << endl;
+    /*for(int i=0;i!=EnergyPoints;i++)
+     {
+     double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
+     cout << energy << " " << fval[i] << " ";
+     }
+     cout << endl;
+     */
+    
+    return fval;
+}
+
+
 IntegrateAxes::IntegrateAxes(axes_info info, TwoDimensionResolutionFunction resFunction, double min, double max, double points)
 {
     MinimumEnergy = min;
@@ -286,6 +343,8 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     
 }
 
+
+
 /*NoResolutionFunction::NoResolutionFunction()
  {
  
@@ -295,14 +354,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
  {
  }
  
- EnergyResolutionFunction::EnergyResolutionFunction()
- {
- }
  
- std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
- {
- 
- }
  
  TwoDimensionResolutionFunction::TwoDimensionResolutionFunction()
  {

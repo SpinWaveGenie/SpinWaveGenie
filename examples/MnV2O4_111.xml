@@ -57,7 +57,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>116.909</theta>
+      		<theta>145.0</theta>
       		<phi>270.0</phi>
       	</moment>
       	<atomicpositions>
@@ -78,7 +78,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>116.909</theta>
+      		<theta>145.0</theta>
       		<phi>0.0</phi>
       	</moment>
       	<atomicpositions>
@@ -99,7 +99,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>116.909</theta>
+      		<theta>145.0</theta>
       		<phi>90.0</phi>
       	</moment>
       	<atomicpositions>
@@ -120,7 +120,7 @@
       	<type>V3</type>
       	<moment>
       		<magnitude>1.0</magnitude>
-      		<theta>116.909</theta>
+      		<theta>145.0</theta>
       		<phi>180.0</phi>
       	</moment>
       	<atomicpositions>
@@ -142,7 +142,7 @@
   	<Exchange>
         <group>
             <name>Jaa</name>
-  			<value>0.0</value>
+  			<value>-0.2</value>
   			<mindist>3.65</mindist>
   			<maxdist>3.7</maxdist>
   			<pairs>
@@ -152,91 +152,91 @@
   				</pair>
   			</pairs>
   		</group>
-  		<group>
-  			<name>Jab</name>
-  			<value>-1.92496</value>
-  			<mindist>3.48</mindist>
-  			<maxdist>3.57</maxdist>
-  			<pairs>
-  				<pair>
-  					<name1>Mn0</name1>
-  					<name2>V0</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn0</name1>
-  					<name2>V1</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn0</name1>
-  					<name2>V2</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn0</name1>
-  					<name2>V3</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn1</name1>
-  					<name2>V0</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn1</name1>
-  					<name2>V1</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn1</name1>
-  					<name2>V2</name2>
-  				</pair>
-  				<pair>
-  					<name1>Mn1</name1>
-  					<name2>V3</name2>
-  				</pair>
-  			</pairs>
-  		</group>
-  		<group>
-  			<name>Jbb</name>	
-  			<value>-10.2</value>
-  			<mindist>2.975</mindist>
-  			<maxdist>3.06</maxdist>
-  			<pairs>
-  				<pair>
-  					<name1>V0</name1>
-  					<name2>V2</name2>
-  				</pair>
-  				<pair>
-  					<name1>V1</name1>
-  					<name2>V3</name2>
-  				</pair>
-  			</pairs>
-  		</group>
-  		<group>
-  			<name>Jbbp</name>
-  			<value>-3.0</value>
-  			<mindist>2.975</mindist>
-  			<maxdist>3.06</maxdist>
-  			<pairs>
-  				<pair>
-  					<name1>V0</name1>
-  					<name2>V1</name2>
-  				</pair>
-  				<pair>
-  					<name1>V0</name1>
-  					<name2>V3</name2>
-  				</pair>
-  				<pair>
-  					<name1>V2</name1>
-  					<name2>V1</name2>
-  				</pair>
-  				<pair>
-  					<name1>V2</name1>
-  					<name2>V3</name2>
-  				</pair>
-  			</pairs>
-  		</group>
+        <group>
+            <name>Jab</name>
+            <value>-2.0</value>
+            <mindist>3.48</mindist>
+            <maxdist>3.57</maxdist>
+            <pairs>
+                <pair>
+                    <name1>Mn0</name1>
+                    <name2>V0</name2>
+                </pair>
+                <pair>
+                    <name1>Mn0</name1>
+                    <name2>V1</name2>
+                </pair>
+                <pair>
+                    <name1>Mn0</name1>
+                    <name2>V2</name2>
+                </pair>
+                <pair>
+                    <name1>Mn0</name1>
+                    <name2>V3</name2>
+                </pair>
+                <pair>
+                    <name1>Mn1</name1>
+                    <name2>V0</name2>
+                </pair>
+                <pair>
+                    <name1>Mn1</name1>
+                    <name2>V1</name2>
+                </pair>
+                <pair>
+                    <name1>Mn1</name1>
+                    <name2>V2</name2>
+                </pair>
+                <pair>
+                    <name1>Mn1</name1>
+                    <name2>V3</name2>
+                </pair>
+            </pairs>
+        </group>
+        <group>
+            <name>Jbb</name>
+            <value>-10.0</value>
+            <mindist>2.975</mindist>
+            <maxdist>3.06</maxdist>
+            <pairs>
+                <pair>
+                    <name1>V0</name1>
+                    <name2>V2</name2>
+                </pair>
+                <pair>
+                    <name1>V1</name1>
+                    <name2>V3</name2>
+                </pair>
+            </pairs>
+        </group>
+        <group>
+            <name>Jbbp</name>
+            <value>2.0</value>
+            <mindist>2.975</mindist>
+            <maxdist>3.06</maxdist>
+            <pairs>
+                <pair>
+                    <name1>V0</name1>
+                    <name2>V1</name2>
+                </pair>
+                <pair>
+                    <name1>V0</name1>
+                    <name2>V3</name2>
+                </pair>
+                <pair>
+                    <name1>V2</name1>
+                    <name2>V1</name2>
+                </pair>
+                <pair>
+                    <name1>V2</name1>
+                    <name2>V3</name2>
+                </pair>
+            </pairs>
+        </group>
   	</Exchange>
   	<Anisotropy>
   		<group>
   			<name>Daz</name>
-  			<value>-0.0655621</value>
+  			<value>0.8</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -248,44 +248,51 @@
   			</sublattices>
   		</group>
   		<group>
-  			<name>Dbz</name>
-  			<value>0.7</value>
+  		  	<name>Dbx</name>
+  			<value>-6.351</value>
   			<direction>
-  				<x>0.0</x>
+  				<x>1.0</x>
   				<y>0.0</y>
-  				<z>1.0</z>
+  				<z>-1.0</z>
   			</direction>
   			<sublattices>
-  				<name>V0</name>
   				<name>V1</name>
-  				<name>V2</name>
-  				<name>V3</name>
   			</sublattices>
   		</group>
-  		<group>
-  		  	<name>Dbx</name>
-  			<value>-4.8</value>
+        <group>
+  		  	<name>Dbmx</name>
+  			<value>-6.351</value>
   			<direction>
   				<x>-1.0</x>
   				<y>0.0</y>
-  				<z>1.0</z>
+  				<z>-1.0</z>
   			</direction>
   			<sublattices>
-  				<name>V1</name>
   				<name>V3</name>
   			</sublattices>
   		</group>
   		<group>
   		  	<name>Dby</name>
-  			<value>-4.8</value>
+  			<value>-6.351</value>
+  			<direction>
+  				<x>0.0</x>
+  				<y>1.0</y>
+  				<z>-1.0</z>
+  			</direction>
+  			<sublattices>
+  				<name>V2</name>
+  			</sublattices>
+  		</group>
+  		<group>
+  		  	<name>Dbmy</name>
+  			<value>-6.351</value>
   			<direction>
   				<x>0.0</x>
   				<y>-1.0</y>
-  				<z>1.0</z>
+  				<z>-1.0</z>
   			</direction>
   			<sublattices>
   				<name>V0</name>
-  				<name>V2</name>
   			</sublattices>
   		</group>
   	</Anisotropy>

@@ -14,6 +14,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "SpinWavePlot.h"
+#include "IntegrateThetaPhi.h"
 #include "Initializer.h"
 #include <boost/thread.hpp>
 #include <boost/program_options.hpp>
@@ -37,13 +38,13 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 101;
+        npoints = 201;
         pointsDone = 0;
         nextPoint = 0;
-        points = 81;
+        points = 161;
         figure.setZero(points,npoints);
         min = 0.0;
-        max = 80.0;
+        max = 40.0;
     }
     ~ThreadClass()
     {
@@ -53,6 +54,7 @@ public:
     void Run(int i, Init& four_sl)
     {
         boost::unique_lock<boost::mutex> scoped_lock(io_mutex);
+        Cell cell = four_sl.get_cell();
         SW_Builder builder = four_sl.get_builder();
         scoped_lock.unlock();
         boost::unique_lock<boost::mutex> np_lock(np_mutex);
@@ -82,26 +84,14 @@ public:
         */
         
         double x0,y0,z0,x1,y1,z1;
-        x0=3.0;x1=3.0;
+        x0=0.0;x1=0.0;
         y0=0.0;y1=0.0;
-        z0=-4.0;z1=4.0;
+        z0=0.0;z1=4.0;
          
-        TwoDimGaussian resinfo;
-        resinfo.a = 579.7;
-        resinfo.b = -20.0;
-        resinfo.c = 1.3;
+        OneDimGaussian resinfo;
+        resinfo.fwhm = 1.0;
         resinfo.tol = 1.0e-1;
-        resinfo.direction = 2;
         resinfo.SW = builder.Create_Element();
-        
-        axes_info axesinfo;
-        axesinfo.x = true;
-        axesinfo.y = true;
-        axesinfo.z = true;
-        axesinfo.dx = 0.2;
-        axesinfo.dy = 0.2;
-        axesinfo.dz = 0.05;
-        axesinfo.tol = 1.0e-1;
         
         scoped_lock.lock();
         double tmin = min;
@@ -110,8 +100,8 @@ public:
         int tnpoints = npoints;
         scoped_lock.unlock();
 
-        TwoDimensionResolutionFunction res(resinfo, tmin,tmax, tpoints);
-        IntegrateAxes tmp(axesinfo,res,tmin,tmax,tpoints);
+        EnergyResolutionFunction res(resinfo, tmin,tmax, tpoints);
+        IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
         //for(int m=i;m<tnpoints;m=m+tnproc)
         while (true)
         {

@@ -54,7 +54,7 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
         for (int j=0; j<3; j++)
         {
             //cout << i << " " << j << " " << directions(i,j) << endl;
-            if (directions(i,j) > 1.0e-10)
+            if (abs(directions(i,j)) > 1.0e-10)
             {
                 double X = value*S*directions(i,j);
                 double eta =    0.5*(inv(i,0)*inv(j,0) - inv(i,1)*inv(j,1));
@@ -81,11 +81,11 @@ void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &e
         for (int j=0; j<3; j++)
         {
             //cout << i << " " << j << " " << directions(i,j) << endl;
-            if (directions(i,j) > 1.0e-10)
+            if (abs(directions(i,j)) > 1.0e-10)
             {
                 double X = value*directions(i,j)*sqrt(pow(S,3)/2.0);
                 complex<double> nu = inv(i,2)*inv(j,0) + inv(i,0)*inv(j,2) + XI*(inv(i,2)*inv(j,1) + inv(i,1)*inv(j,2));
-                //cout << "zeta= " << zeta << endl;
+                //cout << "nu= " << nu << endl;
                 elements(r) += X*conj(nu);
                 elements(r+M) += X*nu;
             }

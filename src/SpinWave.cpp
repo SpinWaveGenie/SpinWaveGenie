@@ -44,12 +44,12 @@ Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-         /*vector<string> sls = iter->sublattices();
-         for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
-         {
-         cout << (*iter2) << " ";
-         }
-         cout << endl;*/
+        // vector<string> sls = iter->sublattices();
+        // for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
+        // {
+        // cout << (*iter2) << " ";
+        // }
+        // cout << endl;
         //firstOrder.setZero(2*M);
         iter->checkFirstOrderTerms(this->cell,firstOrder);
         //cout << firstOrder[2] << " " << firstOrder[8] << endl;

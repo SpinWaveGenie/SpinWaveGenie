@@ -1,3 +1,7 @@
+#ifndef __SpinWavePlot__
+#define __SpinWavePlot__
+
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,6 +24,13 @@ struct TwoDimGaussian
     SpinWave SW;
 };
 
+struct OneDimGaussian
+{
+    double fwhm;
+    double tol;
+    SpinWave SW;
+};
+
 class TwoDimensionResolutionFunction : SpinWavePlot{
 public:
     TwoDimensionResolutionFunction(){};
@@ -33,6 +44,19 @@ private:
     double a,b,c;
     double kx,ky,kz;
     unsigned EnergyPoints,direction;
+    SpinWave SW;
+};
+
+class EnergyResolutionFunction : SpinWavePlot{
+    public:
+    EnergyResolutionFunction(){};
+    EnergyResolutionFunction(OneDimGaussian& info, double min, double max, double points);
+    std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
+    ~EnergyResolutionFunction(){};
+    private:
+    double MinimumEnergy,MaximumEnergy,tol;
+    double fwhm;
+    unsigned EnergyPoints;
     SpinWave SW;
 };
 
@@ -67,15 +91,9 @@ private:
  std::vector<double> getCut(double kx, double ky, double kz);
  ~NoResolutionFunction() = 0;
  };
- 
- 
- 
- class EnergyResolutionFunction : SpinWavePlot {
- EnergyResolutionFunction();
- std::vector<double> getCut(double kx, double ky, double kz);
- ~EnergyResolutionFunction() = 0;
- };
  */
+
+
 
 /*
  class FourDimensionResolutionFunction : SpinWavePlot {
@@ -84,3 +102,6 @@ private:
  ~FourDimensionResolutionFunction() = 0;
  };
  */
+
+
+#endif /* defined(__SpinWavePlot__) */

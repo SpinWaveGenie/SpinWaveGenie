@@ -22,7 +22,7 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_111.xml");
     SW_Builder builder = four_sl.get_builder();
         
     //cout << check << endl;
@@ -44,7 +44,7 @@ int main(int argc, char * argv[])
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
     }
 
-    int npoints = 11;
+    int npoints = 101;
     double x,y,z,x0,y0,z0,x1,y1,z1;
     x0=0.0;x1=0.0;
     y0=0.0;y1=0.0;
