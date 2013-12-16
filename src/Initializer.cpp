@@ -177,11 +177,6 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
              
              cout << name << " " << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
              builder.Add_Interaction(new Exch_Interaction(name,value,atom1,atom2,min,max));
-             if (atom1 != atom2)
-             {
-                 cout << atom2 << " " << atom1 << endl;
-                 builder.Add_Interaction(new Exch_Interaction(name,value,atom2,atom1,min,max));
-             }
          }
      }
     

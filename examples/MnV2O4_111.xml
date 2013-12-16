@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+ f<?xml version="1.0" encoding="UTF-8"?>
 <spinwavegenie xmlns="SpinWaveGenieSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="SpinWaveGenieSchema SpinWaveGenieSchema.xsd ">
   <cell>
     <latticevectors>
@@ -142,7 +142,7 @@
   	<Exchange>
         <group>
             <name>Jaa</name>
-  			<value>-0.2</value>
+  			<value>-0.274676</value>
   			<mindist>3.65</mindist>
   			<maxdist>3.7</maxdist>
   			<pairs>
@@ -154,7 +154,7 @@
   		</group>
         <group>
             <name>Jab</name>
-            <value>-2.0</value>
+            <value>-1.79036</value>
             <mindist>3.48</mindist>
             <maxdist>3.57</maxdist>
             <pairs>
@@ -194,7 +194,7 @@
         </group>
         <group>
             <name>Jbb</name>
-            <value>-10.0</value>
+            <value>-10.5299</value>
             <mindist>2.975</mindist>
             <maxdist>3.06</maxdist>
             <pairs>
@@ -210,7 +210,7 @@
         </group>
         <group>
             <name>Jbbp</name>
-            <value>2.0</value>
+            <value>3.26891</value>
             <mindist>2.975</mindist>
             <maxdist>3.06</maxdist>
             <pairs>
@@ -236,7 +236,7 @@
   	<Anisotropy>
   		<group>
   			<name>Daz</name>
-  			<value>0.8</value>
+  			<value>0.628353</value>
   			<direction>
   				<x>0.0</x>
   				<y>0.0</y>
@@ -249,7 +249,7 @@
   		</group>
   		<group>
   		  	<name>Dbx</name>
-  			<value>-6.351</value>
+  			<value>-5.13811</value>
   			<direction>
   				<x>1.0</x>
   				<y>0.0</y>
@@ -261,7 +261,7 @@
   		</group>
         <group>
   		  	<name>Dbmx</name>
-  			<value>-6.351</value>
+  			<value>-5.13811</value>
   			<direction>
   				<x>-1.0</x>
   				<y>0.0</y>
@@ -273,7 +273,7 @@
   		</group>
   		<group>
   		  	<name>Dby</name>
-  			<value>-6.351</value>
+  			<value>-5.13811</value>
   			<direction>
   				<x>0.0</x>
   				<y>1.0</y>
@@ -285,7 +285,7 @@
   		</group>
   		<group>
   		  	<name>Dbmy</name>
-  			<value>-6.351</value>
+  			<value>-5.13811</value>
   			<direction>
   				<x>0.0</x>
   				<y>-1.0</y>

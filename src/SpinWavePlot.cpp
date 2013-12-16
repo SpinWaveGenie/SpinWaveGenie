@@ -83,8 +83,8 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
       for(size_t k=0;k!=frequencies.size();k++)
       {
         //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-        long min_bin = (long) (frequencies[k]+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-        long max_bin = (long) (frequencies[k]+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long min_bin = (frequencies[k]+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long max_bin = (frequencies[k]+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
         
         if (min_bin < 0)
             min_bin = 0;
@@ -194,21 +194,44 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     vector<double> frequencies = SW.Get_Frequencies();
     vector<double> intensities = SW.Get_Intensities();
     
-    double a = -4.0*log(2)/pow(fwhm,2);
+    double ma = -4.0*log(2.0)/pow(fwhm,2);
+    double factor = 2.0*sqrt(log(2.0))/(fwhm*sqrt(M_PI));
     
+    double constant = log(tol/factor);
+    double minmax = sqrt(constant/ma);
+    
+    //cout << minmax << endl;
     for(size_t k=0;k!=frequencies.size();k++)
     {
-        for(int i=0;i!=EnergyPoints;i++)
+        //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
+        long min_bin = (frequencies[k]-minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
+        //long avg_bin = (frequencies[k] - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long max_bin = (frequencies[k]+minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
+        
+        if (min_bin < 0)
+          min_bin = 0;
+        else if (min_bin > EnergyPoints)
+          min_bin = EnergyPoints;
+        
+        if (max_bin < 0)
+          max_bin = 0;
+        else if (max_bin > EnergyPoints)
+          max_bin = EnergyPoints;
+        
+        //cout << min_bin << " " << avg_bin << " " << max_bin << endl;
+        for(int i=min_bin;i<=max_bin;i++)
         {
             double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-            fval[i] += intensities[k]*exp(a*pow(frequencies[k]-energy,2));
+            fval[i] += intensities[k]*exp(ma*pow(frequencies[k]-energy,2));
         }
+        
     }
     
-    double tmp = 2*sqrt(log(2))/(fwhm*sqrt(M_PI));
+    
+    
     for(int i=0;i!=EnergyPoints;i++)
     {
-        fval[i] *= tmp;
+        fval[i] *= factor;
     }
     
     //cout << endl;

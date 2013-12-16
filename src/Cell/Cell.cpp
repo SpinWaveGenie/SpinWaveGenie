@@ -24,6 +24,8 @@ void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double
     basisVectors << a,0.0,0.0,
                     b*cos(gamma),b*sin(gamma),0.0,
                     ci,cj,ck;
+    
+    //cout << "basis vectors equal" <<basisVectors << endl;
     reciprocalVectors = 2.0*M_PI*basisVectors.inverse();
 }
 

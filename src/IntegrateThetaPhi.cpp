@@ -26,23 +26,27 @@ IntegrateThetaPhi::IntegrateThetaPhi(EnergyResolutionFunction resFunction, doubl
 int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)
 {
     Vector3 tmp,k;
-    double kx,ky,kz;
     double theta = x[0];
     double phi = x[1];
+    
+    //cout << "r= " << r << endl;
+    //cout << "theta= " << theta << endl;
+    //cout << "phi= " << phi << endl;
     
     tmp[0] = r*sin(theta)*cos(phi);
     tmp[1] = r*sin(theta)*sin(phi);
     tmp[2] = r*cos(theta);
     
     k = tmp.transpose()*basisVectors.inverse();
-    
+    //cout << tmp.transpose() << endl;
     //cout << k.transpose() << endl;
     
     vector<double> val = resolutionFunction.getCut(k[0],k[1],k[2]);
     
+    double factor = sin(theta)/(4.0*M_PI);
     for(int i=0;i!=EnergyPoints;i++)
     {
-        retval[i] = val[i]/volume;
+        retval[i] = val[i]*factor;
         //double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
         //cout << energy << " " << val[i] << " ";
     }
@@ -65,7 +69,10 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
     Vector3 dispRLU(kx,ky,kz);
     Vector3 dispAng = dispRLU.transpose()*basisVectors;
     r = dispAng.transpose().norm();
-    volume = 4.0*M_PI*r*r;
+    
+    //cout << "dispRLU= " << dispRLU.transpose() << endl;
+    //cout << "basisVectors= " <<basisVectors << endl;
+    //cout << "dispAng = " << dispAng.transpose() << endl;
     
     vector<double> fval(EnergyPoints);
     vector<double> err(EnergyPoints);

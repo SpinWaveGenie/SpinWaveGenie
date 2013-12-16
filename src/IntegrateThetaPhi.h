@@ -23,7 +23,7 @@ class IntegrateThetaPhi : SpinWavePlot {
     double MinimumEnergy,MaximumEnergy;
     double r;
     unsigned EnergyPoints;
-    double tol,volume;
+    double tol;
     EnergyResolutionFunction resolutionFunction;
     Matrix3 basisVectors;
 };

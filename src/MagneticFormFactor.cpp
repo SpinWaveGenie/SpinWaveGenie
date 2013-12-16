@@ -131,7 +131,7 @@ void MagneticFormFactor::setType(std::string type)
 {
     if ( coefficients.find(type) == coefficients.end() )
     {
-        F = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+        F = {0.0,0.0,0.0,0.0,0.0,0.0,1.0};
     }
     else
     {

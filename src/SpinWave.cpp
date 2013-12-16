@@ -140,7 +140,7 @@ void SpinWave::Calc_Eigenvalues()
     */
 
     //cout << "LN= " << endl;
-    //cout << LN.norm() << endl;
+    //cout << LN << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)

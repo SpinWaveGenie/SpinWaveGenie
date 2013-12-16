@@ -22,7 +22,7 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_111.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_JunHee_2.xml");
     SW_Builder builder = four_sl.get_builder();
         
     //cout << check << endl;
@@ -70,14 +70,14 @@ int main(int argc, char * argv[])
         test.createMatrix(x,y,z);
         test.Calc();
         vector<double> frequencies = test.Get_Frequencies();
-        sort(frequencies.begin(),frequencies.end());
-        //vector<double> intensities = test.Get_Intensities();
+        //sort(frequencies.begin(),frequencies.end());
+        vector<double> intensities = test.Get_Intensities();
         //cout << "Freq.  Int." << endl;
-        //vector<double>::iterator it2 = intensities.begin();
+        vector<double>::iterator it2 = intensities.begin();
         for(vector<double>::iterator it = frequencies.begin();it!=frequencies.end();it++)
         {
-            cout << (*it) << "  ";// << (*it2) ;//<< endl;
-            //it2++;
+            cout << (*it) << "  " << (*it2) << " " ;//<< endl;
+            it2++;
         }
         cout << endl;
     }
