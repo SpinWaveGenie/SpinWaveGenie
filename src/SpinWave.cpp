@@ -82,7 +82,6 @@ void SpinWave::Clear_Matrix()
 {
     LN.setZero();
     VI.clear();
-    SVI.clear();
 }
 
 void SpinWave::Set_Kpoint(double KX, double KY, double KZ)
@@ -365,22 +364,24 @@ void SpinWave::Calc_Intensities()
     SZZ = Intensities.col(2).real();
     
     VI.reserve(M);
-    SVI.reserve(M);
     for (int i=0;i<M;i++)
     {
-        VI.push_back(abs(WW[i+M]));
+        point pt;
+        pt.frequency = abs(WW[i+M]);
         //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
-        SVI.push_back(SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2)));
+        pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
+        VI.push_back(pt);
     }
+    sort(VI.begin(),VI.end());
     //WP = WW.segment(M,M).array().abs();
     //cout << "WP= " << WP << endl;
 }
 
-bool evalues_equal(double a, double b)
+bool evalues_equal(const point& a, const point& b)
 {
     // remove eigenvalues that are equal
     double EPS = 1.0e-5;
-    return fabs(a-b) < EPS;
+    return abs(a.frequency-b.frequency) < EPS;
 }
 
 void SpinWave::Unique_Solutions()
@@ -389,10 +390,9 @@ void SpinWave::Unique_Solutions()
     int VP_pos;
     vector<double>::iterator last;
     vector<double>::iterator uniq;
-    vector<double> VI_unique,SVI_unique;
+    vector<point> VI_unique;
     // Find unique eigenvalues
     VI_unique = VI;
-    
     VI_unique.erase(unique(VI_unique.begin(),VI_unique.end(),evalues_equal),VI_unique.end());
     
     NU = (int)VI_unique.size();
@@ -400,7 +400,7 @@ void SpinWave::Unique_Solutions()
     
     for (int i=0;i<NU;i++)
     {
-        SVI_unique.push_back(0.0);
+        VI_unique[i].intensity = 0.0;
     }
     
     for (int i=0;i<M;i++)
@@ -408,10 +408,10 @@ void SpinWave::Unique_Solutions()
         VP_pos = NU; //set position to a nonsense value
         for (int j=0;j<NU;j++)
         {
-            if (abs(VI[i] - VI_unique[j]) < EPS)
+            if (abs(VI[i].frequency - VI_unique[j].frequency) < EPS)
             {
                 VP_pos = j;
-                SVI_unique[j] += SVI[i];
+                VI_unique[j].intensity += VI[i].intensity;
                 break;
             }
         }
@@ -420,7 +420,6 @@ void SpinWave::Unique_Solutions()
     }
     
     VI = VI_unique;
-    SVI = SVI_unique;
     
     //for (int i=0;i<NU;i++)
     //    cout << VP(i) << "\t" << TPM(i) << "\t" << TMP(i) << "\t" << TZZ(i) << endl;
@@ -431,23 +430,21 @@ void SpinWave::Unique_Solutions()
 
 void SpinWave::Signif_Solutions()
 {
-    double ETS = 1.0e-5;
-    vector<double> VI_signif,SVI_signif;
+    double ETS = 0.001;
+    vector<point> VI_signif;
     IM = 0; MI = 0;
     //VI.resize(0);
     //SVI.resize(0);
     
-    for (int k=0;k<NU;k++)
+    for (int k=0;k!=VI.size();k++)
     {
-        if (SVI[k] > ETS )
+        if (VI[k].intensity > ETS )
         {
             VI_signif.push_back(VI[k]);
-            SVI_signif.push_back(SVI[k]);
         }
     }
     
     VI = VI_signif;
-    SVI = SVI_signif;
     
     //SVI.resize(MI);
     //cout << "Numerical Result" << endl;
@@ -466,12 +463,8 @@ void SpinWave::Calc()
     //this->Signif_Solutions();
 }
 
-vector<double> SpinWave::Get_Frequencies()
+vector<point> SpinWave::getPoints()
 {
     return VI;
 }
 
-vector<double> SpinWave::Get_Intensities()
-{
-    return SVI;
-}

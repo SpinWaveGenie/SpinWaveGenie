@@ -57,7 +57,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
 
     double maximum = 1.0;
-    double fraction = 1.0e-3;
+    double fraction = 1.0e-5;
     double minEnergy,maxEnergy;
     
     double d = log(maximum/fraction);
@@ -66,8 +66,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     {
     
       SW.Calc();
-      vector<double> frequencies = SW.Get_Frequencies();
-      vector<double> intensities = SW.Get_Intensities();
+      vector<point> points = SW.getPoints();
     
       double firstSolution = (-b*u + sqrt((b*b - a*c)*u*u +c*d))/c;
       double secondSolution = (a*u*u - d)/(c*firstSolution);
@@ -80,11 +79,11 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     
       //cout << minEnergy << " " << maxEnergy << endl;
     
-      for(size_t k=0;k!=frequencies.size();k++)
+      for(size_t k=0;k!=points.size();k++)
       {
         //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-        long min_bin = (frequencies[k]+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-        long max_bin = (frequencies[k]+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long min_bin = (points[k].frequency+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        long max_bin = (points[k].frequency+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
         
         if (min_bin < 0)
             min_bin = 0;
@@ -100,7 +99,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         for(int i=min_bin;i!=max_bin;i++)
         {
           double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-          fval[i] += intensities[k]*exp(-1.0*(c*pow(frequencies[k]-energy,2)+2.0*b*(frequencies[k]-energy)*u+a*pow(u,2)));
+          fval[i] += points[k].intensity*exp(-1.0*(c*pow(points[k].frequency-energy,2)+2.0*b*(points[k].frequency-energy)*u+a*pow(u,2)));
         }
       }
     
@@ -191,8 +190,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     
     SW.createMatrix(kx,ky,kz);
     SW.Calc();
-    vector<double> frequencies = SW.Get_Frequencies();
-    vector<double> intensities = SW.Get_Intensities();
+    vector<point> points = SW.getPoints();
     
     double ma = -4.0*log(2.0)/pow(fwhm,2);
     double factor = 2.0*sqrt(log(2.0))/(fwhm*sqrt(M_PI));
@@ -201,12 +199,12 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     double minmax = sqrt(constant/ma);
     
     //cout << minmax << endl;
-    for(size_t k=0;k!=frequencies.size();k++)
+    for(size_t k=0;k!=points.size();k++)
     {
         //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-        long min_bin = (frequencies[k]-minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
+        long min_bin = (points[k].frequency-minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
         //long avg_bin = (frequencies[k] - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-        long max_bin = (frequencies[k]+minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
+        long max_bin = (points[k].frequency+minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
         
         if (min_bin < 0)
           min_bin = 0;
@@ -219,10 +217,10 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
           max_bin = EnergyPoints;
         
         //cout << min_bin << " " << avg_bin << " " << max_bin << endl;
-        for(int i=min_bin;i<=max_bin;i++)
+        for(int i=0;i<=EnergyPoints;i++)
         {
             double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-            fval[i] += intensities[k]*exp(ma*pow(frequencies[k]-energy,2));
+            fval[i] += points[k].intensity*exp(ma*pow(points[k].frequency-energy,2));
         }
         
     }
@@ -365,7 +363,6 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     return fval;
     
 }
-
 
 
 /*NoResolutionFunction::NoResolutionFunction()

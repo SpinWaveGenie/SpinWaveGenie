@@ -38,10 +38,10 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 201;
+        npoints = 801;
         pointsDone = 0;
         nextPoint = 0;
-        points = 161;
+        points = 641;
         figure.setZero(points,npoints);
         min = 0.0;
         max = 40.0;
@@ -84,13 +84,13 @@ public:
         */
         
         double x0,y0,z0,x1,y1,z1;
-        x0=0.0;x1=0.0;
-        y0=0.0;y1=0.0;
-        z0=0.0;z1=4.0;
+        x0=1.0;x1=2.0;
+        y0=3.0;y1=2.0;
+        z0=0.0;z1=0.0;
          
         OneDimGaussian resinfo;
-        resinfo.fwhm = 1.0;
-        resinfo.tol = 1.0e-1;
+        resinfo.fwhm = 1.5;
+        resinfo.tol = 1.0e-5;
         resinfo.SW = builder.Create_Element();
         
         scoped_lock.lock();
@@ -100,8 +100,8 @@ public:
         int tnpoints = npoints;
         scoped_lock.unlock();
 
-        EnergyResolutionFunction res(resinfo, tmin,tmax, tpoints);
-        IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
+        EnergyResolutionFunction tmp(resinfo, tmin,tmax, tpoints);
+        //IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
         //for(int m=i;m<tnpoints;m=m+tnproc)
         while (true)
         {
@@ -204,7 +204,7 @@ int main(int argc, char * argv[])
     }
     g.join_all();
     
-    std::ofstream file("test.txt");
+    std::ofstream file("MnV2O4_2z.txt");
     if (file.is_open())
     {
         file << tc.figure << '\n';

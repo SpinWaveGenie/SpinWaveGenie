@@ -25,6 +25,16 @@
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
 
+
+struct point
+{
+    double frequency;
+    double intensity;
+    bool operator<( const point& val ) const {
+    	return frequency < val.frequency;
+    }
+};
+
 struct results
 {
     double weight;
@@ -53,8 +63,7 @@ public:
     Eigen::VectorXcd checkFirstOrderTerms();
     void createMatrix(double KX,double KY,double KZ);
     void Calc();
-    std::vector<double> Get_Frequencies();
-    std::vector<double> Get_Intensities();
+    std::vector<point> getPoints();
 private:
     double KXP,KYP,KZP;
     Cell cell;
@@ -70,7 +79,7 @@ private:
     Eigen::VectorXd SS;
     Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
     Eigen::VectorXd WW; // want to get rid of this
-    std::vector<double> VI,SVI; 
+    std::vector<point> VI;
     Eigen::MatrixXcd XY,XIN;
     boost::ptr_vector<Interaction> interactions;
     MagneticFormFactor formFactor;
