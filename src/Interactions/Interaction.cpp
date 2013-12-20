@@ -30,7 +30,6 @@ bool Interaction::operator<(const Interaction& other) const
     }
 }
 
-
 bool Interaction::operator==(const Interaction& other) const
 {
     vector<string> sl1 = this->sublattices();

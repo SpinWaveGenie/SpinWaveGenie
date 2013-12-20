@@ -463,6 +463,17 @@ void SpinWave::Calc()
     //this->Signif_Solutions();
 }
 
+void SpinWave::updateValue(string name,double value)
+{
+    for(auto it = interactions.begin();it!=interactions.end();it++)
+    {
+        if (name.compare((*it).getName()) == 0)
+        {
+            (*it).updateValue(value);
+        }
+    }
+}
+
 vector<point> SpinWave::getPoints()
 {
     return VI;

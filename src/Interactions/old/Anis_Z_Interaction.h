@@ -1,22 +1,29 @@
+#ifndef __AnisZ_Interaction_H__
+#define __AnisZ_Interaction_H__ 1
+
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include <boost/shared_ptr.hpp>
-#include "../Cell.h"
+#include "Cell.h"
+#include "Interaction.h"
 
-struct Anis_Z_Parameters
-{
-    std::string sl_r;
-    double value;
-};
-
-class Anis_Z_Interaction
+class Anis_Z_Interaction: public Interaction
 {
 public:
-    Anis_Z_Interaction();
-    void Add_Interaction(double value, std::string sl_r);
-    void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN);
+    Anis_Z_Interaction(double value_in, std::string sl_r_in);
+    void Update_Interaction(double value_in, std::string sl_r_in);
+    void calcConstantValues(Cell& cell);
+    void calcChangingValues(Eigen::Vector3d K);
+    void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
+    void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
+    std::vector<std::string> sublattices() const;
+    virtual Interaction* do_clone() const;
+    virtual ~Anis_Z_Interaction(){};
 private:
-    std::vector<Anis_Z_Parameters> Anis_Z_array;
+    std::string sl_r;
+    double value;
+    int r,M;
+    std::complex<double> LNrr,LNrrM,LNrMr,LNrMrM;
 };
 
+#endif

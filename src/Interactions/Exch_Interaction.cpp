@@ -16,7 +16,6 @@ Interaction* Exch_Interaction::do_clone() const
     return new Exch_Interaction(*this);
 }
 
-
 void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     value = value_in;
@@ -24,6 +23,16 @@ void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string
     sl_s = sl_s_in;
     min = min_in;
     max = max_in;
+}
+
+string Exch_Interaction::getName()
+{
+    return name;
+}
+
+void Exch_Interaction::updateValue(double value_in)
+{
+    value = value_in;
 }
 
 vector<string> Exch_Interaction::sublattices() const

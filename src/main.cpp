@@ -32,15 +32,15 @@ double fitting(SpinWave &SW, double KX, double KY, double KZ, double freq, long 
     vector<point> points3 = SW.getPoints();
     
     double average = (points1[pos].frequency*points1[pos].intensity + points2[pos].frequency*points2[pos].intensity  + points3[pos].frequency*points3[pos].intensity);
-    average = average/(points1[pos].intensity+points2[pos].intensity+points2[pos].intensity);
-    diff_sq += pow((points1[pos].frequency-freq)/error,2);
+    average = average/(points1[pos].intensity+points2[pos].intensity+points3[pos].intensity);
+    diff_sq += pow((average-freq)/error,2);
     
-    double lower_limit = (points1[2].frequency*points1[2].intensity + points2[2].frequency*points2[2].intensity  + points3[2].frequency*points3[2].intensity)/(points1[2].intensity+points2[2].intensity+points2[2].intensity);
+    /*double lower_limit = (points1[2].frequency*points1[2].intensity + points2[2].frequency*points2[2].intensity  + points3[2].frequency*points3[2].intensity)/(points1[2].intensity+points2[2].intensity+points3[2].intensity);
     if (lower_limit < 15.0)
     {
         cout << "missing spin gap" << endl;
         diff_sq += pow(lower_limit-15.0,2);
-    }
+    }*/
     
     return diff_sq;
 }
@@ -59,8 +59,8 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     }
     cout << endl;
     
-    double SA = 2.5;
-    double SB = 1.0;
+    double SA = 1.94;
+    double SB = 0.9;
     double theta = M_PI - 35.0*M_PI/180.0;
     
     Cell cell;
@@ -187,29 +187,61 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     
     double diff_sq = 0.0;
     
-    diff_sq += fitting(SW,2.0,0.0,0.0959666,9.48718,1,1.0);
-    diff_sq += fitting(SW,2.0,0.0,0.292072,9.61539,1,1.0);
-    diff_sq += fitting(SW,2.0,0.0,0.504868,9.61539,1,1.0);
-    diff_sq += fitting(SW,2.0,0.0,0.705146,9.61539,1,1.0);
-    diff_sq += fitting(SW,2.0,0.0,0.897079,9.42308,1,1.0);
-    diff_sq += fitting(SW,2.0,0.0,1.08901,8.97436,1,1.0);
-    diff_sq += fitting(SW,2.0,0.0,1.29346,8.07692,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,1.48957,6.28205,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,1.68567,4.35897,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,1.84840,2.56410,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,1.95271,1.60256,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,2.05702,1.85897,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,2.15716,2.50000,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,2.31572,4.10256,0,1.0);
-    diff_sq += fitting(SW,2.0,0.0,2.49513,6.08974,0,1.0);
+    /*diff_sq += fitting(SW,2.0,0.0,0.0898357,9.67548,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,0.300308,9.59135,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,0.490246,9.59135,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,0.703285,9.63341,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,0.898357,9.54928,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,1.10370,8.96034,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,1.29877,7.86659,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,1.48871,6.35216,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,1.68121,4.33293,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,1.85062,2.52404,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,1.94559,1.93510,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,2.14836,2.52404,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,2.31519,4.16466,0,1.0);
+    diff_sq += fitting(SW,2.0,0.0,2.49743,6.05769,0,1.0);
     
-    diff_sq += fitting(SW,4.0-1.09151,0.0,1.09151,9.48091,0,1.0);
-    diff_sq += fitting(SW,4.0-1.28952,0.0,1.28952,9.02148,0,1.0);
-    diff_sq += fitting(SW,4.0-1.50083,0.0,1.50083,7.93556,0,1.0);
-    diff_sq += fitting(SW,4.0-1.64892,0.0,1.64892,5.63842,0,1.0);
-    diff_sq += fitting(SW,4.0-1.74542,0.0,1.74542,4.21838,0,1.0);
-    diff_sq += fitting(SW,4.0-1.84859,0.0,1.84859,3.59189,0,1.0);
-    diff_sq += fitting(SW,4.0-1.99334,0.0,1.99334,1.87948,0,1.0);
+    diff_sq += fitting(SW,4.0-1.09151,0.0,1.09151,9.16866,0,1.0);
+    diff_sq += fitting(SW,4.0-1.29285,0.0,1.29285,7.78708,0,1.0);
+    diff_sq += fitting(SW,4.0-1.49251,0.0,1.49251,6.57297,0,1.0);
+    diff_sq += fitting(SW,4.0-1.65225,0.0,1.65225,5.35885,0,1.0);
+    diff_sq += fitting(SW,4.0-1.75541,0.0,1.75541,4.31220,0,1.0);
+    diff_sq += fitting(SW,4.0-1.84859,0.0,1.84859,3.01435,0,1.0);
+    diff_sq += fitting(SW,4.0-1.94842,0.0,1.94842,1.92584,0,1.0);
+    */
+    
+    diff_sq += fitting(SW,0.9698,0.9698,0.0,10.06597219,0,1.0);
+    diff_sq += fitting(SW,1.04226464286,1.04226464286,0.0,9.99065186,0,1.0);
+    diff_sq += fitting(SW,1.11592928571,1.11592928571,0.0,9.8570631 ,0,1.0);
+    diff_sq += fitting(SW,1.18959392857,1.18959392857,0.0,9.9547905,0,1.0);
+    diff_sq += fitting(SW,1.26325857143,1.26325857143,0.0,9.81130869,0,1.0);
+    diff_sq += fitting(SW,1.33692321429,1.33692321429,0.0,9.48279593,0,1.0);
+    diff_sq += fitting(SW,1.4842525,1.4842525,0.0,8.83547847 ,0,1.0);
+    diff_sq += fitting(SW,1.63158178571,1.63158178571,0.0,8.71456678,0,1.0);
+    diff_sq += fitting(SW,1.70524642857,1.70524642857,0.0,8.40018172 ,0,1.0);
+    diff_sq += fitting(SW,1.77891107143,1.77891107143,0.0,7.56902124,0,1.0);
+    diff_sq += fitting(SW,1.85257571429,1.85257571429,0.0,5.97786782,0,1.0);
+    diff_sq += fitting(SW,1.92624035714,1.92624035714,0.0,4.37164445,0,1.0);
+    //diff_sq += fitting(SW,1.999905,1.999905 ,0.0,2.0,0,1.0);
+    
+    
+    /*diff_sq += fitting(SW,0.0,0.0,4.00,2.0,0,1.0);
+    diff_sq += fitting(SW,0.0,0.0,3.75,5.7,0,1.0);
+    diff_sq += fitting(SW,0.0,0.0,3.50,9.23,0,1.0);
+    diff_sq += fitting(SW,0.0,0.0,3.25,9.92,0,1.0);
+    diff_sq += fitting(SW,0.0,0.0,3.00,10.66,0,1.0);
+
+    diff_sq += fitting(SW,2.00,2.00,0.0,2.0,0,0.5);
+    diff_sq += fitting(SW,1.75,1.75,0.0,6.96,0,1.0);
+    diff_sq += fitting(SW,1.50,1.50,0.0,8.12,0,1.0);
+    diff_sq += fitting(SW,1.25,1.25,0.0,9.73,0,1.0);
+    diff_sq += fitting(SW,1.00,1.00,0.0,10.49,0,1.0);
+    */
+    //diff_sq += fitting(SW,1.85,1.85,-1.85,4.87,0,1.0);
+    //diff_sq += fitting(SW,1.75,1.75,-1.75,7.54,0,1.0);
+    //diff_sq += fitting(SW,1.50,1.50,-1.50,8.3,0,1.0);
+    //diff_sq += fitting(SW,1.00,1.00,-1.00,8.33,0,1.0);
     
     cout << "diff_sq= " << diff_sq << endl;
     return diff_sq;
@@ -223,7 +255,7 @@ int main()
     ub[0] =  1.0;
     ub[1] =  0.0;
     ub[2] =  10.0;
-    ub[3] =  2.0;
+    ub[3] =  1.0;
     ub[4] = 10.0;
     ub[5] = 0.0;
     opt.set_upper_bounds(ub);
@@ -231,20 +263,20 @@ int main()
     lb[0] = -1.0;
     lb[1] = -20.0;
     lb[2] =  0.0;
-    lb[3] = -2.0;
+    lb[3] = -1.0;
     lb[4] = -10.0;
-    lb[5] = -10.0;
+    lb[5] = -7.0;
     opt.set_lower_bounds(lb);
     opt.set_min_objective(myfunc, NULL);
-    opt.set_xtol_rel(1.0e-5);
+    opt.set_xtol_rel(1.0e-4);
     std::vector<double> x(6);
     
-    x[0] = -0.0366266;
-    x[1] = -9.25592;
-    x[2] = 3.07237;
-    x[3] = 0.9441521;
-    x[4] = -3.66346;
-    x[5] = -7.64194;
+    x[0] = 0.1;
+    x[1] = -9.80542;
+    x[2] = 6.56457;
+    x[3] = 0.468028;
+    x[4] = 0.07;
+    x[5] = -6.62711;
  
     double minf = 0.0;
     
@@ -259,20 +291,21 @@ int main()
         cout << (*it) << " ";
     cout << endl;
     cout << "chi_squared = " << minf << endl;
-    cout << "reduced chi_squared = " << minf/1.0 << endl;
+    cout << "reduced chi_squared = " << minf/21.0 << endl;
     
     /*vector<double> gradient;
     
-    for (long i = 0; i!=x.size();i++)
+
+    //cout << endl;
+    long i = 4;
+    vector<double> xtemp = x;
+    for (int j=-20;j!=21;j++)
     {
-        cout << endl;
-        cout << "x[" << i << "] = " << x[i] << endl;
-        vector<double> xtemp = x;
-        for (int j=-10;j!=11;j++)
-        {
-            xtemp[i] = x[i] + x[i]*(double)j/10.0;
-            cout << xtemp[i] << "  " << (myfunc_4sl(xtemp,gradient,NULL) - minf)/1.0 - 1.0 << endl;
-        }
+        xtemp[i] = x[i] + x[i]*(double)j/0.2;
+        double diffsq = myfunc(xtemp,gradient,NULL);
+        cout << "x[" << i << "] = " << xtemp[i];
+        cout << ", reduced chi^2= " << (diffsq - minf)/21.0 -0.0 << endl;
     }*/
+
     return 0;
 }

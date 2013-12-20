@@ -20,6 +20,8 @@ public:
     //!
     void UpdateInteraction(double value_in,Vector3 direction, std::string sl_r_in);
     //!
+    void updateValue(double value_in);
+    std::string getName();
     void calcConstantValues(Cell& cell);
     void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
     void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);

@@ -1,9 +1,6 @@
 #include <functional>
 #include "Initializer.h"
 #include "Exch_Interaction.h"
-#include "Anis_Z_Interaction.h"
-#include "Anis_Y_Interaction.h"
-#include "Anis_X_Interaction.h"
 #include "AnisotropyInteraction.h"
 #include "DM_Y_Interaction.h"
 #include "DM_Z_Interaction.h"

@@ -33,6 +33,16 @@ vector<string> DM_Z_Interaction::sublattices() const
     return sl;
 }
 
+string DM_Z_Interaction::getName()
+{
+    return name;
+}
+
+void DM_Z_Interaction::updateValue(double value_in)
+{
+    value = value_in;
+}
+
 void DM_Z_Interaction::calcConstantValues(Cell& cell)
 {
     r = cell.getPosition(sl_r);

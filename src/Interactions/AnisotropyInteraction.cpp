@@ -27,6 +27,16 @@ void AnisotropyInteraction::UpdateInteraction(double value_in, Vector3 unitVecto
     sl_r = sl_r_in;
 }
 
+string AnisotropyInteraction::getName()
+{
+    return name;
+}
+
+void AnisotropyInteraction::updateValue(double value_in)
+{
+    value = value_in;
+}
+
 vector<string> AnisotropyInteraction::sublattices() const
 {
     vector<string> sl;

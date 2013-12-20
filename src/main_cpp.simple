@@ -27,7 +27,7 @@ int main(int argc, char * argv[])
         
     //cout << check << endl;
     
-    Cell cell = four_sl.get_cell();
+    /*Cell cell = four_sl.get_cell();
     
     string sl_r = "Mn0";
     string sl_s = "Mn1";
@@ -42,14 +42,32 @@ int main(int argc, char * argv[])
     for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
     {
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
-    }
+    }*/
 
-    int npoints = 101;
+
+    int npoints = 11;
     double x,y,z,x0,y0,z0,x1,y1,z1;
     x0=1.0;x1=3.0;
-    y0=0.0;y1=0.0;
+    y0=1.0;y1=3.0;
     z0=0.0;z1=0.0;
     SpinWave test = builder.Create_Element();
+    
+    double SA = 2.3;
+    double SB = 0.9;
+    double theta = M_PI - 35.0*M_PI/180.0;
+    double DB = -6.62711;
+    double JBB = -9.80542;
+    double DBz = 0.073016;
+    
+
+    for(int dbi = -100; dbi != 101 ; dbi++)
+    {
+    double JBBP = 6.56457*(1.0+(double)dbi/50.0);
+    double JAB = SB*((6.0*JBB+6.0*JBBP+DB-3.0*DBz)*cos(theta)*sin(theta) -sqrt(2.0)*DB*(2.0*pow(cos(theta),2)-1.0))/(-9.0*SA*sin(theta));
+    cout << "JBBP= " << JBBP << " " << " JAB= " << JAB << endl;
+    test.updateValue("Jbbp",JBBP);
+    test.updateValue("Jab",JAB);
+    
     for(int m=0;m<npoints;m++)
     {
         //sleep(1);
@@ -76,6 +94,7 @@ int main(int argc, char * argv[])
             cout << (*it).frequency << "  " << (*it).intensity*10.0 << " " ;//<< endl;
         }
         cout << endl;
+    }
     }
     return 0;
 }

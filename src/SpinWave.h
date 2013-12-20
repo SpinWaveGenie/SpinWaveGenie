@@ -59,6 +59,7 @@ public:
     SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);
     //!
     void Set_Kpoint(double KX, double KY, double KZ);
+    void updateValue(std::string name, double value);
     void Clear_Matrix();
     Eigen::VectorXcd checkFirstOrderTerms();
     void createMatrix(double KX,double KY,double KZ);

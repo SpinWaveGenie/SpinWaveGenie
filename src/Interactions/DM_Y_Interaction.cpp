@@ -25,6 +25,16 @@ void DM_Y_Interaction::Update_Interaction(double value_in, string sl_r_in,string
     max = max_in;
 }
 
+string DM_Y_Interaction::getName()
+{
+    return name;
+}
+
+void DM_Y_Interaction::updateValue(double value_in)
+{
+    value = value_in;
+}
+
 vector<string> DM_Y_Interaction::sublattices() const
 {
     vector<string> sl;

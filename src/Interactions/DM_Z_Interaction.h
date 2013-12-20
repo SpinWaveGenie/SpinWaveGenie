@@ -14,6 +14,8 @@ class DM_Z_Interaction: public Interaction
 public:
     DM_Z_Interaction(std::string name, double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void Update_Interaction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
+    void updateValue(double value_in);
+    std::string getName();
     void calcConstantValues(Cell& cell);
     void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
     void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
