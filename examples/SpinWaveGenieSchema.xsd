@@ -43,6 +43,7 @@
 
     <xsd:complexType name="ExchangeType">
     	<xsd:all>
+    		<xsd:element name="name" type="xsd:string"></xsd:element>
     		<xsd:element name="value" type="xsd:double" maxOccurs="1"
     			minOccurs="1">
     		</xsd:element>
@@ -55,7 +56,8 @@
     		<xsd:element name="pairs" maxOccurs="1" minOccurs="1">
     			<xsd:complexType>
     				<xsd:sequence>
-    					<xsd:element name="pair" type="swg:PairType" maxOccurs="unbounded" minOccurs="1">
+    					<xsd:element name="pair" type="swg:PairType"
+    						maxOccurs="unbounded" minOccurs="1">
     					</xsd:element>
     				</xsd:sequence>
     			</xsd:complexType>
@@ -65,10 +67,13 @@
     
     <xsd:complexType name="AnisotropyType">
     	<xsd:all>
+    		<xsd:element name="name" type="xsd:string"></xsd:element>
     		<xsd:element name="value" type="xsd:double" maxOccurs="1"
     			minOccurs="1">
     		</xsd:element>
-    		<xsd:element name="direction" type="swg:PositionType" maxOccurs="1" minOccurs="1"></xsd:element>
+    		<xsd:element name="direction" type="swg:PositionType"
+    			maxOccurs="1" minOccurs="1">
+    		</xsd:element>
     		<xsd:element name="sublattices">
     			<xsd:complexType>
     				<xsd:sequence>
@@ -163,10 +168,13 @@
     <xsd:element name="spinwavegenie">
     	<xsd:complexType>
     		<xsd:all>
-    			<xsd:element name="cell" type="swg:CellType" maxOccurs="1" minOccurs="1"></xsd:element>
+    			<xsd:element name="cell" type="swg:CellType"
+    				maxOccurs="1" minOccurs="1">
+    			</xsd:element>
     			<xsd:element name="interactions"
     				type="swg:InteractionsType" maxOccurs="1" minOccurs="1">
     			</xsd:element>
+    			<xsd:element name="dispersion" type="swg:DispersionType" maxOccurs="1" minOccurs="0"></xsd:element>
     		</xsd:all>
     	</xsd:complexType></xsd:element>
 
@@ -187,5 +195,28 @@
     	<xsd:sequence>
     		<xsd:element name="group" type="swg:ExchangeType" maxOccurs="unbounded" minOccurs="1"></xsd:element>
     	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DispersionType">
+    	<xsd:all>
+    		<xsd:element name="filename" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+    		<xsd:element name="filetype" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+    		<xsd:element name="numberpoints" type="xsd:positiveInteger"
+    			maxOccurs="1" minOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="lines" type="swg:linesGroupType"></xsd:element>
+    	</xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="linesGroupType">
+    	<xsd:sequence>
+    		<xsd:element name="group" type="swg:LinesType"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LinesType">
+    	<xsd:all>
+    		<xsd:element name="firstpoint" type="swg:PositionType"></xsd:element>
+    		<xsd:element name="lastpoint" type="swg:PositionType"></xsd:element>
+    	</xsd:all>
     </xsd:complexType>
 </xsd:schema>
