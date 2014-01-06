@@ -93,16 +93,15 @@ Matrix3& Sublattice::getInverseMatrix()
 
 void Sublattice::addAtom(double x, double y, double z)
 {
-    Vector3 pos(x,y,z);
-    position.push_back(pos);
+    positions.insert(x,y,z);
 }
 
 Sublattice::Iterator Sublattice::begin()
 {
-    return Iterator(position.begin());
+    return Iterator(positions.begin());
 }
 
 Sublattice::Iterator Sublattice::end()
 {
-    return Iterator(position.end());
+    return Iterator(positions.end());
 }

@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 #include "Matrices.h"
-
+#include "../UniquePositions.h"
 
 //! Describes a sublattice in the unit cell.
 /*!
@@ -58,7 +58,7 @@ public:
     //! \param y y component of atomic position in Angstroms
     //! \param z z component of atomic position in Angstroms
     void addAtom(double x, double y, double z);
-    typedef Vector3Iterator Iterator;
+    typedef UniquePositions::Iterator Iterator;
     //! returns iterator to first atomic position;
     Iterator begin();
     //! returns iterator to final atomic position;
@@ -72,6 +72,6 @@ private:
     //std::vector<double> angles; //!< spin, theta, phi
     Matrix3 rotationMatrix, //!< rotation matrix describing moment along z
     inverseMatrix; //!< inverse for rotation matrix
-    std::vector<Vector3> position; //!< std::vector storing atomic positions.
+    UniquePositions positions; //!< std::vector storing atomic positions.
 };
 #endif // __Sublattice_H__

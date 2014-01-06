@@ -76,9 +76,7 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     //cout << basisVectors << endl;
     
     Vector3 pos = basisVectors*scaled_position;
-    
-    //cout << "unscaled= " << unscaled_position.transpose() << endl;
-    
+        
     sublatticeInfo[name].addAtom(pos[0], pos[1], pos[2]);
 }
 

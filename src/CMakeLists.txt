@@ -12,4 +12,4 @@ file(GLOB INTERACTIONS_SRCS Interactions/*.cpp Interactions/*.h)
 set(ALL_SRCS ${CELL_SRCS} ${EXTERN_SRCS} ${SRCS} ${INTERACTIONS_SRCS}) 
 
 add_executable(spin_wave_genie ${ALL_SRCS})
-add_library(cell SHARED ${CELL_SRCS})
+#add_library(cell SHARED ${CELL_SRCS})
