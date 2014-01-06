@@ -26,11 +26,10 @@ int main(int argc, char * argv[])
     
     //Init four_sl;
     Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_cubic.xml");
-    SW_Builder builder = four_sl.get_builder();
-        
+    
     //cout << check << endl;
     
-    /*Cell cell = four_sl.get_cell();
+    Cell cell = four_sl.get_cell();
     
     string sl_r = "Mn0";
     string sl_s = "Mn1";
@@ -45,28 +44,11 @@ int main(int argc, char * argv[])
     for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
     {
         cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
-    }*/
+    }
     
+    SW_Builder builder = four_sl.get_builder();
     SpinWave test = builder.Create_Element();
     
-    double SA = 2.3;
-    double SB = 0.9;
-    double theta = M_PI - 35.0*M_PI/180.0;
-    double DB = -6.62711;
-    double JBB = -9.80542;
-    double DBz = 0.073016;
-    
-    for(int dbi = 0; dbi != 1; dbi++)
-    {
-    double JBBP = 6.56457*(1.0+(double)dbi/50.0);
-    double JAB = SB*((6.0*JBB+6.0*JBBP+DB-3.0*DBz)*cos(theta)*sin(theta) -sqrt(2.0)*DB*(2.0*pow(cos(theta),2)-1.0))/(-9.0*SA*sin(theta));
-    cout << "JBBP= " << JBBP << " " << " JAB= " << JAB << endl;
-    test.updateValue("Jbbp",JBBP);
-    test.updateValue("Jab",JAB);
-
-    std::cout << "hello world" << std::endl;
-    
-
     PointsAlongLine Line;
     Line.setFirstPoint(1.0,1.0,0.0);
     Line.setFinalPoint(3.0,3.0,0.0);
@@ -90,7 +72,6 @@ int main(int argc, char * argv[])
             cout << (*it2).frequency << "  " << (*it2).intensity*10.0 << " " ;//<< endl;
         }
         cout << endl;
-    }
     }
     return 0;
 }
