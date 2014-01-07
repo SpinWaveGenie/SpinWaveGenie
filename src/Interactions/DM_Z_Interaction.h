@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include "Cell.h"
-#include "Interaction.h"
+#include "Cell/Cell.h"
+#include "Interactions/Interaction.h"
 #include "Cell/Neighbors.h"
 
 

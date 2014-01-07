@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "SpinWave.h"
+#include "Genie/SpinWave.h"
 
 /* Abstract base class */
 // The abstract Coffee class defines the functionality of Coffee implemented by decorator

@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE SublatticeTest
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include "Cell.h"
+#include "Cell/Cell.h"
 #include <iostream>
 
 BOOST_AUTO_TEST_CASE( ConstructorsTest )

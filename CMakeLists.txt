@@ -1,6 +1,7 @@
 project(spin_wave_genie)
 
 cmake_minimum_required(VERSION 2.8)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 ENABLE_TESTING()
 

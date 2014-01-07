@@ -8,8 +8,8 @@
 #include <cmath>
 #include <functional>
 #include "SpinWavePlot.h"
-#include "SpinWave.h"
-#include "extern/cubature.h"
+#include "Genie/SpinWave.h"
+#include "External/cubature.h"
 
 using namespace std;
 

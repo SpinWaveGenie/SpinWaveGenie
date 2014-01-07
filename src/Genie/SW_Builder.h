@@ -3,8 +3,8 @@
 
 #include <string>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include "SpinWave.h"
-#include "Interaction.h"
+#include "Genie/SpinWave.h"
+#include "Interactions/Interaction.h"
 
 
 class SW_Builder

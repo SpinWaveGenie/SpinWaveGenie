@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include "Cell.h"
+#include "Cell/Cell.h"
 
 //! Base class for all classes describing magnetic interactions
 

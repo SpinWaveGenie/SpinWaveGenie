@@ -2,7 +2,7 @@
 #define __PointsAlongLine__
 
 #include <iostream>
-#include "Positions.h"
+#include "Containers/Positions.h"
 
 class PointsAlongLine
 {

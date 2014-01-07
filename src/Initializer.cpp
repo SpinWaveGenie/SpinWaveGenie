@@ -1,13 +1,13 @@
 #include <functional>
 #include "Initializer.h"
-#include "Exch_Interaction.h"
-#include "AnisotropyInteraction.h"
-#include "DM_Y_Interaction.h"
-#include "DM_Z_Interaction.h"
+#include "Interactions/Exch_Interaction.h"
+#include "Interactions/AnisotropyInteraction.h"
+#include "Interactions/DM_Y_Interaction.h"
+#include "Interactions/DM_Z_Interaction.h"
+
 
 using namespace std;
 using namespace boost;
-
 
 Init::Init(string filename)
 {
@@ -19,7 +19,7 @@ void Init::read_input(string filename)
     
     m_parser_map["cell"] = bind(&Init::parseCrystalNode, this, _1);
     m_parser_map["interactions"] = bind(&Init::parseInteractionNode, this, _1);
-    m_parser_map["kpoints"] = bind(&Init::parseKpointsNode, this, _1);
+    m_parser_map["dispersion"] = bind(&Init::parseDispersion, this, _1);
     
     pugi::xml_document doc;
     
@@ -276,38 +276,58 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
     }
 }
 
-void Init::parseKpointsNode(const pugi::xml_node &node)
+void Init::parseDispersion(const pugi::xml_node &node)
 {
-    double x,y,z,x0,y0,z0,x1,y1,z1;
-    if(strncmp(node.attribute("type").value(),"line",4) == 0)
+    
+    cout << "Dispersion:" << endl;
+    string filename = node.child_value("filename");
+    string filetype = node.child_value("filetype");
+    
+
+    
+    pugi::xml_node lines = node.child("lines");
+    for (pugi::xml_node group = lines.child("group");group; group = group.next_sibling("group"))
     {
-        double npoints = node.attribute("points").as_double();
-        istringstream parser;
-        parser.str(node.child_value());
-        while(parser.good())
-        {
-            parser >> x0 >> y0 >> z0;
-            parser >> x1 >> y1 >> z1;
-            if(parser.good())
-            {
-                for(int n=0;n!=npoints;n++)
-                {
-                    x = x0 + (x1-x0)*n/(npoints-1);
-                    y = y0 + (y1-y0)*n/(npoints-1);
-                    z = z0 + (z1-z0)*n/(npoints-1);
-                    //SpinWave* test = builder.Create_Element(x,y,z);
-                    //cout << x << " " << y << " " << z << endl;
-                    //test->Calc();
-                    //vector<double> frequencies = test->Get_Frequencies();
-                    /*cout << endl;
-                    for(int i=0;i!=frequencies.size();i++)
-                    {
-                        cout << frequencies[i] << endl;
-                    }*/
-                }
-            }
-        }
+        double x0,y0,z0,x1,y1,z1,NumberPoints;
+        string temp;
+        
+        temp = group.child("firstpoint").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        NumberPoints = lexical_cast<double>(temp);
+        
+        temp = group.child("firstpoint").child_value("x");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        x0 = lexical_cast<double>(temp);
+        
+        temp = group.child("firstpoint").child_value("y");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        y0 = lexical_cast<double>(temp);
+        
+        temp = group.child("firstpoint").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        z0 = lexical_cast<double>(temp);
+        
+        temp = group.child("lastpoint").child_value("x");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        x1 = lexical_cast<double>(temp);
+        
+        temp = group.child("lastpoint").child_value("y");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        y1 = lexical_cast<double>(temp);
+        
+        temp = group.child("lastpoint").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        z1 = lexical_cast<double>(temp);
+        
+        cout << x0 << " " << y0 << " " << z0 << " " << x1 << " " << y1 << "  " << z1 << endl;
+        
+        //PointsAlongLine Line;
+        //Line.setFirstPoint(x0,y0,z0);
+        //Line.setFinalPoint(x1,y1,z1);
+        //Line.setNumberPoints(NumberPoints);
+
     }
+
 }
 
 Cell Init::get_cell()

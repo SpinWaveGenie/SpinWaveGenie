@@ -8,7 +8,7 @@
 
 #include "IntegrateThetaPhi.h"
 #include <vector>
-#include "extern/cubature.h"
+#include "External/cubature.h"
 
 
 using namespace std;

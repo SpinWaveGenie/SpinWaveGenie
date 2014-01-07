@@ -5,8 +5,8 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <string>
-#include "Matrices.h"
-#include "../UniquePositions.h"
+#include "Containers/Matrices.h"
+#include "Containers/UniquePositions.h"
 
 //! Describes a sublattice in the unit cell.
 /*!

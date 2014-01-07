@@ -12,10 +12,11 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SpinWave.h"
+#include "Genie/SpinWave.h"
+#include "Genie/SW_Builder.h"
 #include "Initializer.h"
 #include "Cell/Neighbors.h"
-#include "Positions.h"
+#include "Containers/Positions.h"
 #include "PointsAlongLine.h"
 
 using namespace boost;
@@ -25,7 +26,7 @@ int main(int argc, char * argv[])
 {
     
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_cubic.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/SpinWaveGenie.xml");
 
     //cout << check << endl;
     
@@ -53,7 +54,7 @@ int main(int argc, char * argv[])
     PointsAlongLine Line;
     Line.setFirstPoint(1.0,1.0,0.0);
     Line.setFinalPoint(3.0,3.0,0.0);
-    Line.setNumberPoints(1000001);
+    Line.setNumberPoints(11);
     Positions KPoints = Line.getPoints();
         
     for(Positions::Iterator it = KPoints.begin(); it != KPoints.end(); it++)
@@ -63,15 +64,15 @@ int main(int argc, char * argv[])
         double z = it->get<2>();
 
         //cout << "Pos." << endl;
-        //cout << x << " " << y << " " << z << " ";// << endl;
+        cout << x << " " << y << " " << z << " ";// << endl;
         test.createMatrix(x,y,z);
         test.Calc();
         vector<point> pts = test.getPoints();
         //cout << "Freq.  Int." << endl;
-        /*for(vector<point>::iterator it2 = pts.begin();it2!=pts.end();it2++)
+        for(vector<point>::iterator it2 = pts.begin();it2!=pts.end();it2++)
         {
             cout << (*it2).frequency << "  " << (*it2).intensity*10.0 << " " ;//<< endl;
-        }*/
+        }
         cout << endl;
     }
     return 0;

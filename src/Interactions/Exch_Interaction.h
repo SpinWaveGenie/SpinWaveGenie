@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include "Cell.h"
-#include "Interaction.h"
-#include "Cell/Matrices.h"
+#include "Cell/Cell.h"
+#include "Interactions/Interaction.h"
+#include "Containers/Matrices.h"
 #include "Cell/Neighbors.h"
 
 

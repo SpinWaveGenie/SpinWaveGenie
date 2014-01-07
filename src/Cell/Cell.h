@@ -11,7 +11,7 @@
 #include <memory> 
 #include <boost/iterator/iterator_facade.hpp>
 #include "Sublattice.h"
-#include "Matrices.h"
+#include "Containers/Matrices.h"
 
 //! Iterates over sublattices in the Cell class.
 /*!

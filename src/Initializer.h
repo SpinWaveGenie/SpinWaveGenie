@@ -9,9 +9,10 @@
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
-#include "extern/pugixml.hpp"
-#include "Cell.h"
-#include "SW_Builder.h"
+#include "Cell/Cell.h"
+#include "Genie/SW_Builder.h"
+#include "External/pugixml.hpp"
+
 
 class Init
 {
@@ -31,7 +32,7 @@ private:
     SW_Builder builder;
     void parseCrystalNode(const pugi::xml_node &node);
     void parseInteractionNode(const pugi::xml_node &node);
-    void parseKpointsNode(const pugi::xml_node &node);
+    void parseDispersion(const pugi::xml_node &node);
 };
 
 #endif /* defined(__Initializer__) */

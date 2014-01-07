@@ -17,11 +17,11 @@
 #include <Eigen/Eigenvalues>
 #include <cmath>
 #include <ctime>
-#include "Cell.h"
+#include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include <boost/ptr_container/ptr_vector.hpp>
-#include "Interaction.h"
-#include "MagneticFormFactor.h"
+#include "Interactions/Interaction.h"
+#include "Genie/MagneticFormFactor.h"
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
 
