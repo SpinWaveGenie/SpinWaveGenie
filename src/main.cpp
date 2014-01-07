@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
     }*/
     
     
-    SW_Builder builder = four_sl.get_builder();
+    /*SW_Builder builder = four_sl.get_builder();
     SpinWave test = builder.Create_Element();
     
     PointsAlongLine Line;
@@ -74,6 +74,6 @@ int main(int argc, char * argv[])
             cout << (*it2).frequency << "  " << (*it2).intensity*10.0 << " " ;//<< endl;
         }
         cout << endl;
-    }
+    }*/
     return 0;
 }

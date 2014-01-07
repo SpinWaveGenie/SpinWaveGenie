@@ -4,6 +4,9 @@
 #include "Interactions/AnisotropyInteraction.h"
 #include "Interactions/DM_Y_Interaction.h"
 #include "Interactions/DM_Z_Interaction.h"
+#include "SpinWaveDispersion.h"
+#include "PointsAlongLine.h"
+#include "Containers/Positions.h"
 
 
 using namespace std;
@@ -283,7 +286,30 @@ void Init::parseDispersion(const pugi::xml_node &node)
     string filename = node.child_value("filename");
     string filetype = node.child_value("filetype");
     
-
+    SpinWaveDispersion Dispersion;
+    Dispersion.setFilename(filename);
+    
+    SpinWaveDispersion::Options PrintOptions;
+    string temp;
+    bool value;
+    
+    temp = node.child("filetype").child_value("printposition");
+    value = boost::lexical_cast<bool, std::string>(temp);
+    PrintOptions = SpinWaveDispersion::Options::PrintPosition;
+    cout << "print position: "<< value << endl;
+    Dispersion.setOptions(PrintOptions,value);
+    
+    temp = node.child("filetype").child_value("printfrequency");
+    value = boost::lexical_cast<bool, std::string>(temp);
+    PrintOptions = SpinWaveDispersion::Options::PrintFrequency;
+    cout << "print frequency: "<< value << endl;
+    Dispersion.setOptions(PrintOptions,value);
+    
+    temp = node.child("filetype").child_value("printintensity");
+    value = boost::lexical_cast<bool, std::string>(temp);
+    PrintOptions = SpinWaveDispersion::Options::PrintIntensity;
+    cout << "print intensity: "<< value << endl;
+    Dispersion.setOptions(PrintOptions,value);
     
     pugi::xml_node lines = node.child("lines");
     for (pugi::xml_node group = lines.child("group");group; group = group.next_sibling("group"))
@@ -291,7 +317,7 @@ void Init::parseDispersion(const pugi::xml_node &node)
         double x0,y0,z0,x1,y1,z1,NumberPoints;
         string temp;
         
-        temp = group.child("firstpoint").child_value("z");
+        temp = group.child_value("numberpoints");
         algorithm::trim(temp); // get rid of surrounding whitespace
         NumberPoints = lexical_cast<double>(temp);
         
@@ -321,13 +347,15 @@ void Init::parseDispersion(const pugi::xml_node &node)
         
         cout << x0 << " " << y0 << " " << z0 << " " << x1 << " " << y1 << "  " << z1 << endl;
         
-        //PointsAlongLine Line;
-        //Line.setFirstPoint(x0,y0,z0);
-        //Line.setFinalPoint(x1,y1,z1);
-        //Line.setNumberPoints(NumberPoints);
-
+        PointsAlongLine Line;
+        Line.setFirstPoint(x0,y0,z0);
+        Line.setFinalPoint(x1,y1,z1);
+        Line.setNumberPoints(NumberPoints);
+        Dispersion.setPoints(Line.getPoints());
     }
-
+    
+    Dispersion.setGenie(builder.Create_Element());
+    Dispersion.save();
 }
 
 Cell Init::get_cell()
