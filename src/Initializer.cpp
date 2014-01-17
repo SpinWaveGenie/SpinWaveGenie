@@ -372,9 +372,8 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
     TwoDimensionCut Cut;
     Cut.setFilename(filename);
     
-    pugi::xml_node lines = node.child("lines");
-    for (pugi::xml_node group = lines.child("group");group; group = group.next_sibling("group"))
     {
+        pugi::xml_node group = node.child("setkpoints");
         double x0,y0,z0,x1,y1,z1,NumberPoints;
         string temp;
         
@@ -413,10 +412,37 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         Line.setFinalPoint(x1,y1,z1);
         Line.setNumberPoints(NumberPoints);
         Cut.setPoints(Line.getPoints());
-        
     }
     
-    Cut.setGenie(builder.Create_Element());
+    
+    {
+        pugi::xml_node group = node.child("setenergypoints");
+        double MinEnergy,MaxEnergy,NumberPoints;
+        string temp;
+        
+        temp = group.child_value("numberpoints");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        NumberPoints = lexical_cast<double>(temp);
+        
+        temp = group.child_value("firstpoint");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        MinEnergy = lexical_cast<double>(temp);
+        
+        temp = group.child_value("lastpoint");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        MaxEnergy = lexical_cast<double>(temp);
+        
+        cout << MinEnergy << " " << MaxEnergy << " " << NumberPoints << endl;
+        
+        PointsAlongLine Line;
+        Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
+    }
+
+    OneDimGaussian resinfo;
+    resinfo.fwhm = 1.0;
+    resinfo.tol = 1.0e-5;
+    resinfo.SW = builder.Create_Element();
+    Cut.setConvolutionObject(resinfo);
     Cut.save();
 }
 

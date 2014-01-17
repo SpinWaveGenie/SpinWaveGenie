@@ -17,11 +17,6 @@ void TwoDimensionCut::setFilename(string name)
     Filename = name;
 }
 
-void TwoDimensionCut::setGenie(SpinWave SW)
-{
-    Genie = SW;
-}
-
 void TwoDimensionCut::setConvolutionObject(OneDimGaussian object)
 {
     InstrumentResolution = object;
@@ -33,6 +28,13 @@ void TwoDimensionCut::setPoints(Positions pts)
     {
         Kpoints.insert(it->get<0>(),it->get<1>(),it->get<2>());
     }
+}
+
+void TwoDimensionCut::setEnergyPoints(double min, double max, size_t points)
+{
+    MinimumEnergy = min;
+    MaximumEnergy = max;
+    EnergyPoints = points;
 }
 
 void TwoDimensionCut::save()

@@ -19,14 +19,13 @@ class TwoDimensionCut
 public:
     void setFilename(std::string name);
     void setPoints(Positions pos);
-    void setGenie(SpinWave SW);
+    void setEnergyPoints(double min, double max, size_t numberpoints);
     void setConvolutionObject(OneDimGaussian object);
     void save();
 private:
     double MaximumEnergy,MinimumEnergy;
     size_t EnergyPoints;
     OneDimGaussian InstrumentResolution;
-    SpinWave Genie;
     std::string Filename;
     Positions Kpoints;
 };
