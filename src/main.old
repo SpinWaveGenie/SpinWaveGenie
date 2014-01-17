@@ -38,13 +38,13 @@ public:
         Eigen::initParallel();
 #endif
         nproc = n;
-        npoints = 801;
+        npoints = 101;
         pointsDone = 0;
         nextPoint = 0;
-        points = 641;
+        points = 81;
         figure.setZero(points,npoints);
         min = 0.0;
-        max = 35.0;
+        max = 7.0;
     }
     ~ThreadClass()
     {
@@ -84,12 +84,12 @@ public:
         */
         
         double x0,y0,z0,x1,y1,z1;
-        x0=1.0;x1=3.0;
+        x0=0.0;x1=0.0;
         y0=0.0;y1=0.0;
-        z0=1.0;z1=3.0;
+        z0=0.0;z1=2.0;
          
         OneDimGaussian resinfo;
-        resinfo.fwhm = 1.5;
+        resinfo.fwhm = 1.0;
         resinfo.tol = 1.0e-5;
         resinfo.SW = builder.Create_Element();
         
@@ -100,8 +100,8 @@ public:
         int tnpoints = npoints;
         scoped_lock.unlock();
 
-        EnergyResolutionFunction tmp(resinfo, tmin,tmax, tpoints);
-        //IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
+        EnergyResolutionFunction res(resinfo, tmin,tmax, tpoints);
+        IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
         //for(int m=i;m<tnpoints;m=m+tnproc)
         while (true)
         {

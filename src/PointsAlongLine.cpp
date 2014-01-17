@@ -39,6 +39,8 @@ void PointsAlongLine::calculatePoints()
     }
 }
 
+
+
 Positions PointsAlongLine::getPoints()
 {
     calculatePoints();

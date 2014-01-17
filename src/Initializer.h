@@ -33,6 +33,7 @@ private:
     void parseCrystalNode(const pugi::xml_node &node);
     void parseInteractionNode(const pugi::xml_node &node);
     void parseDispersion(const pugi::xml_node &node);
+    void parseTwoDimensionCut( const pugi::xml_node &node);
 };
 
 #endif /* defined(__Initializer__) */

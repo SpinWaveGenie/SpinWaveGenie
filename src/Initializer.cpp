@@ -5,6 +5,7 @@
 #include "Interactions/DM_Y_Interaction.h"
 #include "Interactions/DM_Z_Interaction.h"
 #include "SpinWaveDispersion.h"
+#include "TwoDimensionCut.h"
 #include "PointsAlongLine.h"
 #include "Containers/Positions.h"
 
@@ -23,14 +24,17 @@ void Init::read_input(string filename)
     m_parser_map["cell"] = bind(&Init::parseCrystalNode, this, _1);
     m_parser_map["interactions"] = bind(&Init::parseInteractionNode, this, _1);
     m_parser_map["dispersion"] = bind(&Init::parseDispersion, this, _1);
+    m_parser_map["TwoDimensionCut"] = bind(&Init::parseTwoDimensionCut, this, _1);
+
     
     pugi::xml_document doc;
     
     pugi::xml_parse_result result = doc.load_file(filename.c_str());
     std::cout << "Load result: " << result.description() << std::endl;
     assert(result);
-    pugi::xml_node tools = doc.child("spinwavegenie");
     
+    
+    pugi::xml_node tools = doc.child("spinwavegenie");
     for (pugi::xml_node_iterator it = tools.begin(); it != tools.end(); ++it)
     {    
         string name = it->name();
@@ -356,6 +360,64 @@ void Init::parseDispersion(const pugi::xml_node &node)
     
     Dispersion.setGenie(builder.Create_Element());
     Dispersion.save();
+}
+
+void Init::parseTwoDimensionCut(const pugi::xml_node &node)
+{
+    
+    cout << "Two Dimension Cut:" << endl;
+    string filename = node.child_value("filename");
+    string filetype = node.child_value("filetype");
+    
+    TwoDimensionCut Cut;
+    Cut.setFilename(filename);
+    
+    pugi::xml_node lines = node.child("lines");
+    for (pugi::xml_node group = lines.child("group");group; group = group.next_sibling("group"))
+    {
+        double x0,y0,z0,x1,y1,z1,NumberPoints;
+        string temp;
+        
+        temp = group.child_value("numberpoints");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        NumberPoints = lexical_cast<double>(temp);
+        
+        temp = group.child("firstpoint").child_value("x");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        x0 = lexical_cast<double>(temp);
+        
+        temp = group.child("firstpoint").child_value("y");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        y0 = lexical_cast<double>(temp);
+        
+        temp = group.child("firstpoint").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        z0 = lexical_cast<double>(temp);
+        
+        temp = group.child("lastpoint").child_value("x");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        x1 = lexical_cast<double>(temp);
+        
+        temp = group.child("lastpoint").child_value("y");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        y1 = lexical_cast<double>(temp);
+        
+        temp = group.child("lastpoint").child_value("z");
+        algorithm::trim(temp); // get rid of surrounding whitespace
+        z1 = lexical_cast<double>(temp);
+        
+        cout << x0 << " " << y0 << " " << z0 << " " << x1 << " " << y1 << "  " << z1 << endl;
+        
+        PointsAlongLine Line;
+        Line.setFirstPoint(x0,y0,z0);
+        Line.setFinalPoint(x1,y1,z1);
+        Line.setNumberPoints(NumberPoints);
+        Cut.setPoints(Line.getPoints());
+        
+    }
+    
+    Cut.setGenie(builder.Create_Element());
+    Cut.save();
 }
 
 Cell Init::get_cell()

@@ -20,7 +20,7 @@ IntegrateThetaPhi::IntegrateThetaPhi(EnergyResolutionFunction resFunction, doubl
     EnergyPoints = points;
     resolutionFunction = resFunction;
     basisVectors = basisVectorsIn;
-    tol = 0.001;
+    tol = 0.0001;
 }
 
 int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)

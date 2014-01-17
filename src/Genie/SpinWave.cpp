@@ -370,6 +370,7 @@ void SpinWave::Calc_Intensities()
         pt.frequency = abs(WW[i+M]);
         //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
+        pt.intensity /= pt.frequency;
         VI.push_back(pt);
     }
     sort(VI.begin(),VI.end());

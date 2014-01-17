@@ -12,27 +12,30 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SpinWave.h"
+#include "Genie/SpinWave.h"
+#include "Genie/SW_Builder.h"
 #include "Initializer.h"
 #include "Cell/Neighbors.h"
+#include "Containers/Positions.h"
+#include "PointsAlongLine.h"
 
 using namespace boost;
 using namespace std;
 
 int main(int argc, char * argv[])
 {
+    
     //Init four_sl;
     Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_cubic.xml");
-    SW_Builder builder = four_sl.get_builder();
-        
+
     //cout << check << endl;
     
-    /*Cell cell = four_sl.get_cell();
+    Cell cell = four_sl.get_cell();
     
-    string sl_r = "Mn0";
-    string sl_s = "Mn1";
+    string sl_r = "V0";
+    string sl_s = "V1";
     double min = 0.0;
-    double max = 7.0;
+    double max = 4.0;
     
     Neighbors neighborList;
     neighborList.findNeighbors(cell,sl_r,sl_s,min,max);
@@ -41,60 +44,36 @@ int main(int argc, char * argv[])
     cout << "z_rs= " << z_rs << endl;
     for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
     {
-        cout << (*nbr)[0] << " " << (*nbr)[1] << " " << (*nbr)[2] << endl;
-    }*/
-
-
-    int npoints = 11;
-    double x,y,z,x0,y0,z0,x1,y1,z1;
-    x0=1.0;x1=3.0;
-    y0=1.0;y1=3.0;
-    z0=0.0;z1=0.0;
+        cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
+    }
+    
+    
+    /*SW_Builder builder = four_sl.get_builder();
     SpinWave test = builder.Create_Element();
     
-    double SA = 2.3;
-    double SB = 0.9;
-    double theta = M_PI - 35.0*M_PI/180.0;
-    double DB = -6.62711;
-    double JBB = -9.80542;
-    double DBz = 0.073016;
-    
+    PointsAlongLine Line;
+    Line.setFirstPoint(1.0,1.0,0.0);
+    Line.setFinalPoint(3.0,3.0,0.0);
+    Line.setNumberPoints(11);
+    Positions KPoints = Line.getPoints();
+        
+    for(Positions::Iterator it = KPoints.begin(); it != KPoints.end(); it++)
+    {
+        double x = it->get<0>();
+        double y = it->get<1>();
+        double z = it->get<2>();
 
-    for(int dbi = -100; dbi != 101 ; dbi++)
-    {
-    double JBBP = 6.56457*(1.0+(double)dbi/50.0);
-    double JAB = SB*((6.0*JBB+6.0*JBBP+DB-3.0*DBz)*cos(theta)*sin(theta) -sqrt(2.0)*DB*(2.0*pow(cos(theta),2)-1.0))/(-9.0*SA*sin(theta));
-    cout << "JBBP= " << JBBP << " " << " JAB= " << JAB << endl;
-    test.updateValue("Jbbp",JBBP);
-    test.updateValue("Jab",JAB);
-    
-    for(int m=0;m<npoints;m++)
-    {
-        //sleep(1);
-        if(npoints==1)
-        {
-            x = x0 ;
-            y = y0 ;
-            z = z0 ;
-        }
-        else
-        {
-            x = x0 + (x1-x0)*m/(npoints-1);
-            y = y0 + (y1-y0)*m/(npoints-1);
-            z = z0 + (z1-z0)*m/(npoints-1);
-        }
         //cout << "Pos." << endl;
         cout << x << " " << y << " " << z << " ";// << endl;
         test.createMatrix(x,y,z);
         test.Calc();
         vector<point> pts = test.getPoints();
         //cout << "Freq.  Int." << endl;
-        for(vector<point>::iterator it = pts.begin();it!=pts.end();it++)
+        for(vector<point>::iterator it2 = pts.begin();it2!=pts.end();it2++)
         {
-            cout << (*it).frequency << "  " << (*it).intensity*10.0 << " " ;//<< endl;
+            cout << (*it2).frequency << "  " << (*it2).intensity*10.0 << " " ;//<< endl;
         }
         cout << endl;
-    }
-    }
+    }*/
     return 0;
 }
