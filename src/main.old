@@ -44,7 +44,7 @@ public:
         points = 81;
         figure.setZero(points,npoints);
         min = 0.0;
-        max = 7.0;
+        max = 35.0;
     }
     ~ThreadClass()
     {
@@ -84,10 +84,18 @@ public:
         */
         
         double x0,y0,z0,x1,y1,z1;
+        x0=1.0;x1=3.0;
+        y0=1.0;y1=3.0;
+        z0=0.0;z1=0.0;
+        
         x0=0.0;x1=0.0;
+        y0=1.0;y1=3.0;
+        z0=1.0;z1=3.0;
+        
+        x0=1.0;x1=3.0;
         y0=0.0;y1=0.0;
-        z0=0.0;z1=2.0;
-         
+        z0=1.0;z1=3.0;
+        
         OneDimGaussian resinfo;
         resinfo.fwhm = 1.0;
         resinfo.tol = 1.0e-5;
@@ -100,8 +108,8 @@ public:
         int tnpoints = npoints;
         scoped_lock.unlock();
 
-        EnergyResolutionFunction res(resinfo, tmin,tmax, tpoints);
-        IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
+        EnergyResolutionFunction tmp(resinfo, tmin,tmax, tpoints);
+        //IntegrateThetaPhi tmp(res,tmin,tmax,tpoints,cell.getReciprocalVectors());
         //for(int m=i;m<tnpoints;m=m+tnproc)
         while (true)
         {
@@ -204,12 +212,12 @@ int main(int argc, char * argv[])
     }
     g.join_all();
     
-    std::ofstream file("MnV2O4_3x.txt");
+/*std::ofstream file("CoV2O4_z.txt");
     if (file.is_open())
     {
         file << tc.figure << '\n';
     }
-    
+*/
     return 0;
 }
 
