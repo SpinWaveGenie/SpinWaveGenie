@@ -25,7 +25,6 @@ void Init::read_input(string filename)
     m_parser_map["interactions"] = bind(&Init::parseInteractionNode, this, _1);
     m_parser_map["dispersion"] = bind(&Init::parseDispersion, this, _1);
     m_parser_map["TwoDimensionCut"] = bind(&Init::parseTwoDimensionCut, this, _1);
-
     
     pugi::xml_document doc;
     
@@ -39,8 +38,7 @@ void Init::read_input(string filename)
     {    
         string name = it->name();
         cout << name << endl;
-
-        pugi::xml_node node = tools.child(name.c_str());
+        pugi::xml_node node = (*it);
         std::map< std::string, std::function< void (const pugi::xml_node&) > >::iterator parser;
         parser = m_parser_map.find(name);
         if (parser != m_parser_map.end())
@@ -372,6 +370,8 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
     TwoDimensionCut Cut;
     Cut.setFilename(filename);
     
+    cout << filename << endl;
+    
     {
         pugi::xml_node group = node.child("setkpoints");
         double x0,y0,z0,x1,y1,z1,NumberPoints;
@@ -413,8 +413,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         Line.setNumberPoints(NumberPoints);
         Cut.setPoints(Line.getPoints());
     }
-    
-    
+        
     {
         pugi::xml_node group = node.child("setenergypoints");
         double MinEnergy,MaxEnergy,NumberPoints;

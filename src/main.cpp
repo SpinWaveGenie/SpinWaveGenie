@@ -212,12 +212,12 @@ int main(int argc, char * argv[])
     }
     g.join_all();
     
-    std::ofstream file("CoV2O4_z.txt");
+/*std::ofstream file("CoV2O4_z.txt");
     if (file.is_open())
     {
         file << tc.figure << '\n';
     }
-    
+*/
     return 0;
 }
 
