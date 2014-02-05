@@ -17,9 +17,14 @@ void TwoDimensionCut::setFilename(string name)
     Filename = name;
 }
 
-void TwoDimensionCut::setConvolutionObject(OneDimGaussian object)
+void TwoDimensionCut::setConvolutionObject(OneDimensionalGaussian object)
 {
     InstrumentResolution = object;
+}
+
+void TwoDimensionCut::setSpinWave(SpinWave SWIn)
+{
+    SW = SWIn;
 }
 
 void TwoDimensionCut::setPoints(Positions pts)
@@ -41,8 +46,7 @@ void TwoDimensionCut::save()
 {
     Eigen::MatrixXd figure;
     figure.setZero(EnergyPoints,Kpoints.size());
-    EnergyResolutionFunction scan(InstrumentResolution,MinimumEnergy,MaximumEnergy,EnergyPoints);
-    
+    EnergyResolutionFunction scan(InstrumentResolution,SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
     for(Positions::Iterator it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
@@ -54,6 +58,7 @@ void TwoDimensionCut::save()
         for(int n=0;n<EnergyPoints;n++)
         {
             figure(n,m) = val[n];
+            //cout << val[n] << endl;
         }
     }
     std::ofstream file(Filename);

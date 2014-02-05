@@ -14,7 +14,7 @@
                 <name> Co0 </name>
                 <type> MN2 </type>
                 <moment>
-                    <magnitude>1.35</magnitude>
+                    <magnitude>2.3</magnitude>
                     <theta>0.0</theta>
                     <phi>0.0</phi>
                 </moment>
@@ -37,7 +37,7 @@
                 <name> Co1 </name>
                 <type> MN2 </type>
                 <moment>
-                    <magnitude>1.35</magnitude>
+                    <magnitude>2.3</magnitude>
                     <theta>0.0</theta>
                     <phi>0.0</phi>
                 </moment>
@@ -61,21 +61,15 @@
                 <type> V3 </type>
                 <moment>
                     <magnitude>0.9</magnitude>
-                    <theta>72.828381449956368</theta>
-                    <phi>315.0</phi>
+                    <theta>125.28</theta>
+                    <phi>45.0</phi>
                 </moment>
                 <atomicpositions>
                     <position>
-                        <x>0.875</x><y>0.125</y><z>0.375</z>
+                        <x>0.375</x><y>0.875</y><z>0.125</z>
                     </position>
                     <position>
-                        <x>0.875</x><y>0.625</y><z>0.875</z>
-                    </position>
-                    <position>
-                        <x>0.375</x><y>0.125</y><z>0.875</z>
-                    </position>
-                    <position>
-                        <x>0.375</x><y>0.625</y><z>0.375</z>
+                        <x>0.875</x><y>0.375</y><z>0.125</z>
                     </position>
                 </atomicpositions>
             </sublattice>
@@ -84,21 +78,15 @@
                 <type> V3 </type>
                 <moment>
                     <magnitude>0.9</magnitude>
-                    <theta>72.828090295378416</theta>
-                    <phi>135.0</phi>
+                    <theta>54.72</theta>
+                    <phi>45.0</phi>
                 </moment>
                 <atomicpositions>
                     <position>
-                        <x>0.125</x><y>0.375</y><z>0.875</z>
+                        <x>0.625</x><y>0.125</y><z>0.125</z>
                     </position>
                     <position>
-                        <x>0.125</x><y>0.875</y><z>0.375</z>
-                    </position>
-                    <position>
-                        <x>0.625</x><y>0.375</y><z>0.375</z>
-                    </position>
-                    <position>
-                        <x>0.625</x><y>0.875</y><z>0.875</z>
+                        <x>0.125</x><y>0.625</y><z>0.125</z>
                     </position>
                 </atomicpositions>
             </sublattice>
@@ -107,21 +95,15 @@
                 <type> V3 </type>
                 <moment>
                     <magnitude>0.9</magnitude>
-                    <theta>137.58175972937994</theta>
-                    <phi>45.0</phi>
+                    <theta>54.72</theta>
+                    <phi>315.0</phi>
                 </moment>
                 <atomicpositions>
                     <position>
-                        <x>0.375</x><y>0.875</y><z>0.125</z>
+                        <x>0.875</x><y>0.125</y><z>0.375</z>
                     </position>
                     <position>
-                        <x>0.375</x><y>0.375</y><z>0.625</z>
-                    </position>
-                    <position>
-                        <x>0.875</x><y>0.875</y><z>0.625</z>
-                    </position>
-                    <position>
-                        <x>0.875</x><y>0.375</y><z>0.125</z>
+                        <x>0.375</x><y>0.625</y><z>0.375</z>
                     </position>
                 </atomicpositions>
             </sublattice>
@@ -130,7 +112,41 @@
                 <type> V3 </type>
                 <moment>
                     <magnitude>0.9</magnitude>
-                    <theta>137.58175972937994</theta>
+                    <theta>125.28</theta>
+                    <phi>315.0</phi>
+                </moment>
+                <atomicpositions>
+                    <position>
+                        <x>0.125</x><y>0.875</y><z>0.375</z>
+                    </position>
+                    <position>
+                        <x>0.625</x><y>0.375</y><z>0.375</z>
+                    </position>
+                </atomicpositions>
+            </sublattice>
+            <sublattice>
+                <name> V4 </name>
+                <type> V3 </type>
+                <moment>
+                    <magnitude>0.9</magnitude>
+                    <theta>54.72</theta>
+                    <phi>225.0</phi>
+                </moment>
+                <atomicpositions>
+                    <position>
+                        <x>0.375</x><y>0.375</y><z>0.625</z>
+                    </position>
+                    <position>
+                        <x>0.875</x><y>0.875</y><z>0.625</z>
+                    </position>
+                </atomicpositions>
+            </sublattice>
+            <sublattice>
+                <name> V5 </name>
+                <type> V3 </type>
+                <moment>
+                    <magnitude>0.9</magnitude>
+                    <theta>125.28</theta>
                     <phi>225.0</phi>
                 </moment>
                 <atomicpositions>
@@ -138,156 +154,114 @@
                         <x>0.625</x><y>0.625</y><z>0.625</z>
                     </position>
                     <position>
-                        <x>0.625</x><y>0.125</y><z>0.125</z>
-                    </position>
-                    <position>
-                        <x>0.125</x><y>0.625</y><z>0.125</z>
-                    </position>
-                    <position>
                         <x>0.125</x><y>0.125</y><z>0.625</z>
+                    </position>
+                </atomicpositions>
+            </sublattice>
+            <sublattice>
+                <name> V6 </name>
+                <type> V3 </type>
+                <moment>
+                    <magnitude>0.9</magnitude>
+                    <theta>125.28</theta>
+                    <phi>135.0</phi>
+                </moment>
+                <atomicpositions>
+                    <position>
+                        <x>0.875</x><y>0.625</y><z>0.875</z>
+                    </position>
+                    <position>
+                        <x>0.375</x><y>0.125</y><z>0.875</z>
+                    </position>
+                </atomicpositions>
+            </sublattice>
+            <sublattice>
+                <name> V7 </name>
+                <type> V3 </type>
+                <moment>
+                    <magnitude>0.9</magnitude>
+                    <theta>54.72</theta>
+                    <phi>135.0</phi>
+                </moment>
+                <atomicpositions>
+                    <position>
+                        <x>0.125</x><y>0.375</y><z>0.875</z>
+                    </position>
+                    <position>
+                        <x>0.625</x><y>0.875</y><z>0.875</z>
                     </position>
                 </atomicpositions>
             </sublattice>
         </moments>
     </cell>
-        <interactions>
-            <Exchange>
-                <group>
-                    <name>Jab</name>
-                    <value>-5.0</value>
-                    <mindist>3.48</mindist>
-                    <maxdist>3.57</maxdist>
-                    <pairs>
-                        <pair>
-                            <name1>Co0</name1>
-                            <name2>V0</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co0</name1>
-                            <name2>V1</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co0</name1>
-                            <name2>V2</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co0</name1>
-                            <name2>V3</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co1</name1>
-                            <name2>V0</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co1</name1>
-                            <name2>V1</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co1</name1>
-                            <name2>V2</name2>
-                        </pair>
-                        <pair>
-                            <name1>Co1</name1>
-                            <name2>V3</name2>
-                        </pair>
-                    </pairs>
-                </group>
-                <group>
-                    <name>Jbb</name>
-                    <value>-24.0</value>
-                    <mindist>2.975</mindist>
-                    <maxdist>3.06</maxdist>
-                    <pairs>
-                        <pair>
-                            <name1>V0</name1>
-                            <name2>V1</name2>
-                        </pair>
-                        <pair>
-                            <name1>V2</name1>
-                            <name2>V3</name2>
-                        </pair>
-                        <pair>
-                            <name1>V0</name1>
-                            <name2>V2</name2>
-                        </pair>
-                        <pair>
-                            <name1>V0</name1>
-                            <name2>V3</name2>
-                        </pair>
-                        <pair>
-                            <name1>V1</name1>
-                            <name2>V2</name2>
-                        </pair>
-                        <pair>
-                            <name1>V1</name1>
-                            <name2>V3</name2>
-                        </pair>
-                    </pairs>
-                </group>
-            </Exchange>
-            <Anisotropy>
-                <group>
-                    <name>Daz</name>
-                    <value>-1.5</value>
-                    <direction>
-                        <x>0.0</x>
-                        <y>0.0</y>
-                        <z>1.0</z>
-                    </direction>
-                    <sublattices>
-                        <name>Co0</name>
-                        <name>Co1</name>
-                    </sublattices>
-                </group>
-                <group>
-                    <name>Dbx</name>
-                    <value>-4.0</value>
-                    <direction>
-                        <x>-1.0</x>
-                        <y>1.0</y>
-                        <z>-1.0</z>
-                    </direction>
-                    <sublattices>
-                        <name>V0</name>
-                    </sublattices>
-                </group>
-                <group>
-                    <name>Dbmx</name>
-                    <value>-4.0</value>
-                    <direction>
-                        <x>1.0</x>
-                        <y>-1.0</y>
-                        <z>-1.0</z>
-                    </direction>
-                    <sublattices>
-                        <name>V1</name>
-                    </sublattices>
-                </group>
-                <group>
-                    <name>Db</name>
-                    <value>-4.0</value>
-                    <direction>
-                        <x>1.0</x>
-                        <y>1.0</y>
-                        <z>-1.0</z>
-                    </direction>
-                    <sublattices>
-                        <name>V2</name>
-                    </sublattices>
-                </group>
-                <group>
-                    <name>Db</name>
-                    <value>-4.0</value>
-                    <direction>
-                        <x>-1.0</x>
-                        <y>-1.0</y>
-                        <z>-1.0</z>
-                    </direction>
-                    <sublattices>
-                        <name>V3</name>
-                    </sublattices>
-                </group>
-            </Anisotropy>
+    <interactions>
+        <Anisotropy>
+            <group>
+                <name>Daz</name>
+                <value>-4.0</value>
+                <direction>
+                    <x>0.0</x>
+                    <y>0.0</y>
+                    <z>1.0</z>
+                </direction>
+                <sublattices>
+                    <name>Co0</name>
+                    <name>Co1</name>
+                </sublattices>
+            </group>
+            <group>
+                <name>Db</name>
+                <value>-3.0</value>
+                <direction>
+                    <x>1.0</x>
+                    <y>1.0</y>
+                    <z>-1.0</z>
+                </direction>
+                <sublattices>
+                    <name>V0</name>
+                    <name>V4</name>
+                </sublattices>
+            </group>
+            <group>
+                <name>Db</name>
+                <value>-3.0</value>
+                <direction>
+                    <x>1.0</x>
+                    <y>1.0</y>
+                    <z>1.0</z>
+                </direction>
+                <sublattices>
+                    <name>V1</name>
+                    <name>V5</name>
+                </sublattices>
+            </group>
+            <group>
+                <name>Db</name>
+                <value>-3.0</value>
+                <direction>
+                    <x>1.0</x>
+                    <y>-1.0</y>
+                    <z>1.0</z>
+                </direction>
+                <sublattices>
+                    <name>V2</name>
+                    <name>V6</name>
+                </sublattices>
+            </group>
+            <group>
+                <name>Db</name>
+                <value>-3.0</value>
+                <direction>
+                    <x>1.0</x>
+                    <y>-1.0</y>
+                    <z>-1.0</z>
+                </direction>
+                <sublattices>
+                    <name>V3</name>
+                    <name>V7</name>
+                </sublattices>
+            </group>
+        </Anisotropy>
     </interactions>
     <TwoDimensionCut>
         <filename>CoV2O4_x.txt</filename>

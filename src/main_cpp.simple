@@ -26,28 +26,34 @@ int main(int argc, char * argv[])
 {
     
     //Init four_sl;
-    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/MnV2O4_cubic.xml");
+    Init four_sl("/Users/svh/Documents/spin_wave_genie/examples/CoV2O4_nn.xml");
 
     //cout << check << endl;
     
     Cell cell = four_sl.get_cell();
     
-    string sl_r = "V0";
-    string sl_s = "V1";
+    string sl_r = "V6";
+    string sl_s = "V";
     double min = 0.0;
     double max = 4.0;
     
-    Neighbors neighborList;
-    neighborList.findNeighbors(cell,sl_r,sl_s,min,max);
-    size_t z_rs = neighborList.getNumberNeighbors();
     
-    cout << "z_rs= " << z_rs << endl;
-    for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
+    
+    for (int i=0;i<8;i++)
     {
-        cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
+        string sl_si = sl_s + to_string(i);
+        cout << sl_si << endl;
+        Neighbors neighborList;
+        neighborList.findNeighbors(cell,sl_r,sl_si,min,max);
+        size_t z_rs = neighborList.getNumberNeighbors();
+    
+        cout << "z_rs= " << z_rs << endl;
+        for(Neighbors::Iterator nbr=neighborList.begin();nbr!=neighborList.end();++nbr)
+        {
+            cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
+        }
+    
     }
-    
-    
     /*SW_Builder builder = four_sl.get_builder();
     SpinWave test = builder.Create_Element();
     

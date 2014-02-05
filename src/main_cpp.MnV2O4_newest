@@ -4,12 +4,12 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include "SpinWave.h"
+#include "Genie/SpinWave.h"
 #include "Initializer.h"
-#include "Cell.h"
+#include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
-#include "Exch_Interaction.h"
-#include "AnisotropyInteraction.h"
+#include "Interactions/Exch_Interaction.h"
+#include "Interactions/AnisotropyInteraction.h"
 
 
 using namespace std;
@@ -35,12 +35,12 @@ double fitting(SpinWave &SW, double KX, double KY, double KZ, double freq, long 
     average = average/(points1[pos].intensity+points2[pos].intensity+points3[pos].intensity);
     diff_sq += pow((average-freq)/error,2);
     
-    /*double lower_limit = (points1[2].frequency*points1[2].intensity + points2[2].frequency*points2[2].intensity  + points3[2].frequency*points3[2].intensity)/(points1[2].intensity+points2[2].intensity+points3[2].intensity);
+    double lower_limit = (points1[2].frequency*points1[2].intensity + points2[2].frequency*points2[2].intensity  + points3[2].frequency*points3[2].intensity)/(points1[2].intensity+points2[2].intensity+points3[2].intensity);
     if (lower_limit < 15.0)
     {
         cout << "missing spin gap" << endl;
         diff_sq += pow(lower_limit-15.0,2);
-    }*/
+    }
     
     return diff_sq;
 }
@@ -52,14 +52,14 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
         cout << "error: no gradient available" << endl;
     }
     
-    cout << "x[i] = ";
+    /*cout << "x[i] = ";
     for (size_t i = 0; i<6;i++)
     {
         cout << x[i] << " ";
     }
     cout << endl;
-    
-    double SA = 1.73;
+    */
+    double SA = 2.3;
     double SB = 0.9;
     double theta = M_PI - 35.0*M_PI/180.0;
     
@@ -186,7 +186,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     double diff_sq = 0.0;
     
     //MnV2O4
-    /*diff_sq += fitting(SW,2.0,0.0,0.0898357,9.67548,1,1.0);
+    diff_sq += fitting(SW,2.0,0.0,0.0898357,9.67548,1,1.0);
     diff_sq += fitting(SW,2.0,0.0,0.300308,9.59135,1,1.0);
     diff_sq += fitting(SW,2.0,0.0,0.490246,9.59135,1,1.0);
     diff_sq += fitting(SW,2.0,0.0,0.703285,9.63341,1,1.0);
@@ -208,7 +208,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     diff_sq += fitting(SW,4.0-1.75541,0.0,1.75541,4.31220,0,1.0);
     diff_sq += fitting(SW,4.0-1.84859,0.0,1.84859,3.01435,0,1.0);
     diff_sq += fitting(SW,4.0-1.94842,0.0,1.94842,1.92584,0,1.0);
-    */
+    
     
     //Mn0.6Co0.4V2O4
     /*diff_sq += fitting(SW,0.9698,0.9698,0.0,10.06597219,0,1.0);
@@ -229,16 +229,16 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     
     //Mn0.4=6Co0.4V2O4
     //diff_sq += fitting(SW,0.0,0.0,4.00,2.0,0,1.0);
-    diff_sq += fitting(SW,0.0,0.0,3.75,5.7,0,1.0);
-    diff_sq += fitting(SW,0.0,0.0,3.50,9.23,0,1.0);
-    diff_sq += fitting(SW,0.0,0.0,3.25,9.92,0,1.0);
-    diff_sq += fitting(SW,0.0,0.0,3.00,10.66,0,1.0);
+    //diff_sq += fitting(SW,0.0,0.0,3.75,5.7,0,1.0);
+   // diff_sq += fitting(SW,0.0,0.0,3.50,9.23,0,1.0);
+   // diff_sq += fitting(SW,0.0,0.0,3.25,9.92,0,1.0);
+   // diff_sq += fitting(SW,0.0,0.0,3.00,10.66,0,1.0);
 
     //diff_sq += fitting(SW,2.00,2.00,0.0,2.0,0,0.5);
-    diff_sq += fitting(SW,1.75,1.75,0.0,6.96,0,1.0);
-    diff_sq += fitting(SW,1.50,1.50,0.0,8.12,0,1.0);
-    diff_sq += fitting(SW,1.25,1.25,0.0,9.73,0,1.0);
-    diff_sq += fitting(SW,1.00,1.00,0.0,10.49,0,1.0);
+   // diff_sq += fitting(SW,1.75,1.75,0.0,6.96,0,1.0);
+   // diff_sq += fitting(SW,1.50,1.50,0.0,8.12,0,1.0);
+   // diff_sq += fitting(SW,1.25,1.25,0.0,9.73,0,1.0);
+   // diff_sq += fitting(SW,1.00,1.00,0.0,10.49,0,1.0);
     
     //diff_sq += fitting(SW,1.85,1.85,-1.85,4.87,0,1.0);
     //diff_sq += fitting(SW,1.75,1.75,-1.75,7.54,0,1.0);
@@ -246,7 +246,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     //diff_sq += fitting(SW,1.00,1.00,-1.00,8.33,0,1.0);
     
     
-    cout << "diff_sq= " << diff_sq << endl;
+    //cout << "diff_sq= " << diff_sq << endl;
     return diff_sq;
 }
 
@@ -255,47 +255,59 @@ int main()
    
     nlopt::opt opt(nlopt::LN_COBYLA,6);
     std::vector<double> ub(6);
-    ub[0] =  1.0;
+    ub[0] =  0.0;
     ub[1] =  0.0;
     ub[2] =  10.0;
     ub[3] =  1.0;
-    ub[4] = 10.0;
+    ub[4] =  0.0;
     ub[5] = 0.0;
     opt.set_upper_bounds(ub);
     std::vector<double> lb(6);
-    lb[0] = -1.0;
+    lb[0] =  0.0;
     lb[1] = -20.0;
     lb[2] =  0.0;
     lb[3] = -1.0;
-    lb[4] = -10.0;
+    lb[4] =  0.0;
     lb[5] = -7.0;
     opt.set_lower_bounds(lb);
     opt.set_min_objective(myfunc, NULL);
     opt.set_xtol_rel(1.0e-4);
+    opt.set_maxeval(1000);
+
     std::vector<double> x(6);
     
-    x[0] = 0.1;
+    x[0] = 0.0;
     x[1] = -9.80542;
     x[2] = 6.56457;
     x[3] = 0.468028;
-    x[4] = 0.07;
+    x[4] = 0.0;
     x[5] = -6.62711;
+    
+    x[0] = 0;
+    x[1] = -5.13588;
+    x[2] = 1.15072;
+    x[3] = 0.46231;
+    x[4] = 0;
+    x[5] = -6.29658;
+
  
     double minf = 0.0;
     
-    nlopt::result result = opt.optimize(x, minf);
+    for(int i = 0;i!=101;i++)
+    {
+        nlopt::result result = opt.optimize(x, minf);
     
-    cout << result << endl;
+        //cout << result << endl;
     
-    cout << minf << endl;
+        //cout << minf << endl;
     
-    cout << "results:" << endl;
-    for (vector<double>::iterator it = x.begin(); it!=x.end();it++)
-        cout << (*it) << " ";
-    cout << endl;
-    cout << "chi_squared = " << minf << endl;
-    cout << "reduced chi_squared = " << minf/21.0 << endl;
-    
+        cout << "results:" << endl;
+        for (vector<double>::iterator it = x.begin(); it!=x.end();it++)
+            cout << (*it) << " ";
+        cout << endl;
+        cout << "chi_squared = " << minf << endl;
+        //cout << "reduced chi_squared = " << minf/21.0 << endl;
+    }
     /*vector<double> gradient;
     
 

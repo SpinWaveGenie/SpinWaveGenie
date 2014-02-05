@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "Genie/SpinWave.h"
+#include "OneDimensionalGaussian.h"
 
 /* Abstract base class */
 // The abstract Coffee class defines the functionality of Coffee implemented by decorator
@@ -31,6 +32,8 @@ struct OneDimGaussian
     SpinWave SW;
 };
 
+
+
 class TwoDimensionResolutionFunction : SpinWavePlot{
 public:
     TwoDimensionResolutionFunction(){};
@@ -48,16 +51,16 @@ private:
 };
 
 class EnergyResolutionFunction : SpinWavePlot{
-    public:
+public:
     EnergyResolutionFunction(){};
-    EnergyResolutionFunction(OneDimGaussian& info, double min, double max, double points);
+    EnergyResolutionFunction(OneDimensionalGaussian ResolutionFunctionIn, SpinWave SWIn, double min, double max, double points);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
     ~EnergyResolutionFunction(){};
-    private:
+private:
     double MinimumEnergy,MaximumEnergy,tol;
-    double fwhm;
-    unsigned EnergyPoints;
+    std::size_t EnergyPoints;
     SpinWave SW;
+    OneDimensionalGaussian ResolutionFunction;
 };
 
 struct axes_info
@@ -81,7 +84,7 @@ private:
     bool x,y,z;
     double dx,dy,dz;
     double tol,volume;
-    TwoDimensionResolutionFunction resolutionFunction;
+    TwoDimensionResolutionFunction ResolutionFunction;
 };
 
 /*
@@ -92,8 +95,6 @@ private:
  ~NoResolutionFunction() = 0;
  };
  */
-
-
 
 /*
  class FourDimensionResolutionFunction : SpinWavePlot {

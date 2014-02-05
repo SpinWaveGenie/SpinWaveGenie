@@ -13,6 +13,7 @@
 #include "Containers/Positions.h"
 #include "Genie/SpinWave.h"
 #include "SpinWavePlot.h"
+#include "OneDimensionalGaussian.h"
 
 class TwoDimensionCut
 {
@@ -20,12 +21,14 @@ public:
     void setFilename(std::string name);
     void setPoints(Positions pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
-    void setConvolutionObject(OneDimGaussian object);
+    void setConvolutionObject(OneDimensionalGaussian object);
+    void setSpinWave(SpinWave SWIn);
     void save();
 private:
     double MaximumEnergy,MinimumEnergy;
     size_t EnergyPoints;
-    OneDimGaussian InstrumentResolution;
+    OneDimensionalGaussian InstrumentResolution;
+    SpinWave SW;
     std::string Filename;
     Positions Kpoints;
 };

@@ -134,18 +134,18 @@ void SpinWave::Calc_Eigenvalues()
     ces.compute(Ltest);
     if (ces.info() != Success)
         cout << ces.info() << endl;
-    
-    cout << ces.eigenvalues().transpose() << endl;
     */
-
+    
     //cout << "LN= " << endl;
     //cout << LN << endl;
     
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
-    
+    //cout << "Eigenvalues:" << endl;
     //cout << ces.eigenvalues().transpose() << endl << endl;
+    //cout << "Eigenvectors:" << endl;
+    //cout << ces.eigenvectors() << endl;
     
     //
     //     Test eigenvalue condition
@@ -204,6 +204,13 @@ void SpinWave::Calc_Weights()
     int IR;
     int IFL;
     //IPR.setZero();
+    
+    {
+        MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
+        //cout << "ortho_test" << endl;
+        //cout << ortho_test << endl;
+    }
+    
     int maxIterations = 50;
     for(int ito=0;ito<maxIterations;ito++)
     {
@@ -250,7 +257,7 @@ void SpinWave::Calc_Weights()
         if (ito==maxIterations-1)
         {
             TEST = ortho_test.diagonal();
-            cout << "Error calculating frequencies" << endl;
+            //cout << "Error calculating frequencies" << endl;
         }
     }
     
@@ -265,6 +272,8 @@ void SpinWave::Calc_Weights()
     //
     // Reorder the XX's by the weights
     //
+    
+
     
     sort(AL.begin(),AL.end());
 
@@ -297,7 +306,8 @@ void SpinWave::Calc_Weights()
         //AL[L1].index = L1;
     }
     
-
+    //cout << "XX=" << endl;
+    //cout << XX << endl;
     /*cout <<"Eigenvalues: " << endl ;
     cout << ces.eigenvalues().transpose() << endl;
     cout << "Weights: " << endl;
@@ -318,12 +328,13 @@ void SpinWave::Calc_Weights()
     XIN.block(0,M,M,M) *= -1.0;//*XIN.block(0,M,M,M);
     XIN.block(M,0,M,M) *= -1.0;//*XIN.block(M,0,M,M);
     
-    //cout << "XY= " << endl << XY << endl;
+    //cout << "XX= " << endl << XX << endl;
     //cout << "XIN= " << endl << XIN << endl ;
     
     //cout << endl;
-    //cout << (XY.inverse()*XY).block(0,0,5,5)  << endl ;
-    //cout << XIN*XY << endl;
+    //cout << (XX.inverse()*XX).block(0,0,5,5)  << endl ;
+    //cout << XIN*XX << endl;
+    
 }
 
 void SpinWave::Calc_Intensities()
@@ -359,6 +370,8 @@ void SpinWave::Calc_Intensities()
     Intensities *= Intensities.conjugate();
     Intensities *= 1.0/(4.0*M);
     
+    //cout << "Intensities:" << endl << Intensities << endl;
+    
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
@@ -370,7 +383,7 @@ void SpinWave::Calc_Intensities()
         pt.frequency = abs(WW[i+M]);
         //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
-        pt.intensity /= pt.frequency;
+        //pt.intensity /= pt.frequency;
         VI.push_back(pt);
     }
     sort(VI.begin(),VI.end());

@@ -275,9 +275,10 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
         {
             string atom1 = name.child_value();
             Vector3 direction(x,y,z);
-            //cout "direction= " << direction.transpose() << endl;
+            cout << "direction= " << direction.transpose() << endl;
             builder.Add_Interaction(new AnisotropyInteraction(identifier,value,direction,atom1));
         }
+        cout << "woof" << endl;
     }
 }
 
@@ -436,12 +437,12 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         PointsAlongLine Line;
         Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
     }
-
-    OneDimGaussian resinfo;
-    resinfo.fwhm = 1.0;
-    resinfo.tol = 1.0e-5;
-    resinfo.SW = builder.Create_Element();
+    OneDimensionalGaussian resinfo;
+    resinfo.setFWHM(1.0);
+    resinfo.setTolerance(1.0e-5);
     Cut.setConvolutionObject(resinfo);
+    SpinWave SW = builder.Create_Element();
+    Cut.setSpinWave(SW);
     Cut.save();
 }
 

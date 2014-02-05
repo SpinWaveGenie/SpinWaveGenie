@@ -166,15 +166,13 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     return fval;
 }
 
-EnergyResolutionFunction::EnergyResolutionFunction(OneDimGaussian& info, double min, double max, double points)
+EnergyResolutionFunction::EnergyResolutionFunction(OneDimensionalGaussian ResolutionFunctionIn, SpinWave SWIn, double min, double max, double points)
 {
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
-    
-    fwhm = info.fwhm;
-    tol = info.tol;
-    SW = info.SW;
+    ResolutionFunction = ResolutionFunctionIn;
+    SW = SWIn;
 }
 
 std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
@@ -186,25 +184,18 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
         fval[i] = 0.0;
     }
     
-    //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
-    
     SW.createMatrix(kx,ky,kz);
     SW.Calc();
     vector<point> points = SW.getPoints();
     
-    double ma = -4.0*log(2.0)/pow(fwhm,2);
-    double factor = 2.0*sqrt(log(2.0))/(fwhm*sqrt(M_PI));
-    
-    double constant = log(tol/factor);
-    double minmax = sqrt(constant/ma);
-    
-    //cout << minmax << endl;
     for(size_t k=0;k!=points.size();k++)
     {
-        //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-        long min_bin = (points[k].frequency-minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
-        //long avg_bin = (frequencies[k] - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-        long max_bin = (points[k].frequency+minmax - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
+        //cout << "calculated frequency & intensity: " << points[k].frequency << " " << points[k].intensity << "  " << endl;
+        //long avg_bin = (points[k].frequency - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+        double min = ResolutionFunction.getMinimumEnergy();
+        long min_bin = (points[k].frequency + min - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
+        double max = ResolutionFunction.getMaximumEnergy();
+        long max_bin = (points[k].frequency + max - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
         
         if (min_bin < 0)
           min_bin = 0;
@@ -217,19 +208,12 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
           max_bin = EnergyPoints;
         
         //cout << min_bin << " " << avg_bin << " " << max_bin << endl;
-        for(int i=0;i<=EnergyPoints;i++)
+        for(int i=min_bin;i<=max_bin;i++)
         {
             double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-            fval[i] += points[k].intensity*exp(ma*pow(points[k].frequency-energy,2));
+            fval[i] += points[k].intensity*ResolutionFunction.getFunction(points[k].frequency,energy);
         }
         
-    }
-    
-    
-    
-    for(int i=0;i!=EnergyPoints;i++)
-    {
-        fval[i] *= factor;
     }
     
     //cout << endl;
@@ -250,7 +234,7 @@ IntegrateAxes::IntegrateAxes(axes_info info, TwoDimensionResolutionFunction resF
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
-    resolutionFunction = resFunction;
+    ResolutionFunction = resFunction;
 
     x = info.x;
     y = info.y;
@@ -292,7 +276,7 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     //cout << "** " << x[0] << " " << x[1] << " " << x[2] << endl;
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
-    vector<double> val = resolutionFunction.getCut(tmpx,tmpy,tmpz);
+    vector<double> val = ResolutionFunction.getCut(tmpx,tmpy,tmpz);
 
     for(int i=0;i!=EnergyPoints;i++)
      {
