@@ -6,11 +6,22 @@
 
 BOOST_AUTO_TEST_CASE( ConstructorsTest )
 {
-    Cell test;
+    
 }
 
 BOOST_AUTO_TEST_CASE( BasisVectors )
 {
+    Matrix3 ActualBasisVectors;
+    ActualBasisVectors <<
+    2.0,0.0,0.0,
+    0.0,2.0,0.0,
+    0.0,0.0,2.0;
+    
+    Cell test;
+    test.setBasisVectors(2.0,2.0,2.0,90.0,90.0,90.0);
+    Matrix3 BasisVectors = test.getBasisVectors();
+    Matrix3 diff = BasisVectors-ActualBasisVectors;
+    BOOST_CHECK_SMALL(diff.norm(),1.0e-8);
 
 }
 

@@ -72,5 +72,4 @@ private:
  };
  */
 
-
 #endif /* defined(__SpinWavePlot__) */

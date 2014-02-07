@@ -19,6 +19,15 @@ EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShap
     SW = SWIn;
 }
 
+EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFunction other)
+{
+    MinimumEnergy = other.MinimumEnergy;
+    MaximumEnergy = other.MaximumEnergy;
+    SW = other.SW;
+    ResolutionFunction = move(other.ResolutionFunction->clone());
+    return *this;
+}
+
 std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
 {
     

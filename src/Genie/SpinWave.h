@@ -84,7 +84,6 @@ private:
     Eigen::MatrixXcd XY,XIN;
     boost::ptr_vector<Interaction> interactions;
     MagneticFormFactor formFactor;
-
 };
 
 #endif /* defined(__SpinWave__) */

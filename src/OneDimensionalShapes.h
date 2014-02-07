@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef __spin_wave_genie__OneDimensionalShapes__
-#define __spin_wave_genie__OneDimensionalShapes__
+#ifndef __OneDimensionalShapes__
+#define __OneDimensionalShapes__
 
 #include <iostream>
 #include <memory>
@@ -25,4 +25,4 @@ public:
     virtual ~OneDimensionalShapes(){};
 };
 
-#endif /* defined(__spin_wave_genie__OneDimensionalShapes__) */
+#endif /* defined(__OneDimensionalShapes__) */
