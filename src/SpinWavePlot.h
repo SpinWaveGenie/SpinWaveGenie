@@ -65,15 +65,6 @@ private:
 };
 
 /*
- // extension of SpinWaveGenie with no resolution function
- class NoResolutionFunction : SpinWavePlot {
- NoResolutionFunction();
- std::vector<double> getCut(double kx, double ky, double kz);
- ~NoResolutionFunction() = 0;
- };
- */
-
-/*
  class FourDimensionResolutionFunction : SpinWavePlot {
  FourDimensionResolutionFunction();
  std::vector<double> getCut(double kx, double ky, double kz);

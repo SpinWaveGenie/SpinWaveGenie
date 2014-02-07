@@ -21,7 +21,7 @@ public:
     virtual double getMinimumEnergy() = 0;
     virtual double getMaximumEnergy() = 0;
     virtual double getFunction(double frequency, double energy) = 0;
-    virtual std::shared_ptr<OneDimensionalShapes> clone() = 0;
+    virtual std::unique_ptr<OneDimensionalShapes> clone() = 0;
     virtual ~OneDimensionalShapes(){};
 };
 

@@ -23,13 +23,13 @@ public:
     void setFilename(std::string name);
     void setPoints(Positions pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
-    void setConvolutionObject(std::shared_ptr<OneDimensionalShapes> object);
+    void setConvolutionObject(std::unique_ptr<OneDimensionalShapes> object);
     void setSpinWave(SpinWave SWIn);
     void save();
 private:
     double MaximumEnergy,MinimumEnergy;
     size_t EnergyPoints;
-    std::shared_ptr<OneDimensionalShapes> InstrumentResolution;
+    std::unique_ptr<OneDimensionalShapes> InstrumentResolution;
     SpinWave SW;
     std::string Filename;
     Positions Kpoints;

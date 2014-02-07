@@ -21,7 +21,7 @@ public:
     double getMinimumEnergy();
     double getMaximumEnergy();
     double getFunction(double frequency, double energy);
-    std::shared_ptr<OneDimensionalShapes> clone();
+    std::unique_ptr<OneDimensionalShapes> clone();
     ~OneDimensionalGaussian(){};
 private:
     double getExponentialFactor();

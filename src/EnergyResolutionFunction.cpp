@@ -10,7 +10,7 @@
 
 using namespace std;
 
-EnergyResolutionFunction::EnergyResolutionFunction(shared_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, double min, double max, double points)
+EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, double min, double max, double points)
 {
     MinimumEnergy = min;
     MaximumEnergy = max;

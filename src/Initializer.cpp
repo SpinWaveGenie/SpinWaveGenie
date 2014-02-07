@@ -449,7 +449,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
 
         if (Gaussian)
         {
-            std::shared_ptr<OneDimensionalShapes> resinfo(new OneDimensionalGaussian);
+            std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalGaussian);
             string temp = Gaussian.child_value("fwhm");
             algorithm::trim(temp); // get rid of surrounding whitespace
             double fwhm = lexical_cast<double>(temp);
@@ -460,11 +460,11 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             double tolerance = lexical_cast<double>(temp);
             resinfo->setTolerance(tolerance);
             cout << "Gaussian resolution function set" << endl;
-            Cut.setConvolutionObject(resinfo);
+            Cut.setConvolutionObject(move(resinfo));
         }
         else if(Lorentzian)
         {
-            std::shared_ptr<OneDimensionalShapes> resinfo(new OneDimensionalLorentzian);
+            std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalLorentzian);
             string temp = Lorentzian.child_value("fwhm");
             algorithm::trim(temp); // get rid of surrounding whitespace
             double fwhm = lexical_cast<double>(temp);
@@ -475,11 +475,11 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             double tolerance = lexical_cast<double>(temp);
             resinfo->setTolerance(tolerance);
             cout << "Lorentzian resolution function set" << endl;
-            Cut.setConvolutionObject(resinfo);
+            Cut.setConvolutionObject(move(resinfo));
         }
         else if(PseudoVoigt)
         {
-            std::shared_ptr<OneDimensionalPseudoVoigt> resinfo(new OneDimensionalPseudoVoigt);
+            std::unique_ptr<OneDimensionalPseudoVoigt> resinfo(new OneDimensionalPseudoVoigt);
             
             string temp = PseudoVoigt.child_value("eta");
             algorithm::trim(temp); // get rid of surrounding whitespace
@@ -497,7 +497,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             resinfo->setTolerance(tolerance);
             cout << "Lorentzian resolution function set" << endl;
             
-            Cut.setConvolutionObject(resinfo);
+            Cut.setConvolutionObject(move(resinfo));
         }
         else
         {

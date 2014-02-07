@@ -50,7 +50,7 @@ double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
     return result;
 }
 
-shared_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone()
+unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone()
 {
-    return shared_ptr<OneDimensionalShapes>(new OneDimensionalPseudoVoigt(*this));
+    return unique_ptr<OneDimensionalShapes>(new OneDimensionalPseudoVoigt(*this));
 }

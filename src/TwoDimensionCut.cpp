@@ -10,7 +10,7 @@
 #include <Eigen/Dense>
 #include "EnergyResolutionFunction.h"
 
-using std::string; using std::vector; using std::shared_ptr;
+using std::string; using std::vector; using std::unique_ptr;
 using std::cout; using std::endl;
 
 void TwoDimensionCut::setFilename(string name)
@@ -18,9 +18,9 @@ void TwoDimensionCut::setFilename(string name)
     Filename = name;
 }
 
-void TwoDimensionCut::setConvolutionObject(shared_ptr<OneDimensionalShapes> object)
+void TwoDimensionCut::setConvolutionObject(unique_ptr<OneDimensionalShapes> object)
 {
-    InstrumentResolution = object->clone();
+    InstrumentResolution = move(object->clone());
 }
 
 void TwoDimensionCut::setSpinWave(SpinWave SWIn)
@@ -47,7 +47,7 @@ void TwoDimensionCut::save()
 {
     Eigen::MatrixXd figure;
     figure.setZero(EnergyPoints,Kpoints.size());
-    EnergyResolutionFunction scan(InstrumentResolution,SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
+    EnergyResolutionFunction scan(move(InstrumentResolution->clone()),SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
     for(Positions::Iterator it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();

@@ -26,11 +26,11 @@ public:
     double getMinimumEnergy();
     double getMaximumEnergy();
     double getFunction(double frequency, double energy);
-    std::shared_ptr<OneDimensionalShapes> clone();
+    std::unique_ptr<OneDimensionalShapes> clone();
     ~OneDimensionalPseudoVoigt(){};
 private:
     double eta;
-    std::shared_ptr<OneDimensionalShapes> Lorentzian,Gaussian;
+    std::unique_ptr<OneDimensionalShapes> Lorentzian,Gaussian;
 };
 
 #endif /* defined(__OneDimensionalPseudoVoigt__) */
