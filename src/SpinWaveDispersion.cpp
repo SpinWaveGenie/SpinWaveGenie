@@ -17,7 +17,6 @@ void SpinWaveDispersion::setOptions(Options PrintOptions, bool Value)
     }
 }
 
-
 void SpinWaveDispersion::setFilename(string name)
 {
     Filename = name;

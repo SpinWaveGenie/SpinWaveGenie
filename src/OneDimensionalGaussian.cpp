@@ -41,3 +41,8 @@ double OneDimensionalGaussian::getExponentialFactor()
 {
     return -4.0*log(2.0)/pow(FWHM,2);
 }
+
+shared_ptr<OneDimensionalShapes> OneDimensionalGaussian::clone()
+{
+    return shared_ptr<OneDimensionalShapes>(new OneDimensionalGaussian(*this));
+}

@@ -8,7 +8,10 @@
 #include "TwoDimensionCut.h"
 #include "PointsAlongLine.h"
 #include "Containers/Positions.h"
-
+#include "OneDimensionalPseudoVoigt.h"
+#include "OneDimensionalLorentzian.h"
+#include "OneDimensionalGaussian.h"
+#include "OneDimensionalShapes.h"
 
 using namespace std;
 using namespace boost;
@@ -278,7 +281,6 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             cout << "direction= " << direction.transpose() << endl;
             builder.Add_Interaction(new AnisotropyInteraction(identifier,value,direction,atom1));
         }
-        cout << "woof" << endl;
     }
 }
 
@@ -437,10 +439,72 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         PointsAlongLine Line;
         Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
     }
-    OneDimensionalGaussian resinfo;
-    resinfo.setFWHM(1.0);
-    resinfo.setTolerance(1.0e-5);
-    Cut.setConvolutionObject(resinfo);
+    
+    {
+        pugi::xml_node type = node.child("type");
+        
+        pugi::xml_node Gaussian = type.child("OneDimensionGaussian");
+        pugi::xml_node Lorentzian = type.child("OneDimensionLorentzian");
+        pugi::xml_node PseudoVoigt = type.child("OneDimensionPseudoVoigt");
+
+        if (Gaussian)
+        {
+            std::shared_ptr<OneDimensionalShapes> resinfo(new OneDimensionalGaussian);
+            string temp = Gaussian.child_value("fwhm");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double fwhm = lexical_cast<double>(temp);
+            resinfo->setFWHM(fwhm);
+
+            temp = Gaussian.child_value("tol");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double tolerance = lexical_cast<double>(temp);
+            resinfo->setTolerance(tolerance);
+            cout << "Gaussian resolution function set" << endl;
+            Cut.setConvolutionObject(resinfo);
+        }
+        else if(Lorentzian)
+        {
+            std::shared_ptr<OneDimensionalShapes> resinfo(new OneDimensionalLorentzian);
+            string temp = Lorentzian.child_value("fwhm");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double fwhm = lexical_cast<double>(temp);
+            resinfo->setFWHM(fwhm);
+            
+            temp = Lorentzian.child_value("tol");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double tolerance = lexical_cast<double>(temp);
+            resinfo->setTolerance(tolerance);
+            cout << "Lorentzian resolution function set" << endl;
+            Cut.setConvolutionObject(resinfo);
+        }
+        else if(PseudoVoigt)
+        {
+            std::shared_ptr<OneDimensionalPseudoVoigt> resinfo(new OneDimensionalPseudoVoigt);
+            
+            string temp = PseudoVoigt.child_value("eta");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double eta = lexical_cast<double>(temp);
+            resinfo->setEta(eta);
+            
+            temp = PseudoVoigt.child_value("fwhm");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double fwhm = lexical_cast<double>(temp);
+            resinfo->setFWHM(fwhm);
+            
+            temp = PseudoVoigt.child_value("tol");
+            algorithm::trim(temp); // get rid of surrounding whitespace
+            double tolerance = lexical_cast<double>(temp);
+            resinfo->setTolerance(tolerance);
+            cout << "Lorentzian resolution function set" << endl;
+            
+            Cut.setConvolutionObject(resinfo);
+        }
+        else
+        {
+            cout << "RESOLUTION FUNCTION NOT SET!!!" << endl;
+        }
+    }
+    
     SpinWave SW = builder.Create_Element();
     Cut.setSpinWave(SW);
     Cut.save();

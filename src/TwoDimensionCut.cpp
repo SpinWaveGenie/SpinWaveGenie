@@ -8,8 +8,9 @@
 #include <fstream>
 #include "TwoDimensionCut.h"
 #include <Eigen/Dense>
+#include "EnergyResolutionFunction.h"
 
-using std::string; using std::vector;
+using std::string; using std::vector; using std::shared_ptr;
 using std::cout; using std::endl;
 
 void TwoDimensionCut::setFilename(string name)
@@ -17,9 +18,9 @@ void TwoDimensionCut::setFilename(string name)
     Filename = name;
 }
 
-void TwoDimensionCut::setConvolutionObject(OneDimensionalGaussian object)
+void TwoDimensionCut::setConvolutionObject(shared_ptr<OneDimensionalShapes> object)
 {
-    InstrumentResolution = object;
+    InstrumentResolution = object->clone();
 }
 
 void TwoDimensionCut::setSpinWave(SpinWave SWIn)

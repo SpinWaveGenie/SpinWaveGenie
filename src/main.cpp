@@ -96,11 +96,6 @@ public:
         y0=0.0;y1=0.0;
         z0=1.0;z1=3.0;
         
-        OneDimGaussian resinfo;
-        resinfo.fwhm = 1.0;
-        resinfo.tol = 1.0e-5;
-        resinfo.SW = builder.Create_Element();
-        
         scoped_lock.lock();
         double tmin = min;
         double tmax = max;

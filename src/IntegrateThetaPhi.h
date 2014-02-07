@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "SpinWavePlot.h"
+#include "EnergyResolutionFunction.h"
 
 class IntegrateThetaPhi : SpinWavePlot {
     public:

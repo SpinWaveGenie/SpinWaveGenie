@@ -9,7 +9,6 @@
 #include "OneDimensionalGaussian.h"
 
 /* Abstract base class */
-// The abstract Coffee class defines the functionality of Coffee implemented by decorator
 class SpinWavePlot
 {
 public:
@@ -25,15 +24,6 @@ struct TwoDimGaussian
     SpinWave SW;
 };
 
-struct OneDimGaussian
-{
-    double fwhm;
-    double tol;
-    SpinWave SW;
-};
-
-
-
 class TwoDimensionResolutionFunction : SpinWavePlot{
 public:
     TwoDimensionResolutionFunction(){};
@@ -48,19 +38,6 @@ private:
     double kx,ky,kz;
     unsigned EnergyPoints,direction;
     SpinWave SW;
-};
-
-class EnergyResolutionFunction : SpinWavePlot{
-public:
-    EnergyResolutionFunction(){};
-    EnergyResolutionFunction(OneDimensionalGaussian ResolutionFunctionIn, SpinWave SWIn, double min, double max, double points);
-    std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
-    ~EnergyResolutionFunction(){};
-private:
-    double MinimumEnergy,MaximumEnergy,tol;
-    std::size_t EnergyPoints;
-    SpinWave SW;
-    OneDimensionalGaussian ResolutionFunction;
 };
 
 struct axes_info
