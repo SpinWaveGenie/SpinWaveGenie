@@ -16,6 +16,13 @@
 using namespace std;
 using namespace boost;
 
+
+double stringToDouble(string value)
+{
+    algorithm::trim(value); // get rid of surrounding whitespace
+    return lexical_cast<double>(value);
+}
+
 Init::Init(string filename)
 {
     read_input(filename);
@@ -61,29 +68,13 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     pugi::xml_node lattice_parameters = node.child("latticevectors");
     double a,b,c,alpha,beta,gamma;
     
-    string temp = lattice_parameters.child_value("a");
-    algorithm::trim(temp); // get rid of surrounding whitespace
-    a = lexical_cast<double>(temp);
-    
-    temp = lattice_parameters.child_value("b");
-    algorithm::trim(temp); // get rid of surrounding whitespace
-    b = lexical_cast<double>(temp);
-    
-    temp = lattice_parameters.child_value("c");
-    algorithm::trim(temp); // get rid of surrounding whitespace
-    c = lexical_cast<double>(temp);
-    
-    temp = lattice_parameters.child_value("alpha");
-    algorithm::trim(temp); // get rid of surrounding whitespace
-    alpha = lexical_cast<double>(temp);
-    
-    temp = lattice_parameters.child_value("beta");
-    algorithm::trim(temp); // get rid of surrounding whitespace
-    beta = lexical_cast<double>(temp);
-    
-    temp = lattice_parameters.child_value("gamma");
-    algorithm::trim(temp); // get rid of surrounding whitespace
-    gamma = lexical_cast<double>(temp);
+
+    a = stringToDouble(lattice_parameters.child_value("a"));
+    b = stringToDouble(lattice_parameters.child_value("b"));
+    c = stringToDouble(lattice_parameters.child_value("c"));
+    alpha = stringToDouble(lattice_parameters.child_value("alpha"));
+    beta = stringToDouble(lattice_parameters.child_value("beta"));
+    gamma = stringToDouble(lattice_parameters.child_value("gamma"));
     
     cout << a << " " << b << " " << c << " " << alpha << " " << beta << " " << gamma << endl;
 
@@ -91,6 +82,8 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
     pugi::xml_node moments = node.child("moments");
 
+    string temp;
+    
     for (pugi::xml_node tool = moments.child("sublattice"); tool; tool = tool.next_sibling("sublattice"))
     {
         Sublattice new_sl;
@@ -107,17 +100,9 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
         
         double S,theta,phi;
         
-        temp = tool.child("moment").child_value("magnitude");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        S = lexical_cast<double>(temp);
-        
-        temp = tool.child("moment").child_value("theta");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        theta = lexical_cast<double>(temp)*M_PI/180.0;
-        
-        temp = tool.child("moment").child_value("phi");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        phi = lexical_cast<double>(temp)*M_PI/180.0;
+        S = stringToDouble(tool.child("moment").child_value("magnitude"));
+        theta = stringToDouble(tool.child("moment").child_value("theta"))*M_PI/180.0;
+        phi = stringToDouble(tool.child("moment").child_value("phi"))*M_PI/180.0;
         
         cout << S << '\t' << theta << '\t' << phi << endl;
 
@@ -129,17 +114,10 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
         for (pugi::xml_node position = atomicpositions.child("position"); position; position = position.next_sibling("position"))
         {
             double x,y,z;
-            temp = position.child_value("x");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            x = lexical_cast<double>(temp);
             
-            temp = position.child_value("y");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            y = lexical_cast<double>(temp);
-            
-            temp = position.child_value("z");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            z = lexical_cast<double>(temp);
+            x = stringToDouble(position.child_value("x"));
+            y = stringToDouble(position.child_value("y"));
+            z = stringToDouble(position.child_value("z"));
             
             cout << x << '\t' << y << '\t' << z << endl;
            
@@ -161,19 +139,13 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
          
          string name = tool.child_value("name");
          algorithm::trim(name); // get rid of surrounding whitespace
-         
-         string temp = tool.child_value("value");
-         algorithm::trim(temp); // get rid of surrounding whitespace
-         double value = lexical_cast<double>(temp);
-         
-         temp = tool.child_value("mindist");
-         algorithm::trim(temp); // get rid of surrounding whitespace
-         double min = lexical_cast<double>(temp);
-         
-         temp = tool.child_value("maxdist");
-         algorithm::trim(temp); // get rid of surrounding whitespace
-         double max = lexical_cast<double>(temp);
 
+         double value,min,max;
+         
+         value = stringToDouble(tool.child_value("value"));
+         min = stringToDouble(tool.child_value("mindist"));
+         max = stringToDouble(tool.child_value("maxdist"));
+         
          pugi::xml_node pairs = tool.child("pairs");
          for (pugi::xml_node pair = pairs.child("pair"); pair; pair = pair.next_sibling("pair"))
          {
@@ -193,31 +165,16 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
         string name = tool.child_value("name");
         algorithm::trim(name); // get rid of surrounding whitespace
         
-        string temp = tool.child_value("value");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        double value = lexical_cast<double>(temp);
-        
-        temp = tool.child_value("min");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        double min = lexical_cast<double>(temp);
-        
-        temp = tool.child_value("max");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        double max = lexical_cast<double>(temp);
+        double value,min,max;
+        value = stringToDouble(tool.child_value("value"));
+        min = stringToDouble(tool.child_value("min"));
+        max = stringToDouble(tool.child_value("max"));
         
         double x,y,z;
         
-        temp = tool.child("direction").child_value("x");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        x = lexical_cast<double>(temp);
-        
-        temp = tool.child("direction").child_value("y");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        y = lexical_cast<double>(temp);
-        
-        temp = tool.child("direction").child_value("z");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        z = lexical_cast<double>(temp);
+        x = stringToDouble(tool.child("direction").child_value("x"));
+        y = stringToDouble(tool.child("direction").child_value("y"));
+        z = stringToDouble(tool.child("direction").child_value("z"));
         
         cout << x << '\t' << y << '\t' << z << endl;
         
@@ -253,23 +210,12 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
         string identifier = tool.child_value("name");
         algorithm::trim(identifier); // get rid of surrounding whitespace
         
-        string temp = tool.child_value("value");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        double value = lexical_cast<double>(temp);
+        double value,x,y,z;
         
-        double x,y,z;
-        
-        temp = tool.child("direction").child_value("x");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        x = lexical_cast<double>(temp);
-        
-        temp = tool.child("direction").child_value("y");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        y = lexical_cast<double>(temp);
-        
-        temp = tool.child("direction").child_value("z");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        z = lexical_cast<double>(temp);
+        value = stringToDouble(tool.child_value("value"));
+        x = stringToDouble(tool.child("direction").child_value("x"));
+        y = stringToDouble(tool.child("direction").child_value("y"));
+        z = stringToDouble(tool.child("direction").child_value("z"));
     
         cout << x << '\t' << y << '\t' << z << endl;
             
@@ -320,35 +266,14 @@ void Init::parseDispersion(const pugi::xml_node &node)
     for (pugi::xml_node group = lines.child("group");group; group = group.next_sibling("group"))
     {
         double x0,y0,z0,x1,y1,z1,NumberPoints;
-        string temp;
         
-        temp = group.child_value("numberpoints");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        NumberPoints = lexical_cast<double>(temp);
-        
-        temp = group.child("firstpoint").child_value("x");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        x0 = lexical_cast<double>(temp);
-        
-        temp = group.child("firstpoint").child_value("y");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        y0 = lexical_cast<double>(temp);
-        
-        temp = group.child("firstpoint").child_value("z");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        z0 = lexical_cast<double>(temp);
-        
-        temp = group.child("lastpoint").child_value("x");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        x1 = lexical_cast<double>(temp);
-        
-        temp = group.child("lastpoint").child_value("y");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        y1 = lexical_cast<double>(temp);
-        
-        temp = group.child("lastpoint").child_value("z");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        z1 = lexical_cast<double>(temp);
+        NumberPoints = stringToDouble(group.child_value("numberpoints"));
+        x0 = stringToDouble(group.child("firstpoint").child_value("x"));
+        y0 = stringToDouble(group.child("firstpoint").child_value("y"));
+        z0 = stringToDouble(group.child("firstpoint").child_value("z"));
+        x1 = stringToDouble(group.child("lastpoint").child_value("x"));
+        y1 = stringToDouble(group.child("lastpoint").child_value("y"));
+        z1 = stringToDouble(group.child("lastpoint").child_value("z"));
         
         cout << x0 << " " << y0 << " " << z0 << " " << x1 << " " << y1 << "  " << z1 << endl;
         
@@ -380,33 +305,13 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         double x0,y0,z0,x1,y1,z1,NumberPoints;
         string temp;
         
-        temp = group.child_value("numberpoints");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        NumberPoints = lexical_cast<double>(temp);
-        
-        temp = group.child("firstpoint").child_value("x");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        x0 = lexical_cast<double>(temp);
-        
-        temp = group.child("firstpoint").child_value("y");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        y0 = lexical_cast<double>(temp);
-        
-        temp = group.child("firstpoint").child_value("z");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        z0 = lexical_cast<double>(temp);
-        
-        temp = group.child("lastpoint").child_value("x");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        x1 = lexical_cast<double>(temp);
-        
-        temp = group.child("lastpoint").child_value("y");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        y1 = lexical_cast<double>(temp);
-        
-        temp = group.child("lastpoint").child_value("z");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        z1 = lexical_cast<double>(temp);
+        NumberPoints = stringToDouble(group.child_value("numberpoints"));
+        x0 = stringToDouble(group.child("firstpoint").child_value("x"));
+        y0 = stringToDouble(group.child("firstpoint").child_value("y"));
+        z0 = stringToDouble(group.child("firstpoint").child_value("z"));
+        x1 = stringToDouble(group.child("lastpoint").child_value("x"));
+        y1 = stringToDouble(group.child("lastpoint").child_value("y"));
+        z1 = stringToDouble(group.child("lastpoint").child_value("z"));
         
         cout << x0 << " " << y0 << " " << z0 << " " << x1 << " " << y1 << "  " << z1 << endl;
         
@@ -422,17 +327,9 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         double MinEnergy,MaxEnergy,NumberPoints;
         string temp;
         
-        temp = group.child_value("numberpoints");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        NumberPoints = lexical_cast<double>(temp);
-        
-        temp = group.child_value("firstpoint");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        MinEnergy = lexical_cast<double>(temp);
-        
-        temp = group.child_value("lastpoint");
-        algorithm::trim(temp); // get rid of surrounding whitespace
-        MaxEnergy = lexical_cast<double>(temp);
+        NumberPoints = stringToDouble(group.child_value("numberpoints"));
+        MinEnergy = stringToDouble(group.child_value("firstpoint"));
+        MaxEnergy = stringToDouble(group.child_value("lastpoint"));
         
         cout << MinEnergy << " " << MaxEnergy << " " << NumberPoints << endl;
         
@@ -450,54 +347,49 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         if (Gaussian)
         {
             std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalGaussian);
-            string temp = Gaussian.child_value("fwhm");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double fwhm = lexical_cast<double>(temp);
+            
+            double fwhm,tolerance;
+            fwhm = stringToDouble(Gaussian.child_value("fwhm"));
+            tolerance = stringToDouble(Gaussian.child_value("tol"));
+            
             resinfo->setFWHM(fwhm);
-
-            temp = Gaussian.child_value("tol");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double tolerance = lexical_cast<double>(temp);
             resinfo->setTolerance(tolerance);
-            cout << "Gaussian resolution function set" << endl;
             Cut.setConvolutionObject(move(resinfo));
+            
+            cout << "Gaussian resolution function set" << endl;
+
         }
         else if(Lorentzian)
         {
             std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalLorentzian);
-            string temp = Lorentzian.child_value("fwhm");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double fwhm = lexical_cast<double>(temp);
-            resinfo->setFWHM(fwhm);
+
+            double fwhm,tolerance;
+            fwhm = stringToDouble(Lorentzian.child_value("fwhm"));
+            tolerance = stringToDouble(Lorentzian.child_value("tol"));
             
-            temp = Lorentzian.child_value("tol");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double tolerance = lexical_cast<double>(temp);
+            resinfo->setFWHM(fwhm);
             resinfo->setTolerance(tolerance);
-            cout << "Lorentzian resolution function set" << endl;
+            
             Cut.setConvolutionObject(move(resinfo));
+            cout << "Lorentzian resolution function set" << endl;
+
         }
         else if(PseudoVoigt)
         {
             std::unique_ptr<OneDimensionalPseudoVoigt> resinfo(new OneDimensionalPseudoVoigt);
             
-            string temp = PseudoVoigt.child_value("eta");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double eta = lexical_cast<double>(temp);
+            double eta,fwhm,tolerance;
+            eta = stringToDouble(PseudoVoigt.child_value("eta"));
+            fwhm = stringToDouble(PseudoVoigt.child_value("fwhm"));
+            tolerance = stringToDouble(PseudoVoigt.child_value("tol"));
+            
             resinfo->setEta(eta);
-            
-            temp = PseudoVoigt.child_value("fwhm");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double fwhm = lexical_cast<double>(temp);
             resinfo->setFWHM(fwhm);
-            
-            temp = PseudoVoigt.child_value("tol");
-            algorithm::trim(temp); // get rid of surrounding whitespace
-            double tolerance = lexical_cast<double>(temp);
             resinfo->setTolerance(tolerance);
-            cout << "Lorentzian resolution function set" << endl;
-            
             Cut.setConvolutionObject(move(resinfo));
+            
+            cout << "Pseudo-Voigt resolution function set" << endl;
+
         }
         else
         {
