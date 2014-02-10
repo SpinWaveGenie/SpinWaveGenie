@@ -14,47 +14,73 @@ Neighbors::Neighbors()
 
 void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min, double max)
 {
-    Sublattice::Iterator atom1 = cell.getSublattice(sl1).begin();
-    // No benefit to iterating over the first sublattice. Hence we choose the first element
-    // Increase the size of the supercell until the list of neighbors does not change
-    // for two consecutive iterations. A 5x5x5 supercell should good enough for
-    // any physical interaction. If not, a warning message will be printed.
-    for (long supercellSize = 1;supercellSize<=5;supercellSize++)
+    
+    for(Sublattice::Iterator atom1 = cell.getSublattice(sl1).begin(); atom1!=cell.getSublattice(sl1).end();++atom1)
     {
-        //cout << supercellSize << endl;
-        bool new_results = 0;
-        for (Sublattice::Iterator atom2=cell.getSublattice(sl2).begin(); atom2!=cell.getSublattice(sl2).end(); ++atom2)
+        
+        UniquePositions Neighbors;
+        // No benefit to iterating over the first sublattice. Hence we choose the first element
+        // Increase the size of the supercell until the list of neighbors does not change
+        // for two consecutive iterations. A 5x5x5 supercell should good enough for
+        // any physical interaction. If not, a warning message will be printed.
+        for (long supercellSize = 1;supercellSize<=5;supercellSize++)
         {
-            Vector3 atomdistance(atom2->get<0>()-atom1->get<0>(),atom2->get<1>()-atom1->get<1>(),atom2->get<2>()-atom1->get<2>());
-            //cout << "atom2:  " << atom2->get<0>() << " " << atom2->get<1>() << " " << atom2->get<2>() << endl;
-            //cout << "atom1:  " << atom1->get<0>() << " " << atom1->get<1>() << " " << atom1->get<2>() << endl;
-            //cout << atomdistance.transpose() << endl;
-            for (long n1=-supercellSize;n1<=supercellSize;n1++)
+            //cout << supercellSize << endl;
+            bool new_results = 0;
+            for (Sublattice::Iterator atom2=cell.getSublattice(sl2).begin(); atom2!=cell.getSublattice(sl2).end(); ++atom2)
             {
-                for (long n2=-supercellSize;n2<=supercellSize;n2++)
+                Vector3 atomdistance(atom2->get<0>()-atom1->get<0>(),atom2->get<1>()-atom1->get<1>(),atom2->get<2>()-atom1->get<2>());
+                //cout << "atom2:  " << atom2->get<0>() << " " << atom2->get<1>() << " " << atom2->get<2>() << endl;
+                //cout << "atom1:  " << atom1->get<0>() << " " << atom1->get<1>() << " " << atom1->get<2>() << endl;
+                //cout << atomdistance.transpose() << endl;
+                for (long n1=-supercellSize;n1<=supercellSize;n1++)
                 {
-                    for (long n3=-supercellSize;n3<=supercellSize;n3++)
+                    for (long n2=-supercellSize;n2<=supercellSize;n2++)
                     {
-                        //find distance between supercells
-                        Vector3 dispRLU(n1,n2,n3);
-                        Vector3 dispAng = dispRLU.transpose()*cell.getBasisVectors();
-                        Vector3 relativeDistance = atomdistance + dispAng;
-                        double norm = relativeDistance.norm();
-                        // check if norm is between min and max
-                        if (norm < max && norm > min)
+                        for (long n3=-supercellSize;n3<=supercellSize;n3++)
                         {
-                            neighborList.insert(relativeDistance[0],relativeDistance[1],relativeDistance[2]);
+                            //find distance between supercells
+                            Vector3 dispRLU(n1,n2,n3);
+                            Vector3 dispAng = dispRLU.transpose()*cell.getBasisVectors();
+                            Vector3 relativeDistance = atomdistance + dispAng;
+                            double norm = relativeDistance.norm();
+                            // check if norm is between min and max
+                            if (norm < max && norm > min)
+                            {
+                                Neighbors.insert(relativeDistance[0],relativeDistance[1],relativeDistance[2]);
+                            }
                         }
                     }
                 }
             }
+            if(!new_results)
+                break;
+            else if (supercellSize==5)
+                cout << "Couldn't find all neighbors at specified distance" << endl;
         }
-        if(!new_results)
-            break;
-        else if (supercellSize==5)
-            cout << "Couldn't find all neighbors at specified distance" << endl;
+        if (atom1 == cell.getSublattice(sl1).begin())
+        {
+            numberNeighbors = Neighbors.size();
+            neighborList = Neighbors;
+        }
+        else
+        {
+            if (!(Neighbors == neighborList))
+            {
+                cout << "Old number of neighbors:" << numberNeighbors << endl;
+                cout << "Old positions:" << endl;
+                for(auto MyPosition = neighborList.begin(); MyPosition!= neighborList.end(); MyPosition++)
+                {
+                    cout << "\t" << MyPosition->get<0>() << " " << MyPosition->get<1>() << " " << MyPosition->get<2>() << endl;
+                }
+                cout << "New number of neighbors:" << Neighbors.size() << endl;
+                for(auto MyPosition = Neighbors.begin(); MyPosition!= Neighbors.end(); MyPosition++)
+                {
+                    cout << "\t" << MyPosition->get<0>() << " " << MyPosition->get<1>() << " " << MyPosition->get<2>() << endl;
+                }
+            }
+        }
     }
-    numberNeighbors = neighborList.size();
 }
 
 complex<double> Neighbors::getGamma(Vector3 K)

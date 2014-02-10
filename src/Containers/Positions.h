@@ -9,6 +9,7 @@
 class Positions
 {
 public:
+    bool operator==(Positions& other);
     void insert(double x, double y, double z);
     typedef std::vector<double>::const_iterator ValueIterator;
     typedef boost::zip_iterator<boost::tuple<ValueIterator,ValueIterator,ValueIterator> > Iterator;

@@ -17,7 +17,6 @@ void UniquePositions::insert(double x, double y, double z)
     {
         if (std::abs(it->get<0>() - x) < epsilon && std::abs(it->get<1>() - y) < epsilon && std::abs(it->get<2>() - z) < epsilon)
         {
-            std::cout << "not quite" << std::endl;
             unique = false;
             break;
         }
