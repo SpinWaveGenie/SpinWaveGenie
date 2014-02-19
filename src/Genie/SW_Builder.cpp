@@ -23,7 +23,7 @@ SpinWave SW_Builder::Create_Element()
 {
     SpinWave SW(cell,interactions);
     Eigen::VectorXcd firstOrder = SW.checkFirstOrderTerms();
-    if (firstOrder.norm() > 0.001)
+    if (firstOrder.norm() > 0.01)
     {
         cout << "Warning! Nonzero first order terms present." << endl;
         cout << firstOrder.transpose() << endl;

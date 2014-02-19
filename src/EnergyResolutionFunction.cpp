@@ -15,7 +15,7 @@ EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShap
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
-    ResolutionFunction = ResolutionFunctionIn->clone();
+    ResolutionFunction = move(ResolutionFunctionIn);
     SW = SWIn;
 }
 

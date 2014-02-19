@@ -355,6 +355,16 @@ void SpinWave::Calc_Intensities()
         S_r = sl->getMoment();
         formFactor.setType(sl->getType());
         ff = formFactor.getFormFactor(KX,KY,KZ);
+        /*if (sl->getType() == "MN2")
+        {
+            formFactor.setType("CO2");
+            ff = 0.6*ff+ 0.4*formFactor.getFormFactor(KX,KY,KZ);
+        }*/
+        if (sl->getType() == "CO2")
+        {
+            formFactor.setType("MN2");
+            ff = 0.8*ff+ 0.2*formFactor.getFormFactor(KX,KY,KZ);
+        }
         for(int L=0;L<M;L++) //n
         {
             for(int L1=0;L1<3;L1++) //alpha

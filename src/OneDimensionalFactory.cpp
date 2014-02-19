@@ -14,7 +14,7 @@
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double fwhm, double tol)
 {
-    std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalGaussian);
+    std::unique_ptr<OneDimensionalGaussian> resinfo(new OneDimensionalGaussian);
     resinfo->setFWHM(fwhm);
     resinfo->setTolerance(tol);
     return std::move(resinfo);
@@ -22,7 +22,7 @@ std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double 
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getLorentzian(double fwhm, double tol)
 {
-    std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalLorentzian);
+    std::unique_ptr<OneDimensionalLorentzian> resinfo(new OneDimensionalLorentzian);
     resinfo->setFWHM(fwhm);
     resinfo->setTolerance(tol);
     return std::move(resinfo);

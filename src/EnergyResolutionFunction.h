@@ -24,10 +24,10 @@ public:
     ~EnergyResolutionFunction(){};
 private:
     std::size_t getBin(double Energy);
-    double MinimumEnergy,MaximumEnergy;
     std::size_t EnergyPoints;
-    SpinWave SW;
+    double MinimumEnergy,MaximumEnergy;
     std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
+    SpinWave SW;
 };
 
 #endif /* defined(__EnergyResolutionFunction__) */

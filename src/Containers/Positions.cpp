@@ -9,7 +9,6 @@
 #include "Positions.h"
 #include <cmath>
 
-
 bool Positions::operator==(Positions& other)
 {
     for(auto MyPosition = this->begin(); MyPosition!= this->end(); MyPosition++)

@@ -6,8 +6,15 @@
 //
 //
 #define _USE_MATH_DEFINES
+#include <exception>
+#include <numeric>
+#include <iostream>
 #include <string>
 #include <cmath>
+#include <functional>
+#include <algorithm>
+#include <boost/iterator/zip_iterator.hpp>
+#include <boost/tuple/tuple.hpp>
 #include "MagneticFormFactor.h"
 
 using std::exp;
@@ -29,6 +36,7 @@ void MagneticFormFactor::initializeMap()
 {
     coefficients =
     {
+        {"NONE",vector<double>{ 0.0,0.0,0.0,0.0,0.0,0.0,1.0}},
         {"AM2",vector<double>{ 0.474300, 21.776100,  1.580000,  5.690200, -1.077900,  4.145100,  0.021800}},
         {"AM3",vector<double>{ 0.423900, 19.573900,  1.457300,  5.872200, -0.905200,  3.968200,  0.023800}},
         {"AM4",vector<double>{ 0.373700, 17.862499,  1.352100,  6.042600, -0.751400,  3.719900,  0.025800}},
@@ -129,23 +137,82 @@ void MagneticFormFactor::initializeMap()
 
 void MagneticFormFactor::setType(std::string type)
 {
-    if ( coefficients.find(type) == coefficients.end() )
+    Farray.clear();
+    NormalizedWeights.clear();
+    setType(type,1.0);
+}
+
+void MagneticFormFactor::setType(std::string type, double weight)
+{
+
+    
+    if ( coefficients.find(type) != coefficients.end() )
     {
-        F = {0.0,0.0,0.0,0.0,0.0,0.0,1.0};
+        Farray.push_back(coefficients[type]);
+        NormalizedWeights.push_back(weight);
     }
     else
     {
-        F = coefficients[type];
+        std::cout << "Form factor coefficients for " << type << " were not found!" << std::endl;
+    }
+}
+
+void MagneticFormFactor::setType( std::vector<std::string> types, std::vector<double> weights)
+{
+    
+    if (types.size() != weights.size())
+    {
+        throw std::runtime_error("Types and weights array are not equal lengths!");
+    }
+    
+    Farray.clear();
+    NormalizedWeights.clear();
+    double sum = std::accumulate(weights.begin(),weights.end(),0.0);
+    //std::cout << "sum= " << sum << std::endl;
+    //std::cout << types.size() << " " << weights.size() << std::endl;
+    if (types.size() != weights.size())
+    {
+        std::cout << "Size of types and weights arrays are different" << std::endl;
+    }
+    else
+    {
+        auto begin = boost::make_zip_iterator(boost::make_tuple(types.begin(),weights.begin()));
+        auto end = boost::make_zip_iterator(boost::make_tuple(types.end(),weights.end()));
+        for(auto element = begin; element!= end; element++)
+        {
+            setType(element->get<0>(),element->get<1>()/sum);
+        }
     }
 }
 
 double MagneticFormFactor::getFormFactor(double x, double y, double z)
 {
-    double s2 = (pow(x,2) + pow(y,2) + pow(z,2))/(16.0*M_PI*M_PI);
-    double f_Q = F[6];
-    for(int k=0;k<3;k++)
+    if (Farray.size() == 0)
     {
-        f_Q += F[2*k]*exp(-1.0*F[2*k+1]*s2);
+        throw std::runtime_error("Magnetic Form Factor Not Set");
     }
-    return f_Q;
+    
+    double result = 0.0;
+    double s2 = (pow(x,2) + pow(y,2) + pow(z,2))/(16.0*M_PI*M_PI);
+    
+    auto begin = boost::make_zip_iterator(boost::make_tuple(Farray.begin(),NormalizedWeights.begin()));
+    auto end = boost::make_zip_iterator(boost::make_tuple(Farray.end(),NormalizedWeights.end()));
+    
+    for( auto element = begin; element != end; element++)
+    {
+        vector<double> F = element->get<0>();
+        double weight = element->get<1>();
+        
+        //std::cout << "weight= " << weight << std::endl;
+        
+        double f_Q = F[6];
+        for(int k=0;k<3;k++)
+        {
+            f_Q += F[2*k]*exp(-1.0*F[2*k+1]*s2);
+        }
+        
+        //std::cout << "f_Q= " <<  f_Q << std::endl;
+        result += weight*f_Q;
+    }
+    return result;
 }

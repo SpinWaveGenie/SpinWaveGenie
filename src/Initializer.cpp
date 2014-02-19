@@ -8,14 +8,11 @@
 #include "TwoDimensionCut.h"
 #include "PointsAlongLine.h"
 #include "Containers/Positions.h"
-#include "OneDimensionalPseudoVoigt.h"
-#include "OneDimensionalLorentzian.h"
-#include "OneDimensionalGaussian.h"
+#include "OneDimensionalFactory.h"
 #include "OneDimensionalShapes.h"
 
 using namespace std;
 using namespace boost;
-
 
 double stringToDouble(string value)
 {
@@ -344,59 +341,47 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         pugi::xml_node Lorentzian = type.child("OneDimensionLorentzian");
         pugi::xml_node PseudoVoigt = type.child("OneDimensionPseudoVoigt");
 
+        OneDimensionalFactory factory;
+        
         if (Gaussian)
         {
-            std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalGaussian);
-            
             double fwhm,tolerance;
             fwhm = stringToDouble(Gaussian.child_value("fwhm"));
             tolerance = stringToDouble(Gaussian.child_value("tol"));
             
-            resinfo->setFWHM(fwhm);
-            resinfo->setTolerance(tolerance);
+            auto resinfo = factory.getGaussian(fwhm,tolerance);
             Cut.setConvolutionObject(move(resinfo));
             
             cout << "Gaussian resolution function set" << endl;
-
         }
         else if(Lorentzian)
         {
-            std::unique_ptr<OneDimensionalShapes> resinfo(new OneDimensionalLorentzian);
-
             double fwhm,tolerance;
             fwhm = stringToDouble(Lorentzian.child_value("fwhm"));
             tolerance = stringToDouble(Lorentzian.child_value("tol"));
-            
-            resinfo->setFWHM(fwhm);
-            resinfo->setTolerance(tolerance);
-            
-            Cut.setConvolutionObject(move(resinfo));
-            cout << "Lorentzian resolution function set" << endl;
 
+            auto resinfo = factory.getLorentzian(fwhm,tolerance);
+            Cut.setConvolutionObject(move(resinfo));
+            
+            cout << "Lorentzian resolution function set" << endl;
         }
         else if(PseudoVoigt)
         {
-            std::unique_ptr<OneDimensionalPseudoVoigt> resinfo(new OneDimensionalPseudoVoigt);
-            
             double eta,fwhm,tolerance;
             eta = stringToDouble(PseudoVoigt.child_value("eta"));
             fwhm = stringToDouble(PseudoVoigt.child_value("fwhm"));
             tolerance = stringToDouble(PseudoVoigt.child_value("tol"));
             
-            resinfo->setEta(eta);
-            resinfo->setFWHM(fwhm);
-            resinfo->setTolerance(tolerance);
+            auto resinfo = factory.getPseudoVoigt(eta,fwhm,tolerance);
             Cut.setConvolutionObject(move(resinfo));
             
             cout << "Pseudo-Voigt resolution function set" << endl;
-
         }
         else
         {
             cout << "RESOLUTION FUNCTION NOT SET!!!" << endl;
         }
     }
-    
     SpinWave SW = builder.Create_Element();
     Cut.setSpinWave(SW);
     Cut.save();

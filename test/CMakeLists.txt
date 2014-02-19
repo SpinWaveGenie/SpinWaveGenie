@@ -7,14 +7,17 @@ LINK_LIBRARIES(${Boost_LIBRARIES})
 
 file(GLOB CELL_SRCS ../src/Cell/*.cpp)
 file(GLOB CONTAINERS_SRCS ../src/Containers/*.cpp)
+file(GLOB FORMFACTOR_SRCS ../src/Genie/MagneticFormFactor.cpp)
 
 file(GLOB CELL_HDRS ../src/Cell/*.h)
 file(GLOB CONTAINERS_HDRS ../src/Containers/*.h)
-
+file(GLOB FORMFACTOR_HDRS ../src/Genie/MagneticFormFactor.h)
 
 add_executable(SublatticeTest SublatticeTest.cpp ${CELL_SRCS} ${CELL_HDRS} ${CONTAINERS_SRCS} ${CONTAINERS_HDRS}  )
 add_executable(CellTest CellTest.cpp ${CELL_SRCS} ${CELL_HDRS} ${CONTAINERS_HDRS} ${CONTAINERS_SRCS} ) 
+add_executable(FormFactorTest FormFactorTest.cpp ${FORMFACTOR_SRCS} ${FORMFACTOR_HDRS} )
 add_test(NAME SublatticeTest COMMAND SublatticeTest)
 add_test(NAME CellTest COMMAND CellTest)
+add_test(NAME FormFactorTest COMMAND FormFactorTest)
 
 

@@ -14,15 +14,15 @@ Neighbors::Neighbors()
 
 void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min, double max)
 {
-    
+    // In principle, we only need to iterate over one atom in the first sublattice. However, iterating over
+    // all atoms provides a good check that all atoms have the same number of neighbors in the same relative
+    // positions
     for(Sublattice::Iterator atom1 = cell.getSublattice(sl1).begin(); atom1!=cell.getSublattice(sl1).end();++atom1)
     {
-        
-        UniquePositions Neighbors;
-        // No benefit to iterating over the first sublattice. Hence we choose the first element
         // Increase the size of the supercell until the list of neighbors does not change
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. If not, a warning message will be printed.
+        UniquePositions Neighbors;
         for (long supercellSize = 1;supercellSize<=5;supercellSize++)
         {
             //cout << supercellSize << endl;
