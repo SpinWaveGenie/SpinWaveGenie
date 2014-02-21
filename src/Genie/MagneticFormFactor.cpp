@@ -192,27 +192,17 @@ double MagneticFormFactor::getFormFactor(double x, double y, double z)
         throw std::runtime_error("Magnetic Form Factor Not Set");
     }
     
-    double result = 0.0;
-    double s2 = (pow(x,2) + pow(y,2) + pow(z,2))/(16.0*M_PI*M_PI);
+    double ms2 = -1.0*(pow(x,2) + pow(y,2) + pow(z,2))/(16.0*M_PI*M_PI);
     
+    double result = 0.0;
     auto begin = boost::make_zip_iterator(boost::make_tuple(Farray.begin(),NormalizedWeights.begin()));
     auto end = boost::make_zip_iterator(boost::make_tuple(Farray.end(),NormalizedWeights.end()));
-    
     for( auto element = begin; element != end; element++)
     {
         vector<double> F = element->get<0>();
         double weight = element->get<1>();
-        
-        //std::cout << "weight= " << weight << std::endl;
-        
-        double f_Q = F[6];
-        for(int k=0;k<3;k++)
-        {
-            f_Q += F[2*k]*exp(-1.0*F[2*k+1]*s2);
-        }
-        
-        //std::cout << "f_Q= " <<  f_Q << std::endl;
-        result += weight*f_Q;
+        result += weight*(F[0]*exp(F[1]*ms2) + F[2]*exp(F[3]*ms2) + F[4]*exp(F[5]*ms2) + F[6]);
     }
+    
     return result;
 }
