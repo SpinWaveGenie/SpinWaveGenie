@@ -26,20 +26,20 @@ endmacro()
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-find_package(Log4cplus)
-if(NOT ${LOG4CPLUS_FOUND})
-  include(ExternalProject)
-  ExternalProject_Add(log4cplus
-    GIT_REPOSITORY https://github.com/log4cplus/log4cplus.git
-    GIT_TAG REL_1_1_2
-    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/log4cplus
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/log4cplus "-DCMAKE_CXX_FLAGS:STRING=-std=c++11 -stdlib=libc++" "-DCMAKE_EXE_LINKER_FLAGS:STRING=-std=c++11 -stdlib=libc++" -DBUILD_SHARED_LIBS:BOOL=FALSE 
-)
-  set(LOG4CPLUS_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/log4cplus/include)
-  set(LOG4CPLUS_LIBRARIES ${CMAKE_CURRENT_BINARY_DIR}/log4cplus/lib/liblog4cplus.dylib)
-endif(NOT ${LOG4CPLUS_FOUND})
+#find_package(Log4cplus)
+#if(NOT ${LOG4CPLUS_FOUND})
+#  include(ExternalProject)
+#  ExternalProject_Add(log4cplus
+#    GIT_REPOSITORY https://github.com/log4cplus/log4cplus.git
+#    GIT_TAG REL_1_1_2
+#    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/log4cplus
+#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/log4cplus "-DCMAKE_CXX_FLAGS:STRING=-std=c++11 -stdlib=libc++" "-DCMAKE_EXE_LINKER_FLAGS:STRING=-std=c++11 -stdlib=libc++" -DBUILD_SHARED_LIBS:BOOL=FALSE 
+#)
+#  set(LOG4CPLUS_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/log4cplus/include)
+#  set(LOG4CPLUS_LIBRARIES ${CMAKE_CURRENT_BINARY_DIR}/log4cplus/lib/liblog4cplus.dylib)
+#endif(NOT ${LOG4CPLUS_FOUND})
 
-message("sfml_PREFIX='${LOG4CPLUS_LIBRARIES}'")
+#message("sfml_PREFIX='${LOG4CPLUS_LIBRARIES}'")
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     message("compiler detected as: GNU compiler")

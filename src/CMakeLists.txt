@@ -1,6 +1,6 @@
 include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${LOG4CPLUS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} /Users/svh/Documents/spin_wave_genie/asdf/log4cplus/lib  /usr/local/Cellar/nlopt/2.4/lib)
-LINK_LIBRARIES(${Boost_LIBRARIES} log4cplusS nlopt)
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} /usr/local/Cellar/nlopt/2.4/lib)
+LINK_LIBRARIES(${Boost_LIBRARIES} nlopt)
 
 #add_subdirectory(Interactions)
 

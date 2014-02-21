@@ -91,12 +91,12 @@ public:
     const Matrix3 getReciprocalVectors();
     //! Add sublattice to cell
     //! \param name Unique name defining sublattice
-    //! \param sl Pointer to Sublattice object
+    //! \param sl Sublattice object
     //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
     void addSublattice(Sublattice& sl);
-    //! Returns pointer to sublattice "name"
+    //! Returns sublattice "name"
     //! \param name used to describe sublattice
-    //! \return pointer to sublattice
+    //! \return sublattice
     Sublattice& getSublattice(std::string name);
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
@@ -106,8 +106,8 @@ public:
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices
     const size_t size();
-    //! \return Returns an iterator pointing to the first Sublattice element
     typedef SublatticeIterator Iterator;
+    //! \return Returns an iterator pointing to the first Sublattice element
     Iterator begin();
     //! \return Returns an iterator pointing to the final Sublattice element
     Iterator end();

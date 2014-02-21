@@ -25,7 +25,6 @@ public:
     //! returns name of a given sublattice
     //! \return name of sublattice
     std::string getName();
-    //! use AtomIterator to iterate over atoms in sublattice
     //! set type to describe magnetic form factor used in the calculation of intensities;
     //! \param typeInput a std::string argument
     void setType(std::string typeInput );
@@ -38,14 +37,11 @@ public:
      \param phi_input angle 0 <= phi <= 2*pi
      */
     void setMoment(double spinInput, double thetaInput , double phiInput);
-    //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
-    //! \return coordinates [r,theta,phi]
+    //! \return coordinate r of [r,theta,phi]
     double getMoment();
-    //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
-    //! \return coordinates [r,theta,phi]
+    //! \return coordinates theta of [r,theta,phi]
     double getTheta();
-    //! returns spherical coordinates (r,theta,phi) as a std:vector<double>
-    //! \return coordinates [r,theta,phi]
+    //! \return coordinates phi of [r,theta,phi]
     double getPhi();
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
@@ -69,7 +65,6 @@ private:
     double spin, //!< magnitude of spin
     theta, //!< angle theta describing orientation of spin
     phi; //!< angle phi describing orientation of spin
-    //std::vector<double> angles; //!< spin, theta, phi
     Matrix3 rotationMatrix, //!< rotation matrix describing moment along z
     inverseMatrix; //!< inverse for rotation matrix
     UniquePositions positions; //!< std::vector storing atomic positions.
