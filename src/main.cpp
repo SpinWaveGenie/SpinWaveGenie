@@ -77,14 +77,14 @@ int main(int argc, char * argv[])
         
     Cell cell = four_sl.get_cell();
         
-    string sl_r = "Fe22";
-    string sl_s = "Fe";
+    string sl_r = "Mn0";
+    string sl_s = "Mn";
     double min = 0.0;
-    double max = 4.0;
+    double max = 7.0;
         
         
         
-    for (int i=4;i<16;i++)
+    for (int i=0;i<2;i++)
     {
         string sl_si = sl_s + to_string(i);
         cout << sl_si << endl;

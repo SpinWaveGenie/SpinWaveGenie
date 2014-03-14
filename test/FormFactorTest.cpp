@@ -4,30 +4,34 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <map>
 #include <boost/test/unit_test.hpp>
 #include "Genie/MagneticFormFactor.h"
 
 class TestCoefficients : public MagneticFormFactor {
 public:
-    void testcoefficients()
+    std::map<std::string,double> testCoefficients()
     {
+        std::map<std::string,double> badCoefficients;
         for( auto it = coefficients.begin(); it!=coefficients.end(); it++)
         {
             std::vector<double> F = it->second;
             double test = F[0] + F[2] + F[4] + F[6];
-            //std::cout << fabs(test-1.0) << std::endl;
             if(fabs(test-1.0)>2.4e-3)
             {
-                throw std::logic_error("error in coefficients for "+it->first);
+                badCoefficients.insert(std::pair<std::string,double>(it->first,test));
             }
         }
+        return badCoefficients;
     }
 };
 
 BOOST_AUTO_TEST_CASE( CheckCoefficients )
 {
     TestCoefficients test;
-    BOOST_CHECK_NO_THROW(test.testcoefficients());
+    std::map<std::string,double> badCoefficients;
+    badCoefficients = test.testCoefficients();
+    BOOST_CHECK_EQUAL(badCoefficients.size(), 0);
 }
 
 
