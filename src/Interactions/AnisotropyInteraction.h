@@ -33,7 +33,7 @@ private:
     Matrix3 directions;
     double value;
     int r,M;
-    std::complex<double> LNrr,LNrrM,LNrMr,LNrMrM;
+    std::complex<double> LNrr,LNrrM,LNrMr;
 };
 
 #endif /* defined(__spin_wave_genie__AnisotropyInteraction__) */

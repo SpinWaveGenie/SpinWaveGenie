@@ -58,7 +58,6 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
     LNrr = complex<double>(0.0,0.0);
     LNrMr = complex<double>(0.0,0.0);
     LNrrM = complex<double>(0.0,0.0);
-    LNrMrM = complex<double>(0.0,0.0);
     
     for (int i=0; i<3; i++)
         for (int j=0; j<3; j++)
@@ -73,7 +72,6 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
                 LNrr += X*(eta - inv(i,2)*inv(j,2));
                 LNrMr += X*conj(zeta);
                 LNrrM += X*zeta ;
-                LNrMrM += X*(eta - inv(i,2)*inv(j,2));
             }
         }
     //cout << "new implementation" << endl;
@@ -105,10 +103,8 @@ void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &e
 
 void AnisotropyInteraction::Update_Matrix(Vector3 K, Eigen::MatrixXcd &LN)
 {
-
     LN(r,r) += LNrr;
     LN(r,r+M) += LNrrM;
     LN(r+M,r) += LNrMr;
-    LN(r+M,r+M) += LNrMrM;
-
+    LN(r+M,r+M) += LNrr;
 }
