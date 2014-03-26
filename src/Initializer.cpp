@@ -1,6 +1,6 @@
 #include <functional>
 #include "Initializer.h"
-#include "Interactions/Exch_Interaction.h"
+#include "Interactions/ExchangeInteraction.h"
 #include "Interactions/AnisotropyInteraction.h"
 #include "Interactions/DM_Y_Interaction.h"
 #include "Interactions/DM_Z_Interaction.h"
@@ -150,7 +150,8 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
              string atom2 = pair.child_value("name2");
              
              cout << name << " " << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
-             builder.Add_Interaction(new Exch_Interaction(name,value,atom1,atom2,min,max));
+             builder.Add_Interaction(new ExchangeInteraction(name,value,atom1,atom2,min,max));
+
          }
      }
     

@@ -54,7 +54,6 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
     const double S = cell.getSublattice(sl_r).getMoment();
     const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
     
-    
     LNrr = complex<double>(0.0,0.0);
     LNrMr = complex<double>(0.0,0.0);
     LNrrM = complex<double>(0.0,0.0);

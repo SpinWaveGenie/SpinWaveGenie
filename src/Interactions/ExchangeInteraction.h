@@ -1,5 +1,5 @@
-#ifndef __Exch_Interaction_H__
-#define __Exch_Interaction_H__
+#ifndef __ExchangeInteraction_H__
+#define __ExchangeInteraction_H__
 
 #include <string>
 #include <vector>
@@ -10,10 +10,10 @@
 #include "Cell/Neighbors.h"
 
 
-class Exch_Interaction: public Interaction
+class ExchangeInteraction: public Interaction
 {
 public:
-    Exch_Interaction(std::string name, double value, std::string sl_r,std::string sl_s, double min, double max);
+    ExchangeInteraction(std::string name, double value, std::string sl_r,std::string sl_s, double min, double max);
     void Update_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
     virtual void updateValue(double value_in);
     virtual std::string getName();
@@ -22,16 +22,14 @@ public:
     void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
     std::vector<std::string> sublattices() const;
     virtual Interaction* do_clone() const;
-    virtual ~Exch_Interaction(){};
+    virtual ~ExchangeInteraction(){};
 private:
     Neighbors neighbors;
     std::string name,sl_r,sl_s;
     int r,s,M;
     double value,min,max;
-    double Sr,Ss;
-    Matrix3 Frs,Fsr;
-    double z_rs;
     std::complex<double> gamma_rs;
+    std::complex<double> LNr,LNs,LNrr,LNss,LNrs,LNrsM;
 };
 
 #endif

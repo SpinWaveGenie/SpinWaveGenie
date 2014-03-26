@@ -1,102 +1,124 @@
 #include "Exch_Interaction.h"
+#include <iostream>
+#include "../Cell/Neighbors.h"
 
 using namespace std;
 using namespace Eigen;
 
-Exch_Interaction::Exch_Interaction()
+Exch_Interaction::Exch_Interaction(string name_in, double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
+    name = name_in;
+    this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
+}
+
+Interaction* Exch_Interaction::do_clone() const
+{
+    return new Exch_Interaction(*this);
+}
+
+void Exch_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+{
+    value = value_in;
+    sl_r = sl_r_in;
+    sl_s = sl_s_in;
+    min = min_in;
+    max = max_in;
+}
+
+string Exch_Interaction::getName()
+{
+    return name;
+}
+
+void Exch_Interaction::updateValue(double value_in)
+{
+    value = value_in;
+}
+
+vector<string> Exch_Interaction::sublattices() const
+{
+    vector<string> sl = {sl_r,sl_s};
+    return sl;
+}
+
+void Exch_Interaction::calcConstantValues(Cell& cell)
+{
+    r = cell.getPosition(sl_r);
+    s = cell.getPosition(sl_s);
+    M = cell.size();
+    
+    Sr = cell.getSublattice(sl_r).getMoment();
+    Ss = cell.getSublattice(sl_s).getMoment();
+
+    Frs = cell.getSublattice(sl_r).getRotationMatrix()*
+          cell.getSublattice(sl_s).getInverseMatrix();
+    
+    Fsr = cell.getSublattice(sl_s).getRotationMatrix()*
+          cell.getSublattice(sl_r).getInverseMatrix();
+    
+    neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+    z_rs = neighbors.getNumberNeighbors();
+    
+    //cout << r << "\t" << s << endl << F << endl;
+    //cout << endl;
+    
+    //cout << "G1= " << G1 << endl;
+    //cout << "G2= " << G2 << endl;
     
 }
 
-void Exch_Interaction::Add_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+void Exch_Interaction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
 {
-    Exch_Parameters in;
-    in.value = value_in;
-    in.sl_r = sl_r_in;
-    in.sl_s = sl_s_in;
-    in.min = min_in;
-    in.max = max_in;
-    exch_array.push_back(in);
-}
-
-void Exch_Interaction::Update_Matrix(Vector3d K, boost::shared_ptr<Cell> cell, MatrixXcd &LN)
-{
-    //K[0] = KXP*2.0*M_PI;
-    //K[1] = KYP*2.0*M_PI;
-    //K[2] = KZP*2.0*M_PI; 
+        
+    complex<double> F1rs(Frs(0,2),Frs(1,2));
+    complex<double> F2rs(Frs(2,0),Frs(2,1));
+    complex<double> F1sr(Fsr(0,2),Fsr(1,2));
+    complex<double> F2sr(Fsr(2,0),Fsr(2,1));
     
-    std::vector<Exch_Parameters>::iterator iter;
-    for(iter=exch_array.begin();iter!=exch_array.end();iter++)
+    elements[r] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*conj(F1rs + F2sr);
+    elements[r+M] -= sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*(F1rs+F2sr);
+    
+    if (r!=s)
     {
-        //find location of r,s
-        int r= -1;
-        int s= -1;
-    
-        CellIter sl(cell);
-        int M=0;
-        for(sl.First();!sl.IsDone();sl.Next())
-        {
-            if ( iter->sl_r == sl.CurrentItem()->get_name())
-                r = M;
-            if ( iter->sl_s == sl.CurrentItem()->get_name())
-                s = M;
-            M++;
-        }
-        assert(r!=-1 && s!=-1);
-           
-        double S = cell->get_sublattice(iter->sl_r)->get_moment()[0];
-        
-        Matrix3d F;
-        F = cell->get_sublattice(iter->sl_r)->get_rot_matrix()*
-            cell->get_sublattice(iter->sl_s)->get_inv_matrix();
-    
-        //cout << r << "\t" << s << endl << F << endl;
-        //cout << endl;
+      elements[s] -= sqrt(Ss)*Sr/(2.0*sqrt(2.0))*z_rs*value*conj(F1sr + F2rs);
+      elements[s+M] -= sqrt(Ss)*Sr/(2.0*sqrt(2.0))*z_rs*value*(F1sr+F2rs);
+    }
+}
 
-        boost::shared_ptr<Sublattice> sl_s = cell->get_sublattice(iter->sl_r);
-        boost::shared_ptr<Sublattice> sl_r = cell->get_sublattice(iter->sl_s);
-        NeighborIter nbr(cell,sl_s,sl_r,iter->min,iter->max);
+void Exch_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN)
+{
+    
+    complex<double> G1rs = -0.5*complex<double>(Frs(0,0) + Frs(1,1),Frs(1,0)-Frs(0,1));
+    complex<double> G2rs = -0.5*complex<double>(Frs(0,0) - Frs(1,1),-Frs(1,0)-Frs(0,1));
+    complex<double> G1sr = -0.5*complex<double>(Fsr(0,0) + Fsr(1,1),Fsr(1,0)-Fsr(0,1));
+    complex<double> G2sr = -0.5*complex<double>(Fsr(0,0) - Fsr(1,1),-Fsr(1,0)-Fsr(0,1));
+    
+    gamma_rs = neighbors.getGamma(K);
+    
+    //cout << gamma_rs << endl;
+    
+    double X = value*sqrt(Sr*Ss);
+    
+    //cout << "G2rs  G2sr" << endl;
+    //cout << G2rs << " " << G2sr << endl;
+    LN(r,r) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
+    LN(r+M,r+M) += 0.25*z_rs*value*Ss*(Frs(2,2)+Fsr(2,2));
 
-        double z_rs;
-        z_rs = 0;
-        complex<double> gamma_rs (0.0,0.0);
-        for(nbr.First();!nbr.IsDone();nbr.Next())
-        {
-            double dot_prod = K.dot(nbr.CurrentItem());
-            //cout << nbr.CurrentItem().transpose() << endl;
-            gamma_rs += complex<double> (cos(dot_prod),-1.0*sin(dot_prod));
-            z_rs = z_rs + 1.0;
-        }
-        
-        gamma_rs /= z_rs; //force gamma_rs(k=0) = 1.0
-        //cout << "z_rs= " << z_rs << endl;
-        //cout << "gamma_rs(" << r << "," << s << ")= " << gamma_rs << endl;
-    
-        complex<double> G1 (F(0,0) + F(1,1),F(1,0)-F(0,1));
-        G1 *= -0.5;
-    
-        complex<double> G2 (F(0,0) - F(1,1),-F(1,0)-F(0,1));
-        G2 *= -0.5;
-        
-        double X = iter->value;
-                
-        //cout << "G1= " << G1 << endl;
-	    //cout << "G2= " << G2 << endl;
+    LN(r,s) += 0.25*z_rs*X*conj(gamma_rs)*(G1rs+conj(G1sr));
+    LN(r+M,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G1rs)+G1sr);
 
-        LN(r,r) += 0.25*z_rs*X*S*F(2,2);
-        LN(s,s) += 0.25*z_rs*X*S*F(2,2);
-        LN(r+M,r+M) += 0.25*z_rs*X*S*F(2,2);
-        LN(s+M,s+M) += 0.25*z_rs*X*S*F(2,2);
+    LN(r,s+M) += 0.25*z_rs*X*conj(gamma_rs)*(conj(G2rs)+conj(G2sr));
+    LN(r+M,s) += 0.25*z_rs*X*conj(gamma_rs)*(G2rs+G2sr);
     
-        LN(r,s) += 0.25*z_rs*X*S*gamma_rs*G1;
-        LN(r+M,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G1);
-        LN(s,r) += 0.25*z_rs*X*S*gamma_rs*conj(G1);
-        LN(s+M,r+M) += 0.25*z_rs*X*S*conj(gamma_rs)*G1;
-                    
-        LN(r,s+M) += 0.25*z_rs*X*S*conj(gamma_rs)*conj(G2);
-        LN(s,r+M) += 0.25*z_rs*X*S*gamma_rs*conj(G2);
-                    
-        LN(r+M,s) += 0.25*z_rs*X*S*conj(gamma_rs)*G2;
-        LN(s+M,r) += 0.25*z_rs*X*S*gamma_rs*G2;
+    if (r!=s)
+    {
+      LN(s,s) += 0.25*z_rs*value*Sr*(Frs(2,2)+Fsr(2,2));
+      LN(s+M,s+M) += 0.25*z_rs*value*Sr*(Frs(2,2)+Fsr(2,2));
+
+      LN(s,r) += 0.25*z_rs*X*gamma_rs*(G1sr+conj(G1rs));
+      LN(s+M,r+M) += 0.25*z_rs*X*gamma_rs*(conj(G1sr)+G1rs);
+       
+      LN(s,r+M) += 0.25*z_rs*X*gamma_rs*(conj(G2rs)+conj(G2sr));
+      LN(s+M,r) += 0.25*z_rs*X*gamma_rs*(G2rs+G2sr);
     }
 }

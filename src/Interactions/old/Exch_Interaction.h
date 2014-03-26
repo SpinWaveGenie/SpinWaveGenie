@@ -1,21 +1,37 @@
+#ifndef __Exch_Interaction_H__
+#define __Exch_Interaction_H__
+
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include <boost/shared_ptr.hpp>
-#include "../Cell.h"
+#include "Cell/Cell.h"
+#include "Interactions/Interaction.h"
+#include "Containers/Matrices.h"
+#include "Cell/Neighbors.h"
 
-struct Exch_Parameters
-{
-    std::string sl_r,sl_s;
-    double value,min,max;
-};
 
-class Exch_Interaction
+class Exch_Interaction: public Interaction
 {
 public:
-    Exch_Interaction();
-    void Add_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
-    void Update_Matrix(Eigen::Vector3d K, boost::shared_ptr<Cell> cell, Eigen::MatrixXcd &LN);
+    Exch_Interaction(std::string name, double value, std::string sl_r,std::string sl_s, double min, double max);
+    void Update_Interaction(double value, std::string sl_r,std::string sl_s, double min, double max);
+    virtual void updateValue(double value_in);
+    virtual std::string getName();
+    void calcConstantValues(Cell& cell);
+    void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
+    void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
+    std::vector<std::string> sublattices() const;
+    virtual Interaction* do_clone() const;
+    virtual ~Exch_Interaction(){};
 private:
-    std::vector<Exch_Parameters> exch_array;
+    Neighbors neighbors;
+    std::string name,sl_r,sl_s;
+    int r,s,M;
+    double value,min,max;
+    double Sr,Ss;
+    Matrix3 Frs,Fsr;
+    double z_rs;
+    std::complex<double> gamma_rs;
 };
+
+#endif
