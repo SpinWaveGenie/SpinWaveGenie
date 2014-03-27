@@ -5,7 +5,7 @@
 using namespace std;
 using namespace Eigen;
 
-ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
 {
     name = name_in;
     this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
@@ -81,12 +81,9 @@ void ExchangeInteraction::calcConstantValues(Cell& cell)
 void ExchangeInteraction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
 {
     elements[r] += LNr;
+    elements[s] += LNs;
     elements[r+M] += conj(LNr);
-    if (r!=s)
-    {
-      elements[s] += LNs;
-      elements[s+M] += conj(LNs);
-    }
+    elements[s+M] += conj(LNs);
 }
 
 void ExchangeInteraction::Update_Matrix(Vector3d K, MatrixXcd &LN)
@@ -94,23 +91,20 @@ void ExchangeInteraction::Update_Matrix(Vector3d K, MatrixXcd &LN)
     gamma_rs = neighbors.getGamma(K);
     
     LN(r,r) += LNrr;
-    LN(r+M,r+M) += LNrr;
-
     LN(r,s) += LNrs*conj(gamma_rs);
+    LN(r,s+M) += LNrsM*conj(gamma_rs);
+    
+    LN(s,r) += conj(LNrs)*gamma_rs;
+    LN(s,s) += LNss;
+    LN(s,r+M) += LNrsM*gamma_rs;
+
+    LN(r+M,s) += conj(LNrsM)*conj(gamma_rs);
+    LN(r+M,r+M) += LNrr;
     LN(r+M,s+M) += conj(LNrs)*conj(gamma_rs);
 
-    LN(r,s+M) += LNrsM*conj(gamma_rs);
-    LN(r+M,s) += conj(LNrsM)*conj(gamma_rs);
-    
-    if (r!=s)
-    {
-      LN(s,s) += LNss;
-      LN(s+M,s+M) += LNss;
+    LN(s+M,r) += conj(LNrsM)*gamma_rs;
+    LN(s+M,r+M) += LNrs*gamma_rs;
+    LN(s+M,s+M) += LNss;
 
-      LN(s,r) += conj(LNrs)*gamma_rs;
-      LN(s+M,r+M) += LNrs*gamma_rs;
-       
-      LN(s,r+M) += LNrsM*gamma_rs;
-      LN(s+M,r) += conj(LNrsM)*gamma_rs;
-    }
+    
 }

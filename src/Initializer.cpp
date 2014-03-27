@@ -1,5 +1,6 @@
 #include <functional>
 #include "Initializer.h"
+#include "Interactions/InteractionFactory.h"
 #include "Interactions/ExchangeInteraction.h"
 #include "Interactions/AnisotropyInteraction.h"
 #include "Interactions/DM_Y_Interaction.h"
@@ -128,6 +129,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
 {
      SW_Builder buildertemp(unit_cell);
      builder = buildertemp;
+     InteractionFactory factory;
     
      pugi::xml_node exchange = node.child("Exchange");
      for (pugi::xml_node tool = exchange.child("group"); tool; tool = tool.next_sibling("group"))
@@ -150,7 +152,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
              string atom2 = pair.child_value("name2");
              
              cout << name << " " << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
-             builder.Add_Interaction(new ExchangeInteraction(name,value,atom1,atom2,min,max));
+             builder.Add_Interaction(factory.getExchange(name,value,atom1,atom2,min,max).release());
 
          }
      }
@@ -176,6 +178,8 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
         
         cout << x << '\t' << y << '\t' << z << endl;
         
+        Vector3 direction(x,y,z);
+        
         pugi::xml_node pairs = tool.child("pairs");
         for (pugi::xml_node pair = pairs.child("pair"); pair; pair = pair.next_sibling("pair"))
         {
@@ -183,19 +187,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             string atom2 = pair.child_value("name2");
             
             cout << name << " " << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
-            
-            if ( x > 0.99 && y < 0.01 && z < 0.01)
-            {
-                cout << "Error: Dzyaloshinsky-Moriya along X not yet implemented!" << endl;
-            }
-            else if (x < 0.01 && y > 0.99 && z < 0.01)
-            {
-                builder.Add_Interaction(new DM_Y_Interaction(name,value,atom1,atom2,min,max));
-            }
-            else if (x < 0.01 && y < 0.01 && z > 0.99)
-            {
-                builder.Add_Interaction(new DM_Z_Interaction(name,value,atom1,atom2,min,max));
-            }
+            builder.Add_Interaction( factory.getDzyaloshinskiiMoriya(name,value,direction,atom1,atom2,min,max).release() );
         }
     }
     
@@ -223,7 +215,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             string atom1 = name.child_value();
             Vector3 direction(x,y,z);
             cout << "direction= " << direction.transpose() << endl;
-            builder.Add_Interaction(new AnisotropyInteraction(identifier,value,direction,atom1));
+            builder.Add_Interaction(factory.getAnisotropy(identifier,value,direction,atom1).release());
         }
     }
 }

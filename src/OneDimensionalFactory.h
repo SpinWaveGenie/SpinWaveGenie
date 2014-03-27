@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <memory>
-#include "OneDimensionalShapes.cpp"
+#include "OneDimensionalShapes.h"
 
 class OneDimensionalFactory
 {

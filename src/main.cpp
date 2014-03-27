@@ -25,8 +25,6 @@ namespace po = boost::program_options;
 using namespace std;
 using namespace Eigen;
 
-
-
 int main(int argc, char * argv[])
 {
     string filename;
