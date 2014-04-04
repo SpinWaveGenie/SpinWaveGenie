@@ -1,6 +1,6 @@
-include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${LOG4CPLUS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} /usr/local/Cellar/nlopt/2.4/lib)
-LINK_LIBRARIES(${Boost_LIBRARIES} nlopt)
+include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${LOG4CPLUS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} /usr/local/Cellar/nlopt/2.4.1/include )
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} /usr/local/Cellar/nlopt/2.4.1/lib)
+LINK_LIBRARIES(${Boost_LIBRARIES} nlopt_cxx)
 
 #add_subdirectory(Interactions)
 

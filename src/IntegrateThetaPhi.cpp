@@ -13,12 +13,11 @@
 
 using namespace std;
 
-IntegrateThetaPhi::IntegrateThetaPhi(EnergyResolutionFunction resFunction, double min, double max, double points, Matrix3 basisVectorsIn)
+IntegrateThetaPhi::IntegrateThetaPhi(double min, double max, double points, Matrix3 basisVectorsIn)
 {
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
-    resolutionFunction = resFunction;
     basisVectors = basisVectorsIn;
     tol = 0.0001;
 }
@@ -37,17 +36,26 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     tmp[1] = r*sin(theta)*sin(phi);
     tmp[2] = r*cos(theta);
     
-    k = tmp.transpose()*basisVectors.inverse();
-    //cout << tmp.transpose() << endl;
+    k = basisVectors/(2.0*M_PI)*tmp;
+    //cout << tmp.transose() << endl;
     //cout << k.transpose() << endl;
     
-    vector<double> val = resolutionFunction.getCut(k[0],k[1],k[2]);
+    
+    //Vector3 woof = k.transpose()*basisVectors.inverse()*2.0*M_PI;
+    //cout << woof.norm() << endl << endl;
+    //vector<double> val = resolutionFunction.getCut(k[0],k[1],k[2]);
     
     double factor = sin(theta)/(4.0*M_PI);
     for(int i=0;i!=EnergyPoints;i++)
     {
-        retval[i] = val[i]*factor;
-        //double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
+        //retval[i] = factor*pow(0.25*sqrt(5.0/M_PI)*(3*cos(theta)*cos(theta)-1.0),1)*0.5*sqrt(3.0/M_PI)*cos(theta)*4.0*M_PI;
+        double S = 1.0;
+        double J = 1.0;
+        double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
+        double frequency = 2.0*J*S*(1.0-cos(tmp[0]));
+        //cout << frequency << endl;
+        double F = 0.5;
+        retval[i] = factor*(1.0+cos(theta)*cos(theta))*exp(-1.0*(4.0*log(2.0)*pow(energy-frequency,2))/(F*F));
         //cout << energy << " " << val[i] << " ";
     }
     //cout << endl;
@@ -67,7 +75,7 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
     
     int dim = 2;
     Vector3 dispRLU(kx,ky,kz);
-    Vector3 dispAng = dispRLU.transpose()*basisVectors;
+    Vector3 dispAng = dispRLU.transpose()*2.0*M_PI*basisVectors.inverse();
     r = dispAng.transpose().norm();
     
     //cout << "dispRLU= " << dispRLU.transpose() << endl;

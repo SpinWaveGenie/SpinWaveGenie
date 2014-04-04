@@ -20,7 +20,7 @@ void TwoDimensionCut::setFilename(string name)
 
 void TwoDimensionCut::setConvolutionObject(unique_ptr<OneDimensionalShapes> object)
 {
-    InstrumentResolution = move(object->clone());
+    InstrumentResolution = move(object);
 }
 
 void TwoDimensionCut::setSpinWave(SpinWave SWIn)
@@ -30,6 +30,7 @@ void TwoDimensionCut::setSpinWave(SpinWave SWIn)
 
 void TwoDimensionCut::setPoints(Positions pts)
 {
+    Kpoints.clear();
     for( Positions::Iterator it = pts.begin(); it!= pts.end(); it++)
     {
         Kpoints.insert(it->get<0>(),it->get<1>(),it->get<2>());
@@ -68,4 +69,5 @@ void TwoDimensionCut::save()
         file << figure;
     }
     file << endl;
+    file.close();
 }

@@ -51,3 +51,10 @@ Positions::Iterator Positions::end()
 {
   return boost::make_zip_iterator(boost::make_tuple(valuesX.end(),valuesY.end(),valuesZ.end()));
 }
+
+void Positions::clear()
+{
+    valuesX.clear();
+    valuesY.clear();
+    valuesZ.clear();
+}

@@ -322,8 +322,6 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         MaxEnergy = stringToDouble(group.child_value("lastpoint"));
         
         cout << MinEnergy << " " << MaxEnergy << " " << NumberPoints << endl;
-        
-        PointsAlongLine Line;
         Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
     }
     

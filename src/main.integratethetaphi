@@ -24,11 +24,11 @@ int main()
     0.0,1.0,0.0,
     0.0,0.0,1.0;
     
-    IntegrateThetaPhi func(0.0,5.0,401,basisVectors);
+    IntegrateThetaPhi func(0.0,10.0,11,basisVectors);
     
-    for (int value = 0; value < 401; value++)
+    for (int value = 0; value < 11; value++)
     {
-        vector<double> result = func.getCut(0.0,0.0,(double)value/100.0);
+        vector<double> result = func.getCut(0.0,0.0,(double)value/10.0);
         for ( auto it = result.begin(); it != result.end(); it++)
         {
             cout << (*it) << " ";

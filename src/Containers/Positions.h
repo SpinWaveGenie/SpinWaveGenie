@@ -18,6 +18,7 @@ public:
     Iterator begin();
     //! \return Returns an iterator pointing to the first element of the neighbor list
     Iterator end();
+    void clear();
 protected:
     std::vector<double> valuesX;
     std::vector<double> valuesY;

@@ -65,7 +65,7 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     recip = cell.getReciprocalVectors();
     K << KX,KY,KZ;
     //cout << "K before " << K.transpose() << endl;
-    K = recip*K;
+    K = K.transpose()*recip;
     //cout << "K after " << K.transpose() << endl;
     Set_Kpoint(K[0],K[1],K[2]);
     Clear_Matrix();
@@ -360,11 +360,11 @@ void SpinWave::Calc_Intensities()
             formFactor.setType("CO2");
             ff = 0.6*ff+ 0.4*formFactor.getFormFactor(KX,KY,KZ);
         }*/
-        if (sl->getType() == "CO2")
+        /*if (sl->getType() == "CO2")
         {
             formFactor.setType("MN2");
             ff = 0.8*ff+ 0.2*formFactor.getFormFactor(KX,KY,KZ);
-        }
+        }*/
         for(int L=0;L<M;L++) //n
         {
             for(int L1=0;L1<3;L1++) //alpha
