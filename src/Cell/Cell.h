@@ -63,6 +63,42 @@ private:
     
 };
 
+/*class ConstSublatticeIterator
+: public boost::iterator_facade<
+ConstSublatticeIterator
+, Sublattice const
+, boost::forward_traversal_tag
+>
+{
+private:
+    friend class boost::iterator_core_access;
+    
+public:
+    explicit ConstSublatticeIterator(std::map<std::string,Sublattice>::const_iterator _it)
+    : it(_it)
+    {}
+    
+    SublatticeIterator(SublatticeIterator const& other)
+    : it(other.it)
+    {}
+    
+private:
+    std::map<std::string,Sublattice>::iterator it;
+    void increment()
+    {
+        ++it;
+    }
+    bool equal(SublatticeIterator const& other) const
+    {
+        return (it == other.it);
+    }
+    Sublattice const& dereference() const
+    {
+        return it->second;
+    }
+    
+}; */
+
 //! Contains the basis vectors and a pointer to all sublattices in the unit cell.
 /*!
 The Cell class stores the basis vectors and a pointer to all sublattices in the unit cell. 
@@ -85,10 +121,10 @@ public:
     void setBasisVectors(double scale, Matrix3 basis);
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    const Matrix3 getBasisVectors();
+    const Matrix3 getBasisVectors() const;
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    const Matrix3 getReciprocalVectors();
+    const Matrix3 getReciprocalVectors() const;
     //! Add sublattice to cell
     //! \param name Unique name defining sublattice
     //! \param sl Sublattice object
@@ -105,12 +141,13 @@ public:
     void addAtom(std::string name, double x, double y, double z);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices
-    const size_t size();
+    const size_t size() const;
     typedef SublatticeIterator Iterator;
     //! \return Returns an iterator pointing to the first Sublattice element
     Iterator begin();
     //! \return Returns an iterator pointing to the final Sublattice element
     Iterator end();
+    //~Cell() { std::cout << "Cell destructed" << std::endl; }
 private:
     //! basis vectors
     Matrix3 basisVectors;

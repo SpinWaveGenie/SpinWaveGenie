@@ -54,6 +54,7 @@ elseif(APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++11 -stdlib=libc++ -msse4")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 find_package(Eigen3 REQUIRED)
+find_package(TBB REQUIRED)
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.5 REQUIRED COMPONENTS system thread program_options unit_test_framework)
 

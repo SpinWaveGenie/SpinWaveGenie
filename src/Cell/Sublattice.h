@@ -24,13 +24,13 @@ public:
     void setName(std::string nameInput );
     //! returns name of a given sublattice
     //! \return name of sublattice
-    std::string getName();
+    std::string getName() const;
     //! set type to describe magnetic form factor used in the calculation of intensities;
     //! \param typeInput a std::string argument
     void setType(std::string typeInput );
     //! returns name of a given sublattice
     //! \return name of sublattice
-    std::string getType();
+    std::string getType() const;
     //! set moment in spherical coordinates r,theta,phi
     /*! \param spin_input magnitude of spin moment
      \param theta_input angle 0 <= theta <= pi
@@ -38,17 +38,17 @@ public:
      */
     void setMoment(double spinInput, double thetaInput , double phiInput);
     //! \return coordinate r of [r,theta,phi]
-    double getMoment();
+    double getMoment() const;
     //! \return coordinates theta of [r,theta,phi]
-    double getTheta();
+    double getTheta() const;
     //! \return coordinates phi of [r,theta,phi]
-    double getPhi();
+    double getPhi() const;
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
-    Matrix3& getRotationMatrix();
+    const Matrix3& getRotationMatrix() const;
     //! returns inverse rotation matrix as an Eigen::Matrix3d object
     //! \return inverse rotation matrix
-    Matrix3& getInverseMatrix();
+    const Matrix3& getInverseMatrix() const;
     //! add atom to the sublattice
     //! \param x x component of atomic position in Angstroms
     //! \param y y component of atomic position in Angstroms

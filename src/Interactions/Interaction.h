@@ -26,6 +26,11 @@ public:
     virtual void updateValue(double value) = 0;
     virtual void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) = 0;
     virtual Interaction* do_clone() const = 0;
+    Interaction() = default;
+    Interaction(const Interaction&) = default;
+    Interaction(Interaction&&) = default;
+    Interaction& operator=(const Interaction&) & = default;
+    Interaction& operator=(Interaction&&) & = default;
     virtual ~Interaction(){};
 private:
 };

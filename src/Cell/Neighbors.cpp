@@ -17,6 +17,9 @@ void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min,
     // In principle, we only need to iterate over one atom in the first sublattice. However, iterating over
     // all atoms provides a good check that all atoms have the same number of neighbors in the same relative
     // positions
+    
+    
+    //cout << "cell check(Neighbors): " << cell.begin()->getName() << endl;
     for(Sublattice::Iterator atom1 = cell.getSublattice(sl1).begin(); atom1!=cell.getSublattice(sl1).end();++atom1)
     {
         // Increase the size of the supercell until the list of neighbors does not change
@@ -47,6 +50,7 @@ void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min,
                             // check if norm is between min and max
                             if (norm < max && norm > min)
                             {
+                                //cout << "candidate: " << relativeDistance.transpose() << endl;
                                 Neighbors.insert(relativeDistance[0],relativeDistance[1],relativeDistance[2]);
                             }
                         }
@@ -89,6 +93,7 @@ complex<double> Neighbors::getGamma(Vector3 K)
     complex<double> gamma_rs = complex<double>(0.0,0.0);
     for(Iterator nbr=this->begin(); nbr!=this->end(); ++nbr)
     {
+        //cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
         double dot_prod = K[0]*nbr->get<0>() + K[1]*nbr->get<1>() + K[2]*nbr->get<2>();
         gamma_rs += exp(MXI*dot_prod);
     }

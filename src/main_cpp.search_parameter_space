@@ -35,7 +35,7 @@ void myfunc(const std::vector<double> &x)
     double SA = 1.5;
     double SB = 1.0;
     
-    CalculateAngles angles(SA,SB,x[0],x[1],x[1],x[2]);
+    CalculateAngles angles(SA,SB,x[0],x[1],x[2],x[3]);
     
     double minf = 0.0;
     std::vector<double> ub = {M_PI,2.0*M_PI,M_PI,2.0*M_PI,M_PI,2.0*M_PI,M_PI,2.0*M_PI};
@@ -145,19 +145,19 @@ void myfunc(const std::vector<double> &x)
     builder.Add_Interaction(new ExchangeInteraction("Jbb",x[1],"V0","V1",2.975,3.06));
     builder.Add_Interaction(new ExchangeInteraction("Jbb",x[1],"V2","V3",2.975,3.06));
 
-    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[1],"V0","V2",2.975,3.06));
-    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[1],"V0","V3",2.975,3.06));
-    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[1],"V1","V2",2.975,3.06));
-    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[1],"V1","V3",2.975,3.06));
+    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[2],"V0","V2",2.975,3.06));
+    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[2],"V0","V3",2.975,3.06));
+    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[2],"V1","V2",2.975,3.06));
+    builder.Add_Interaction(new ExchangeInteraction("Jbbp",x[2],"V1","V3",2.975,3.06));
        
     Vector3 direction(-1.0,1.0,-1.0);
-    builder.Add_Interaction(new AnisotropyInteraction("Dby",x[2],direction,"V0"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dby",x[3],direction,"V0"));
     direction = Vector3(1.0,-1.0,-1.0);
-    builder.Add_Interaction(new AnisotropyInteraction("Dbx",x[2],direction,"V1"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbx",x[3],direction,"V1"));
     direction = Vector3(1.0,1.0,-1.0);
-    builder.Add_Interaction(new AnisotropyInteraction("Dby",x[2],direction,"V2"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dby",x[3],direction,"V2"));
     direction = Vector3(-1.0,-1.0,-1.0);
-    builder.Add_Interaction(new AnisotropyInteraction("Dbx",x[2],direction,"V3"));
+    builder.Add_Interaction(new AnisotropyInteraction("Dbx",x[3],direction,"V3"));
     
     //double JBB = x[0];
     //double JBBP = x[1];
@@ -180,7 +180,7 @@ void myfunc(const std::vector<double> &x)
     TwoDimensionCut Cut;
     Cut.setSpinWave(SW);
 
-    string filename = "MnV2O4_"+boost::lexical_cast<string>(x[0])+"_"+boost::lexical_cast<string>(x[1])+"_"+boost::lexical_cast<string>(x[2])+"_"+boost::lexical_cast<string>(theta);
+    string filename = "MnV2O4_"+boost::lexical_cast<string>(x[0])+"_"+boost::lexical_cast<string>(x[1])+"_"+boost::lexical_cast<string>(x[2])+"_"+boost::lexical_cast<string>(x[3]);
 
     Cut.setEnergyPoints(0.0,25.0,201);
     
@@ -277,17 +277,17 @@ int main()
 
     std::vector<double> ub(4),lb(4);
     std::vector<size_t> ns(4);
-    ub[0] =  -1.0;
-    ub[1] =  -20.0;
-    ub[2] =  -1.0;
+    ub[0] =  -2.4;
+    ub[1] =  -25.0;
+    ub[2] =  -1.6;
 
-    lb[0] =  -4.0;
-    lb[1] =  -40.0;
-    lb[2] =  -4.0;
+    lb[0] =  -3.4;
+    lb[1] =  -60.0;
+    lb[2] =  -2.8;
     
-    ns[0] =  12;
-    ns[1] =  41;
-    ns[2] =  12;
+    ns[0] =  11;
+    ns[1] =  21;
+    ns[2] =  11;
     
     vector<vector<double> > parameters;
     
@@ -297,16 +297,21 @@ int main()
         for (int i=0;i<ns[1];i++)
         {
             double jbb = findValue(i,ns[1],lb[1],ub[1]);
-            for (int k=0;k<ns[2];k++)
+            for (int j=0;j<ns[2];j++)
             {
-                double db = findValue(k,ns[2],lb[2],ub[2]);
-                vector<double> xtemp = {jab,jbb,db};
-                parameters.push_back(xtemp);
-                //cout << jab << " " << jbb << " " << jbbp << " " << db << endl;
-                //myfunc(xtemp);
+                double jbbp = findValue(j,ns[2],lb[2],ub[2]);
+                for (int k=0;k<ns[3];k++)
+                {
+                    double db = findValue(k,ns[3],lb[3],ub[3]);
+                    vector<double> xtemp = {jab,jbb,jbbp,db};
+                    parameters.push_back(xtemp);
+                    //cout << jab << " " << jbb << " " << jbbp << " " << db << endl;
+                    //myfunc(xtemp);
+                }
             }
         }
     }
+
     ParallelApplyFoo(parameters, parameters.size());
     return 0;
 }

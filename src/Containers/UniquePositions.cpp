@@ -8,6 +8,7 @@
 
 #include "UniquePositions.h"
 #include <cmath>
+#include <iostream>
 
 void UniquePositions::insert(double x, double y, double z)
 {
@@ -23,6 +24,7 @@ void UniquePositions::insert(double x, double y, double z)
     }
     if (unique)
     {
-      Positions::insert(x,y,z);
+        //std::cout << "adding neighbor at "<< x << " " << y << " " << z << std::endl;
+        Positions::insert(x,y,z);
     }
 }

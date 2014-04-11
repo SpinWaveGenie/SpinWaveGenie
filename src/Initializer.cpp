@@ -45,7 +45,7 @@ void Init::read_input(string filename)
     for (pugi::xml_node_iterator it = tools.begin(); it != tools.end(); ++it)
     {    
         string name = it->name();
-        cout << name << endl;
+        cout << "name" << name << endl;
         pugi::xml_node node = (*it);
         std::map< std::string, std::function< void (const pugi::xml_node&) > >::iterator parser;
         parser = m_parser_map.find(name);
@@ -120,7 +120,6 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
             cout << x << '\t' << y << '\t' << z << endl;
            
             unit_cell.addAtom(name,x,y,z);
-            
         }
     }
 }
@@ -322,6 +321,8 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         MaxEnergy = stringToDouble(group.child_value("lastpoint"));
         
         cout << MinEnergy << " " << MaxEnergy << " " << NumberPoints << endl;
+        
+        PointsAlongLine Line;
         Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
     }
     

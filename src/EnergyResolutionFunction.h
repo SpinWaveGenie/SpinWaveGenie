@@ -17,10 +17,13 @@
 class EnergyResolutionFunction : SpinWavePlot{
 public:
     EnergyResolutionFunction(){};
-    EnergyResolutionFunction(const EnergyResolutionFunction& other) : ResolutionFunction( other.ResolutionFunction->clone() ) {};
+    EnergyResolutionFunction(const EnergyResolutionFunction& other);
     EnergyResolutionFunction& operator=(EnergyResolutionFunction other);
-    EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, double min, double max, double points);
+    EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, double min, double max, std::size_t points);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
+    double getMinimumEnergy() const;
+    double getMaximumEnergy() const;
+    std::size_t getNumberPoints() const;
     ~EnergyResolutionFunction(){};
 private:
     std::size_t getBin(double Energy);

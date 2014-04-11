@@ -36,23 +36,29 @@ void ExchangeInteractionSameSublattice::updateValue(double value_in)
 
 vector<string> ExchangeInteractionSameSublattice::sublattices() const
 {
-    vector<string> sl = {sl_r,sl_s};
+    vector<string> sl = {sl_r,sl_r};
     return sl;
 }
 
 void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
 {
+    //cout << "cell check(calcConstantValues): " << cell.begin()->getName() << endl;
     r = cell.getPosition(sl_r);
     M = cell.size();
     
+    //cout << "r: " << r << " " << ", M: " << M << endl;
     double Sr = cell.getSublattice(sl_r).getMoment();
 
+    //cout << "Sr: " << Sr << endl;
+
     Matrix3 Frs = cell.getSublattice(sl_r).getRotationMatrix()*
-          cell.getSublattice(sl_s).getInverseMatrix();
-    
-    neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+          cell.getSublattice(sl_r).getInverseMatrix();
+       
+    neighbors.findNeighbors(cell,sl_r, sl_r, min, max);
     double z_rs = neighbors.getNumberNeighbors();
-    
+
+    //cout << "cell check(calcConstantValues): " << cell2.begin()->getName() << endl;
+
     complex<double> F1rs(Frs(0,2),Frs(1,2));
     complex<double> F2sr(Frs(2,0),Frs(2,1));
     
@@ -64,6 +70,8 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
     LNrr = 0.25*z_rs*value*Sr*(Frs(2,2)+Frs(2,2));
     LNrs = 0.25*z_rs*value*Sr*(G1rs+conj(G1rs));
     LNrsM = 0.25*z_rs*value*Sr*conj(G2rs+G2rs);
+    
+    cout << LNrr << " " << LNrs << " " << LNrsM << endl;
 }
 
 void ExchangeInteractionSameSublattice::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
@@ -75,6 +83,9 @@ void ExchangeInteractionSameSublattice::checkFirstOrderTerms(Cell& cell, VectorX
 void ExchangeInteractionSameSublattice::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
     gamma_rs = neighbors.getGamma(K);
+    
+    //cout << "number of neighbors: " << neighbors.getNumberNeighbors() << endl;
+    //cout << gamma_rs <<  " " << conj(gamma_rs) << endl;
     
     LN(r,r) += LNrr + LNrs*conj(gamma_rs);
     LN(r,r+M) += LNrsM*conj(gamma_rs);

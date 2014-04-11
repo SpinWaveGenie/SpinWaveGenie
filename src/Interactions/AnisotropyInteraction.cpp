@@ -81,7 +81,7 @@ void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &e
 {
     complex<double> XI (0.0,1.0);
     double S = cell.getSublattice(sl_r).getMoment();
-    Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
+    const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
     
     for (int i=0; i<3; i++)
     {

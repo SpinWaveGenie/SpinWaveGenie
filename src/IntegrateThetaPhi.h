@@ -11,13 +11,13 @@
 
 #include <iostream>
 #include "SpinWavePlot.h"
-#include "OneDimensionalShapes.h"
+#include "EnergyResolutionFunction.h"
 
 class IntegrateThetaPhi : SpinWavePlot {
     public:
     IntegrateThetaPhi(double min, double max, double points, const Matrix3 basisVectors);
-    IntegrateThetaPhi(const IntegrateThetaPhi& other) : InstrumentResolution( other.InstrumentResolution->clone() ) {};
-    void setConvolutionObject(std::unique_ptr<OneDimensionalShapes> object);
+    //IntegrateThetaPhi(const IntegrateThetaPhi& other) {};
+    void setConvolutionObject(EnergyResolutionFunction object);
     std::vector<double> getCut(double kx,double ky, double kz);
     ~IntegrateThetaPhi(){};
     private:
@@ -28,7 +28,7 @@ class IntegrateThetaPhi : SpinWavePlot {
     unsigned EnergyPoints;
     double tol;
     Matrix3 basisVectors;
-    std::unique_ptr<OneDimensionalShapes> InstrumentResolution;
+    EnergyResolutionFunction InstrumentResolution;
 };
 
 #endif /* defined(__spin_wave_genie__IntegrateThetaPhi__) */

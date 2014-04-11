@@ -22,6 +22,12 @@ IntegrateThetaPhi::IntegrateThetaPhi(double min, double max, double points, Matr
     tol = 0.0001;
 }
 
+void IntegrateThetaPhi::setConvolutionObject(EnergyResolutionFunction object)
+{
+    InstrumentResolution = object;
+}
+
+
 int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)
 {
     Vector3 tmp,k;
@@ -40,23 +46,32 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     //cout << tmp.transose() << endl;
     //cout << k.transpose() << endl;
     
-    
     //Vector3 woof = k.transpose()*basisVectors.inverse()*2.0*M_PI;
-    //cout << woof.norm() << endl << endl;
-    //vector<double> val = resolutionFunction.getCut(k[0],k[1],k[2]);
+    //cout << woof.transpose() << endl << endl;
+    vector<double> val = InstrumentResolution.getCut(k[0],k[1],k[2]);
     
+    //vector<double> values = InstrumentResolution.getCut(0.5,0.0,0.0);
+    
+    //for (auto it = values.begin(); it!=values.end(); it++)
+    //{
+    //    cout << (*it) << endl;
+    //}
+    
+    //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
     double factor = sin(theta)/(4.0*M_PI);
     for(int i=0;i!=EnergyPoints;i++)
     {
+        retval[i] = factor*val[i];
         //retval[i] = factor*pow(0.25*sqrt(5.0/M_PI)*(3*cos(theta)*cos(theta)-1.0),1)*0.5*sqrt(3.0/M_PI)*cos(theta)*4.0*M_PI;
-        double S = 1.0;
-        double J = 1.0;
-        double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-        double frequency = 2.0*J*S*(1.0-cos(tmp[0]));
-        //cout << frequency << endl;
-        double F = 0.5;
-        retval[i] = factor*(1.0+cos(theta)*cos(theta))*exp(-1.0*(4.0*log(2.0)*pow(energy-frequency,2))/(F*F));
+        //double S = 1.0;
+        //double J = 1.0;
+        //double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
+        //double frequency = 2.0*J*S*(1.0-cos(tmp[0]));
+        //double F = 0.5;
+        //cout << retval[i] << " ";
+        //cout << factor*(1.0+cos(theta)*cos(theta))*exp(-1.0*(4.0*log(2.0)*pow(energy-frequency,2))/(F*F)) << endl;
         //cout << energy << " " << val[i] << " ";
+        //cout << frequency << endl;
     }
     //cout << endl;
     return 0;

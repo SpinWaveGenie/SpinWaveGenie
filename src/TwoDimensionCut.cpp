@@ -44,6 +44,28 @@ void TwoDimensionCut::setEnergyPoints(double min, double max, size_t points)
     EnergyPoints = points;
 }
 
+Eigen::MatrixXd TwoDimensionCut::getMatrix()
+{
+    Eigen::MatrixXd figure;
+    figure.setZero(EnergyPoints,Kpoints.size());
+    EnergyResolutionFunction scan(move(InstrumentResolution->clone()),SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
+    for(Positions::Iterator it = Kpoints.begin(); it != Kpoints.end(); it++)
+    {
+        double x = it->get<0>();
+        double y = it->get<1>();
+        double z = it->get<2>();
+        
+        vector<double> val = scan.getCut(x,y,z);
+        size_t m = std::distance(Kpoints.begin(),it);
+        for(int n=0;n<EnergyPoints;n++)
+        {
+            figure(n,m) = val[n];
+            //cout << val[n] << endl;
+        }
+    }
+    return figure;
+}
+
 void TwoDimensionCut::save()
 {
     Eigen::MatrixXd figure;

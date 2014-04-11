@@ -17,18 +17,20 @@ void Sublattice::setName(string nameInput)
     name = nameInput;
 }
     
-string Sublattice::getName()
+string Sublattice::getName() const
 {
     return name;
 }
 
 void Sublattice::setType(string typeInput)
 {
+    //cout << typeInput << endl;
     type = typeInput;
 }
 
-string Sublattice::getType()
+string Sublattice::getType() const
 {
+    //cout << type << endl;
     return type;
 }
 
@@ -66,27 +68,27 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
     inverseMatrix = rotationMatrix.inverse();
 }
 
-double Sublattice::getMoment()
+double Sublattice::getMoment() const
 {
     return spin;
 }
 
-double Sublattice::getTheta()
+double Sublattice::getTheta() const
 {
     return theta;
 }
 
-double Sublattice::getPhi()
+double Sublattice::getPhi() const
 {
     return phi;
 }
 
-Matrix3& Sublattice::getRotationMatrix()
+const Matrix3& Sublattice::getRotationMatrix() const
 {
     return rotationMatrix;
 }
 
-Matrix3& Sublattice::getInverseMatrix()
+const Matrix3& Sublattice::getInverseMatrix() const
 {
     return inverseMatrix;
 }

@@ -19,12 +19,12 @@
 class TwoDimensionCut
 {
 public:
-    
     void setFilename(std::string name);
     void setPoints(Positions pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
     void setConvolutionObject(std::unique_ptr<OneDimensionalShapes> object);
     void setSpinWave(SpinWave SWIn);
+    Eigen::MatrixXd getMatrix();
     void save();
 private:
     double MaximumEnergy,MinimumEnergy;

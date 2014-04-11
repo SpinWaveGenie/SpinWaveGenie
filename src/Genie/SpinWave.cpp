@@ -353,6 +353,7 @@ void SpinWave::Calc_Intensities()
     {
         V_r = sl->getInverseMatrix();
         S_r = sl->getMoment();
+        //cout << "type:" << sl->getName() << endl;
         formFactor.setType(sl->getType());
         ff = formFactor.getFormFactor(KX,KY,KZ);
         /*if (sl->getType() == "MN2")
