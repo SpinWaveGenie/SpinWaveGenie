@@ -52,6 +52,16 @@ Positions::Iterator Positions::end()
   return boost::make_zip_iterator(boost::make_tuple(valuesX.end(),valuesY.end(),valuesZ.end()));
 }
 
+Positions::ConstIterator Positions::cbegin()
+{
+    return boost::make_zip_iterator(boost::make_tuple(valuesX.cbegin(),valuesY.cbegin(),valuesZ.cbegin()));
+}
+
+Positions::ConstIterator Positions::cend()
+{
+    return boost::make_zip_iterator(boost::make_tuple(valuesX.cend(),valuesY.cend(),valuesZ.cend()));
+}
+
 void Positions::clear()
 {
     valuesX.clear();

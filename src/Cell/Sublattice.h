@@ -55,6 +55,7 @@ public:
     //! \param z z component of atomic position in Angstroms
     void addAtom(double x, double y, double z);
     typedef UniquePositions::Iterator Iterator;
+    //typedef UniquePositions::ConstIterator ConstIterator;
     //! returns iterator to first atomic position;
     Iterator begin();
     //! returns iterator to final atomic position;
