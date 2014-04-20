@@ -284,7 +284,7 @@ void ParallelApplyFoo( vector<vector<double> > a, size_t n ) {
 
 int main()
 {
-    tbb::task_scheduler_init init(24);  // Automatic number of threads
+    tbb::task_scheduler_init init(4);  // Automatic number of threads
     cout << "#MinValue JAB JBB JBBP DAZ DBZ DB111 " << endl;
 
     /*std::vector<double> ub(3),lb(3);
