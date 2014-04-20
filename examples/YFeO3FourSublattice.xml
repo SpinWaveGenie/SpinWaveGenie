@@ -140,7 +140,7 @@
     <DzyaloshinskyMoriya>
     	<group>
             <name>D1</name>
-    		<value>0.073861</value>
+    		<value>-0.073861</value>
     		<min>3.78</min>
     		<max>4.32</max>
     		<direction>
@@ -161,7 +161,7 @@
     	</group>
     	<group>
             <name>D2</name>
-    		<value>0.0278289</value>
+    		<value>-0.0278289</value>
     		<min>3.78</min>
     		<max>4.32</max>
     		<direction>

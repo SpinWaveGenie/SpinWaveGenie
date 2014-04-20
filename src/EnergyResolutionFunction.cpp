@@ -71,7 +71,8 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     
     for(size_t k=0;k!=points.size();k++)
     {
-        if (isnan(points[k].frequency) || isnan(points[k].intensity))
+        //cout << "k= " << k << endl;
+        if (std::isnan(points[k].frequency) || std::isnan(points[k].intensity))
         {
             
             //cout << "found NaN: " << points[k].frequency << " " << points[k].intensity << endl;
@@ -115,8 +116,8 @@ std::size_t EnergyResolutionFunction::getBin(double Energy)
     
     if (bin < 0)
         bin = 0;
-    else if (bin > EnergyPoints)
-        bin = EnergyPoints;
+    else if (bin >= EnergyPoints)
+        bin = EnergyPoints-1.0;
     
     return (size_t) bin;
 }
