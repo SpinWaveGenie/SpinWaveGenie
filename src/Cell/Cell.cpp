@@ -1,12 +1,23 @@
 #include "Cell/Cell.h"
 #include "Containers/Matrices.h"
 #include <iostream>
+#include <string>
 #include <stdexcept>
 
 using std::pair;
 using std::string;
 using std::cout;
 using std::endl;
+
+struct CompareSublatticeNames
+{
+    CompareSublatticeNames(const std::string &name) : name(name) {}
+    bool operator() (const Sublattice &arg)
+    {
+        return name.compare(arg.getName()) == 0;
+    }
+    std::string name;
+};
 
 void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double beta_deg, double gamma_deg)
 {
@@ -46,25 +57,36 @@ const Matrix3 Cell::getReciprocalVectors() const
 
 void Cell::addSublattice(Sublattice& sl)
 {
-    string name = sl.getName();
-    sublatticeInfo.insert(pair<string,Sublattice>(name,sl));
+    std::string name = sl.getName();
+    auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
+    if (it != sublatticeInfo.end())
+    {
+        throw std::invalid_argument("sublattice already defined");
+    }
+    else
+    {
+        sublatticeInfo.push_back(sl);
+    }
 }
 
 Sublattice& Cell::getSublattice(string name)
 {
-    return sublatticeInfo[name];
+    auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
+    if (it == sublatticeInfo.end())
+    {
+         throw std::invalid_argument("sublattice not found");
+    }
+    return *it;
 }
 
-const int Cell::getPosition(std::string name)
+const std::size_t Cell::getPosition(std::string name)
 {
-    int r = 0;
-    for (Iterator sl=begin(); sl!=end(); ++sl)
+    auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
+    if (it == sublatticeInfo.end())
     {
-        if ( name.compare(sl->getName()) == 0)
-            return r;
-        r++;
+        throw std::invalid_argument("sublattice not found");
     }
-    throw std::invalid_argument("sublattice not found");
+    return std::distance(sublatticeInfo.begin(),it);
 }
 
 void Cell::addAtom(std::string name, double x, double y, double z)
@@ -79,7 +101,7 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     //cout << "unscaled= " << pos.transpose() << endl;
     //cout << " " <<endl;
     
-    sublatticeInfo[name].addAtom(pos[0], pos[1], pos[2]);
+    getSublattice(name).addAtom(pos[0], pos[1], pos[2]);
 }
 
 const size_t Cell::size() const
@@ -89,12 +111,22 @@ const size_t Cell::size() const
 
 Cell::Iterator Cell::begin()
 {
-    return Iterator(sublatticeInfo.begin());
+    return sublatticeInfo.begin();
 }
 
 Cell::Iterator Cell::end()
 {
-    return Iterator(sublatticeInfo.end());
+    return sublatticeInfo.end();
+}
+
+Cell::ConstIterator Cell::cbegin()
+{
+    return sublatticeInfo.cbegin();
+}
+
+Cell::ConstIterator Cell::cend()
+{
+    return sublatticeInfo.cend();
 }
 
 

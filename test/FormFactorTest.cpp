@@ -34,12 +34,12 @@ BOOST_AUTO_TEST_CASE( CheckCoefficients )
     BOOST_CHECK_EQUAL(badCoefficients.size(), 0);
 }
 
-
 BOOST_AUTO_TEST_CASE(DefaultConstructor)
 {
     MagneticFormFactor FormFactor;
     BOOST_CHECK_THROW(FormFactor.getFormFactor(0.0,0.0,0.0),std::runtime_error);
 }
+
 
 BOOST_AUTO_TEST_CASE( AlternateConstructor )
 {
