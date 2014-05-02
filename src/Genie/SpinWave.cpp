@@ -186,6 +186,8 @@ void SpinWave::Calc_Eigenvalues()
      }*/
 }
 
+bool IsPositive (results i) { return i.weight > 0; }
+
 void SpinWave::Calc_Weights()
 {
     MatrixXcdRowMajor XX;
@@ -273,19 +275,17 @@ void SpinWave::Calc_Weights()
     // Reorder the XX's by the weights
     //
     
+    //sort(AL.begin(),AL.end());
+    partition(AL.begin(), AL.end(),IsPositive);
 
-    
-    sort(AL.begin(),AL.end());
-
-    //cout << "AL.index= " << endl;
+    //cout << "AL.weight= " << endl;
     for(int L1=0;L1<N;L1++)
     {
         WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
-        //cout << AL[L1].index << " ";
+        //cout << AL[L1].weight << " ";
 
     }
     //cout << endl;
-    
     
     //Swap rows to reflect ordering of eigenvalues.
     //The swap moves row L1 to a new position and the index must be

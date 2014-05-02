@@ -39,10 +39,6 @@ struct results
 {
     double weight;
     long index;
-    // < operator reversed for sort!!!!
-    bool operator<( const results& val ) const {
-    	return weight > val.weight;
-        }
 };
 
 //! SpinWave Class

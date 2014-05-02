@@ -193,7 +193,6 @@ double MagneticFormFactor::getFormFactor(double x, double y, double z)
     }
     
     double ms2 = -1.0*(pow(x,2) + pow(y,2) + pow(z,2))/(16.0*M_PI*M_PI);
-    
     double result = 0.0;
     auto begin = boost::make_zip_iterator(boost::make_tuple(Farray.begin(),NormalizedWeights.begin()));
     auto end = boost::make_zip_iterator(boost::make_tuple(Farray.end(),NormalizedWeights.end()));
