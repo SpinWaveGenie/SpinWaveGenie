@@ -8,7 +8,7 @@
 #include "SpinWaveDispersion.h"
 #include "TwoDimensionCut.h"
 #include "PointsAlongLine.h"
-#include "Containers/Positions.h"
+#include "Containers/ThreeVectors.h"
 #include "OneDimensionalFactory.h"
 #include "OneDimensionalShapes.h"
 

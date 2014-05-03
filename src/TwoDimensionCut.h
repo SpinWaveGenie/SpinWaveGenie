@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <memory>
-#include "Containers/Positions.h"
+#include "Containers/ThreeVectors.h"
 #include "Genie/SpinWave.h"
 #include "SpinWavePlot.h"
 #include "OneDimensionalShapes.h"
@@ -20,7 +20,7 @@ class TwoDimensionCut
 {
 public:
     void setFilename(std::string name);
-    void setPoints(Positions pos);
+    void setPoints(ThreeVectors<double> pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
     void setConvolutionObject(std::unique_ptr<OneDimensionalShapes> object);
     void setSpinWave(SpinWave SWIn);
@@ -32,7 +32,7 @@ private:
     std::unique_ptr<OneDimensionalShapes> InstrumentResolution;
     SpinWave SW;
     std::string Filename;
-    Positions Kpoints;
+    ThreeVectors<double> Kpoints;
 };
 
 

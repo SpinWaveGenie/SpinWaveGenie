@@ -42,7 +42,7 @@ void PointsAlongLine::calculatePoints()
 
 
 
-Positions PointsAlongLine::getPoints()
+ThreeVectors<double> PointsAlongLine::getPoints()
 {
     calculatePoints();
     return Kpoints;

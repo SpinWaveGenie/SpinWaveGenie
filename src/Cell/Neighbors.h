@@ -4,7 +4,7 @@
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include"Containers/Matrices.h"
-#include "Containers/UniquePositions.h"
+#include "Containers/UniqueThreeVectors.h"
 
 class Sublattice;
 class Cell;
@@ -24,13 +24,13 @@ public:
     void findNeighbors(Cell& cell,std::string& sl1, std::string& sl2, double min, double max);
     double getNumberNeighbors();
     std::complex<double> getGamma(Vector3 K);
-    typedef UniquePositions::Iterator Iterator;
+    typedef UniqueThreeVectors<double>::Iterator Iterator;
     //! \return Returns an iterator pointing to the first element of the neighbor list
     Iterator begin();
     //! \return Returns an iterator pointing to the first element of the neighbor list
     Iterator end();
 private:
-    UniquePositions neighborList;
+    UniqueThreeVectors<double> neighborList;
     double numberNeighbors;
 };
 #endif // __Neighbors_H__ 

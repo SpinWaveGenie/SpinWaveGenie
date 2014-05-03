@@ -2,7 +2,7 @@
 #define __PointsAlongLine__
 
 #include <iostream>
-#include "Containers/Positions.h"
+#include "Containers/ThreeVectors.h"
 
 class PointsAlongLine
 {
@@ -10,10 +10,10 @@ public:
     void setFirstPoint(double kx, double ky, double kz);
     void setFinalPoint(double kx, double ky, double kz);
     void setNumberPoints(long points);
-    Positions getPoints();
+    ThreeVectors<double> getPoints();
 private:
     void calculatePoints();
-    Positions Kpoints;
+    ThreeVectors<double> Kpoints;
     double kxi,kyi,kzi,kxf,kyf,kzf;
     long numberPoints;    
 };

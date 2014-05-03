@@ -25,7 +25,7 @@ void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min,
         // Increase the size of the supercell until the list of neighbors does not change
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. If not, a warning message will be printed.
-        UniquePositions Neighbors;
+        UniqueThreeVectors<double> Neighbors;
         for (long supercellSize = 1;supercellSize<=5;supercellSize++)
         {
             //cout << supercellSize << endl;

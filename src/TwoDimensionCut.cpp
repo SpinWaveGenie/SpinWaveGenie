@@ -28,10 +28,10 @@ void TwoDimensionCut::setSpinWave(SpinWave SWIn)
     SW = SWIn;
 }
 
-void TwoDimensionCut::setPoints(Positions pts)
+void TwoDimensionCut::setPoints(ThreeVectors<double> pts)
 {
     Kpoints.clear();
-    for( Positions::Iterator it = pts.begin(); it!= pts.end(); it++)
+    for(auto it = pts.begin(); it!= pts.end(); it++)
     {
         Kpoints.insert(it->get<0>(),it->get<1>(),it->get<2>());
     }
@@ -49,7 +49,7 @@ Eigen::MatrixXd TwoDimensionCut::getMatrix()
     Eigen::MatrixXd figure;
     figure.setZero(EnergyPoints,Kpoints.size());
     EnergyResolutionFunction scan(move(InstrumentResolution->clone()),SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
-    for(Positions::Iterator it = Kpoints.begin(); it != Kpoints.end(); it++)
+    for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
         double y = it->get<1>();
@@ -71,7 +71,7 @@ void TwoDimensionCut::save()
     Eigen::MatrixXd figure;
     figure.setZero(EnergyPoints,Kpoints.size());
     EnergyResolutionFunction scan(move(InstrumentResolution->clone()),SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
-    for(Positions::Iterator it = Kpoints.begin(); it != Kpoints.end(); it++)
+    for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
         double y = it->get<1>();

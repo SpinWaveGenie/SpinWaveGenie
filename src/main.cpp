@@ -18,7 +18,7 @@ using namespace std;
 using namespace Eigen;
 
 double SA = 2.1;
-double SB = 0.5;
+double SB = 0.7;
 
 double getCantingAngle(double JAB, double JBB, double JBBP, double DB)
 {
@@ -514,14 +514,14 @@ int main()
 
     std::vector<double> ub(4);
     ub[0] = -1.0;
-    ub[1] = -10.0;
-    ub[2] = -10.0;
+    ub[1] = -4.0;
+    ub[2] = -7.0;
     ub[3] =  1.0;
     
     std::vector<double> lb(4);
     lb[0] = -3.0;
-    lb[1] = -15.0;
-    lb[2] = -15.0;
+    lb[1] = -10.0;
+    lb[2] = -12.0;
     lb[3] =  -1.0;
 
     std::vector<double> x(4);
@@ -533,10 +533,10 @@ int main()
     for(double min_value = -30.0; min_value < -9.1 ;min_value += 1.0)
     {
 
-        x[0] = -2.3;
-        x[1] = -13.5;
-        x[2] = -12.5;
-        x[3] =  0.15;
+        x[0] = -1.8;
+        x[1] = -6.9;
+        x[2] = -9.1;
+        x[3] =  0.4;
 
         nlopt::opt opt(nlopt::LN_SBPLX,4);
         opt.set_min_objective(myfunc, &min_value);

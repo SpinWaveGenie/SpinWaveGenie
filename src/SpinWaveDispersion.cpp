@@ -27,9 +27,9 @@ void SpinWaveDispersion::setGenie(SpinWave SW)
     Genie = SW;
 }
 
-void SpinWaveDispersion::setPoints(Positions pts)
+void SpinWaveDispersion::setPoints(ThreeVectors<double> pts)
 {
-    for( Positions::Iterator it = pts.begin(); it!= pts.end(); it++)
+    for(auto it = pts.begin(); it!= pts.end(); it++)
     {
         Kpoints.insert(it->get<0>(),it->get<1>(),it->get<2>());
     }
@@ -39,7 +39,7 @@ void SpinWaveDispersion::save()
 {
     
     std::ofstream file(Filename);
-    for(Positions::Iterator it = Kpoints.begin(); it != Kpoints.end(); it++)
+    for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
         double y = it->get<1>();
