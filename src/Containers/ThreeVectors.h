@@ -6,6 +6,8 @@
 #include <boost/tuple/tuple.hpp>
 #include <iostream>
 
+using namespace boost;
+
 template<class T>
 class ThreeVectors
 {
@@ -13,7 +15,6 @@ protected:
     typedef typename std::vector<T>::iterator ValueIterator;
     typedef typename std::vector<T>::const_iterator ConstValueIterator;
 public:
-    bool operator==(ThreeVectors& other);
     void insert(T x, T y,T z);
     typedef boost::zip_iterator<boost::tuple<ValueIterator,ValueIterator,ValueIterator> > Iterator;
     typedef boost::zip_iterator<boost::tuple<ConstValueIterator,ConstValueIterator,ConstValueIterator> > ConstIterator;
@@ -32,27 +33,6 @@ protected:
     std::vector<T> valuesY;
     std::vector<T> valuesZ;
 };
-
-template<class T>
-bool ThreeVectors<T>::operator==(ThreeVectors<T>& other)
-{
-    for(auto MyThreeVectors = this->begin(); MyThreeVectors!= this->end(); MyThreeVectors++)
-    {
-        bool ContainsPosition = false;
-        for(auto OtherThreeVectors = other.begin(); OtherThreeVectors!= other.end(); OtherThreeVectors++)
-        {
-            double epsilon = 1.0e-8;
-            T x = MyThreeVectors->template get<0>() - OtherThreeVectors->template get<0>();
-            T y = MyThreeVectors->template get<1>() - OtherThreeVectors->template get<1>();
-            T z = MyThreeVectors->template get<2>() - OtherThreeVectors->template get<2>();
-            if (std::abs(x) < epsilon && std::abs(y) < epsilon && std::abs(z) < epsilon)
-                ContainsPosition = true;
-        }
-        if(ContainsPosition == false)
-            return ContainsPosition;
-    }
-    return true;
-}
 
 template<class T>
 void ThreeVectors<T>::insert(T x,T y,T z)
