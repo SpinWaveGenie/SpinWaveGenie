@@ -98,12 +98,22 @@ void Sublattice::addAtom(double x, double y, double z)
     positions.insert(x,y,z);
 }
 
+Sublattice::ConstIterator Sublattice::cbegin()
+{
+    return positions.cbegin();
+}
+
+Sublattice::ConstIterator Sublattice::cend()
+{
+    return positions.cend();
+}
+
 Sublattice::Iterator Sublattice::begin()
 {
-    return Iterator(positions.begin());
+    return positions.begin();
 }
 
 Sublattice::Iterator Sublattice::end()
 {
-    return Iterator(positions.end());
+    return positions.end();
 }

@@ -55,11 +55,15 @@ public:
     //! \param z z component of atomic position in Angstroms
     void addAtom(double x, double y, double z);
     typedef UniqueThreeVectors<double>::Iterator Iterator;
-    //typedef UniquePositions::ConstIterator ConstIterator;
+    typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
     //! returns iterator to first atomic position;
     Iterator begin();
     //! returns iterator to final atomic position;
     Iterator end();
+    //! returns iterator to first atomic position;
+    ConstIterator cbegin();
+    //! returns iterator to final atomic position;
+    ConstIterator cend();
 private:
     std::string name; //!< name describing the sublattice
     std::string type; //!< type describing the magnetic form factor

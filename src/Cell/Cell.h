@@ -13,10 +13,10 @@
 #include "Sublattice.h"
 #include "Containers/Matrices.h"
 
-//! Contains the basis vectors and a pointer to all sublattices in the unit cell.
+//! Contains the basis vectors and all sublattices in the unit cell.
 /*!
-The Cell class stores the basis vectors and a pointer to all sublattices in the unit cell. 
-Atomic positions inserted as a fraction of the basis vectors and converted to Angstroms.
+The Cell class stores the basis vectors and all sublattices in the unit cell.
+Atomic positions are inserted as a fraction of the basis vectors and converted to Angstroms.
 */
 class Cell
 {
@@ -47,7 +47,7 @@ public:
     //! Returns sublattice "name"
     //! \param name used to describe sublattice
     //! \return sublattice
-    Sublattice& getSublattice(std::string name);
+    Sublattice& getSublattice(std::string name) const;
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.
@@ -70,7 +70,7 @@ private:
     Matrix3 basisVectors;
     //! reciprocal lattice vectors
     Matrix3 reciprocalVectors;
-    //! map of all Sublattice objects;
+    //! vector containing all Sublattice objects;
     std::vector<Sublattice> sublatticeInfo;
 };
 #endif // __Cell_H__ 
