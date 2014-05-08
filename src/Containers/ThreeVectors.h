@@ -8,7 +8,7 @@
 
 using namespace boost;
 
-template<class T>
+template<typename T>
 class ThreeVectors
 {
 protected:
@@ -34,7 +34,7 @@ protected:
     std::vector<T> valuesZ;
 };
 
-template<class T>
+template<typename T>
 void ThreeVectors<T>::insert(T x,T y,T z)
 {
     valuesX.push_back(x);
@@ -42,38 +42,38 @@ void ThreeVectors<T>::insert(T x,T y,T z)
     valuesZ.push_back(z);
 }
 
-template<class T>
+template<typename T>
 
 size_t ThreeVectors<T>::size()
 {
     return valuesX.size();
 }
 
-template<class T>
+template<typename T>
 typename ThreeVectors<T>::Iterator ThreeVectors<T>::begin()
 {
     return boost::make_zip_iterator(boost::make_tuple(valuesX.begin(),valuesY.begin(),valuesZ.begin()));
 }
 
-template<class T>
+template<typename T>
 typename ThreeVectors<T>::Iterator ThreeVectors<T>::end()
 {
     return boost::make_zip_iterator(boost::make_tuple(valuesX.end(),valuesY.end(),valuesZ.end()));
 }
 
-template<class T>
+template<typename T>
 typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cbegin()
 {
     return boost::make_zip_iterator(boost::make_tuple(valuesX.cbegin(),valuesY.cbegin(),valuesZ.cbegin()));
 }
 
-template<class T>
+template<typename T>
 typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cend()
 {
     return boost::make_zip_iterator(boost::make_tuple(valuesX.cend(),valuesY.cend(),valuesZ.cend()));
 }
 
-template<class T>
+template<typename T>
 void ThreeVectors<T>::clear()
 {
     valuesX.clear();

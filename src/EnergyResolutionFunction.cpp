@@ -59,6 +59,7 @@ EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFu
 std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
 {
     //cout << "Energy Points: " << EnergyPoints << endl;
+    //cout << MinimumEnergy << " " << MaximumEnergy << endl;
     vector<double> fval(EnergyPoints);
     for(int i=0;i!=EnergyPoints;i++)
     {
@@ -98,6 +99,11 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
 double EnergyResolutionFunction::getMinimumEnergy() const
 {
     return MinimumEnergy;
+}
+
+const Cell& EnergyResolutionFunction::getCell() const
+{
+    return SW.getCell();
 }
 
 double EnergyResolutionFunction::getMaximumEnergy() const

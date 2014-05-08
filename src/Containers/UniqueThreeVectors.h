@@ -14,7 +14,7 @@
 #include <boost/range/iterator_range.hpp>
 #include "ThreeVectors.h"
 
-template<class T>
+template<typename T>
 class UniqueThreeVectors: public ThreeVectors<T>
 {
 public:
@@ -22,7 +22,7 @@ public:
     void insert(T x, T y, T z);
 };
 
-template<class T>
+template<typename T>
 struct isEqual
 {
     double epsilon;
@@ -45,7 +45,7 @@ struct isEqual
     };
 };
 
-template<class T>
+template<typename T>
 void UniqueThreeVectors<T>::insert(T x, T y, T z)
 {
     boost::tuple<T,T,T> MyThreeVector(x,y,z);
@@ -54,7 +54,7 @@ void UniqueThreeVectors<T>::insert(T x, T y, T z)
         ThreeVectors<T>::insert(x,y,z);
 }
 
-template<class T>
+template<typename T>
 bool UniqueThreeVectors<T>::operator==(UniqueThreeVectors<T>& other)
 {
     boost::tuple<T,T,T> MyThreeVector,OtherThreeVector;

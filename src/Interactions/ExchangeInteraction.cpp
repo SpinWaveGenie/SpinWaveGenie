@@ -89,6 +89,7 @@ void ExchangeInteraction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
 void ExchangeInteraction::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
     gamma_rs = neighbors.getGamma(K);
+    //cout << sl_r << " " << sl_s << " " << gamma_rs << endl;
     
     LN(r,r) += LNrr;
     LN(r,s) += LNrs*conj(gamma_rs);

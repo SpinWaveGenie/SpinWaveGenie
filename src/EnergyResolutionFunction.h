@@ -12,9 +12,10 @@
 #include <iostream>
 #include <memory>
 #include "SpinWavePlot.h"
+#include "Cell/Cell.h"
 #include "OneDimensionalShapes.h"
 
-class EnergyResolutionFunction : SpinWavePlot{
+class EnergyResolutionFunction : public SpinWavePlot{
 public:
     EnergyResolutionFunction(){};
     EnergyResolutionFunction(const EnergyResolutionFunction& other);
@@ -23,6 +24,7 @@ public:
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
     double getMinimumEnergy() const;
     double getMaximumEnergy() const;
+    const Cell& getCell() const;
     std::size_t getNumberPoints() const;
     ~EnergyResolutionFunction(){};
 private:

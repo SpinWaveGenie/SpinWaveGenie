@@ -47,7 +47,7 @@ public:
     //! Returns sublattice "name"
     //! \param name used to describe sublattice
     //! \return sublattice
-    Sublattice& getSublattice(std::string name) const;
+    Sublattice& getSublattice(std::string name);
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Cell/Cell.h"
 #include "Genie/SpinWave.h"
 #include "OneDimensionalGaussian.h"
 
@@ -12,6 +13,10 @@
 class SpinWavePlot
 {
 public:
+    virtual const Cell& getCell() const = 0;
+    virtual double getMinimumEnergy() const = 0;
+    virtual double getMaximumEnergy() const = 0;
+    virtual std::size_t getNumberPoints() const = 0;
     virtual std::vector<double> getCut(double kx, double ky, double kz) = 0; // returns constant-Q cut
     virtual ~SpinWavePlot(){};
 };
@@ -40,29 +45,8 @@ private:
     SpinWave SW;
 };
 
-struct axes_info
-{
-    bool x,y,z;
-    double dx,dy,dz;
-    double tol;
-};
 
-class IntegrateAxes : SpinWavePlot {
-public:
-    IntegrateAxes(axes_info info, TwoDimensionResolutionFunction resFunction, double min, double max, double points);
-    int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
-    static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
-    std::vector<double> getCut(double kx, double ky, double kz);
-    ~IntegrateAxes(){};
-private:
-    double MinimumEnergy,MaximumEnergy;
-    double kx,ky,kz;
-    unsigned EnergyPoints;
-    bool x,y,z;
-    double dx,dy,dz;
-    double tol,volume;
-    TwoDimensionResolutionFunction ResolutionFunction;
-};
+
 
 /*
  class FourDimensionResolutionFunction : SpinWavePlot {

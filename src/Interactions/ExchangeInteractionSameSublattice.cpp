@@ -71,7 +71,7 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
     LNrs = 0.25*z_rs*value*Sr*(G1rs+conj(G1rs));
     LNrsM = 0.25*z_rs*value*Sr*conj(G2rs+G2rs);
     
-    cout << LNrr << " " << LNrs << " " << LNrsM << endl;
+    //cout << LNrr << " " << LNrs << " " << LNrsM << endl;
 }
 
 void ExchangeInteractionSameSublattice::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
@@ -83,9 +83,11 @@ void ExchangeInteractionSameSublattice::checkFirstOrderTerms(Cell& cell, VectorX
 void ExchangeInteractionSameSublattice::Update_Matrix(Vector3d K, MatrixXcd &LN)
 {
     gamma_rs = neighbors.getGamma(K);
-    
+    //cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;
+
     //cout << "number of neighbors: " << neighbors.getNumberNeighbors() << endl;
     //cout << gamma_rs <<  " " << conj(gamma_rs) << endl;
+    //cout << LNrr/value << endl;
     
     LN(r,r) += LNrr + LNrs*conj(gamma_rs);
     LN(r,r+M) += LNrsM*conj(gamma_rs);

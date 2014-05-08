@@ -26,10 +26,9 @@ void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min,
         // for two consecutive iterations. A 5x5x5 supercell should good enough for
         // any physical interaction. If not, a warning message will be printed.
         UniqueThreeVectors<double> Neighbors;
-        for (long supercellSize = 1;supercellSize<=5;supercellSize++)
+        for (long supercellSize = 10;supercellSize<=10;supercellSize++)
         {
             //cout << supercellSize << endl;
-            bool new_results = 0;
             for (Sublattice::Iterator atom2=cell.getSublattice(sl2).begin(); atom2!=cell.getSublattice(sl2).end(); ++atom2)
             {
                 Vector3 atomdistance(atom2->get<0>()-atom1->get<0>(),atom2->get<1>()-atom1->get<1>(),atom2->get<2>()-atom1->get<2>());
@@ -57,10 +56,8 @@ void Neighbors::findNeighbors(Cell& cell, string& sl1, string& sl2 , double min,
                     }
                 }
             }
-            if(!new_results)
-                break;
-            else if (supercellSize==5)
-                cout << "Couldn't find all neighbors at specified distance" << endl;
+            //if (supercellSize==10)
+            //    cout << "Couldn't find all neighbors at specified distance" << endl;
         }
         if (atom1 == cell.getSublattice(sl1).begin())
         {

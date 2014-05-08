@@ -14,6 +14,15 @@ SW_Builder::SW_Builder(Cell& cell_in)
 
 }
 
+void SW_Builder::addInteraction(std::unique_ptr<Interaction> in)
+{
+    //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
+    in->calcConstantValues(cell);
+    //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
+    interactions.push_back(in.release());
+    interactions.sort();
+}
+
 void SW_Builder::Add_Interaction(Interaction* in)
 {
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;

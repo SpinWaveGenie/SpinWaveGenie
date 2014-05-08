@@ -2,9 +2,9 @@
 #include "Containers/Matrices.h"
 #include <Eigen/Cholesky>
 #include <iomanip>
-#include <unordered_map>
 #include "Cell/Neighbors.h"
-
+#include <cmath>
+#include <random>
 
 using namespace Eigen;
 using namespace std;
@@ -91,6 +91,11 @@ void SpinWave::Set_Kpoint(double KX, double KY, double KZ)
     KZP = KZ;
 }
 
+const Cell& SpinWave::getCell() const
+{
+    return cell;
+}
+
 void SpinWave::Calc_Eigenvalues()
 {
     //MatrixXcd test;
@@ -135,7 +140,6 @@ void SpinWave::Calc_Eigenvalues()
     if (ces.info() != Success)
         cout << ces.info() << endl;
     */
-    
     //cout << "LN= " << endl;
     //cout << LN << endl;
     
@@ -198,8 +202,8 @@ void SpinWave::Calc_Weights()
     
     //cout << "eigenvectors" << endl;
     //cout << ces.eigenvectors() << endl;
-    
-    
+   
+    //cout << XX << endl;
     //MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
     MatrixXi IPR(N,N);
     VectorXcd TEST(N);
@@ -230,7 +234,7 @@ void SpinWave::Calc_Weights()
                 {
                     IPR(L1,L2) = 1;
                     IR = -1;
-                    //cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
+                    cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
                 }
             }
         }
@@ -259,9 +263,11 @@ void SpinWave::Calc_Weights()
         if (ito==maxIterations-1)
         {
             TEST = ortho_test.diagonal();
-            //cout << "Error calculating frequencies" << endl;
+            cout << "Error calculating frequencies" << endl;
         }
     }
+    
+    //cout << "XX" << XX << endl;
     
     vector<results> AL(N);
     for (int L1=0;L1<N;L1++)
@@ -392,8 +398,10 @@ void SpinWave::Calc_Intensities()
     {
         point pt;
         pt.frequency = abs(WW[i+M]);
+        //cout << KX << " " << KY << " " << KZ << endl;
         //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
+        //cout << endl;
         //pt.intensity /= pt.frequency;
         VI.push_back(pt);
     }

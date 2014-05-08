@@ -44,7 +44,8 @@ void SpinWaveDispersion::save()
         double x = it->get<0>();
         double y = it->get<1>();
         double z = it->get<2>();
-        
+        cout << x << " " << y << " " << z << endl;
+
         if (PrintPosition)
         {
             file << x << " " << y << " " << z << " ";// << endl;
