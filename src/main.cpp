@@ -49,23 +49,15 @@ int main()
     OneDimensionalFactory factory;
     auto gauss = factory.getLorentzian(5.0,0.000001);
     
-    axes_info info;
-    
-    info.x = true;
-    info.y = true;
-    info.z = true;
-    info.dx = 0.05;
-    info.dy = 0.1;
-    info.dz = 0.2;
-    info.tol = 0.00001;
-    
-    size_t numberpoints = 201;
+    size_t numberpoints = 1601;
     
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW, 0.0, 120.0, numberpoints));
-
-    IntegrateAxes cut(info,move(res));
-
     
+    IntegrateAxes cut(move(res),0.0000001);
+    cut.addDirection(0, 0.05);
+    cut.addDirection(0.5,-1.0,0.0,0.1);
+    cut.addDirection(2, 0.2);
+
     Eigen::MatrixXd mat;
     mat.resize(numberpoints,numberpoints);
     
