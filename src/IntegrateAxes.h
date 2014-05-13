@@ -18,7 +18,6 @@ struct Axis
     double v0,v1,v2,delta;
 };
 
-
 class IntegrateAxes
 {
 public:

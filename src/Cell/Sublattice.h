@@ -20,7 +20,7 @@ public:
     Sublattice();
     ~Sublattice() {};
     //! set name to describe sublattice
-    //! \param name_input a std::string argument
+    //! \param name_input a std::string argument unique to each sublattice
     void setName(std::string nameInput );
     //! returns name of a given sublattice
     //! \return name of sublattice
@@ -65,13 +65,13 @@ public:
     //! returns iterator to final atomic position;
     ConstIterator cend();
 private:
-    std::string name; //!< name describing the sublattice
-    std::string type; //!< type describing the magnetic form factor
-    double spin, //!< magnitude of spin
-    theta, //!< angle theta describing orientation of spin
-    phi; //!< angle phi describing orientation of spin
-    Matrix3 rotationMatrix, //!< rotation matrix describing moment along z
-    inverseMatrix; //!< inverse for rotation matrix
-    UniqueThreeVectors<double> positions; //!< std::vector storing atomic positions.
+    std::string name;
+    std::string type;
+    double spin,
+    theta,
+    phi;
+    Matrix3 rotationMatrix,
+    inverseMatrix;
+    UniqueThreeVectors<double> positions;
 };
 #endif // __Sublattice_H__

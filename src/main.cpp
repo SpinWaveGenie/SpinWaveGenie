@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <Eigen/Dense>
+//#include "tbb/tbb.h"
 #include "Genie/SpinWave.h"
 #include "Genie/SW_Builder.h"
 #include "Cell/Cell.h"
@@ -13,9 +15,39 @@
 #include "OneDimensionalFactory.h"
 #include "OneDimensionalShapes.h"
 #include "IntegrateAxes.h"
-#include <Eigen/Dense>
+#include "PointsAlongLine.h"
+
 
 using namespace std;
+
+/*using namespace tbb;
+
+class ApplyFoo
+{
+    IntegrateAxes cut;
+    vector<vector<double> > my_a;
+public:
+    void operator()( const blocked_range<size_t>& r ) const
+    
+    {
+        for( size_t i=r.begin(); i!=r.end(); ++i )
+        {
+            vector<double> data = cut.getCut(my_a[i][0],my_a[i][1],my_a[i][2]);
+            for (auto j=0;j!=numberpoints;j++)
+            {
+                mat(j,i) = data[j];
+            }
+        }
+        
+    }
+    
+    ApplyFoo( vector< vector<double> > a ) : my_a(a) {}
+};
+
+void ParallelApplyFoo( vector<vector<double> > a, size_t n ) {
+    parallel_for(blocked_range<size_t>(0,n), ApplyFoo(a));
+}
+*/
 
 int main()
 {
@@ -49,7 +81,7 @@ int main()
     OneDimensionalFactory factory;
     auto gauss = factory.getLorentzian(5.0,0.000001);
     
-    size_t numberpoints = 1601;
+    size_t numberpoints = 401;
     
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW, 0.0, 120.0, numberpoints));
     
@@ -61,11 +93,18 @@ int main()
     Eigen::MatrixXd mat;
     mat.resize(numberpoints,numberpoints);
     
+    PointsAlongLine calculatePoints;
+    calculatePoints.setFirstPoint(-4.0, 0.0, 2.0);
+    calculatePoints.setFinalPoint( 3.0, 0.0, 2.0);
+    calculatePoints.setNumberPoints(numberpoints);
+    ThreeVectors<double> points = calculatePoints.getPoints();
+    
+    auto pt = points.begin();
     for (int i = 0; i!=numberpoints; i++)
     {
-        double x = -4.0+i*7.0/(numberpoints-1);
-        cout << x << endl;
-        vector<double> data = cut.getCut(x, 0.0 ,2.0);
+        cout << pt->get<0>() << endl;
+        vector<double> data = cut.getCut(pt->get<0>(),pt->get<1>(),pt->get<2>());
+        pt++;
         for (auto j=0;j!=numberpoints;j++)
         {
             mat(j,i) = data[j];

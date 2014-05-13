@@ -54,29 +54,12 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     double tmpx=kx,tmpy=ky,tmpz=kz;
     //cout << dim << " dimensions" << endl;
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
-    switch(dim)
+    
+    for(unsigned i = 0; i!=dim; i++)
     {
-        case 1:
-        {
-            tmpx += x[0]*integrationDirections[0].v0;
-            tmpy += x[0]*integrationDirections[0].v1;
-            tmpz += x[0]*integrationDirections[0].v2;
-            break;
-        }
-        case 2:
-        {
-            tmpx += x[0]*integrationDirections[0].v0+x[1]*integrationDirections[1].v0;
-            tmpy += x[0]*integrationDirections[0].v1+x[1]*integrationDirections[1].v1;
-            tmpz += x[0]*integrationDirections[0].v2+x[1]*integrationDirections[1].v2;
-            break;
-        }
-        case 3:
-        {
-            tmpx += x[0]*integrationDirections[0].v0+x[1]*integrationDirections[1].v0+x[2]*integrationDirections[2].v0;
-            tmpy += x[0]*integrationDirections[0].v1+x[1]*integrationDirections[1].v1+x[2]*integrationDirections[2].v1;
-            tmpz += x[0]*integrationDirections[0].v2+x[1]*integrationDirections[1].v2+x[2]*integrationDirections[2].v2;
-            break;
-        }
+        tmpx += x[i]*integrationDirections[i].v0;
+        tmpy += x[i]*integrationDirections[i].v1;
+        tmpz += x[i]*integrationDirections[i].v2;
     }
     //cout << "** " << x[0] << endl;//<< " " << x[1] << " " << x[2] << endl;
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
@@ -115,8 +98,11 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     ky = kyIn;
     kz = kzIn;
     
-    std::vector<double> xmin,xmax;
+    int dim = integrationDirections.size();
     
+    std::vector<double> xmin,xmax;
+    xmin.reserve(dim);
+    xmax.reserve(dim);
     
     for (auto it = integrationDirections.begin(); it != integrationDirections.end(); it++)
     {
@@ -125,7 +111,6 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     }
     
     Matrix3 lattice = resolutionFunction->getCell().getReciprocalVectors();
-    int dim = integrationDirections.size();
 
     switch(dim)
     {
@@ -133,6 +118,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
         {
             Vector3 direction = integrationDirections[0].v0*lattice.row(0) + integrationDirections[0].v1*lattice.row(1) + integrationDirections[0].v2*lattice.row(2);
             direction *= 2.0*integrationDirections[0].delta;
+            
             volume = direction.norm();
             break;
         }
@@ -142,7 +128,8 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
             firstDirection *= 2.0*integrationDirections[0].delta;
             Vector3 secondDirection = integrationDirections[1].v0*lattice.row(0) + integrationDirections[1].v1*lattice.row(1) + integrationDirections[1].v2*lattice.row(2);
             secondDirection *= 2.0*integrationDirections[1].delta;
-            volume = firstDirection.cross(secondDirection).norm();
+            
+            volume = std::abs(firstDirection.cross(secondDirection).norm());
             break;
         }
         case 3:

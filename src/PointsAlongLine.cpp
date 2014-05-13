@@ -40,8 +40,6 @@ void PointsAlongLine::calculatePoints()
     }
 }
 
-
-
 ThreeVectors<double> PointsAlongLine::getPoints()
 {
     calculatePoints();

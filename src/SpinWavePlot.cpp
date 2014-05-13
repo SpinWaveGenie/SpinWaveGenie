@@ -166,12 +166,6 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     return fval;
 }
 
-
-
-
-
-
-
 /*NoResolutionFunction::NoResolutionFunction()
  {
  

@@ -22,7 +22,10 @@ public:
     //! \param min minimum distance considered (Angstroms)
     //! \param max maximum distance considered (Angstroms)
     void findNeighbors(Cell& cell,std::string& sl1, std::string& sl2, double min, double max);
+    //! Get the number of neighbors.
     double getNumberNeighbors();
+    //! Get Gamma (descibed in paper J Phys. Condens. Matter 21 216001 (2009)
+    //! \param K K vector used in spin wave calculation.
     std::complex<double> getGamma(Vector3 K);
     typedef UniqueThreeVectors<double>::Iterator Iterator;
     //! \return Returns an iterator pointing to the first element of the neighbor list

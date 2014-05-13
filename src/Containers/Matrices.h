@@ -10,6 +10,9 @@
 
 #include "Eigen/Core"
 
+// Vevtor3d and Matrix3d from the eigen library, so we provide typedefs for them here.
+// I've started replacing Vector3 from the public interface because alternatives often exist.
+
 typedef Eigen::Matrix <double, 3, 1> Vector3;
 typedef Eigen::Matrix <double, 3, 3> Matrix3;
 

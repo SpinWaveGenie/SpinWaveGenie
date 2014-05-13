@@ -25,9 +25,9 @@ public:
     //! \param a     Distance a in Angstroms
     //! \param b     Distance b in Angstroms
     //! \param c     Distance c in Angstroms
-    //! \param alpha Angle alpha in degrees
-    //! \param beta  Angle beta in degrees
-    //! \param gamma Angle gamma in degrees
+    //! \param alpha Angle alpha in Radians
+    //! \param beta  Angle beta in Radians
+    //! \param gamma Angle gamma in Radians
     void setBasisVectors(double a,double b, double c, double alpha, double beta, double gamma);
     //! Set basis vectors as Eigen::Matrix3d object. May be multiplied by double "scale"
     //! \param scale Double used to scale basis vectors
@@ -51,8 +51,10 @@ public:
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param pos Position of atom in fraction of the basis vectors.
-    const std::size_t getPosition(std::string name);
     void addAtom(std::string name, double x, double y, double z);
+    //! Returns the position where sublattice name is stored.
+    //! \param name name of sublattice.
+    const std::size_t getPosition(std::string name);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices
     const size_t size() const;
@@ -64,13 +66,9 @@ public:
     //! \return Returns an iterator pointing to the final Sublattice element
     Iterator end();
     ConstIterator cend();
-    //~Cell() { std::cout << "Cell destructed" << std::endl; }
 private:
-    //! basis vectors
     Matrix3 basisVectors;
-    //! reciprocal lattice vectors
     Matrix3 reciprocalVectors;
-    //! vector containing all Sublattice objects;
     std::vector<Sublattice> sublatticeInfo;
 };
 #endif // __Cell_H__ 
