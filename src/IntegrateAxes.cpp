@@ -10,6 +10,19 @@
 
 using namespace std;
 
+
+IntegrateAxes::IntegrateAxes(const IntegrateAxes& other)
+{
+    this->tolerance = other.tolerance;
+    resolutionFunction = move(other.resolutionFunction->clone());
+    this->minimumEnergy = other.minimumEnergy;
+    this->maximumEnergy = other.maximumEnergy;
+    this->energyPoints = other.energyPoints;
+    this->integrationDirections = other.integrationDirections;
+    this->tolerance = other.tolerance;
+    this->integrationDirections = other.integrationDirections;    
+}
+
 IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, double tolerance)
 {
     this->tolerance = tolerance;
@@ -160,4 +173,47 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     std::for_each(fval.begin(), fval.end(), DivideValue(volume));
 
     return fval;
+}
+
+const Cell& IntegrateAxes::getCell() const
+{
+    return resolutionFunction->getCell();
+}
+
+double IntegrateAxes::getMinimumEnergy() const
+{
+    return minimumEnergy;
+}
+
+double IntegrateAxes::getMaximumEnergy() const
+{
+    return maximumEnergy;
+}
+
+std::size_t IntegrateAxes::getNumberPoints() const
+{
+    return energyPoints;
+}
+
+void IntegrateAxes::setMinimumEnergy(double energy)
+{
+    resolutionFunction->setMinimumEnergy(energy);
+    this->minimumEnergy = energy;
+}
+
+void IntegrateAxes::setMaximumEnergy(double energy)
+{
+    resolutionFunction->setMaximumEnergy(energy);
+    this->maximumEnergy = energy;
+}
+
+void IntegrateAxes::setNumberPoints(std::size_t points)
+{
+    resolutionFunction->setNumberPoints(points);
+    this->energyPoints = points;
+}
+
+std::unique_ptr<SpinWavePlot> IntegrateAxes::clone()
+{
+    return unique_ptr<SpinWavePlot>(new IntegrateAxes(*this));
 }

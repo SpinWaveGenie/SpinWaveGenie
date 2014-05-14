@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <memory>
 #include <Eigen/Dense>
-//#include "tbb/tbb.h"
+#include "tbb/tbb.h"
 #include "Genie/SpinWave.h"
 #include "Genie/SW_Builder.h"
 #include "Cell/Cell.h"
@@ -16,41 +16,52 @@
 #include "OneDimensionalShapes.h"
 #include "IntegrateAxes.h"
 #include "PointsAlongLine.h"
+#include "TwoDimensionCut.h"
 
 
 using namespace std;
+using namespace tbb;
 
-/*using namespace tbb;
+Eigen::MatrixXd mat;
 
 class ApplyFoo
 {
-    IntegrateAxes cut;
-    vector<vector<double> > my_a;
+    unique_ptr<SpinWavePlot> cut;
+    ThreeVectors<double> points;
+    size_t energyPoints;
 public:
-    void operator()( const blocked_range<size_t>& r ) const
-    
+    ApplyFoo(unique_ptr<SpinWavePlot> inCut, ThreeVectors<double> inPoints, size_t inEnergyPoints) : cut(move(inCut)), points(inPoints), energyPoints(inEnergyPoints) {}
+    ApplyFoo(const ApplyFoo& other)
     {
-        for( size_t i=r.begin(); i!=r.end(); ++i )
+        cut = move(other.cut->clone());
+        points = other.points;
+        energyPoints = other.energyPoints;
+    }
+    void operator()( const blocked_range<size_t>& r ) const
+    {
+        unique_ptr<SpinWavePlot> cut2(move(cut->clone()));
+        auto it = points.cbegin()+ r.begin();
+        for(size_t i = r.begin(); i!=r.end(); ++i)
         {
-            vector<double> data = cut.getCut(my_a[i][0],my_a[i][1],my_a[i][2]);
-            for (auto j=0;j!=numberpoints;j++)
+            cout << it->get<0>() << endl;
+            vector<double> data = cut2->getCut(it->get<0>(),it->get<1>(),it->get<2>());
+            for (auto j=0;j!=energyPoints;j++)
             {
                 mat(j,i) = data[j];
             }
+            it++;
         }
-        
     }
-    
-    ApplyFoo( vector< vector<double> > a ) : my_a(a) {}
 };
 
-void ParallelApplyFoo( vector<vector<double> > a, size_t n ) {
-    parallel_for(blocked_range<size_t>(0,n), ApplyFoo(a));
+void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points, size_t inEnergyPoints)
+{
+    parallel_for(blocked_range<size_t>(0,points.size()), ApplyFoo(move(cut),points,inEnergyPoints));
 }
-*/
 
 int main()
 {
+    tbb::task_scheduler_init init(12);
     double SA = 2.0;
     double theta = M_PI/2.0;
     
@@ -81,16 +92,17 @@ int main()
     OneDimensionalFactory factory;
     auto gauss = factory.getLorentzian(5.0,0.000001);
     
-    size_t numberpoints = 401;
+    size_t numberpoints = 1601;
     
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW, 0.0, 120.0, numberpoints));
     
-    IntegrateAxes cut(move(res),0.0000001);
-    cut.addDirection(0, 0.05);
-    cut.addDirection(0.5,-1.0,0.0,0.1);
-    cut.addDirection(2, 0.2);
-
-    Eigen::MatrixXd mat;
+    unique_ptr<IntegrateAxes> cut(new IntegrateAxes(move(res),0.0000001));
+    cut->addDirection(0, 0.05);
+    cut->addDirection(0.5,-1.0,0.0,0.1);
+    cut->addDirection(2, 0.2);
+    
+    unique_ptr<SpinWavePlot> cut2(move(cut));
+    
     mat.resize(numberpoints,numberpoints);
     
     PointsAlongLine calculatePoints;
@@ -98,19 +110,13 @@ int main()
     calculatePoints.setFinalPoint( 3.0, 0.0, 2.0);
     calculatePoints.setNumberPoints(numberpoints);
     ThreeVectors<double> points = calculatePoints.getPoints();
+
+    ParallelApplyFoo(move(cut2),points,numberpoints);
     
-    auto pt = points.begin();
-    for (int i = 0; i!=numberpoints; i++)
-    {
-        cout << pt->get<0>() << endl;
-        vector<double> data = cut.getCut(pt->get<0>(),pt->get<1>(),pt->get<2>());
-        pt++;
-        for (auto j=0;j!=numberpoints;j++)
-        {
-            mat(j,i) = data[j];
-        }
-    }
-    
+    //TwoDimensionCut twodimcut;
+    //twodimcut.setPlotObject(move(cut2));
+    //twodimcut.setPoints(points);
+    //mat = twodimcut.getMatrix();
     std::ofstream file("MnBi_H02.txt");
     file << mat << endl;
 

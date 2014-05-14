@@ -18,14 +18,12 @@ void TwoDimensionCut::setFilename(string name)
     Filename = name;
 }
 
-void TwoDimensionCut::setConvolutionObject(unique_ptr<OneDimensionalShapes> object)
+void TwoDimensionCut::setPlotObject(unique_ptr<SpinWavePlot> object)
 {
+    EnergyPoints = object->getNumberPoints();
+    MaximumEnergy = object->getMaximumEnergy();
+    MinimumEnergy = object->getMinimumEnergy();
     InstrumentResolution = move(object);
-}
-
-void TwoDimensionCut::setSpinWave(SpinWave SWIn)
-{
-    SW = SWIn;
 }
 
 void TwoDimensionCut::setPoints(ThreeVectors<double> pts)
@@ -39,8 +37,11 @@ void TwoDimensionCut::setPoints(ThreeVectors<double> pts)
 
 void TwoDimensionCut::setEnergyPoints(double min, double max, size_t points)
 {
+    InstrumentResolution->setMinimumEnergy(min);
     MinimumEnergy = min;
+    InstrumentResolution->setMaximumEnergy(max);
     MaximumEnergy = max;
+    InstrumentResolution->setNumberPoints(points);
     EnergyPoints = points;
 }
 
@@ -48,19 +49,18 @@ Eigen::MatrixXd TwoDimensionCut::getMatrix()
 {
     Eigen::MatrixXd figure;
     figure.setZero(EnergyPoints,Kpoints.size());
-    EnergyResolutionFunction scan(move(InstrumentResolution->clone()),SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
     for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
         double y = it->get<1>();
         double z = it->get<2>();
         
-        vector<double> val = scan.getCut(x,y,z);
+        vector<double> val = InstrumentResolution->getCut(x,y,z);
         size_t m = std::distance(Kpoints.begin(),it);
+        cout << m << endl;
         for(int n=0;n<EnergyPoints;n++)
         {
             figure(n,m) = val[n];
-            //cout << val[n] << endl;
         }
     }
     return figure;
@@ -68,23 +68,7 @@ Eigen::MatrixXd TwoDimensionCut::getMatrix()
 
 void TwoDimensionCut::save()
 {
-    Eigen::MatrixXd figure;
-    figure.setZero(EnergyPoints,Kpoints.size());
-    EnergyResolutionFunction scan(move(InstrumentResolution->clone()),SW,MinimumEnergy,MaximumEnergy,EnergyPoints);
-    for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
-    {
-        double x = it->get<0>();
-        double y = it->get<1>();
-        double z = it->get<2>();
-
-        vector<double> val = scan.getCut(x,y,z);
-        size_t m = std::distance(Kpoints.begin(),it);
-        for(int n=0;n<EnergyPoints;n++)
-        {
-            figure(n,m) = val[n];
-            //cout << val[n] << endl;
-        }
-    }
+    Eigen::MatrixXd figure = this->getMatrix();
     std::ofstream file(Filename);
     if (file.is_open())
     {

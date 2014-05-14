@@ -21,31 +21,19 @@ EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShap
     SW = SWIn;
 }
 
-//EnergyResolutionFunction& operator=( const EnergyResolutionFunction& a )
-//{
-//    ResolutionFunction = move(other.ResolutionFunction0->clone();
-//    return *this,
-//}
-
-//A& operator=( A&& a )
-//{
-//    up_ = std::move( a.up_ );
-//    return *this,
-//}
-
 EnergyResolutionFunction::EnergyResolutionFunction(const EnergyResolutionFunction& other)
 {
-    std::cout << "Copying Energy Resolution Function" << std::endl;
+    //std::cout << "Copying Energy Resolution Function" << std::endl;
     MinimumEnergy = other.MinimumEnergy;
     MaximumEnergy = other.MaximumEnergy;
     EnergyPoints = other.EnergyPoints;
-    cout << "Energy Points??? " << other.EnergyPoints << endl;
-    cout << "Energy Points??? " << EnergyPoints << endl;
+    //cout << "Energy Points??? " << other.EnergyPoints << endl;
+    //cout << "Energy Points??? " << EnergyPoints << endl;
     SW = other.SW;
     ResolutionFunction = move(other.ResolutionFunction->clone());
 }
 
-EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFunction other)
+EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFunction& other)
 {
     std::cout << "Copying Energy Resolution Function" << std::endl;
     MinimumEnergy = other.MinimumEnergy;
@@ -101,6 +89,11 @@ double EnergyResolutionFunction::getMinimumEnergy() const
     return MinimumEnergy;
 }
 
+void EnergyResolutionFunction::setMinimumEnergy(double energy)
+{
+    this->MinimumEnergy = energy;
+}
+
 const Cell& EnergyResolutionFunction::getCell() const
 {
     return SW.getCell();
@@ -111,9 +104,19 @@ double EnergyResolutionFunction::getMaximumEnergy() const
     return MaximumEnergy;
 }
 
+void EnergyResolutionFunction::setMaximumEnergy(double energy)
+{
+    this->MaximumEnergy = energy;
+}
+
 std::size_t EnergyResolutionFunction::getNumberPoints() const
 {
     return EnergyPoints;
+}
+
+void EnergyResolutionFunction::setNumberPoints(size_t points)
+{
+    EnergyPoints = points;
 }
 
 std::size_t EnergyResolutionFunction::getBin(double Energy)
@@ -126,6 +129,11 @@ std::size_t EnergyResolutionFunction::getBin(double Energy)
         bin = EnergyPoints-1.0;
     
     return (size_t) bin;
+}
+
+std::unique_ptr<SpinWavePlot> EnergyResolutionFunction::clone()
+{
+    return unique_ptr<SpinWavePlot>(new EnergyResolutionFunction(*this));
 }
 
 

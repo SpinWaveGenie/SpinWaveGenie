@@ -11,6 +11,7 @@
 #include "Containers/ThreeVectors.h"
 #include "OneDimensionalFactory.h"
 #include "OneDimensionalShapes.h"
+#include "EnergyResolutionFunction.h"
 
 using namespace std;
 using namespace boost;
@@ -66,7 +67,6 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
     pugi::xml_node lattice_parameters = node.child("latticevectors");
     double a,b,c,alpha,beta,gamma;
     
-
     a = stringToDouble(lattice_parameters.child_value("a"));
     b = stringToDouble(lattice_parameters.child_value("b"));
     c = stringToDouble(lattice_parameters.child_value("c"));
@@ -309,6 +309,8 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         Line.setFinalPoint(x1,y1,z1);
         Line.setNumberPoints(NumberPoints);
         Cut.setPoints(Line.getPoints());
+        
+
     }
         
     {
@@ -323,17 +325,16 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         cout << MinEnergy << " " << MaxEnergy << " " << NumberPoints << endl;
         
         PointsAlongLine Line;
-        Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
-    }
-    
-    {
+
         pugi::xml_node type = node.child("type");
         
         pugi::xml_node Gaussian = type.child("OneDimensionGaussian");
         pugi::xml_node Lorentzian = type.child("OneDimensionLorentzian");
         pugi::xml_node PseudoVoigt = type.child("OneDimensionPseudoVoigt");
-
+        
         OneDimensionalFactory factory;
+        
+        unique_ptr<OneDimensionalShapes> resinfo;
         
         if (Gaussian)
         {
@@ -341,9 +342,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             fwhm = stringToDouble(Gaussian.child_value("fwhm"));
             tolerance = stringToDouble(Gaussian.child_value("tol"));
             
-            auto resinfo = factory.getGaussian(fwhm,tolerance);
-            Cut.setConvolutionObject(move(resinfo));
-            
+            resinfo = factory.getGaussian(fwhm,tolerance);
             cout << "Gaussian resolution function set" << endl;
         }
         else if(Lorentzian)
@@ -352,8 +351,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             fwhm = stringToDouble(Lorentzian.child_value("fwhm"));
             tolerance = stringToDouble(Lorentzian.child_value("tol"));
 
-            auto resinfo = factory.getLorentzian(fwhm,tolerance);
-            Cut.setConvolutionObject(move(resinfo));
+            resinfo = factory.getLorentzian(fwhm,tolerance);
             
             cout << "Lorentzian resolution function set" << endl;
         }
@@ -364,8 +362,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             fwhm = stringToDouble(PseudoVoigt.child_value("fwhm"));
             tolerance = stringToDouble(PseudoVoigt.child_value("tol"));
             
-            auto resinfo = factory.getPseudoVoigt(eta,fwhm,tolerance);
-            Cut.setConvolutionObject(move(resinfo));
+            resinfo = factory.getPseudoVoigt(eta,fwhm,tolerance);
             
             cout << "Pseudo-Voigt resolution function set" << endl;
         }
@@ -373,10 +370,15 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         {
             cout << "RESOLUTION FUNCTION NOT SET!!!" << endl;
         }
+        
+        SpinWave SW = builder.Create_Element();
+        unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(resinfo), SW, MinEnergy, MaxEnergy, NumberPoints));
+        Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
+        Cut.setPlotObject(move(res));
     }
-    SpinWave SW = builder.Create_Element();
-    Cut.setSpinWave(SW);
     Cut.save();
+
+
 }
 
 Cell Init::get_cell()

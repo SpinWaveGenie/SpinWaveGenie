@@ -35,9 +35,9 @@ public:
     //! \return Returns an iterator pointing to the end of the vector
     Iterator end();
     //! \return Returns an iterator pointing to the first element
-    ConstIterator cbegin();
+    ConstIterator cbegin() const;
     //! \return Returns an iterator pointing to the end fo the vector
-    ConstIterator cend();
+    ConstIterator cend() const;
 protected:
     std::vector<T> valuesX;
     std::vector<T> valuesY;
@@ -72,13 +72,13 @@ typename ThreeVectors<T>::Iterator ThreeVectors<T>::end()
 }
 
 template<typename T>
-typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cbegin()
+typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cbegin() const
 {
     return boost::make_zip_iterator(boost::make_tuple(valuesX.cbegin(),valuesY.cbegin(),valuesZ.cbegin()));
 }
 
 template<typename T>
-typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cend()
+typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cend() const
 {
     return boost::make_zip_iterator(boost::make_tuple(valuesX.cend(),valuesY.cend(),valuesZ.cend()));
 }

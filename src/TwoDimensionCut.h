@@ -22,15 +22,13 @@ public:
     void setFilename(std::string name);
     void setPoints(ThreeVectors<double> pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
-    void setConvolutionObject(std::unique_ptr<OneDimensionalShapes> object);
-    void setSpinWave(SpinWave SWIn);
+    void setPlotObject(std::unique_ptr<SpinWavePlot> object);
     Eigen::MatrixXd getMatrix();
     void save();
 private:
     double MaximumEnergy,MinimumEnergy;
     size_t EnergyPoints;
-    std::unique_ptr<OneDimensionalShapes> InstrumentResolution;
-    SpinWave SW;
+    std::unique_ptr<SpinWavePlot> InstrumentResolution;
     std::string Filename;
     ThreeVectors<double> Kpoints;
 };
