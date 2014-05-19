@@ -13,14 +13,12 @@ using namespace std;
 
 IntegrateAxes::IntegrateAxes(const IntegrateAxes& other)
 {
-    this->tolerance = other.tolerance;
     resolutionFunction = move(other.resolutionFunction->clone());
+    this->tolerance = other.tolerance;
     this->minimumEnergy = other.minimumEnergy;
     this->maximumEnergy = other.maximumEnergy;
     this->energyPoints = other.energyPoints;
     this->integrationDirections = other.integrationDirections;
-    this->tolerance = other.tolerance;
-    this->integrationDirections = other.integrationDirections;    
 }
 
 IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, double tolerance)

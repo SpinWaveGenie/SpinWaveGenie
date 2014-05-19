@@ -11,24 +11,29 @@
 
 #include <iostream>
 #include "SpinWavePlot.h"
-#include "EnergyResolutionFunction.h"
 
-class IntegrateThetaPhi : SpinWavePlot {
-    public:
-    IntegrateThetaPhi(double min, double max, double points, const Matrix3 basisVectors);
-    //IntegrateThetaPhi(const IntegrateThetaPhi& other) {};
-    void setConvolutionObject(EnergyResolutionFunction object);
+class IntegrateThetaPhi : public SpinWavePlot {
+public:
+    IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance);
+    IntegrateThetaPhi(const IntegrateThetaPhi& other);
+    std::unique_ptr<SpinWavePlot> clone();
+    const Cell& getCell() const;
+    double getMinimumEnergy() const;
+    void setMinimumEnergy(double energy);
+    double getMaximumEnergy() const;
+    void setMaximumEnergy(double energy);
+    std::size_t getNumberPoints() const;
+    void setNumberPoints(std::size_t points);
     std::vector<double> getCut(double kx,double ky, double kz);
     ~IntegrateThetaPhi(){};
-    private:
+private:
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
-    double MinimumEnergy,MaximumEnergy;
+    double minimumEnergy,maximumEnergy;
     double r;
-    unsigned EnergyPoints;
+    unsigned energyPoints;
     double tol;
-    Matrix3 basisVectors;
-    EnergyResolutionFunction InstrumentResolution;
+    std::unique_ptr<SpinWavePlot> resolutionFunction;
 };
 
 #endif /* defined(__spin_wave_genie__IntegrateThetaPhi__) */

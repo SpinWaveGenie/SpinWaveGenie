@@ -13,18 +13,67 @@
 
 using namespace std;
 
-IntegrateThetaPhi::IntegrateThetaPhi(double min, double max, double points, Matrix3 basisVectorsIn)
+
+IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance)
 {
-    MinimumEnergy = min;
-    MaximumEnergy = max;
-    EnergyPoints = points;
-    basisVectors = basisVectorsIn;
-    tol = 0.0001;
+    minimumEnergy = object->getMinimumEnergy();
+    maximumEnergy = object->getMaximumEnergy();
+    energyPoints = object->getNumberPoints();
+    tol = tolerance;
+    resolutionFunction = move(object);
 }
 
-void IntegrateThetaPhi::setConvolutionObject(EnergyResolutionFunction object)
+IntegrateThetaPhi::IntegrateThetaPhi(const IntegrateThetaPhi& other)
 {
-    InstrumentResolution = object;
+    minimumEnergy = other.minimumEnergy;
+    maximumEnergy = other.maximumEnergy;
+    energyPoints = other.energyPoints;
+    tol = other.tol;
+    resolutionFunction = move(other.resolutionFunction->clone());
+}
+
+
+std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
+{
+    return unique_ptr<SpinWavePlot>(new IntegrateThetaPhi(*this));
+}
+
+const Cell& IntegrateThetaPhi::getCell() const
+{
+    return resolutionFunction->getCell();
+}
+
+double IntegrateThetaPhi::getMinimumEnergy() const
+{
+    return minimumEnergy;
+}
+
+void IntegrateThetaPhi::setMinimumEnergy(double energy)
+{
+    resolutionFunction->setMinimumEnergy(energy);
+    this->minimumEnergy = energy;
+}
+
+double IntegrateThetaPhi::getMaximumEnergy() const
+{
+    return maximumEnergy;
+}
+
+void IntegrateThetaPhi::setMaximumEnergy(double energy)
+{
+    resolutionFunction->setMaximumEnergy(energy);
+    this->maximumEnergy = energy;
+}
+
+std::size_t IntegrateThetaPhi::getNumberPoints() const
+{
+    return energyPoints;
+}
+
+void IntegrateThetaPhi::setNumberPoints(std::size_t points)
+{
+    resolutionFunction->setNumberPoints(points);
+    this->energyPoints = points;
 }
 
 
@@ -42,15 +91,14 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     tmp[1] = r*sin(theta)*sin(phi);
     tmp[2] = r*cos(theta);
     
-    k = basisVectors/(2.0*M_PI)*tmp;
+
+    Matrix3 basisVectors = resolutionFunction->getCell().getBasisVectors();
+    
+    k = tmp.transpose()*basisVectors/(2.0*M_PI);
     //cout << tmp.transose() << endl;
     //cout << k.transpose() << endl;
     
-    //Vector3 woof = k.transpose()*basisVectors.inverse()*2.0*M_PI;
-    //cout << woof.transpose() << endl << endl;
-    vector<double> val = InstrumentResolution.getCut(k[0],k[1],k[2]);
-    
-    //vector<double> values = InstrumentResolution.getCut(0.5,0.0,0.0);
+    vector<double> val = resolutionFunction->getCut(k[0],k[1],k[2]);
     
     //for (auto it = values.begin(); it!=values.end(); it++)
     //{
@@ -59,19 +107,9 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     
     //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
     double factor = sin(theta)/(4.0*M_PI);
-    for(int i=0;i!=EnergyPoints;i++)
+    for(int i=0;i!=energyPoints;i++)
     {
         retval[i] = factor*val[i];
-        //retval[i] = factor*pow(0.25*sqrt(5.0/M_PI)*(3*cos(theta)*cos(theta)-1.0),1)*0.5*sqrt(3.0/M_PI)*cos(theta)*4.0*M_PI;
-        //double S = 1.0;
-        //double J = 1.0;
-        //double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-        //double frequency = 2.0*J*S*(1.0-cos(tmp[0]));
-        //double F = 0.5;
-        //cout << retval[i] << " ";
-        //cout << factor*(1.0+cos(theta)*cos(theta))*exp(-1.0*(4.0*log(2.0)*pow(energy-frequency,2))/(F*F)) << endl;
-        //cout << energy << " " << val[i] << " ";
-        //cout << frequency << endl;
     }
     //cout << endl;
     return 0;
@@ -87,20 +125,15 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
 {
     std::vector<double> xmin = {0.0,0.0};
     std::vector<double> xmax = {M_PI,2.0*M_PI};
-    
     int dim = 2;
-    Vector3 dispRLU(kx,ky,kz);
-    Vector3 dispAng = dispRLU.transpose()*2.0*M_PI*basisVectors.inverse();
-    r = dispAng.transpose().norm();
+    r = std::abs(kz);
     
-    //cout << "dispRLU= " << dispRLU.transpose() << endl;
-    //cout << "basisVectors= " <<basisVectors << endl;
-    //cout << "dispAng = " << dispAng.transpose() << endl;
+    //cout << "dispAng = " << r << endl;
     
-    vector<double> fval(EnergyPoints);
-    vector<double> err(EnergyPoints);
+    vector<double> fval(energyPoints);
+    vector<double> err(energyPoints);
     
-    hcubature(EnergyPoints,IntegrateThetaPhi::calc, this, dim, &xmin[0], &xmax[0], 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, &xmin[0], &xmax[0], 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
     
     /*for(int i=0;i!=EnergyPoints;i++)
      {
@@ -110,5 +143,4 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
      cout << endl;
      */
     return fval;
-    
 }
