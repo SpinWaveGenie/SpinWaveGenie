@@ -69,6 +69,20 @@ void MagneticFieldInteraction::calcConstantValues(Cell& cell)
     //cout << LNrr << " " << LNrMrM << endl;
 }
 
+void MagneticFieldInteraction::calculateEnergy(Cell &cell, double &energy)
+{
+    double S = cell.getSublattice(sl_r).getMoment();
+    const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
+
+    for (int i=0; i<3; i++)
+    {
+        if (abs(directions(i)) > 1.0e-10)
+        {
+            energy -= value*S*directions(i)*inv(i,2);
+        }
+    }
+}
+
 void MagneticFieldInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
     complex<double> XI (0.0,1.0);

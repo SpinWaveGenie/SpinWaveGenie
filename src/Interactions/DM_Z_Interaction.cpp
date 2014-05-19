@@ -13,7 +13,6 @@ DM_Z_Interaction::DM_Z_Interaction(string name_in, double value_in, string sl_r_
 Interaction* DM_Z_Interaction::do_clone() const
 {
     return new DM_Z_Interaction(*this);
-
 }
 
 void DM_Z_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
@@ -41,6 +40,11 @@ string DM_Z_Interaction::getName()
 void DM_Z_Interaction::updateValue(double value_in)
 {
     value = value_in;
+}
+
+void DM_Z_Interaction::calculateEnergy(Cell& cell, double &energy)
+{
+    
 }
 
 void DM_Z_Interaction::calcConstantValues(Cell& cell)
@@ -72,6 +76,7 @@ void DM_Z_Interaction::calcConstantValues(Cell& cell)
 
 void DM_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
+    
 }
 
 

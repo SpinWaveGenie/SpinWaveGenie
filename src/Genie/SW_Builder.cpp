@@ -32,6 +32,17 @@ void SW_Builder::Add_Interaction(Interaction* in)
     interactions.sort();
 }
 
+double SW_Builder::getEnergy()
+{
+    double energy = 0.0;
+    for(auto it=interactions.begin();it!=interactions.end();it++)
+    {
+        it->calculateEnergy(cell,energy);
+        cout << energy << endl;
+    }
+    return energy;
+}
+
 SpinWave SW_Builder::Create_Element()
 {
     //cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;

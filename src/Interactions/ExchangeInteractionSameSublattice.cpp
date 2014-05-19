@@ -59,11 +59,6 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
 
     //cout << "cell check(calcConstantValues): " << cell2.begin()->getName() << endl;
 
-    complex<double> F1rs(Frs(0,2),Frs(1,2));
-    complex<double> F2sr(Frs(2,0),Frs(2,1));
-    
-    LNr = -1.0*sqrt(Sr)*Sr/(2.0*sqrt(2.0))*z_rs*value*conj(F1rs + F2sr);
-
     complex<double> G1rs = -0.5*complex<double>(Frs(0,0) + Frs(1,1),Frs(1,0)-Frs(0,1));
     complex<double> G2rs = -0.5*complex<double>(Frs(0,0) - Frs(1,1),-Frs(1,0)-Frs(0,1));
     
@@ -74,10 +69,18 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
     //cout << LNrr << " " << LNrs << " " << LNrsM << endl;
 }
 
+void ExchangeInteractionSameSublattice::calculateEnergy(Cell& cell, double &energy)
+{
+    r = cell.getPosition(sl_r);
+    M = cell.size();
+    double Sr = cell.getSublattice(sl_r).getMoment();
+    
+    energy -= value*Sr*Sr;
+}
+
 void ExchangeInteractionSameSublattice::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
 {
-    elements[r] += LNr;
-    elements[r+M] += conj(LNr);
+    //first order terms are 0.0
 }
 
 void ExchangeInteractionSameSublattice::Update_Matrix(Vector3d K, MatrixXcd &LN)

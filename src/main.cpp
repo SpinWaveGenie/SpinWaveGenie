@@ -61,9 +61,9 @@ void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points,
 
 int main()
 {
-    tbb::task_scheduler_init init(12);
+    tbb::task_scheduler_init init(24);
     double SA = 2.0;
-    double theta = M_PI/2.0;
+    double theta = M_PI/3.0;
     
     Cell cell;
     cell.setBasisVectors(4.2827,4.2827,6.1103,90.0,90.0,120.0);
@@ -86,8 +86,11 @@ int main()
     builder.addInteraction(interactionFactory.getExchange("J4",1.578125,name,name,6.0,6.2));
     builder.addInteraction(interactionFactory.getExchange("J5",-3.188207,name,name,7.40,7.43));
     builder.addInteraction(interactionFactory.getExchange("J6",0.8203125,name,name,7.44,7.49));
+    builder.addInteraction(interactionFactory.getAnisotropy("D", -0.02, Vector3(0.0,0.0,1.0),name));
     
-    SpinWave SW = builder.Create_Element();
+    cout << builder.getEnergy() << endl;
+    
+    /*SpinWave SW = builder.Create_Element();
     
     OneDimensionalFactory factory;
     auto gauss = factory.getLorentzian(5.0,0.000001);
@@ -119,6 +122,6 @@ int main()
     //mat = twodimcut.getMatrix();
     std::ofstream file("MnBi_H02.txt");
     file << mat << endl;
-
+*/
     return 0;
 }

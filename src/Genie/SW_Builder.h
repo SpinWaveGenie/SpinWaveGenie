@@ -14,6 +14,7 @@ public:
     SW_Builder(Cell& cell_in);
     void Add_Interaction(Interaction* in);
     void addInteraction(std::unique_ptr<Interaction> in);
+    double getEnergy();
     SpinWave Create_Element();
 private:
     Cell cell;

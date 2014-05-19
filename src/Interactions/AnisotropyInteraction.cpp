@@ -77,6 +77,25 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
     //cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << LNrMrM << endl;
 }
 
+void AnisotropyInteraction::calculateEnergy(Cell& cell, double &energy)
+{
+    double S = cell.getSublattice(sl_r).getMoment();
+    const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
+    
+    for (int i=0; i<3; i++)
+    {
+        for (int j=0; j<3; j++)
+        {
+            //cout << i << " " << j << " " << directions(i,j) << endl;
+            if (abs(directions(i,j)) > 1.0e-10)
+            {
+                energy += value*directions(i,j)*S*S*inv(i,2)*inv(j,2);
+            }
+        }
+    }
+}
+
+
 void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
     complex<double> XI (0.0,1.0);

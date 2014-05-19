@@ -23,6 +23,7 @@ public:
     void updateValue(double value_in);
     std::string getName();
     void calcConstantValues(Cell& cell);
+    void calculateEnergy(Cell& cell, double &energy);
     void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
     void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
     std::vector<std::string> sublattices() const;
