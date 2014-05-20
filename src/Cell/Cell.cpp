@@ -36,7 +36,7 @@ void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double
                     b*cos(gamma),b*sin(gamma),0.0,
                     ci,cj,ck;
     
-    cout << "basis vectors equal" <<basisVectors << endl;
+    //cout << "basis vectors equal" <<basisVectors << endl;
     
     //basisVectors << a/2.0,a*sqrt(3.0)/2.0,0.0,
     //                a/2.0,-1.0*a*sqrt(3.0)/2.0,0.0,
@@ -44,7 +44,7 @@ void Cell::setBasisVectors(double a,double b, double c, double alpha_deg, double
     
     reciprocalVectors = 2.0*M_PI*basisVectors.inverse().transpose();
 
-    cout << "recip vectors equal" <<reciprocalVectors << endl;
+    //cout << "recip vectors equal" <<reciprocalVectors << endl;
 
 }
 

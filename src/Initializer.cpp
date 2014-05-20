@@ -151,7 +151,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
              string atom2 = pair.child_value("name2");
              
              cout << name << " " << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
-             builder.Add_Interaction(factory.getExchange(name,value,atom1,atom2,min,max).release());
+             builder.addInteraction(factory.getExchange(name,value,atom1,atom2,min,max));
 
          }
      }
@@ -186,7 +186,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             string atom2 = pair.child_value("name2");
             
             cout << name << " " << value <<" " << atom1 << " " <<  atom2 << " " << min << " " << " " << max << endl;
-            builder.Add_Interaction( factory.getDzyaloshinskiiMoriya(name,value,direction,atom1,atom2,min,max).release() );
+            builder.addInteraction( factory.getDzyaloshinskiiMoriya(name,value,direction,atom1,atom2,min,max) );
         }
     }
     
@@ -214,7 +214,7 @@ void Init::parseInteractionNode(const pugi::xml_node &node)
             string atom1 = name.child_value();
             Vector3 direction(x,y,z);
             cout << "direction= " << direction.transpose() << endl;
-            builder.Add_Interaction(factory.getAnisotropy(identifier,value,direction,atom1).release());
+            builder.addInteraction(factory.getAnisotropy(identifier,value,direction,atom1));
         }
     }
 }

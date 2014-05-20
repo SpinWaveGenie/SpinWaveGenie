@@ -8,7 +8,7 @@ using namespace Eigen;
 ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(string name_in, double value_in, string sl_r_in, double min_in, double max_in)
 {
     name = name_in;
-    this->Update_Interaction(value_in, sl_r_in, min_in, max_in);
+    this->updateInteraction(value_in, sl_r_in, min_in, max_in);
 }
 
 Interaction* ExchangeInteractionSameSublattice::do_clone() const
@@ -16,7 +16,7 @@ Interaction* ExchangeInteractionSameSublattice::do_clone() const
     return new ExchangeInteractionSameSublattice(*this);
 }
 
-void ExchangeInteractionSameSublattice::Update_Interaction(double value_in, string sl_r_in, double min_in, double max_in)
+void ExchangeInteractionSameSublattice::updateInteraction(double value_in, string sl_r_in, double min_in, double max_in)
 {
     value = value_in;
     sl_r = sl_r_in;
@@ -78,12 +78,12 @@ void ExchangeInteractionSameSublattice::calculateEnergy(Cell& cell, double &ener
     energy -= value*Sr*Sr;
 }
 
-void ExchangeInteractionSameSublattice::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
+void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell& cell, VectorXcd &elements )
 {
     //first order terms are 0.0
 }
 
-void ExchangeInteractionSameSublattice::Update_Matrix(Vector3d K, MatrixXcd &LN)
+void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN)
 {
     gamma_rs = neighbors.getGamma(K);
     //cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;

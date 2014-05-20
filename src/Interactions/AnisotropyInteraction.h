@@ -18,14 +18,14 @@ public:
     //!
     AnisotropyInteraction(std::string name_in, double value_in,Vector3 direction, std::string sl_r_in);
     //!
-    void UpdateInteraction(double value_in,Vector3 direction, std::string sl_r_in);
+    void updateInteraction(double value_in,Vector3 direction, std::string sl_r_in);
     //!
     void updateValue(double value_in);
     std::string getName();
     void calcConstantValues(Cell& cell);
     void calculateEnergy(Cell& cell, double &energy);
-    void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
-    void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
+    void calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
+    void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
     std::vector<std::string> sublattices() const;
     virtual Interaction* do_clone() const;
     virtual ~AnisotropyInteraction(){};

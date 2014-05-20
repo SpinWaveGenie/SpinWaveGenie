@@ -13,13 +13,13 @@ class DM_Y_Interaction: public Interaction
 {
 public:
     DM_Y_Interaction(std::string name, double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
-    void Update_Interaction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
+    void updateInteraction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void updateValue(double value_in);
     std::string getName();
     void calcConstantValues(Cell& cell);
     void calculateEnergy(Cell& cell, double &energy);
-    void checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
-    void Update_Matrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
+    void calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
+    void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
     std::vector<std::string> sublattices() const;
     virtual Interaction* do_clone() const;
     virtual ~DM_Y_Interaction(){};

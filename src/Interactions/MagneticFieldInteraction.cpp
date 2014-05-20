@@ -13,7 +13,7 @@ using namespace std;
 MagneticFieldInteraction::MagneticFieldInteraction(string name_in, double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
     name = name_in;
-    this->UpdateInteraction(value_in, unitVectorIn, sl_r_in);
+    this->updateInteraction(value_in, unitVectorIn, sl_r_in);
 }
 
 Interaction* MagneticFieldInteraction::do_clone() const
@@ -21,7 +21,7 @@ Interaction* MagneticFieldInteraction::do_clone() const
     return new MagneticFieldInteraction(*this);
 }
 
-void MagneticFieldInteraction::UpdateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
+void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
     value = value_in;
     directions = unitVectorIn;
@@ -83,7 +83,7 @@ void MagneticFieldInteraction::calculateEnergy(Cell &cell, double &energy)
     }
 }
 
-void MagneticFieldInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
+void MagneticFieldInteraction::calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
     complex<double> XI (0.0,1.0);
     double S = cell.getSublattice(sl_r).getMoment();
@@ -103,7 +103,7 @@ void MagneticFieldInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd
     }
 }
 
-void MagneticFieldInteraction::Update_Matrix(Vector3 K, Eigen::MatrixXcd &LN)
+void MagneticFieldInteraction::updateMatrix(Vector3 K, Eigen::MatrixXcd &LN)
 {
     
     LN(r,r) += LNrr;

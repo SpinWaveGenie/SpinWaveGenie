@@ -11,7 +11,7 @@ using namespace std;
 AnisotropyInteraction::AnisotropyInteraction(string name_in, double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
     name = name_in;
-    this->UpdateInteraction(value_in, unitVectorIn, sl_r_in);
+    this->updateInteraction(value_in, unitVectorIn, sl_r_in);
 }
 
 Interaction* AnisotropyInteraction::do_clone() const
@@ -19,7 +19,7 @@ Interaction* AnisotropyInteraction::do_clone() const
     return new AnisotropyInteraction(*this);
 }
 
-void AnisotropyInteraction::UpdateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
+void AnisotropyInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
     value = value_in;
     unitVectorIn.normalize();
@@ -96,7 +96,7 @@ void AnisotropyInteraction::calculateEnergy(Cell& cell, double &energy)
 }
 
 
-void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
+void AnisotropyInteraction::calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
     complex<double> XI (0.0,1.0);
     double S = cell.getSublattice(sl_r).getMoment();
@@ -119,7 +119,7 @@ void AnisotropyInteraction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &e
     }
 }
 
-void AnisotropyInteraction::Update_Matrix(Vector3 K, Eigen::MatrixXcd &LN)
+void AnisotropyInteraction::updateMatrix(Vector3 K, Eigen::MatrixXcd &LN)
 {
     LN(r,r) += LNrr;
     LN(r,r+M) += LNrrM;

@@ -7,7 +7,7 @@ using namespace Eigen;
 DM_Z_Interaction::DM_Z_Interaction(string name_in, double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     name = name_in;
-    this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
+    this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
 Interaction* DM_Z_Interaction::do_clone() const
@@ -15,7 +15,7 @@ Interaction* DM_Z_Interaction::do_clone() const
     return new DM_Z_Interaction(*this);
 }
 
-void DM_Z_Interaction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+void DM_Z_Interaction::updateInteraction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     value = value_in;
     sl_r = sl_r_in;
@@ -74,13 +74,13 @@ void DM_Z_Interaction::calcConstantValues(Cell& cell)
 }
 
 
-void DM_Z_Interaction::checkFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
+void DM_Z_Interaction::calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
     
 }
 
 
-void DM_Z_Interaction::Update_Matrix(Vector3d K, MatrixXcd &LN)
+void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
 {
     complex<double> XI (0.0,1.0);
     gamma_rs = neighbors.getGamma(K);

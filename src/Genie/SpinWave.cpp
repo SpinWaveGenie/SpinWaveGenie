@@ -37,26 +37,7 @@ SpinWave::SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in
     }
 }
 
-Eigen::VectorXcd SpinWave::checkFirstOrderTerms()
-{
-    Eigen::VectorXcd firstOrder;
-    firstOrder.setZero(N);
-    boost::ptr_vector<Interaction>::iterator iter;
-    for (iter = interactions.begin(); iter != interactions.end(); iter++)
-    {
-        // vector<string> sls = iter->sublattices();
-        // for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
-        // {
-        // cout << (*iter2) << " ";
-        // }
-        // cout << endl;
-        //firstOrder.setZero(2*M);
-        iter->checkFirstOrderTerms(this->cell,firstOrder);
-        //cout << firstOrder[2] << " " << firstOrder[8] << endl;
-        //cout << firstOrder.transpose() << endl;
-    }
-    return firstOrder;
-}
+
 
 void SpinWave::createMatrix(double KX,double KY,double KZ)
 {
@@ -72,7 +53,7 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        iter->Update_Matrix(K,LN);
+        iter->updateMatrix(K,LN);
     }
     //cout << "LN" << endl;
     //cout << SW.LN << endl;

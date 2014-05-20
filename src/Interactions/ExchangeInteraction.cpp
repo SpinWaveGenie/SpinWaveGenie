@@ -8,7 +8,7 @@ using namespace Eigen;
 ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
 {
     name = name_in;
-    this->Update_Interaction(value_in, sl_r_in, sl_s_in, min_in, max_in);
+    this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
 Interaction* ExchangeInteraction::do_clone() const
@@ -16,7 +16,7 @@ Interaction* ExchangeInteraction::do_clone() const
     return new ExchangeInteraction(*this);
 }
 
-void ExchangeInteraction::Update_Interaction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
+void ExchangeInteraction::updateInteraction(double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     value = value_in;
     sl_r = sl_r_in;
@@ -76,6 +76,9 @@ void ExchangeInteraction::calculateEnergy(Cell& cell, double &energy)
     s = cell.getPosition(sl_s);
     M = cell.size();
     
+    neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+    double z_rs = neighbors.getNumberNeighbors();
+    
     double Sr = cell.getSublattice(sl_r).getMoment();
     double Ss = cell.getSublattice(sl_s).getMoment();
     
@@ -85,11 +88,11 @@ void ExchangeInteraction::calculateEnergy(Cell& cell, double &energy)
     Matrix3 Fsr = cell.getSublattice(sl_s).getRotationMatrix()*
     cell.getSublattice(sl_r).getInverseMatrix();
     
-    energy -= 0.5*value*Sr*Ss*(Frs(2,2)+Fsr(2,2));
+    energy -= 0.5*value*z_rs*Sr*Ss*(Frs(2,2)+Fsr(2,2));
 }
 
 
-void ExchangeInteraction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
+void ExchangeInteraction::calculateFirstOrderTerms(Cell& cell, VectorXcd &elements )
 {
     r = cell.getPosition(sl_r);
     s = cell.getPosition(sl_s);
@@ -112,8 +115,8 @@ void ExchangeInteraction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
     complex<double> F1sr(Fsr(0,2),Fsr(1,2));
     complex<double> F2sr(Fsr(2,0),Fsr(2,1));
     
-    LNr = -1.0*sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*conj(F1rs + F2sr);
-    LNs = -1.0*sqrt(Ss)*Sr/(2.0*sqrt(2.0))*z_rs*value*conj(F1sr + F2rs);
+    complex<double> LNr = -1.0*sqrt(Sr)*Ss/(2.0*sqrt(2.0))*z_rs*value*conj(F1rs + F2sr);
+    complex<double> LNs = -1.0*sqrt(Ss)*Sr/(2.0*sqrt(2.0))*z_rs*value*conj(F1sr + F2rs);
     
     elements[r] += LNr;
     elements[s] += LNs;
@@ -121,7 +124,7 @@ void ExchangeInteraction::checkFirstOrderTerms(Cell& cell, VectorXcd &elements )
     elements[s+M] += conj(LNs);
 }
 
-void ExchangeInteraction::Update_Matrix(Vector3d K, MatrixXcd &LN)
+void ExchangeInteraction::updateMatrix(Vector3d K, MatrixXcd &LN)
 {
     gamma_rs = neighbors.getGamma(K);
     //cout << sl_r << " " << sl_s << " " << gamma_rs << endl;
@@ -141,6 +144,4 @@ void ExchangeInteraction::Update_Matrix(Vector3d K, MatrixXcd &LN)
     LN(s+M,r) += conj(LNrsM)*gamma_rs;
     LN(s+M,r+M) += LNrs*gamma_rs;
     LN(s+M,s+M) += LNss;
-
-    
 }

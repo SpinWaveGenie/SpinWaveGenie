@@ -57,7 +57,6 @@ public:
     void Set_Kpoint(double KX, double KY, double KZ);
     void updateValue(std::string name, double value);
     void Clear_Matrix();
-    Eigen::VectorXcd checkFirstOrderTerms();
     const Cell& getCell() const;
     void createMatrix(double KX,double KY,double KZ);
     void Calc();
