@@ -65,7 +65,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     if ((b*b - a*c)*u*u +c*d > 0.0)
     {
     
-      SW.Calc();
+      SW.calculate();
       vector<point> points = SW.getPoints();
     
       double firstSolution = (-b*u + sqrt((b*b - a*c)*u*u +c*d))/c;

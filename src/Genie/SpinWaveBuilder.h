@@ -1,5 +1,5 @@
-#ifndef __SW_Builder_H__
-#define __SW_Builder_H__ 1
+#ifndef __SpinWaveBuilder_H__
+#define __SpinWaveBuilder_H__ 1
 
 #include <string>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -7,11 +7,11 @@
 #include "Interactions/Interaction.h"
 
 
-class SW_Builder
+class SpinWaveBuilder
 {
 public:
-    SW_Builder();
-    SW_Builder(Cell& cell_in);
+    SpinWaveBuilder();
+    SpinWaveBuilder(Cell& cell_in);
     void addInteraction(Interaction* in);
     void addInteraction(std::unique_ptr<Interaction> in);
     double getEnergy();

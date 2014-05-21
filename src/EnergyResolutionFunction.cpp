@@ -55,7 +55,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     }
     
     SW.createMatrix(kx,ky,kz);
-    SW.Calc();
+    SW.calculate();
     vector<point> points = SW.getPoints();
     
     for(size_t k=0;k!=points.size();k++)

@@ -126,7 +126,7 @@ void Init::parseCrystalNode(const pugi::xml_node &node)
 
 void Init::parseInteractionNode(const pugi::xml_node &node)
 {
-     SW_Builder buildertemp(unit_cell);
+     SpinWaveBuilder buildertemp(unit_cell);
      builder = buildertemp;
      InteractionFactory factory;
     
@@ -386,7 +386,7 @@ Cell Init::get_cell()
     return unit_cell;
 }
 
-SW_Builder Init::get_builder()
+SpinWaveBuilder Init::get_builder()
 {
     return builder;
 }

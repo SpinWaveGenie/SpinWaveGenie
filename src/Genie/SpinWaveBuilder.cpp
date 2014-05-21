@@ -1,20 +1,20 @@
-#include "SW_Builder.h"
+#include "SpinWaveBuilder.h"
 #include <iostream>
 
 using namespace std;
 
-SW_Builder::SW_Builder()
+SpinWaveBuilder::SpinWaveBuilder()
 {
 }
 
-SW_Builder::SW_Builder(Cell& cellIn)
+SpinWaveBuilder::SpinWaveBuilder(Cell& cellIn)
 {
     cell = cellIn;
     //cout << "cell check(Add_Cell): " << cell.begin()->getName() << endl;
 
 }
 
-void SW_Builder::addInteraction(std::unique_ptr<Interaction> in)
+void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 {
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
     in->calcConstantValues(cell);
@@ -23,7 +23,7 @@ void SW_Builder::addInteraction(std::unique_ptr<Interaction> in)
     interactions.sort();
 }
 
-void SW_Builder::addInteraction(Interaction* in)
+void SpinWaveBuilder::addInteraction(Interaction* in)
 {
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
     in->calcConstantValues(cell);
@@ -32,7 +32,7 @@ void SW_Builder::addInteraction(Interaction* in)
     interactions.sort();
 }
 
-double SW_Builder::getEnergy()
+double SpinWaveBuilder::getEnergy()
 {
     double energy = 0.0;
     for(auto it=interactions.begin();it!=interactions.end();it++)
@@ -43,7 +43,7 @@ double SW_Builder::getEnergy()
     return energy;
 }
 
-Eigen::VectorXcd SW_Builder::getFirstOrderTerms()
+Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
 {
     Eigen::VectorXcd firstOrder;
     firstOrder.setZero(2*cell.size());
@@ -63,7 +63,7 @@ Eigen::VectorXcd SW_Builder::getFirstOrderTerms()
     return firstOrder;
 }
 
-SpinWave SW_Builder::Create_Element()
+SpinWave SpinWaveBuilder::Create_Element()
 {
     //cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
     SpinWave SW(cell,interactions);

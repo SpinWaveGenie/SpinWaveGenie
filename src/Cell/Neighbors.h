@@ -21,7 +21,7 @@ public:
     //! \param sl2 pointer to second sublattice
     //! \param min minimum distance considered (Angstroms)
     //! \param max maximum distance considered (Angstroms)
-    void findNeighbors(Cell& cell,std::string& sl1, std::string& sl2, double min, double max);
+    void findNeighbors(Cell& cell,std::string sl1, std::string sl2, double min, double max);
     //! Get the number of neighbors.
     double getNumberNeighbors();
     //! Get Gamma (descibed in paper J Phys. Condens. Matter 21 216001 (2009)

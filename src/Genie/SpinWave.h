@@ -50,26 +50,25 @@ class SpinWave
 {
 public:
     SpinWave();
-    //! Use SW_Builder to generate SpinWave instance
-    friend class SW_Builder;
+    //! Use SpinWaveBuilder to generate SpinWave instance
+    friend class SpinWaveBuilder;
     SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);
     //!
-    void Set_Kpoint(double KX, double KY, double KZ);
+    void setKPoint(double KX, double KY, double KZ);
     void updateValue(std::string name, double value);
-    void Clear_Matrix();
+    void clearMatrix();
     const Cell& getCell() const;
     void createMatrix(double KX,double KY,double KZ);
-    void Calc();
+    void calculate();
     std::vector<point> getPoints();
 private:
     double KXP,KYP,KZP;
     Cell cell;
-    Eigen::Vector3d kpoint;
-    void Calc_Eigenvalues();
-    void Calc_Weights();
-    void Calc_Intensities();
-    void Unique_Solutions();
-    void Signif_Solutions();
+    void calculateEigenvalues();
+    void calculateWeights();
+    void calculateIntensities();
+    void uniqueSolutions();
+    void significantSolutions();
     size_t M,N;
     int NU,MI,IM;
     Eigen::MatrixXcd LN;

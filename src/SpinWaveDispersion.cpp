@@ -52,7 +52,7 @@ void SpinWaveDispersion::save()
         }
         
         Genie.createMatrix(x,y,z);
-        Genie.Calc();
+        Genie.calculate();
         vector<point> pts = Genie.getPoints();
         
         if(PrintFrequency)

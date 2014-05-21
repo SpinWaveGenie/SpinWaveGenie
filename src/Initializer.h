@@ -10,7 +10,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include "Cell/Cell.h"
-#include "Genie/SW_Builder.h"
+#include "Genie/SpinWaveBuilder.h"
 #include "External/pugixml.hpp"
 
 
@@ -24,12 +24,12 @@ public:
     // saves Cell into xml file "filename"
     // not yet implemented
     Cell get_cell();
-    SW_Builder get_builder();
+    SpinWaveBuilder get_builder();
     
 private:
     std::map< std::string, std::function< void (const pugi::xml_node&) > > m_parser_map; //!< Map for dispatching parsers based on node type
     Cell unit_cell;
-    SW_Builder builder;
+    SpinWaveBuilder builder;
     void parseCrystalNode(const pugi::xml_node &node);
     void parseInteractionNode(const pugi::xml_node &node);
     void parseDispersion(const pugi::xml_node &node);

@@ -48,8 +48,8 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     //cout << "K before " << K.transpose() << endl;
     K = K.transpose()*recip;
     //cout << "K after " << K.transpose() << endl;
-    Set_Kpoint(K[0],K[1],K[2]);
-    Clear_Matrix();
+    setKPoint(K[0],K[1],K[2]);
+    clearMatrix();
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
@@ -59,13 +59,13 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     //cout << SW.LN << endl;
 }
 
-void SpinWave::Clear_Matrix()
+void SpinWave::clearMatrix()
 {
     LN.setZero();
     VI.clear();
 }
 
-void SpinWave::Set_Kpoint(double KX, double KY, double KZ)
+void SpinWave::setKPoint(double KX, double KY, double KZ)
 {
     KXP = KX;
     KYP = KY;
@@ -77,7 +77,7 @@ const Cell& SpinWave::getCell() const
     return cell;
 }
 
-void SpinWave::Calc_Eigenvalues()
+void SpinWave::calculateEigenvalues()
 {
     //MatrixXcd test;
     // testing if LN is a normal matrix
@@ -173,7 +173,7 @@ void SpinWave::Calc_Eigenvalues()
 
 bool IsPositive (results i) { return i.weight > 0; }
 
-void SpinWave::Calc_Weights()
+void SpinWave::calculateWeights()
 {
     MatrixXcdRowMajor XX;
     //VectorXcd tmp;
@@ -215,7 +215,7 @@ void SpinWave::Calc_Weights()
                 {
                     IPR(L1,L2) = 1;
                     IR = -1;
-                    cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
+                    //cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
                 }
             }
         }
@@ -324,7 +324,7 @@ void SpinWave::Calc_Weights()
     
 }
 
-void SpinWave::Calc_Intensities()
+void SpinWave::calculateIntensities()
 {
     complex<double> XI (0.0,1.0);
     double KX = KXP;
@@ -380,6 +380,7 @@ void SpinWave::Calc_Intensities()
         point pt;
         pt.frequency = abs(WW[i+M]);
         //cout << KX << " " << KY << " " << KZ << endl;
+        //cout << pt.frequency << endl;
         //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
         //cout << endl;
@@ -398,7 +399,7 @@ bool evalues_equal(const point& a, const point& b)
     return abs(a.frequency-b.frequency) < EPS;
 }
 
-void SpinWave::Unique_Solutions()
+void SpinWave::uniqueSolutions()
 {
     double EPS = 1.0e-5;
     int VP_pos;
@@ -442,7 +443,7 @@ void SpinWave::Unique_Solutions()
     //TZZ.array().abs();
 }
 
-void SpinWave::Signif_Solutions()
+void SpinWave::significantSolutions()
 {
     double ETS = 0.001;
     vector<point> VI_signif;
@@ -468,13 +469,13 @@ void SpinWave::Signif_Solutions()
     //}
 }
 
-void SpinWave::Calc()
+void SpinWave::calculate()
 {
-    this->Calc_Eigenvalues();
-    this->Calc_Weights();
-    this->Calc_Intensities();
-    //this->Unique_Solutions();
-    //this->Signif_Solutions();
+    this->calculateEigenvalues();
+    this->calculateWeights();
+    this->calculateIntensities();
+    //this->uniqueSolutions();
+    //this->significantSolutions();
 }
 
 void SpinWave::updateValue(string name,double value)

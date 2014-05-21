@@ -68,6 +68,8 @@ void ExchangeInteraction::calcConstantValues(Cell& cell)
     LNss = 0.25*z_rs*value*Sr*(Frs(2,2)+Fsr(2,2));
     LNrs = 0.25*z_rs*value*sqrt(Sr*Ss)*(G1rs+conj(G1sr));
     LNrsM = 0.25*z_rs*value*sqrt(Sr*Ss)*(conj(G2rs)+conj(G2sr));
+    
+    //cout << LNrr << " "<< LNss << " " << LNrs << " " << LNrsM << endl;
 }
 
 void ExchangeInteraction::calculateEnergy(Cell& cell, double &energy)
