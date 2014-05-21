@@ -40,7 +40,7 @@ std::unique_ptr<Interaction> InteractionFactory::getDzyaloshinskiiMoriya(std::st
     else
     {
         // a general DM interaction has not yet been implemented
-        return std::move( nullptr );
+        return std::move(std::unique_ptr<Interaction>( new DM_Z_Interaction(name,value,sl_r,sl_s,min,max)));
     }
 }
 

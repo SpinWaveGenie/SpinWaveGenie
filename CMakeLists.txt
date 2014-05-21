@@ -19,12 +19,12 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 ENABLE_TESTING()
 
-
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /SNS/users/svh/software/forSWG/lib )
+set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} /SNS/users/svh/software/forSWG/include )
 macro(remove_cxx_flag flag)
   string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endmacro()
-
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 #find_package(Log4cplus)
 #if(NOT ${LOG4CPLUS_FOUND})
@@ -43,7 +43,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     message("compiler detected as: GNU compiler")
-    #set(EIGEN3_INCLUDE_DIR "/SNS/users/svh/software/eigen3")
+    set(EIGEN3_INCLUDE_DIR "/SNS/users/svh/software/forSWG/include/eigen3")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -march=native")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++0x -march=native") 
     #remove_cxx_flag("-O3")
@@ -53,11 +53,14 @@ elseif(APPLE)
     #remove_cxx_flag("-O3")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++11 -stdlib=libc++ -msse4")
 endif(CMAKE_COMPILER_IS_GNUCXX)
+
 find_package(NLOPT REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(TBB REQUIRED)
-set(Boost_USE_STATIC_LIBS ON)
+#set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.5 REQUIRED COMPONENTS system thread program_options unit_test_framework)
+
+ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK) 
 
 add_subdirectory(src)
 add_subdirectory(test)

@@ -1,8 +1,8 @@
 #define BOOST_TEST_MODULE FormFactorTest
 #define BOOST_TEST_MAIN
+#include <cmath>
 #include <exception>
 #include <iostream>
-#include <random>
 #include <vector>
 #include <map>
 #include <boost/test/unit_test.hpp>
@@ -45,12 +45,9 @@ BOOST_AUTO_TEST_CASE( AlternateConstructor )
 {
     MagneticFormFactor FormFactor("NONE");
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(0.0,4.0);
     for (int n = 0; n < 101; ++n)
     {
-        BOOST_CHECK_CLOSE(FormFactor.getFormFactor(dis(gen),dis(gen),dis(gen)),1.0,1.0e-8);
+        BOOST_CHECK_CLOSE(FormFactor.getFormFactor(1.0,1.0,1.0),1.0,1.0e-8);
     }
 }
 
@@ -60,12 +57,9 @@ BOOST_AUTO_TEST_CASE( setType )
     
     FormFactor.setType("FE3");
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(0.0,4.0);
     for (int n = 0; n < 101; ++n)
     {
-        double x = dis(gen); double y = dis(gen); double z = dis(gen);
+        double x = 0.0; double y = 50.0; double z = 0.0;
         
         std::vector<double> FE3 = { 0.397200, 13.244200,  0.629500,  4.903400, -0.031400,  0.349600,  0.004400};
         double s2 = (pow(x,2) + pow(y,2) + pow(z,2))/(16.0*M_PI*M_PI);
@@ -84,12 +78,9 @@ BOOST_AUTO_TEST_CASE( setMultipleTypes )
         
     FormFactor.setType(types,weights);
         
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(0.0,4.0);
     for (int n = 0; n < 101; ++n)
     {
-        double x = dis(gen); double y = dis(gen); double z = dis(gen);
+        double x = 0.0; double y = 0.0; double z = n/50.0;
             
         std::vector<double> MN2 = { 0.422000, 17.684000,  0.594800,  6.005000,  0.004300, -0.609000, -0.021900};
         std::vector<double> CO2 = { 0.433200, 14.355300,  0.585700,  4.607700, -0.038200,  0.133800,  0.017900};

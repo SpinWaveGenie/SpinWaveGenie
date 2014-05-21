@@ -7,6 +7,7 @@
 //
 #define _USE_MATH_DEFINES
 #include <exception>
+#include <stdexcept>
 #include <numeric>
 #include <iostream>
 #include <string>

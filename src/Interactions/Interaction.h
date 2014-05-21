@@ -29,9 +29,9 @@ public:
     virtual Interaction* do_clone() const = 0;
     Interaction() = default;
     Interaction(const Interaction&) = default;
-    Interaction(Interaction&&) = default;
-    Interaction& operator=(const Interaction&) & = default;
-    Interaction& operator=(Interaction&&) & = default;
+    //Interaction(Interaction&&) = default;
+    //Interaction& operator=(const Interaction&) & = default;
+    //Interaction& operator=(Interaction&&) & = default;
     virtual ~Interaction(){};
 private:
 };

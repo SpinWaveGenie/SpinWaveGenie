@@ -1,27 +1,32 @@
-# Find NLOPT
+# - Find NLopt
+# Find the native NLopt includes and library
 #
-# This sets the following variables:
-# NLOPT_FOUND
-# NLOPT_INCLUDE_DIRS
-# NLOPT_LIBRARIES
-# NLOPT_DEFINITIONS
+# NLOPT_INCLUDE_DIR - where to find nlopt.h, etc.
+# NLOPT_LIBRARIES - List of libraries when using nlopt.
+# NLOPT_FOUND - True if nlopt found.
 
-find_package(PkgConfig QUIET)
-pkg_check_modules(PC_NLOPT nlopt)
-set(NLOPT_DEFINITIONS ${PC_NLOPT_CFLAGS_OTHER})
 
-find_path(NLOPT_INCLUDE_DIR nlopt.h
-    HINTS ${PC_NLOPT_INCLUDEDIR} ${PC_NLOPT_INCLUDE_DIRS}
-    PATHS "${CMAKE_INSTALL_PREFIX}/include")
+IF (NLOPT_INCLUDE_DIR)
+# Already in cache, be silent
+SET (nlopt_FIND_QUIETLY TRUE)
+ENDIF (NLOPT_INCLUDE_DIR)
 
-find_library(NLOPT_LIBRARY NAMES nlopt nlopt_cxx
-             HINTS ${PC_NLOPT_LIBDIR} ${PC_NLOPT_LIBRARY_DIRS} )
+FIND_PATH(NLOPT_INCLUDE_DIR nlopt.h)
 
-set(NLOPT_LIBRARIES ${NLOPT_LIBRARY})
-set(NLOPT_INCLUDE_DIRS ${NLOPT_INCLUDE_DIR})
+SET (NLOPT_NAMES nlopt nlopt_cxx)
+FIND_LIBRARY (NLOPT_LIBRARY NAMES ${NLOPT_NAMES})
 
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(NLOPT DEFAULT_MSG
-                                  NLOPT_LIBRARY NLOPT_INCLUDE_DIR)
+# handle the QUIETLY and REQUIRED arguments and set NLOPT_FOUND to TRUE if
+# all listed variables are TRUE
+INCLUDE (FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS (NLOPT DEFAULT_MSG
+NLOPT_LIBRARY
+NLOPT_INCLUDE_DIR)
 
-mark_as_advanced(NLOPT_INCLUDE_DIR NLOPT_LIBRARY)
+IF(NLOPT_FOUND)
+SET (NLOPT_LIBRARIES ${NLOPT_LIBRARY})
+ELSE (NLOPT_FOUND)
+SET (NLOPT_LIBRARIES)
+ENDIF (NLOPT_FOUND)
+
+MARK_AS_ADVANCED (NLOPT_LIBRARY NLOPT_INCLUDE_DIR)

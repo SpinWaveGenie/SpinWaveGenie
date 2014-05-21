@@ -4,6 +4,13 @@
 using std::string; using std::vector;
 using std::cout; using std::endl;
 
+SpinWaveDispersion::SpinWaveDispersion()
+{
+    PrintPosition = true;
+    PrintFrequency = true;
+    PrintIntensity = true;
+}
+
 void SpinWaveDispersion::setOptions(Options PrintOptions, bool Value)
 {
     switch(PrintOptions)
