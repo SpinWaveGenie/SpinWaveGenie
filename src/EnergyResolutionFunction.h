@@ -32,8 +32,10 @@ public:
     std::unique_ptr<SpinWavePlot> clone();
     ~EnergyResolutionFunction(){};
 private:
+    void calculateEnergies();
     std::size_t getBin(double Energy);
     std::size_t EnergyPoints;
+    std::vector<double> energies;
     double MinimumEnergy,MaximumEnergy;
     std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
     SpinWave SW;

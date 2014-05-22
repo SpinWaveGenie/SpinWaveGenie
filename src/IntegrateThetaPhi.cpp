@@ -91,7 +91,6 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     tmp[1] = r*sin(theta)*sin(phi);
     tmp[2] = r*cos(theta);
     
-
     Matrix3 basisVectors = resolutionFunction->getCell().getBasisVectors();
     
     k = tmp.transpose()*basisVectors/(2.0*M_PI);

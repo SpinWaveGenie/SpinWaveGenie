@@ -34,7 +34,6 @@ double OneDimensionalLorentzian::getMaximumEnergy()
 double OneDimensionalLorentzian::getFunction(double frequency, double energy)
 {
     return FWHM/(2.0*M_PI)/(pow(frequency-energy,2)+pow(0.5*FWHM,2));
-    //return result;
 }
 
 unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone()

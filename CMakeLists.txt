@@ -43,7 +43,6 @@ endmacro()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     message("compiler detected as: GNU compiler")
-    set(EIGEN3_INCLUDE_DIR "/SNS/users/svh/software/forSWG/include/eigen3")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -march=native")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++0x -march=native") 
     #remove_cxx_flag("-O3")

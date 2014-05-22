@@ -21,43 +21,14 @@ IntegrateAxes::IntegrateAxes(const IntegrateAxes& other)
     this->integrationDirections = other.integrationDirections;
 }
 
-IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, double tolerance)
+IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tolerance)
 {
     this->tolerance = tolerance;
+    this->integrationDirections = directions;
     this->resolutionFunction = move(resFunction);
     this->minimumEnergy = resolutionFunction->getMinimumEnergy();
     this->maximumEnergy = resolutionFunction->getMaximumEnergy();
     this->energyPoints = resolutionFunction->getNumberPoints();
-}
-
-void IntegrateAxes::addDirection(double v0, double v1, double v2, double delta)
-{
-    Axis direction;
-    direction.v0 = v0;
-    direction.v1 = v1;
-    direction.v2 = v2;
-    direction.delta = delta;
-    
-    integrationDirections.push_back(direction);
-}
-
-void IntegrateAxes::addDirection(int direction, double delta)
-{
-    double v0 = 0.0, v1=0.0, v2=0.0;
-    switch(direction)
-    {
-        case 0:
-            v0 = 1.0;
-            break;
-        case 1:
-            v1 = 1.0;
-            break;
-        case 2:
-            v2 = 1.0;
-            break;
-    }
-    
-    this->addDirection(v0, v1, v2, delta);
 }
 
 int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)

@@ -5,8 +5,8 @@
 //  Created by Hahn, Steven E. on 2/5/14.
 //
 //
-
 #include "EnergyResolutionFunction.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -16,6 +16,7 @@ EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShap
     MinimumEnergy = min;
     MaximumEnergy = max;
     EnergyPoints = points;
+    this->calculateEnergies();
     //cout << "Energy Points " << EnergyPoints << endl;
     ResolutionFunction = move(ResolutionFunctionIn);
     SW = SWIn;
@@ -27,6 +28,7 @@ EnergyResolutionFunction::EnergyResolutionFunction(const EnergyResolutionFunctio
     MinimumEnergy = other.MinimumEnergy;
     MaximumEnergy = other.MaximumEnergy;
     EnergyPoints = other.EnergyPoints;
+    this->calculateEnergies();
     //cout << "Energy Points??? " << other.EnergyPoints << endl;
     //cout << "Energy Points??? " << EnergyPoints << endl;
     SW = other.SW;
@@ -44,6 +46,16 @@ EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFu
     return *this;
 }
 
+void EnergyResolutionFunction::calculateEnergies()
+{
+    energies.clear();
+    energies.reserve(EnergyPoints);
+    for (auto bin = 0; bin!=EnergyPoints; bin++)
+    {
+        energies.push_back(MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)bin/(double)(EnergyPoints-1));
+    }
+}
+
 std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
 {
     //cout << "Energy Points: " << EnergyPoints << endl;
@@ -54,29 +66,28 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     SW.calculate();
     vector<point> points = SW.getPoints();
     
-    for(size_t k=0;k!=points.size();k++)
+    for(auto pt = points.begin();pt!=points.end();pt++)
     {
         //cout << "k= " << k << endl;
-        if (std::isnan(points[k].frequency) || std::isnan(points[k].intensity))
+        if (std::isnan(pt->frequency) || std::isnan(pt->intensity))
         {
             
             //cout << "found NaN: " << points[k].frequency << " " << points[k].intensity << endl;
         }
         else
         {
-            double min = points[k].frequency + ResolutionFunction->getMinimumEnergy();
-            double max = points[k].frequency + ResolutionFunction->getMaximumEnergy();
-            size_t min_bin = getBin(min);
-            size_t max_bin = getBin(max);
-            //cout << min_bin << " " << max_bin << endl;
-            for(size_t bin = min_bin; bin <= max_bin; bin++)
+            double min = pt->frequency + ResolutionFunction->getMinimumEnergy();
+            double max = pt->frequency + ResolutionFunction->getMaximumEnergy();
+            auto begin = boost::make_zip_iterator(boost::make_tuple(fval.begin(),energies.begin()));
+            auto end = boost::make_zip_iterator(boost::make_tuple(fval.begin(),energies.begin()));
+            std::advance(begin,getBin(min));
+            std::advance(end,getBin(max));
+            for(auto it = begin;it!=end;it++)
             {
-                double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)bin/(double)(EnergyPoints-1);
-                fval[bin] += points[k].intensity*ResolutionFunction->getFunction(points[k].frequency,energy);
+                it->get<0>() += pt->intensity*ResolutionFunction->getFunction(pt->frequency,it->get<1>());
             }
         }
     }
-    
     return fval;
 }
 
@@ -117,14 +128,9 @@ void EnergyResolutionFunction::setNumberPoints(size_t points)
 
 std::size_t EnergyResolutionFunction::getBin(double Energy)
 {
-    long bin = ( Energy - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy);
-    
-    if (bin < 0)
-        bin = 0;
-    else if (bin >= EnergyPoints)
-        bin = EnergyPoints-1;
-    
-    return (size_t) bin;
+    int bin = round(( Energy - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy));
+    bin = std::max(bin,0);
+    return std::min((size_t)bin,EnergyPoints);
 }
 
 std::unique_ptr<SpinWavePlot> EnergyResolutionFunction::clone()

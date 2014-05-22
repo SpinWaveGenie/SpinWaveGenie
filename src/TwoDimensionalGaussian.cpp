@@ -8,6 +8,7 @@
 
 #include "TwoDimensionalGaussian.h"
 #include <cmath>
+#include <algorithm>
 #include <functional>
 #include "Genie/SpinWave.h"
 #include "External/cubature.h"
@@ -83,17 +84,13 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         for(size_t k=0;k!=points.size();k++)
         {
             //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-            long min_bin = (points[k].frequency+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-            long max_bin = (points[k].frequency+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+            int min_bin = (points[k].frequency+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+            min_bin = std::max(min_bin,0);
+            min_bin = std::min(min_bin,(int)EnergyPoints);
             
-            if (min_bin < 0)
-                min_bin = 0;
-            else if (min_bin > EnergyPoints)
-                min_bin = EnergyPoints;
-            if (max_bin < 0)
-                max_bin = 0;
-            else if (max_bin > EnergyPoints)
-                max_bin = EnergyPoints;
+            int max_bin = (points[k].frequency+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+            max_bin = std::max(max_bin,0);
+            max_bin = std::min(max_bin,(int)EnergyPoints);
             
             //cout << min_bin << " " << max_bin << endl;
             
