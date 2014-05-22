@@ -114,8 +114,8 @@ int main()
     mat.resize(numberpoints,numberpoints);
     
     PointsAlongLine calculatePoints;
-    calculatePoints.setFirstPoint(0.0, 0.0,-7.0);
-    calculatePoints.setFinalPoint(0.0, 0.0, 3.0);
+    calculatePoints.setFirstPoint(-2.0, 0.0,-7.0);
+    calculatePoints.setFinalPoint(-2.0, 0.0, 3.0);
     calculatePoints.setNumberPoints(numberpoints);
     ThreeVectors<double> points = calculatePoints.getPoints();
     
