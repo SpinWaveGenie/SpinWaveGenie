@@ -48,11 +48,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
 {
     //cout << "Energy Points: " << EnergyPoints << endl;
     //cout << MinimumEnergy << " " << MaximumEnergy << endl;
-    vector<double> fval(EnergyPoints);
-    for(int i=0;i!=EnergyPoints;i++)
-    {
-        fval[i] = 0.0;
-    }
+    vector<double> fval(EnergyPoints,0.0);
     
     SW.createMatrix(kx,ky,kz);
     SW.calculate();
@@ -126,7 +122,7 @@ std::size_t EnergyResolutionFunction::getBin(double Energy)
     if (bin < 0)
         bin = 0;
     else if (bin >= EnergyPoints)
-        bin = EnergyPoints-1.0;
+        bin = EnergyPoints-1;
     
     return (size_t) bin;
 }
