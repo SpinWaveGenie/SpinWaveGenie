@@ -16,8 +16,10 @@ file(GLOB FORMFACTOR_HDRS ../src/Genie/MagneticFormFactor.h)
 add_executable(SublatticeTest SublatticeTest.cpp ${CELL_SRCS} ${CELL_HDRS} ${CONTAINERS_SRCS} ${CONTAINERS_HDRS}  )
 add_executable(CellTest CellTest.cpp ${CELL_SRCS} ${CELL_HDRS} ${CONTAINERS_HDRS} ${CONTAINERS_SRCS} ) 
 add_executable(FormFactorTest FormFactorTest.cpp ${FORMFACTOR_SRCS} ${FORMFACTOR_HDRS} )
+add_executable(HKLDirectionsTest HKLDirectionsTest.cpp ${CONTAINERS_SRCS} ${CONTAINERS_HDRS})
 add_test(NAME SublatticeTest COMMAND SublatticeTest)
 add_test(NAME CellTest COMMAND CellTest)
 add_test(NAME FormFactorTest COMMAND FormFactorTest)
+add_test(NAME HKLDirectionsTest COMMAND HKLDirectionsTest)
 
 

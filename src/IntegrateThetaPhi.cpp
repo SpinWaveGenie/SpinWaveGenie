@@ -32,7 +32,6 @@ IntegrateThetaPhi::IntegrateThetaPhi(const IntegrateThetaPhi& other)
     resolutionFunction = move(other.resolutionFunction->clone());
 }
 
-
 std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
 {
     return unique_ptr<SpinWavePlot>(new IntegrateThetaPhi(*this));
