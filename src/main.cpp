@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <memory>
 #include <Eigen/Dense>
+#include <unistd.h>
 #include "tbb/tbb.h"
 #include "Genie/SpinWave.h"
 #include "Genie/SpinWaveBuilder.h"
@@ -18,13 +19,15 @@
 #include "PointsAlongLine.h"
 #include "TwoDimensionCut.h"
 #include "Containers/HKLDirections.h"
+#include "External/ezRateProgressBar.hpp"
 
 
 using namespace std;
 using namespace tbb;
 
-
+tbb::atomic<int> counter = 0;
 Eigen::MatrixXd mat;
+ez::ezRateProgressBar<int> p(1601);
 
 class ApplyFoo
 {
@@ -42,7 +45,6 @@ public:
     {
         unique_ptr<SpinWavePlot> cut2(move(cut->clone()));
         auto it = points.cbegin()+ r.begin();
-        cout << it->get<2>() << endl;
         for(size_t i = r.begin(); i!=r.end(); ++i)
         {
             vector<double> data = cut2->getCut(it->get<0>(),it->get<1>(),it->get<2>());
@@ -51,6 +53,8 @@ public:
                 mat(j,i) = data[j];
             }
             it++;
+            counter++;
+            p.update(counter);
         }
     }
     
@@ -69,7 +73,8 @@ void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points,
 
 int main()
 {
-    tbb::task_scheduler_init init(12);
+
+    tbb::task_scheduler_init init(8);
     double SA = 2.0;
     double theta = M_PI/2.0;
     
@@ -123,6 +128,8 @@ int main()
     //TwoDimensionCut twodimcut;
     //twodimcut.setPlotObject(move(cut2));
     //twodimcut.setPoints(points);
+    p.units = "Q-points";
+    p.start();
     ParallelApplyFoo(move(cut),points,numberpoints);
     //mat = twodimcut.getMatrix();
     std::ofstream file("MnBi_m20L.txt");

@@ -25,13 +25,4 @@ public:
     virtual ~SpinWavePlot(){};
 };
 
-
-/*
- class FourDimensionResolutionFunction : SpinWavePlot {
- FourDimensionResolutionFunction();
- std::vector<double> getCut(double kx, double ky, double kz);
- ~FourDimensionResolutionFunction() = 0;
- };
- */
-
 #endif /* defined(__SpinWavePlot__) */
