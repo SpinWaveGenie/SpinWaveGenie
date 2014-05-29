@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <array>
 #include <algorithm>
 #include <memory>
 #include <Eigen/Dense>
@@ -19,12 +20,13 @@
 #include <unistd.h>
 #include "tbb/tbb.h"
 #include "External/ezRateProgressBar.hpp"
-
+#include "nexus/NeXusFile.hpp"
+#include "Containers/Energies.h"
 
 using namespace std;
 using namespace tbb;
 
-size_t numberpoints = 1601;
+size_t numberpoints = 21;
 tbb::atomic<int> counter;
 Eigen::MatrixXd mat(numberpoints,numberpoints);
 
@@ -117,7 +119,6 @@ int main()
     }
     */
     
-    
     SpinWaveBuilder builder(cell);
     InteractionFactory interactionFactory;
     
@@ -150,17 +151,78 @@ int main()
     unique_ptr<SpinWavePlot> cut(new IntegrateThetaPhi(move(res),0.001));
 
     PointsAlongLine calculatePoints;
-    calculatePoints.setFirstPoint(0.0, 0.0, 0.0);
-    calculatePoints.setFinalPoint(0.0, 0.0, 2.0);
+    calculatePoints.setFirstPoint(-2.0, 0.0, 0.0);
+    calculatePoints.setFinalPoint(-2.0, 0.0, 2.0);
     calculatePoints.setNumberPoints(numberpoints);
     ThreeVectors<double> points = calculatePoints.getPoints();
     
     tbb::tbb_thread myThread(MyThread);
     ParallelApplyFoo(move(cut),points,numberpoints);
     myThread.join();
-    std::ofstream file("MnBi_H02.txt");
-    file << mat << endl;
     
+    //std::ofstream file("MnBi_m20L.txt");
+    //file << mat << endl;
+    
+    Energies energies(0.0, 6.0, numberpoints);
+
+    NeXus::File nf("MnBi_m20L.hdf5",NXACC_CREATE5);
+    nf.makeGroup("entry","NXentry",true);
+    nf.makeGroup("data","NXdata",true);
+    
+    Eigen::MatrixXd NEXUSimage = mat.transpose();
+    
+    std::vector<int> array_dims;
+    array_dims.push_back(numberpoints);
+    array_dims.push_back(numberpoints);
+    nf.makeData("data", NeXus::FLOAT64, array_dims, true);
+    nf.putData(mat.transpose().data());
+    nf.putAttr("signal", 1);
+    nf.putAttr("axes","wavevector:energy");
+    nf.putAttr("units","arbitrary units");
+    
+    nf.closeData();
+    
+    vector<double> hpts,kpts,lpts;
+    for (auto it=points.begin();it!=points.end();++it)
+    {
+        hpts.push_back(it->get<0>());
+        kpts.push_back(it->get<1>());
+        lpts.push_back(it->get<2>());
+    }
+    
+    nf.makeData("origin", NeXus::FLOAT64, 4 , true);
+    vector<double> origin = {1.0,0.0,-2.0,0.0};
+    nf.putData(&(origin[0]));
+    nf.closeData();
+   
+    array_dims.clear();
+    array_dims.push_back(2);
+    array_dims.push_back(4);
+   
+    nf.makeData("axes_index", NeXus::INT32, array_dims , true);
+    array<array<int,4>,2> axes_index = {{ {{0,0,1,0}}, {{0,0,0,1}} }};
+    nf.putData(axes_index.data());
+    nf.closeData();
+
+    nf.makeData("L", NeXus::FLOAT64, (int)numberpoints , true);
+    nf.putData(lpts.data());
+    nf.putAttr("axis",1);
+    nf.putAttr("primary",1);
+    nf.putAttr("units","NX_UNITLESS");
+    nf.closeData();
+
+    std::vector<double> NEXUSenergies(numberpoints);
+    std::copy(energies.begin(),energies.end(),NEXUSenergies.begin());
+    
+    nf.makeData("energies", NeXus::FLOAT64, (int)numberpoints, true);
+    nf.putData(NEXUSenergies.data());
+    nf.putAttr("axis",2);
+    nf.putAttr("units","meV");
+    
+    nf.closeGroup();
+    nf.closeGroup();
+    nf.closeData();
+
     //TwoDimensionCut twodimcut;
     //twodimcut.setPlotObject(move(cut));
     //twodimcut.setPoints(points);

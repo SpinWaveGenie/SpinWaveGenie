@@ -78,13 +78,9 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
         {
             double min = pt->frequency + ResolutionFunction->getMinimumEnergy();
             double max = pt->frequency + ResolutionFunction->getMaximumEnergy();
-            auto begin = boost::make_zip_iterator(boost::make_tuple(fval.begin(),energies.begin()));
-            auto end = boost::make_zip_iterator(boost::make_tuple(fval.begin(),energies.begin()));
-            std::advance(begin,getBin(min));
-            std::advance(end,getBin(max));
-            for(auto it = begin;it!=end;it++)
+            for(size_t index = getBin(min);index!=getBin(max);index++)
             {
-                it->get<0>() += pt->intensity*ResolutionFunction->getFunction(pt->frequency,it->get<1>());
+                fval[index] += pt->intensity*ResolutionFunction->getFunction(pt->frequency,energies[index]);
             }
         }
     }

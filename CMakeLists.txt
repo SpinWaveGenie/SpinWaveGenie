@@ -55,6 +55,7 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 find_package(NLOPT REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(TBB REQUIRED)
+find_package(Nexus REQUIRED)
 #set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.5 REQUIRED COMPONENTS system thread program_options unit_test_framework)
 
