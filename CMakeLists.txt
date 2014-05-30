@@ -20,38 +20,21 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 ENABLE_TESTING()
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /SNS/users/svh/software/forSWG/lib )
-set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} /SNS/users/svh/software/forSWG/include )
+
 macro(remove_cxx_flag flag)
   string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endmacro()
 
-#find_package(Log4cplus)
-#if(NOT ${LOG4CPLUS_FOUND})
-#  include(ExternalProject)
-#  ExternalProject_Add(log4cplus
-#    GIT_REPOSITORY https://github.com/log4cplus/log4cplus.git
-#    GIT_TAG REL_1_1_2
-#    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/log4cplus
-#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/log4cplus "-DCMAKE_CXX_FLAGS:STRING=-std=c++11 -stdlib=libc++" "-DCMAKE_EXE_LINKER_FLAGS:STRING=-std=c++11 -stdlib=libc++" -DBUILD_SHARED_LIBS:BOOL=FALSE 
-#)
-#  set(LOG4CPLUS_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/log4cplus/include)
-#  set(LOG4CPLUS_LIBRARIES ${CMAKE_CURRENT_BINARY_DIR}/log4cplus/lib/liblog4cplus.dylib)
-#endif(NOT ${LOG4CPLUS_FOUND})
-
-#message("sfml_PREFIX='${LOG4CPLUS_LIBRARIES}'")
-
 if(CMAKE_COMPILER_IS_GNUCXX)
     message("compiler detected as: GNU compiler")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -march=native")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++0x -march=native") 
     #remove_cxx_flag("-O3")
 elseif(APPLE)
     message("compiler detected as: LLVM compiler")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -DEIGEN_DONT_PARALLELIZE -msse4 -ffast-math")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -ffast-math")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+#find_package(Log4cplus)
 find_package(NLOPT REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(TBB REQUIRED)

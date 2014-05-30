@@ -11,12 +11,12 @@
 #include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include "Interactions/InteractionFactory.h"
-#include "EnergyResolutionFunction.h"
-#include "OneDimensionalFactory.h"
-#include "OneDimensionalShapes.h"
-#include "IntegrateThetaPhi.h"
-#include "PointsAlongLine.h"
-#include "TwoDimensionCut.h"
+#include "SpinWavePlot/EnergyResolutionFunction.h"
+#include "SpinWavePlot/OneDimensionalFactory.h"
+#include "SpinWavePlot/OneDimensionalShapes.h"
+#include "SpinWavePlot/IntegrateThetaPhi.h"
+#include "Containers/PointsAlongLine.h"
+#include "SpinWavePlot/TwoDimensionCut.h"
 #include <unistd.h>
 #include "tbb/tbb.h"
 #include "External/ezRateProgressBar.hpp"
@@ -85,7 +85,7 @@ void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points,
 
 int main()
 {
-    tbb::task_scheduler_init init(8);
+    tbb::task_scheduler_init init(12);
     double SA = 1.5;
     
     Cell cell;

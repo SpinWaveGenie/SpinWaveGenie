@@ -6,14 +6,13 @@
 #include "Interactions/DM_Y_Interaction.h"
 #include "Interactions/DM_Z_Interaction.h"
 #include "SpinWaveDispersion.h"
-#include "TwoDimensionCut.h"
-#include "PointsAlongLine.h"
+#include "SpinWavePlot/TwoDimensionCut.h"
+#include "Containers/PointsAlongLine.h"
 #include "Containers/ThreeVectors.h"
-#include "OneDimensionalFactory.h"
-#include "OneDimensionalShapes.h"
-#include "EnergyResolutionFunction.h"
+#include "SpinWavePlot/OneDimensionalFactory.h"
+#include "SpinWavePlot/OneDimensionalShapes.h"
+#include "SpinWavePlot/EnergyResolutionFunction.h"
 #include "Containers/Energies.h"
-
 using namespace std;
 using namespace boost;
 

@@ -20,7 +20,7 @@ public:
     void insert(double energy);
     std::size_t getLowerBound(double energy);
     std::size_t getUpperBound(double energy);
-    std::size_t size();
+    std::size_t size() const;
     void clear();
     double* data();
     const double& operator[](std::size_t position);
@@ -31,7 +31,7 @@ private:
     std::vector<double> energies;
 };
 
-inline std::size_t Energies::size()
+inline std::size_t Energies::size() const
 {
     return energies.size();
 }
