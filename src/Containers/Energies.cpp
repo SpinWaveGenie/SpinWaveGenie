@@ -35,6 +35,11 @@ std::size_t Energies::getUpperBound(double energy)
     return std::distance(energies.begin(),std::upper_bound(energies.begin(),energies.end(),energy));
 }
 
+double* Energies::data()
+{
+    return energies.data();
+}
+
 void Energies::clear()
 {
     energies.clear();

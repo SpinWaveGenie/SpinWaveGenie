@@ -26,7 +26,6 @@ public:
     Eigen::MatrixXd getMatrix();
     void save();
 private:
-    double MaximumEnergy,MinimumEnergy;
     size_t EnergyPoints;
     std::unique_ptr<SpinWavePlot> InstrumentResolution;
     std::string Filename;

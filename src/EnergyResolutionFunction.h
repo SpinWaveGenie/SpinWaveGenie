@@ -14,29 +14,24 @@
 #include "SpinWavePlot.h"
 #include "Cell/Cell.h"
 #include "OneDimensionalShapes.h"
+#include "Containers/Energies.h"
 
 class EnergyResolutionFunction : public SpinWavePlot{
 public:
     EnergyResolutionFunction(){};
     EnergyResolutionFunction(const EnergyResolutionFunction& other);
     EnergyResolutionFunction& operator=(EnergyResolutionFunction& other);
-    EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, double min, double max, std::size_t points);
+    EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, Energies energies);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
-    double getMinimumEnergy() const;
-    void setMinimumEnergy(double energy);
-    double getMaximumEnergy() const;
-    void setMaximumEnergy(double energy);
-    std::size_t getNumberPoints() const;
-    void setNumberPoints(std::size_t points);
+    Energies getEnergies();
+    void setEnergies(Energies energies);
     const Cell& getCell() const;
     std::unique_ptr<SpinWavePlot> clone();
     ~EnergyResolutionFunction(){};
 private:
     void calculateEnergies();
     std::size_t getBin(double Energy);
-    std::size_t EnergyPoints;
-    std::vector<double> energies;
-    double MinimumEnergy,MaximumEnergy;
+    Energies energies;
     std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
     SpinWave SW;
 };

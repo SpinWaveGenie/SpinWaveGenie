@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "SpinWavePlot.h"
+#include "Containers/Energies.h"
 
 class IntegrateThetaPhi : public SpinWavePlot {
 public:
@@ -18,20 +19,14 @@ public:
     IntegrateThetaPhi(const IntegrateThetaPhi& other);
     std::unique_ptr<SpinWavePlot> clone();
     const Cell& getCell() const;
-    double getMinimumEnergy() const;
-    void setMinimumEnergy(double energy);
-    double getMaximumEnergy() const;
-    void setMaximumEnergy(double energy);
-    std::size_t getNumberPoints() const;
-    void setNumberPoints(std::size_t points);
+    Energies getEnergies();
+    void setEnergies(Energies energies);
     std::vector<double> getCut(double kx,double ky, double kz);
     ~IntegrateThetaPhi(){};
 private:
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
-    double minimumEnergy,maximumEnergy;
     double r;
-    unsigned energyPoints;
     double tol;
     std::unique_ptr<SpinWavePlot> resolutionFunction;
 };

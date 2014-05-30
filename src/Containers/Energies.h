@@ -22,6 +22,7 @@ public:
     std::size_t getUpperBound(double energy);
     std::size_t size();
     void clear();
+    double* data();
     const double& operator[](std::size_t position);
     typedef std::vector<double>::iterator Iterator;
     Iterator begin();

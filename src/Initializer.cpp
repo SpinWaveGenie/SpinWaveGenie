@@ -12,6 +12,7 @@
 #include "OneDimensionalFactory.h"
 #include "OneDimensionalShapes.h"
 #include "EnergyResolutionFunction.h"
+#include "Containers/Energies.h"
 
 using namespace std;
 using namespace boost;
@@ -372,7 +373,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         }
         
         SpinWave SW = builder.Create_Element();
-        unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(resinfo), SW, MinEnergy, MaxEnergy, NumberPoints));
+        unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(resinfo), SW, Energies(MinEnergy, MaxEnergy, NumberPoints)));
         Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
         Cut.setPlotObject(move(res));
     }

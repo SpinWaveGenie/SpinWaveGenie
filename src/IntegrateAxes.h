@@ -13,6 +13,7 @@
 #include <memory>
 #include "SpinWavePlot.h"
 #include "Containers/HKLDirections.h"
+#include "Containers/Energies.h"
 
 class IntegrateAxes : public SpinWavePlot
 {
@@ -24,20 +25,14 @@ public:
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
     std::unique_ptr<SpinWavePlot> clone();
     const Cell& getCell() const;
-    double getMinimumEnergy() const;
-    double getMaximumEnergy() const;
-    std::size_t getNumberPoints() const;
-    void setMinimumEnergy(double energy);
-    void setMaximumEnergy(double energy);
-    void setNumberPoints(std::size_t points);
+    Energies getEnergies();
+    void setEnergies(Energies energies);
     ~IntegrateAxes(){};
 private:
     std::unique_ptr<SpinWavePlot> resolutionFunction;
     HKLDirections integrationDirections;
-    double tolerance, volume, minimumEnergy, maximumEnergy;
-    std::size_t energyPoints;
+    double tolerance, volume;
     double kx,ky,kz;
-    
 };
 
 #endif /* defined(__IntegrateAxes__) */

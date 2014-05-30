@@ -16,18 +16,12 @@ using namespace std;
 
 IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance)
 {
-    minimumEnergy = object->getMinimumEnergy();
-    maximumEnergy = object->getMaximumEnergy();
-    energyPoints = object->getNumberPoints();
     tol = tolerance;
     resolutionFunction = move(object);
 }
 
 IntegrateThetaPhi::IntegrateThetaPhi(const IntegrateThetaPhi& other)
 {
-    minimumEnergy = other.minimumEnergy;
-    maximumEnergy = other.maximumEnergy;
-    energyPoints = other.energyPoints;
     tol = other.tol;
     resolutionFunction = move(other.resolutionFunction->clone());
 }
@@ -42,37 +36,14 @@ const Cell& IntegrateThetaPhi::getCell() const
     return resolutionFunction->getCell();
 }
 
-double IntegrateThetaPhi::getMinimumEnergy() const
+Energies IntegrateThetaPhi::getEnergies()
 {
-    return minimumEnergy;
+    return resolutionFunction->getEnergies();
 }
 
-void IntegrateThetaPhi::setMinimumEnergy(double energy)
+void IntegrateThetaPhi::setEnergies(Energies energiesIn)
 {
-    resolutionFunction->setMinimumEnergy(energy);
-    this->minimumEnergy = energy;
-}
-
-double IntegrateThetaPhi::getMaximumEnergy() const
-{
-    return maximumEnergy;
-}
-
-void IntegrateThetaPhi::setMaximumEnergy(double energy)
-{
-    resolutionFunction->setMaximumEnergy(energy);
-    this->maximumEnergy = energy;
-}
-
-std::size_t IntegrateThetaPhi::getNumberPoints() const
-{
-    return energyPoints;
-}
-
-void IntegrateThetaPhi::setNumberPoints(std::size_t points)
-{
-    resolutionFunction->setNumberPoints(points);
-    this->energyPoints = points;
+    resolutionFunction->setEnergies(energiesIn);
 }
 
 
@@ -105,6 +76,7 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     
     //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
     double factor = sin(theta)/(4.0*M_PI);
+    size_t energyPoints = resolutionFunction->getEnergies().size();
     for(int i=0;i!=energyPoints;i++)
     {
         retval[i] = factor*val[i];
@@ -127,11 +99,11 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
     r = std::abs(kz);
     
     //cout << "dispAng = " << r << endl;
-    
+    size_t energyPoints = resolutionFunction->getEnergies().size();
     vector<double> fval(energyPoints);
     vector<double> err(energyPoints);
     
-    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, &xmin[0], &xmax[0], 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, xmin.data(), xmax.data(), 0, tol, 0, ERROR_INDIVIDUAL, fval.data(), err.data());
     
     /*for(int i=0;i!=EnergyPoints;i++)
      {

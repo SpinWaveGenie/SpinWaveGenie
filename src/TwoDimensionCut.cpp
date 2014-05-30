@@ -9,6 +9,7 @@
 #include "TwoDimensionCut.h"
 #include <Eigen/Dense>
 #include "EnergyResolutionFunction.h"
+#include "Containers/Energies.h"
 
 using std::string; using std::vector; using std::unique_ptr;
 using std::cout; using std::endl;
@@ -20,9 +21,6 @@ void TwoDimensionCut::setFilename(string name)
 
 void TwoDimensionCut::setPlotObject(unique_ptr<SpinWavePlot> object)
 {
-    EnergyPoints = object->getNumberPoints();
-    MaximumEnergy = object->getMaximumEnergy();
-    MinimumEnergy = object->getMinimumEnergy();
     InstrumentResolution = move(object);
 }
 
@@ -37,11 +35,7 @@ void TwoDimensionCut::setPoints(ThreeVectors<double> pts)
 
 void TwoDimensionCut::setEnergyPoints(double min, double max, size_t points)
 {
-    InstrumentResolution->setMinimumEnergy(min);
-    MinimumEnergy = min;
-    InstrumentResolution->setMaximumEnergy(max);
-    MaximumEnergy = max;
-    InstrumentResolution->setNumberPoints(points);
+    InstrumentResolution->setEnergies(Energies(min, max, points));
     EnergyPoints = points;
 }
 

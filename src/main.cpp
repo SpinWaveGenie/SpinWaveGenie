@@ -26,7 +26,7 @@
 using namespace std;
 using namespace tbb;
 
-size_t numberpoints = 21;
+size_t numberpoints = 1601;
 tbb::atomic<int> counter;
 Eigen::MatrixXd mat(numberpoints,numberpoints);
 
@@ -51,7 +51,7 @@ public:
             vector<double> data = cut2->getCut(it->get<0>(),it->get<1>(),it->get<2>());
             for (auto j=0;j!=energyPoints;j++)
             {
-                mat(j,i) = data[j];
+                mat(i,j) = data[j];
             }
             it++;
             counter++;
@@ -85,7 +85,7 @@ void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points,
 
 int main()
 {
-    tbb::task_scheduler_init init(1);
+    tbb::task_scheduler_init init(8);
     double SA = 1.5;
     
     Cell cell;
@@ -141,18 +141,23 @@ int main()
         cout << pt->frequency << " " << pt->intensity << endl;
     }*/
     
+    //TwoDimensionCut twodimcut;
+    //twodimcut.setPlotObject(move(cut));
+    //twodimcut.setPoints(points);
+    //mat = twodimcut.getMatrix();
+    
     
     OneDimensionalFactory factory;
     auto lorentz = factory.getGaussian(0.3,0.000001);
     
-    
-    unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(lorentz), SW, 0.0, 6.0, numberpoints));
+    Energies energies(0.0, 6.0, numberpoints);
+    unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(lorentz), SW, energies));
     
     unique_ptr<SpinWavePlot> cut(new IntegrateThetaPhi(move(res),0.001));
 
     PointsAlongLine calculatePoints;
-    calculatePoints.setFirstPoint(-2.0, 0.0, 0.0);
-    calculatePoints.setFinalPoint(-2.0, 0.0, 2.0);
+    calculatePoints.setFirstPoint( 0.0, 0.0, 0.0);
+    calculatePoints.setFinalPoint( 0.0, 0.0, 2.0);
     calculatePoints.setNumberPoints(numberpoints);
     ThreeVectors<double> points = calculatePoints.getPoints();
     
@@ -163,19 +168,16 @@ int main()
     //std::ofstream file("MnBi_m20L.txt");
     //file << mat << endl;
     
-    Energies energies(0.0, 6.0, numberpoints);
 
     NeXus::File nf("MnBi_m20L.hdf5",NXACC_CREATE5);
     nf.makeGroup("entry","NXentry",true);
     nf.makeGroup("data","NXdata",true);
     
-    Eigen::MatrixXd NEXUSimage = mat.transpose();
-    
     std::vector<int> array_dims;
     array_dims.push_back(numberpoints);
     array_dims.push_back(numberpoints);
     nf.makeData("data", NeXus::FLOAT64, array_dims, true);
-    nf.putData(mat.transpose().data());
+    nf.putData(mat.data());
     nf.putAttr("signal", 1);
     nf.putAttr("axes","wavevector:energy");
     nf.putAttr("units","arbitrary units");
@@ -198,9 +200,8 @@ int main()
     array_dims.clear();
     array_dims.push_back(2);
     array_dims.push_back(4);
-   
     nf.makeData("axes_index", NeXus::INT32, array_dims , true);
-    array<array<int,4>,2> axes_index = {{ {{0,0,1,0}}, {{0,0,0,1}} }};
+    array<int,4*2> axes_index = {{0,0,1,0, 0,0,0,1}};
     nf.putData(axes_index.data());
     nf.closeData();
 
@@ -210,25 +211,15 @@ int main()
     nf.putAttr("primary",1);
     nf.putAttr("units","NX_UNITLESS");
     nf.closeData();
-
-    std::vector<double> NEXUSenergies(numberpoints);
-    std::copy(energies.begin(),energies.end(),NEXUSenergies.begin());
     
     nf.makeData("energies", NeXus::FLOAT64, (int)numberpoints, true);
-    nf.putData(NEXUSenergies.data());
+    nf.putData(energies.data());
     nf.putAttr("axis",2);
     nf.putAttr("units","meV");
     
     nf.closeGroup();
     nf.closeGroup();
     nf.closeData();
-
-    //TwoDimensionCut twodimcut;
-    //twodimcut.setPlotObject(move(cut));
-    //twodimcut.setPoints(points);
-    //mat = twodimcut.getMatrix();
-    //std::ofstream file("MnBi_H02.txt");
-    //file << mat << endl;
 
     return 0;
 }

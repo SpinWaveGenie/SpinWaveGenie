@@ -10,13 +10,10 @@
 
 using namespace std;
 
-EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, double min, double max, size_t points)
+EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, Energies energiesIn)
 {
     //std::cout << "Creating Energy Resolution Function" << std::endl;
-    MinimumEnergy = min;
-    MaximumEnergy = max;
-    EnergyPoints = points;
-    this->calculateEnergies();
+    this->energies = energiesIn;
     //cout << "Energy Points " << EnergyPoints << endl;
     ResolutionFunction = move(ResolutionFunctionIn);
     SW = SWIn;
@@ -25,10 +22,7 @@ EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShap
 EnergyResolutionFunction::EnergyResolutionFunction(const EnergyResolutionFunction& other)
 {
     //std::cout << "Copying Energy Resolution Function" << std::endl;
-    MinimumEnergy = other.MinimumEnergy;
-    MaximumEnergy = other.MaximumEnergy;
-    EnergyPoints = other.EnergyPoints;
-    this->calculateEnergies();
+    energies = other.energies;
     //cout << "Energy Points??? " << other.EnergyPoints << endl;
     //cout << "Energy Points??? " << EnergyPoints << endl;
     SW = other.SW;
@@ -38,28 +32,18 @@ EnergyResolutionFunction::EnergyResolutionFunction(const EnergyResolutionFunctio
 EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFunction& other)
 {
     std::cout << "Copying Energy Resolution Function" << std::endl;
-    MinimumEnergy = other.MinimumEnergy;
-    MaximumEnergy = other.MaximumEnergy;
-    EnergyPoints = other.EnergyPoints;
+    energies = other.energies;
     SW = other.SW;
     ResolutionFunction = move(other.ResolutionFunction->clone());
     return *this;
 }
 
-void EnergyResolutionFunction::calculateEnergies()
-{
-    energies.clear();
-    energies.reserve(EnergyPoints);
-    for (auto bin = 0; bin!=EnergyPoints; bin++)
-    {
-        energies.push_back(MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)bin/(double)(EnergyPoints-1));
-    }
-}
 
 std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)
 {
     //cout << "Energy Points: " << EnergyPoints << endl;
     //cout << MinimumEnergy << " " << MaximumEnergy << endl;
+    size_t EnergyPoints = energies.size();
     vector<double> fval(EnergyPoints,0.0);
     
     SW.createMatrix(kx,ky,kz);
@@ -78,7 +62,8 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
         {
             double min = pt->frequency + ResolutionFunction->getMinimumEnergy();
             double max = pt->frequency + ResolutionFunction->getMaximumEnergy();
-            for(size_t index = getBin(min);index!=getBin(max);index++)
+            size_t UpperBound = energies.getUpperBound(max);
+            for(size_t index = energies.getLowerBound(min);index!=UpperBound;index++)
             {
                 fval[index] += pt->intensity*ResolutionFunction->getFunction(pt->frequency,energies[index]);
             }
@@ -87,46 +72,19 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     return fval;
 }
 
-double EnergyResolutionFunction::getMinimumEnergy() const
-{
-    return MinimumEnergy;
-}
-
-void EnergyResolutionFunction::setMinimumEnergy(double energy)
-{
-    this->MinimumEnergy = energy;
-}
-
 const Cell& EnergyResolutionFunction::getCell() const
 {
     return SW.getCell();
 }
 
-double EnergyResolutionFunction::getMaximumEnergy() const
+Energies EnergyResolutionFunction::getEnergies()
 {
-    return MaximumEnergy;
+    return energies;
 }
 
-void EnergyResolutionFunction::setMaximumEnergy(double energy)
+void EnergyResolutionFunction::setEnergies(Energies energiesIn)
 {
-    this->MaximumEnergy = energy;
-}
-
-std::size_t EnergyResolutionFunction::getNumberPoints() const
-{
-    return EnergyPoints;
-}
-
-void EnergyResolutionFunction::setNumberPoints(size_t points)
-{
-    EnergyPoints = points;
-}
-
-std::size_t EnergyResolutionFunction::getBin(double Energy)
-{
-    int bin = round(( Energy - MinimumEnergy)*(EnergyPoints-1.0)/(MaximumEnergy-MinimumEnergy));
-    bin = std::max(bin,0);
-    return std::min((size_t)bin,EnergyPoints);
+    energies = energiesIn;
 }
 
 std::unique_ptr<SpinWavePlot> EnergyResolutionFunction::clone()
