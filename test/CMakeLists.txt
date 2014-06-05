@@ -8,9 +8,16 @@ add_executable(SublatticeTest SublatticeTest.cpp)
 add_executable(CellTest CellTest.cpp ) 
 add_executable(FormFactorTest FormFactorTest.cpp )
 add_executable(HKLDirectionsTest HKLDirectionsTest.cpp )
+add_executable(EnergiesTest EnergiesTest.cpp )
+add_executable(ResultsTest ResultsTest.cpp )
+
 add_test(NAME SublatticeTest COMMAND SublatticeTest)
 add_test(NAME CellTest COMMAND CellTest)
 add_test(NAME FormFactorTest COMMAND FormFactorTest)
 add_test(NAME HKLDirectionsTest COMMAND HKLDirectionsTest)
+add_test(NAME EnergiesTest COMMAND EnergiesTest)
+add_test(NAME ResultsTest COMMAND ResultsTest)
+
+
 
 

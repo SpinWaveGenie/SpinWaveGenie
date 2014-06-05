@@ -20,20 +20,13 @@
 #include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include <boost/ptr_container/ptr_vector.hpp>
+#include "Containers/Results.h"
 #include "Interactions/Interaction.h"
 #include "Genie/MagneticFormFactor.h"
+#include "Containers/Results.h"
+
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
-
-
-struct point
-{
-    double frequency;
-    double intensity;
-    bool operator<( const point& val ) const {
-    	return frequency < val.frequency;
-    }
-};
 
 struct results
 {
@@ -55,27 +48,24 @@ public:
     SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);
     //!
     void setKPoint(double KX, double KY, double KZ);
-    void updateValue(std::string name, double value);
     void clearMatrix();
     const Cell& getCell() const;
     void createMatrix(double KX,double KY,double KZ);
     void calculate();
-    std::vector<point> getPoints();
+    Results getPoints();
 private:
     double KXP,KYP,KZP;
     Cell cell;
     void calculateEigenvalues();
     void calculateWeights();
     void calculateIntensities();
-    void uniqueSolutions();
-    void significantSolutions();
     size_t M,N;
     int NU,MI,IM;
     Eigen::MatrixXcd LN;
     Eigen::VectorXd SS;
     Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
     Eigen::VectorXd WW; // want to get rid of this
-    std::vector<point> VI;
+    Results VI;
     Eigen::MatrixXcd XY,XIN;
     boost::ptr_vector<Interaction> interactions;
     MagneticFormFactor formFactor;

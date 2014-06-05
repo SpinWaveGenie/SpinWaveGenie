@@ -45,9 +45,7 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     Matrix3 recip;
     recip = cell.getReciprocalVectors();
     K << KX,KY,KZ;
-    //cout << "K before " << K.transpose() << endl;
     K = K.transpose()*recip;
-    //cout << "K after " << K.transpose() << endl;
     setKPoint(K[0],K[1],K[2]);
     clearMatrix();
     boost::ptr_vector<Interaction>::iterator iter;
@@ -55,8 +53,6 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     {
         iter->updateMatrix(K,LN);
     }
-    //cout << "LN" << endl;
-    //cout << SW.LN << endl;
 }
 
 void SpinWave::clearMatrix()
@@ -79,63 +75,16 @@ const Cell& SpinWave::getCell() const
 
 void SpinWave::calculateEigenvalues()
 {
-    //MatrixXcd test;
-    // testing if LN is a normal matrix
-    // http://en.wikipedia.org/wiki/Normal_matrix
-    //test = LN.adjoint()*LN - LN*LN.adjoint();
-    //cout << test.squaredNorm() << "\n";
-    //    for (int L1=0;L1<N;L1++)
-    //    {
-    //        for (int L2=0;L2<N;L2++)
-    //        {
-    //        if (abs(test(L1,L2)) > 1.0E-6)
-    //            cout << "AR and AI matrices: " << L1 << "   " << L2 << "    " <<test(L1,L2) << "\n";
-    //        }
-    //    }
-    
-    
-    //LN.block(M,0,M,M) = LN.block(0,M,M,M);
-    //LN.block(M,M,M,M) = LN.block(0,0,M,M);
-    
-    //cout << LN << endl;
-    
-    //cout << "M Matrix:" << endl;
-    //cout << LN;
-    //cout << endl;
-    //cout << LN - LN.adjoint() << endl;
-    //cout << endl;
     
     LN.block(0,M,M,M) *= -1.0;
     LN.block(M,M,M,M) *= -1.0;
     
     LN = LN*2.0;
     
-    /*cout << KXP << KYP << KZP << endl;
-    LLT<MatrixXcd> lltOfA(LN);
-    MatrixXcd H = lltOfA.matrixL();
-    MatrixXcd Ht = H.transpose();
-    
-    MatrixXcd Ltest = H*LN*Ht;
-    
-    ces.compute(Ltest);
-    if (ces.info() != Success)
-        cout << ces.info() << endl;
-    */
-    //cout << "LN= " << endl;
-    //cout << LN << endl;
-    
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
-    //cout << "Eigenvalues:" << endl;
-    //cout << ces.eigenvalues().transpose() << endl << endl;
-    //cout << "Eigenvectors:" << endl;
-    //cout << ces.eigenvectors() << endl;
     
-    //
-    //     Test eigenvalue condition
-    //
-    //cout << ces.eigenvalues().size() << endl;
     for (int i=0;i<N;i++)
     {
         complex<double> lambda = ces.eigenvalues()[i];
@@ -148,27 +97,6 @@ void SpinWave::calculateEigenvalues()
             cout << "i = " << i << ", eigenvalue condition = " << tmp.dot(tmp) << endl;
         }
     }
-    
-    //cout << "XX(0) = " << endl;
-    //for (int i=0;i<N;i++)
-    //{
-    //    //cout << abs(ces.eigenvectors().col(39)[i]) << endl;
-    //
-    //}
-    //cout << " " << endl;
-    //
-    // Test orthogonality condition
-    //
-    
-    /*MatrixXcd ortho_test = ces.eigenvectors().adjoint()*SS.asDiagonal()*ces.eigenvectors();
-     for (int L1=0;L1<N;L1++)
-     {
-     for (int L2=0;L2<N;L2++)
-     {
-     if (L1 != L2 && abs(ortho_test(L1,L2)) > 1.0E-3)
-     cout << "AR and AI matrices: " << L1 << " " << L2 << " " << ces.eigenvalues()[L1] << " " << ces.eigenvalues()[L2] << " " << ortho_test(L1,L2) << "\n";
-     }
-     }*/
 }
 
 bool IsPositive (results i) { return i.weight > 0; }
@@ -176,27 +104,14 @@ bool IsPositive (results i) { return i.weight > 0; }
 void SpinWave::calculateWeights()
 {
     MatrixXcdRowMajor XX;
-    //VectorXcd tmp;
-    //XY.resize(N,N);
     WW.resize(N);
     XX = ces.eigenvectors().adjoint();
     
-    //cout << "eigenvectors" << endl;
-    //cout << ces.eigenvectors() << endl;
-   
-    //cout << XX << endl;
-    //MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
     MatrixXi IPR(N,N);
     VectorXcd TEST(N);
     int IR;
     int IFL;
     //IPR.setZero();
-    
-    {
-        MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
-        //cout << "ortho_test" << endl;
-        //cout << ortho_test << endl;
-    }
     
     int maxIterations = 50;
     for(int ito=0;ito<maxIterations;ito++)
@@ -248,8 +163,6 @@ void SpinWave::calculateWeights()
         }
     }
     
-    //cout << "XX" << XX << endl;
-    
     vector<results> AL(N);
     for (int L1=0;L1<N;L1++)
     {
@@ -262,17 +175,12 @@ void SpinWave::calculateWeights()
     // Reorder the XX's by the weights
     //
     
-    //sort(AL.begin(),AL.end());
     partition(AL.begin(), AL.end(),IsPositive);
 
-    //cout << "AL.weight= " << endl;
     for(int L1=0;L1<N;L1++)
     {
         WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
-        //cout << AL[L1].weight << " ";
-
     }
-    //cout << endl;
     
     //Swap rows to reflect ordering of eigenvalues.
     //The swap moves row L1 to a new position and the index must be
@@ -290,37 +198,15 @@ void SpinWave::calculateWeights()
         }
         XX.row(L1).swap(XX.row(AL[L1].index));   //eigenvector
         AL[old_index].index = AL[L1].index;
-        //AL[L1].index = L1;
     }
-    
-    //cout << "XX=" << endl;
-    //cout << XX << endl;
-    /*cout <<"Eigenvalues: " << endl ;
-    cout << ces.eigenvalues().transpose() << endl;
-    cout << "Weights: " << endl;
-    cout << TEST.transpose() << endl;
-    cout <<"Sorted Eigenvalues: " << endl;
-    cout << WW.transpose() << endl;
-    cout << "Eigenvectors: " << endl;
-    cout << ces.eigenvectors() << endl;
-    cout << "Normalized eigenvectors:" << endl;
-    cout << XX << endl;
-    */
    
     //
     //Evalue inverse of XY or XIN
     //
     
     XIN = XX.adjoint();
-    XIN.block(0,M,M,M) *= -1.0;//*XIN.block(0,M,M,M);
-    XIN.block(M,0,M,M) *= -1.0;//*XIN.block(M,0,M,M);
-    
-    //cout << "XX= " << endl << XX << endl;
-    //cout << "XIN= " << endl << XIN << endl ;
-    
-    //cout << endl;
-    //cout << (XX.inverse()*XX).block(0,0,5,5)  << endl ;
-    //cout << XIN*XX << endl;
+    XIN.block(0,M,M,M) *= -1.0;
+    XIN.block(M,0,M,M) *= -1.0;
     
 }
 
@@ -340,7 +226,6 @@ void SpinWave::calculateIntensities()
     {
         V_r = sl->getInverseMatrix();
         S_r = sl->getMoment();
-        //cout << "type:" << sl->getName() << endl;
         formFactor.setType(sl->getType());
         ff = formFactor.getFormFactor(KX,KY,KZ);
         /*if (sl->getType() == "MN2")
@@ -368,105 +253,18 @@ void SpinWave::calculateIntensities()
     Intensities *= Intensities.conjugate();
     Intensities *= 1.0/(4.0*M);
     
-    //cout << "Intensities:" << endl << Intensities << endl;
     
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
     
-    VI.reserve(M);
     for (int i=0;i<M;i++)
     {
         point pt;
         pt.frequency = abs(WW[i+M]);
-        //cout << KX << " " << KY << " " << KZ << endl;
-        //cout << pt.frequency << endl;
-        //cout << "SXX= " << SXX[i] << "\t SYY= " << SYY[i] << "\t SZZ= " << SZZ[i] << endl;
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
-        //cout << endl;
-        //pt.intensity /= pt.frequency;
-        VI.push_back(pt);
+        VI.insert(pt);
     }
-    sort(VI.begin(),VI.end());
-    //WP = WW.segment(M,M).array().abs();
-    //cout << "WP= " << WP << endl;
-}
-
-bool evalues_equal(const point& a, const point& b)
-{
-    // remove eigenvalues that are equal
-    double EPS = 1.0e-5;
-    return abs(a.frequency-b.frequency) < EPS;
-}
-
-void SpinWave::uniqueSolutions()
-{
-    double EPS = 1.0e-5;
-    int VP_pos;
-    vector<double>::iterator last;
-    vector<double>::iterator uniq;
-    vector<point> VI_unique;
-    // Find unique eigenvalues
-    VI_unique = VI;
-    VI_unique.erase(unique(VI_unique.begin(),VI_unique.end(),evalues_equal),VI_unique.end());
-    
-    NU = (int)VI_unique.size();
-    VI_unique.resize(NU);
-    
-    for (int i=0;i<NU;i++)
-    {
-        VI_unique[i].intensity = 0.0;
-    }
-    
-    for (int i=0;i<M;i++)
-    {
-        VP_pos = NU; //set position to a nonsense value
-        for (int j=0;j<NU;j++)
-        {
-            if (abs(VI[i].frequency - VI_unique[j].frequency) < EPS)
-            {
-                VP_pos = j;
-                VI_unique[j].intensity += VI[i].intensity;
-                break;
-            }
-        }
-        if (VP_pos== NU)
-            cout << "error finding unique value" << endl;
-    }
-    
-    VI = VI_unique;
-    
-    //for (int i=0;i<NU;i++)
-    //    cout << VP(i) << "\t" << TPM(i) << "\t" << TMP(i) << "\t" << TZZ(i) << endl;
-    //TXX.array().abs();
-    //TYY.array().abs();
-    //TZZ.array().abs();
-}
-
-void SpinWave::significantSolutions()
-{
-    double ETS = 0.001;
-    vector<point> VI_signif;
-    IM = 0; MI = 0;
-    //VI.resize(0);
-    //SVI.resize(0);
-    
-    for (int k=0;k!=VI.size();k++)
-    {
-        if (VI[k].intensity > ETS )
-        {
-            VI_signif.push_back(VI[k]);
-        }
-    }
-    
-    VI = VI_signif;
-    
-    //SVI.resize(MI);
-    //cout << "Numerical Result" << endl;
-    //for (int i=0;i<MI;i++)
-    //{
-    //    cout << KZP << "\t" << VI[i] << "\t" << SVI[i] << endl;
-    //}
 }
 
 void SpinWave::calculate()
@@ -474,22 +272,9 @@ void SpinWave::calculate()
     this->calculateEigenvalues();
     this->calculateWeights();
     this->calculateIntensities();
-    //this->uniqueSolutions();
-    //this->significantSolutions();
 }
 
-void SpinWave::updateValue(string name,double value)
-{
-    for(auto it = interactions.begin();it!=interactions.end();it++)
-    {
-        if (name.compare((*it).getName()) == 0)
-        {
-            (*it).updateValue(value);
-        }
-    }
-}
-
-vector<point> SpinWave::getPoints()
+Results SpinWave::getPoints()
 {
     return VI;
 }

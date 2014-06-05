@@ -26,10 +26,10 @@ public:
     const Axis& operator[](std::size_t position);
     typedef std::vector<Axis>::iterator Iterator;
     typedef std::vector<Axis>::const_iterator ConstIterator;
-    //! \return Returns an iterator pointing to the first Sublattice element
+    //! \return Returns an iterator pointing to the first Axis element
     Iterator begin();
     ConstIterator cbegin();
-    //! \return Returns an iterator pointing to the final Sublattice element
+    //! \return Returns an iterator pointing to the final Axis element
     Iterator end();
     ConstIterator cend();
 private:

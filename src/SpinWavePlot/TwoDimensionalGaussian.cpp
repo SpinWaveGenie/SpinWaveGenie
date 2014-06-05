@@ -12,6 +12,7 @@
 #include <functional>
 #include "Genie/SpinWave.h"
 #include "External/cubature.h"
+#include "Containers/Results.h"
 
 using namespace std;
 
@@ -68,7 +69,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
     {
         
         SW.calculate();
-        vector<point> points = SW.getPoints();
+        Results points = SW.getPoints();
         
         double firstSolution = (-b*u + sqrt((b*b - a*c)*u*u +c*d))/c;
         double secondSolution = (a*u*u - d)/(c*firstSolution);
@@ -81,14 +82,14 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
         
         //cout << minEnergy << " " << maxEnergy << endl;
         
-        for(size_t k=0;k!=points.size();k++)
+        for(auto pt = points.begin();pt!=points.end();pt++)
         {
             //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-            int min_bin = (points[k].frequency+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+            int min_bin = (pt->frequency+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
             min_bin = std::max(min_bin,0);
             min_bin = std::min(min_bin,(int)EnergyPoints);
             
-            int max_bin = (points[k].frequency+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
+            int max_bin = (pt->frequency+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
             max_bin = std::max(max_bin,0);
             max_bin = std::min(max_bin,(int)EnergyPoints);
             
@@ -97,7 +98,7 @@ int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const doubl
             for(int i=min_bin;i!=max_bin;i++)
             {
                 double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-                fval[i] += points[k].intensity*exp(-1.0*(c*pow(points[k].frequency-energy,2)+2.0*b*(points[k].frequency-energy)*u+a*pow(u,2)));
+                fval[i] += pt->intensity*exp(-1.0*(c*pow(pt->frequency-energy,2)+2.0*b*(pt->frequency-energy)*u+a*pow(u,2)));
             }
         }
         

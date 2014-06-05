@@ -1,4 +1,5 @@
 #include "SpinWaveDispersion.h"
+#include "Containers/Results.h"
 #include <fstream>
 
 using std::string; using std::vector;
@@ -60,21 +61,21 @@ void SpinWaveDispersion::save()
         
         Genie.createMatrix(x,y,z);
         Genie.calculate();
-        vector<point> pts = Genie.getPoints();
+        Results pts = Genie.getPoints();
         
         if(PrintFrequency)
         {
-            for(vector<point>::iterator it = pts.begin();it!=pts.end();it++)
+            for(Results::Iterator it = pts.begin();it!=pts.end();it++)
             {
-                file << (*it).frequency << "  ";
+                file << it->frequency << "  ";
             }
         }
         
         if(PrintIntensity)
         {
-            for(vector<point>::iterator it = pts.begin();it!=pts.end();it++)
+            for(Results::Iterator it = pts.begin();it!=pts.end();it++)
             {
-                file << (*it).intensity << " " ;
+                file << it->intensity << " " ;
             }
         }
         

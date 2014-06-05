@@ -10,6 +10,8 @@
 #include <Eigen/Dense>
 #include "EnergyResolutionFunction.h"
 #include "Containers/Energies.h"
+#include "External/ezRateProgressBar.hpp"
+
 
 using std::string; using std::vector; using std::unique_ptr;
 using std::cout; using std::endl;
@@ -22,6 +24,7 @@ void TwoDimensionCut::setFilename(string name)
 void TwoDimensionCut::setPlotObject(unique_ptr<SpinWavePlot> object)
 {
     InstrumentResolution = move(object);
+    EnergyPoints = InstrumentResolution->getEnergies().size();
 }
 
 void TwoDimensionCut::setPoints(ThreeVectors<double> pts)
@@ -42,7 +45,10 @@ void TwoDimensionCut::setEnergyPoints(double min, double max, size_t points)
 Eigen::MatrixXd TwoDimensionCut::getMatrix()
 {
     Eigen::MatrixXd figure;
-    figure.setZero(EnergyPoints,Kpoints.size());
+    figure.setZero(Kpoints.size(),EnergyPoints);
+    ez::ezRateProgressBar<int> p(Kpoints.size());
+    p.units = "Q-points";
+    p.start();
     for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
@@ -51,12 +57,13 @@ Eigen::MatrixXd TwoDimensionCut::getMatrix()
         
         vector<double> val = InstrumentResolution->getCut(x,y,z);
         size_t m = std::distance(Kpoints.begin(),it);
-        cout << m << endl;
+        p.update(m);
         for(int n=0;n<EnergyPoints;n++)
         {
-            figure(n,m) = val[n];
+            figure(m,n) = val[n];
         }
     }
+    p.update(Kpoints.size());
     return figure;
 }
 

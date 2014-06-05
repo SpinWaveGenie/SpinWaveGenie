@@ -169,8 +169,6 @@ void MagneticFormFactor::setType( std::vector<std::string> types, std::vector<do
     Farray.clear();
     NormalizedWeights.clear();
     double sum = std::accumulate(weights.begin(),weights.end(),0.0);
-    //std::cout << "sum= " << sum << std::endl;
-    //std::cout << types.size() << " " << weights.size() << std::endl;
     if (types.size() != weights.size())
     {
         std::cout << "Size of types and weights arrays are different" << std::endl;

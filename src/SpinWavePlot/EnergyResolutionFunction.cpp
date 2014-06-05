@@ -6,6 +6,7 @@
 //
 //
 #include "EnergyResolutionFunction.h"
+#include "Containers/Results.h"
 #include <algorithm>
 
 using namespace std;
@@ -48,7 +49,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     
     SW.createMatrix(kx,ky,kz);
     SW.calculate();
-    vector<point> points = SW.getPoints();
+    Results points = SW.getPoints();
     
     for(auto pt = points.begin();pt!=points.end();pt++)
     {
@@ -63,6 +64,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
             double min = pt->frequency + ResolutionFunction->getMinimumEnergy();
             double max = pt->frequency + ResolutionFunction->getMaximumEnergy();
             size_t UpperBound = energies.getUpperBound(max);
+            //cout << min << " " << energies.getLowerBound(min) << " " << max << " " << UpperBound << endl;
             for(size_t index = energies.getLowerBound(min);index!=UpperBound;index++)
             {
                 fval[index] += pt->intensity*ResolutionFunction->getFunction(pt->frequency,energies[index]);

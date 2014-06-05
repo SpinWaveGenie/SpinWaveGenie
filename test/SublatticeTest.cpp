@@ -3,7 +3,6 @@
 #include <boost/test/unit_test.hpp>
 #include "Cell/Sublattice.h"
 #include "Cell/Cell.h"
-
 #include <iostream>
 
 BOOST_AUTO_TEST_CASE( ConstructorsTest )
