@@ -1,149 +1,19 @@
 #include <cmath>
+#include <nlopt.hpp>
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <set>
-#include <array>
 #include <algorithm>
-#include <memory>
-#include <Eigen/Dense>
-#include "nlopt.hpp"
-#include "Genie/SpinWave.h"
 #include "Genie/SpinWaveBuilder.h"
+#include "Initializer.h"
 #include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include "Interactions/InteractionFactory.h"
-#include "SpinWavePlot/EnergyResolutionFunction.h"
-#include "SpinWavePlot/OneDimensionalFactory.h"
-#include "SpinWavePlot/OneDimensionalShapes.h"
-#include "SpinWavePlot/IntegrateThetaPhi.h"
-#include "Containers/PointsAlongLine.h"
-#include "SpinWavePlot/TwoDimensionCut.h"
-#include <unistd.h>
-#include "Containers/Energies.h"
+//#include "CalculateAngles.h"
+
 
 using namespace std;
-
-typedef Eigen::Matrix <bool, Eigen::Dynamic, Eigen::Dynamic> MatrixXb;
-
-class LoadXYZ
-{
-public:
-    void loadFile(string filename);
-    vector<double> getXAxis();
-    vector<double> getYAxis();
-    Eigen::MatrixXd getData();
-    MatrixXb getMask();
-protected:
-    void readFile(string filename);
-    vector<vector<double> > inputData;
-    set<double> xaxis,yaxis;
-    Eigen::MatrixXd data;
-    MatrixXb mask;
-};
-
-void LoadXYZ::readFile(string filename)
-{
-    ifstream file;
-    string output;
-    file.open(filename.c_str());
-    while(getline(file,output))
-    {
-        istringstream parser;
-        parser.str(output);
-        vector<double> tmp(3);
-        parser >> tmp[0] >> tmp[1] >> tmp[2];
-        inputData.push_back(tmp);
-    }
-    file.close();
-}
-
-map<double,int> makeKey(set<double> axis)
-{
-    map<double,int> key;
-    
-    int i = 0;
-    for (set<double>::iterator it = axis.begin(); it!=axis.end();it++)
-    {
-        key.insert(make_pair(*it,i));
-        i++;
-    }
-    
-    return key;
-}
-
-void LoadXYZ::loadFile(string filename)
-{
-    this->readFile(filename);
-    
-    for (vector<vector<double> >::iterator it = inputData.begin();it!=inputData.end();it++)
-    {
-        xaxis.insert((*it)[0]);
-        yaxis.insert((*it)[1]);
-    }
-    
-    std::map<double,int> xkey,ykey;
-    xkey = makeKey(xaxis);
-    ykey = makeKey(yaxis);
-    
-    data.resize(xaxis.size(),yaxis.size());
-    for (std::vector<vector<double> >::iterator it = inputData.begin();it!=inputData.end();it++)
-    {
-        data(xkey[(*it)[0]],ykey[(*it)[1]]) = (*it)[2];
-    }
-    
-    mask.resize(xaxis.size(),yaxis.size());
-    for( int i = 0; i<xaxis.size(); i++)
-    {
-        for( int j=0; j<yaxis.size();j++)
-        {
-            mask(i,j) = data(i,j) != 1.0e-20;
-        }
-    }
-}
-
-vector<double> LoadXYZ::getXAxis()
-{
-    vector<double> tmp(xaxis.size());
-    std::copy(xaxis.begin(),xaxis.end(),tmp.begin());
-    return tmp;
-}
-
-vector<double> LoadXYZ::getYAxis()
-{
-    vector<double> tmp(yaxis.size());
-    std::copy(yaxis.begin(),yaxis.end(),tmp.begin());
-    return tmp;
-}
-
-Eigen::MatrixXd LoadXYZ::getData()
-{
-    return data;
-}
-
-MatrixXb LoadXYZ::getMask()
-{
-    return mask;
-}
-
-double calculatenorm(Eigen::MatrixXd mat1, Eigen::MatrixXd mat2,MatrixXb mask)
-{
-    double norm = 0;
-    for (int i = 0; i!=mat1.rows(); i++)
-    {
-        for (int j = 0; j!=mat1.cols(); j++)
-        {
-            if (mask(i,j))
-            {
-                norm += pow(mat1(i,j) - mat2(i,j),2);
-            }
-        }
-   
-    }
-    return norm;
-}
-
-LoadXYZ xyzfile;
+using namespace Eigen;
 
 double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
 {
@@ -152,141 +22,249 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
         cout << "error: no gradient available" << endl;
     }
     
-    double J,J1,J2;
-    J = x[1];
-    J2 = x[2];
-    J1 = x[3];
+    double* tmp = static_cast<double*>(my_func_data);
+    vector<double> parameters(tmp,tmp+6);
     
-    double SA = 1.5;
+    /*cout << "x[i] = ";
+    for (size_t i = 0; i<6;i++)
+    {
+        cout << x[i] << " ";
+    }
+    cout << endl;
+    */
+    
+    double SA = 1.3;
+    double SB = 0.3;
+    double theta0 = x[0];
+    double theta1 = x[1];
+    
+    
+    //CalculateAngles angles(SA,SB,parameters[0],parameters[1],parameters[2],parameters[4]);
+    
+    //vector<double> anglesIn = {theta,3.0*M_PI/4.0,theta,7.0*M_PI/4.0,theta,M_PI/4.0,theta,5.0*M_PI/4.0};
+    
+    //cout << angles.calculateEnergy(anglesIn) << endl;
     
     Cell cell;
-    cell.setBasisVectors(9.91510,8.84410,5.45950,90.0,107.5780,90.0);
+    cell.setBasisVectors(8.5,8.5,8.5,90.0,90.0,90.0);
     
-    Sublattice Spin0;
-    string name0 = "Spin0";
-    Spin0.setName(name0);
-    Spin0.setType("CR3");
-    Spin0.setMoment(SA,17.568*M_PI/180.0,M_PI);
-    cell.addSublattice(Spin0);
-    cell.addAtom(name0,0.0,0.91226,0.25);
-    cell.addAtom(name0,0.5,0.41226,0.25);
+    Sublattice Mn0;
+    string name = "Mn0";
+    Mn0.setName(name);
+    Mn0.setType("MN2");
+    Mn0.setMoment(SA,0.0,0.0);
+    cell.addSublattice(Mn0);
+    cell.addAtom(name,0.0,0.0,0.0);
+    cell.addAtom(name,0.0,0.5,0.5);
+    cell.addAtom(name,0.5,0.0,0.5);
+    cell.addAtom(name,0.5,0.5,0.0);
     
-    Sublattice Spin1;
-    string name1 = "Spin1";
-    Spin1.setName(name1);
-    Spin1.setType("CR3");
-    Spin1.setMoment(SA,17.568*M_PI/180.0,M_PI);
-    cell.addSublattice(Spin1);
-    cell.addAtom(name1,0.0,0.08774,0.75);
-    cell.addAtom(name1,0.5,0.58774,0.75);
+    Sublattice Mn1;
+    name = "Mn1";
+    Mn1.setName(name);
+    Mn1.setType("MN2");
+    Mn1.setMoment(SA,0.0,0.0);
+    cell.addSublattice(Mn1);
+    cell.addAtom(name,0.75,0.25,0.75);
+    cell.addAtom(name,0.75,0.75,0.25);
+    cell.addAtom(name,0.25,0.25,0.25);
+    cell.addAtom(name,0.25,0.75,0.75);
+    
+    Sublattice V0;
+    name = "V0";
+    V0.setName(name);
+    V0.setType("V3");
+    
+    if (theta1 < M_PI)
+    {
+        V0.setMoment(SB,theta1,3.0*M_PI/4.0);
+    }
+    else
+    {
+        V0.setMoment(SB,2.0*M_PI-theta1,7.0*M_PI/4.0);
+    }
+    cell.addSublattice(V0);
+    cell.addAtom(name,0.875,0.125,0.375);
+    cell.addAtom(name,0.875,0.625,0.875);
+    cell.addAtom(name,0.375,0.125,0.875);
+    cell.addAtom(name,0.375,0.625,0.375);
+    
+    Sublattice V1;
+    name = "V1";
+    V1.setName(name);
+    V1.setType("V3");
+    if (theta1 < M_PI)
+    {
+        V1.setMoment(SB,theta1,7.0*M_PI/4.0);
+    }
+    else
+    {
+        V1.setMoment(SB,2.0*M_PI-theta1,3.0*M_PI/4.0);
+    }
+    cell.addSublattice(V1);
+    cell.addAtom(name,0.125,0.375,0.875);
+    cell.addAtom(name,0.125,0.875,0.375);
+    cell.addAtom(name,0.625,0.375,0.375);
+    cell.addAtom(name,0.625,0.875,0.875);
+    
+    Sublattice V2;
+    name = "V2";
+    V2.setName(name);
+    V2.setType("V3");
+    if (theta1 < M_PI)
+    {
+        V2.setMoment(SB,theta0,5.0*M_PI/4.0);
+    }
+    else
+    {
+        V2.setMoment(SB,2.0*M_PI-theta0,M_PI/4.0);
+    }
+    cell.addSublattice(V2);
+    cell.addAtom(name,0.375,0.875,0.125);
+    cell.addAtom(name,0.375,0.375,0.625);
+    cell.addAtom(name,0.875,0.875,0.625);
+    cell.addAtom(name,0.875,0.375,0.125);
+    
+    Sublattice V3;
+    name = "V3";
+    V3.setName(name);
+    V3.setType("V3");
+    if (theta1 < M_PI)
+    {
+        V3.setMoment(SB,theta0,M_PI/4.0);
+    }
+    else
+    {
+        V3.setMoment(SB,2.0*M_PI-theta0,5.0*M_PI/4.0);
+    }
+    cell.addSublattice(V3);
+    cell.addAtom(name,0.625,0.625,0.625);
+    cell.addAtom(name,0.625,0.125,0.125);
+    cell.addAtom(name,0.125,0.625,0.125);
+    cell.addAtom(name,0.125,0.125,0.625);
     
     SpinWaveBuilder builder(cell);
-    InteractionFactory interactionFactory;
-    
-    builder.addInteraction(interactionFactory.getExchange("J",J,name0,name1,3.1,3.2));
-    //builder.addInteraction(interactionFactory.getExchange("J1",J1,name0,name0,6.6,6.7));
-    //builder.addInteraction(interactionFactory.getExchange("J1",J1,name1,name1,6.6,6.7));
-    //builder.addInteraction(interactionFactory.getExchange("J2",J2,name0,name1,5.6,5.7));
-    
-    //builder.addInteraction(interactionFactory.getAnisotropy("D", -0.01, Vector3(0.0,sin(17.568*M_PI/180.0),-cos(17.568*M_PI/180.0)),"Spin0"));
-    //builder.addInteraction(interactionFactory.getAnisotropy("D", -0.01, Vector3(0.0,sin(17.568*M_PI/180.0),-cos(17.568*M_PI/180.0)),"Spin1"));
-    
-    vector<double> xaxis = xyzfile.getXAxis();
-    vector<double> yaxis = xyzfile.getYAxis();
-    
-    
-    Energies energies;
-    for(auto it = yaxis.begin()+50;it!=yaxis.begin()+80;++it)
-    {
-        energies.insert(*it);
-    }
-    
-    ThreeVectors<double> points;
-    
-    for(auto it = xaxis.begin()+10;it!=xaxis.begin()+65;++it)
-    {
-        points.insert(0.0,0.0,*it);
-    }
-    
-    SpinWave SW = builder.Create_Element();
-    OneDimensionalFactory factory;
-    auto lorentz = factory.getLorentzian(0.2,0.000001);
-    unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(lorentz), SW, energies));
-    unique_ptr<SpinWavePlot> cut(new IntegrateThetaPhi(move(res),0.001));
-    
-    TwoDimensionCut twodimcut;
-    twodimcut.setPlotObject(move(cut));
-    twodimcut.setPoints(points);
-    Eigen::MatrixXd result = twodimcut.getMatrix();
-    
-    MatrixXb mask = xyzfile.getMask();
-    Eigen::MatrixXd data = xyzfile.getData();
-    
-    double output = calculatenorm(data.block(10,50,55,30)/x[0],result, mask.block(10,50,55,30));
+    InteractionFactory interactions;
 
-    cout << x[0] << " " << x[1] << " " << x[2] << " " << x[3] << endl;
-    cout << output << endl;
+    builder.addInteraction(interactions.getExchange("Jbb",parameters[1],"V0","V1",2.975,3.06));
+    builder.addInteraction(interactions.getExchange("Jbb",parameters[1],"V2","V3",2.975,3.06));
+
+    builder.addInteraction(interactions.getExchange("Jbbp",parameters[2],"V0","V2",2.975,3.06));
+    builder.addInteraction(interactions.getExchange("Jbbp",parameters[2],"V0","V3",2.975,3.06));
+    builder.addInteraction(interactions.getExchange("Jbbp",parameters[2],"V1","V2",2.975,3.06));
+    builder.addInteraction(interactions.getExchange("Jbbp",parameters[2],"V1","V3",2.975,3.06));
     
-    std::ofstream file("data_test.txt");
-    if (file.is_open())
-    {
-        file << data.block(10,50,55,30);
-    }
-    file << endl;
-    file.close();
+    Vector3 zhat(0.0,0.0,1.0);
+
+    builder.addInteraction(interactions.getAnisotropy("Daz",parameters[3],zhat,"Mn0"));
+    builder.addInteraction(interactions.getAnisotropy("Daz",parameters[3],zhat,"Mn1"));
     
-    std::ofstream file2("measurement_test.txt");
-    if (file2.is_open())
-    {
-        file2 << result*x[0];
-    }
-    file2 << endl;
-    file2.close();
+    Vector3 direction(-1.0,1.0,-1.0);
+    builder.addInteraction(interactions.getAnisotropy("Db",parameters[4],direction,"V0"));
+    direction = Vector3(1.0,-1.0,-1.0);
+    builder.addInteraction(interactions.getAnisotropy("Db",parameters[4],direction,"V1"));
+    direction = Vector3(1.0,1.0,-1.0);
+    builder.addInteraction(interactions.getAnisotropy("Db",parameters[4],direction,"V2"));
+    direction = Vector3(-1.0,-1.0,-1.0);
+    builder.addInteraction(interactions.getAnisotropy("Db",parameters[4],direction,"V3"));
+
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn0","V0",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn0","V1",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn0","V2",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn0","V3",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn1","V0",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn1","V1",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn1","V2",3.48,3.57));
+    builder.addInteraction(interactions.getExchange("Jab",parameters[0],"Mn1","V3",3.48,3.57));
     
-    return output;
+    builder.addInteraction(interactions.getMagneticField("H",parameters[5],zhat,"Mn0"));
+    builder.addInteraction(interactions.getMagneticField("H",parameters[5],zhat,"Mn1"));
+    builder.addInteraction(interactions.getMagneticField("H",parameters[5],zhat,"V0"));
+    builder.addInteraction(interactions.getMagneticField("H",parameters[5],zhat,"V1"));
+    builder.addInteraction(interactions.getMagneticField("H",parameters[5],zhat,"V2"));
+    builder.addInteraction(interactions.getMagneticField("H",parameters[5],zhat,"V3"));
+    
+    double diff_sq = builder.getEnergy();
+    //cout << diff_sq << endl << endl;
+    return diff_sq;
 }
 
 int main()
 {
-    string filename = "/Users/svh/Documents/spin_wave_genie/build/NaCrGe2O6_1p8K.dat";
-    xyzfile.loadFile(filename);
+    /*nlopt::opt opt(nlopt::LN_SBPLX,2);
+    std::vector<double> ub(2);
+    ub[0] = 2.0*M_PI;
+    ub[1] = 2.0*M_PI;
+    opt.set_upper_bounds(ub);
+    std::vector<double> lb(2);
+    lb[0] = 0.0;
+    lb[0] = 0.0;
+    opt.set_lower_bounds(lb);
+
+    double parameters[6] = {-2.5,-12.0,-12.0,0.0,-1.2,-0.5};
     
-    //cout << result.rows() << " " << result.cols() << endl;
-    
-    //cout << data.norm() << endl;
-    //Eigen::MatrixXd zeros(yaxis.size(),xaxis.size());
-    //zeros.setZero();
-    //cout << calculatenorm(zeros,data, mask) << endl;
-    //cout << calculatenorm(result,zeros, mask) << endl;
-    //cout << calculatenorm(data,result*1.0e-4, mask) << endl;
-    
-    std::vector<double> ub(4);
-    ub[1] =  0.6;
-    ub[3] =  0.0;
-    ub[2] =  0.0;
-    ub[0] =  1.0e-4;
-    
-    std::vector<double> lb(4);
-    lb[1] =  0.3;
-    lb[3] =  0.0;
-    lb[2] =  0.0;
-    lb[0] =  0.0;
-    
-    std::vector<double> x(4);
+    opt.set_ftol_rel(1.0e-8);
+    //opt.set_maxeval(1000);
+
+    std::vector<double> x(2);
     
     double minf = 0.0;
-    
-    x[1] = 0.52;
-    x[3] = 0.0;
-    x[2] = 0.0;
-    x[0] = 3.33e-05;
-    
-    nlopt::opt opt(nlopt::LN_SBPLX,4);
-    opt.set_min_objective(myfunc, NULL);
-    opt.set_upper_bounds(ub);
-    opt.set_lower_bounds(lb);
-    opt.set_ftol_abs(5.0e-5);
-    opt.set_maxeval(1000);
-    opt.optimize(x, minf);
 
+    x[0] = 0.25*M_PI;
+    x[1] = 0.75*M_PI;
+    
+    opt.set_min_objective(myfunc, &parameters[0]);
+    opt.optimize(x, minf);
+   
+    if (x[0] > M_PI)
+        x[0] = 2.0*M_PI - x[0];
+    if (x[1] > M_PI)
+        x[1] = 2.0*M_PI - x[1];
+    cout << "theta0 = ";
+    cout << x[0]*180.0/M_PI << endl;
+    cout << "theta1 = ";
+    cout << x[1]*180.0/M_PI << endl;
+    cout << "total energy = ";
+    cout << minf << endl;
+    */
+    
+    for(double field = -1.0; field<1.1;field+=0.1)
+    {
+        nlopt::opt opt(nlopt::LN_SBPLX,2);
+        std::vector<double> ub(2);
+        ub[0] = 2.0*M_PI;
+        ub[1] = 2.0*M_PI;
+        opt.set_upper_bounds(ub);
+        std::vector<double> lb(2);
+        lb[0] = 0.0;
+        lb[0] = 0.0;
+        opt.set_lower_bounds(lb);
+        
+        opt.set_ftol_rel(1.0e-10);
+            
+        std::vector<double> x(2);
+        
+        double minf = 0.0;
+            
+        x[0] = 0.25*M_PI;
+        x[1] = 0.75*M_PI;
+        
+        double parameters[6] = {-2.5,-12.0,-12.0,0.0,-1.2,field};
+        opt.set_min_objective(myfunc, &parameters[0]);
+        opt.optimize(x, minf);
+            
+        cout << "H = " << field/2.0/5.7883818066e-2;
+        cout << " Tesla";
+        cout << ", theta0 = ";
+        if (x[0] > M_PI)
+            x[0] = 2.0*M_PI - x[0];
+        if (x[1] > M_PI)
+            x[1] = 2.0*M_PI - x[1];
+        cout << x[0]*180.0/M_PI;
+        cout << " Degrees, theta1 = ";
+        cout << x[1]*180.0/M_PI << " Degrees" << endl;
+        
+    }
+ 
+    return 0;
 }
