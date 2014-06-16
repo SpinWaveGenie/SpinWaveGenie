@@ -13,6 +13,7 @@
 #include <boost/foreach.hpp>
 #include <boost/range/iterator_range.hpp>
 #include "ThreeVectors.h"
+#include <complex>
 
 template<typename T>
 class UniqueThreeVectors: public ThreeVectors<T>

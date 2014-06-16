@@ -17,5 +17,4 @@ private:
     double kxi,kyi,kzi,kxf,kyf,kzf;
     long numberPoints;    
 };
-
 #endif /* defined(__PointsAlongLine__) */

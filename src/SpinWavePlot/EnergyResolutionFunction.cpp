@@ -53,11 +53,9 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     
     for(auto pt = points.begin();pt!=points.end();pt++)
     {
-        //cout << "k= " << k << endl;
         if (std::isnan(pt->frequency) || std::isnan(pt->intensity))
         {
-            
-            //cout << "found NaN: " << points[k].frequency << " " << points[k].intensity << endl;
+            cout << "found NaN: " << pt->frequency << " " << pt->intensity << endl;
         }
         else
         {

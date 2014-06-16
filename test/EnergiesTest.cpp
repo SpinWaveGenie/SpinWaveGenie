@@ -45,7 +45,6 @@ BOOST_AUTO_TEST_CASE( clearTest )
     BOOST_CHECK(energies.size() == 0);
 }
 
-
 BOOST_AUTO_TEST_CASE( iteratorTest )
 {
 

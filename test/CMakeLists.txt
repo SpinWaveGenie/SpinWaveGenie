@@ -10,6 +10,11 @@ add_executable(FormFactorTest FormFactorTest.cpp )
 add_executable(HKLDirectionsTest HKLDirectionsTest.cpp )
 add_executable(EnergiesTest EnergiesTest.cpp )
 add_executable(ResultsTest ResultsTest.cpp )
+add_executable(ThreeVectorsTest ThreeVectorsTest.cpp )
+add_executable(UniqueThreeVectorsTest UniqueThreeVectorsTest.cpp )
+add_executable(PointsAlongLineTest PointsAlongLineTest.cpp)
+
+add_executable(NeighborsTest NeighborsTest.cpp)
 
 add_test(NAME SublatticeTest COMMAND SublatticeTest)
 add_test(NAME CellTest COMMAND CellTest)
@@ -17,7 +22,8 @@ add_test(NAME FormFactorTest COMMAND FormFactorTest)
 add_test(NAME HKLDirectionsTest COMMAND HKLDirectionsTest)
 add_test(NAME EnergiesTest COMMAND EnergiesTest)
 add_test(NAME ResultsTest COMMAND ResultsTest)
+add_test(NAME ThreeVectorsTest COMMAND ThreeVectorsTest )
+add_test(NAME UniqueThreeVectorsTest COMMAND UniqueThreeVectorsTest )
+add_test(NAME PointsAlongLineTest COMMAND PointsAlongLineTest)
 
-
-
-
+add_test(NAME NeighborsTest COMMAND NeighborsTest)

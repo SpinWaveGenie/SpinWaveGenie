@@ -203,7 +203,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     
     ThreeVectors<double> points;
     
-    for(auto it = xaxis.begin()+10;it!=xaxis.begin()+70;++it)
+    for(auto it = xaxis.begin()+10;it!=xaxis.begin()+65;++it)
     {
         points.insert(0.0,0.0,*it);
     }
@@ -222,7 +222,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     MatrixXb mask = xyzfile.getMask();
     Eigen::MatrixXd data = xyzfile.getData();
     
-    double output = calculatenorm(data.block(10,50,60,30)/x[0],result, mask.block(10,50,60,30));
+    double output = calculatenorm(data.block(10,50,55,30)/x[0],result, mask.block(10,50,55,30));
 
     cout << x[0] << " " << x[1] << " " << x[2] << " " << x[3] << endl;
     cout << output << endl;
@@ -230,7 +230,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     std::ofstream file("data_test.txt");
     if (file.is_open())
     {
-        file << data.block(10,50,60,30);
+        file << data.block(10,50,55,30);
     }
     file << endl;
     file.close();
@@ -268,20 +268,18 @@ int main()
     
     std::vector<double> lb(4);
     lb[1] =  0.3;
-    lb[3] = -0.0;
-    lb[2] = -0.0;
+    lb[3] =  0.0;
+    lb[2] =  0.0;
     lb[0] =  0.0;
     
     std::vector<double> x(4);
     
     double minf = 0.0;
     
-    //vector<double> gradient;
-    
-    x[1] = 0.439941;
-    x[3] = -0.0;
+    x[1] = 0.52;
+    x[3] = 0.0;
     x[2] = 0.0;
-    x[0] = 2.62781e-05;
+    x[0] = 3.33e-05;
     
     nlopt::opt opt(nlopt::LN_SBPLX,4);
     opt.set_min_objective(myfunc, NULL);
