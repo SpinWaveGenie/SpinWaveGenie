@@ -12,33 +12,58 @@
 #include <iostream>
 #include <vector>
 
-struct point
+
+//! Stores a frequency and intensity pair.
+/*!
+ This struct contains a calculated frequency and its associated intensity.
+ The operator< is used to sort the Points by frequency.
+ */
+struct Point
 {
     double frequency;
     double intensity;
-    bool operator<( const point& val ) const
+    //! \return Whether this Point has lower frequency than Point val.
+    bool operator<( const Point& val ) const
     {
     	return frequency < val.frequency;
     }
 };
 
+//! Stores results of SpinWaveGenie Calculations at the given Q-point.
+/*!
+ This container stores the results of a given SpinWaveGenie calculation. Each "Point" 
+ contains a calculated frequency and intensity. Results can be sorted by frequency, 
+ or filtered so that branches with identical frequencies are combined, or branches without 
+ significant intensity are discarded.
+ */
+
 class Results
 {
 public:
-    void insert(point value);
+    //! Insert Point struct into container.
+    void insert(Point value);
+    //! \return size of Results container.
     const std::size_t size() const;
+    //! Sort Results by frequency.
     void sort();
+    //! Clear results container so that the size is zero.
     void clear();
+    //! Filter Points by combining those with identical frequencies.
     void uniqueSolutions();
+    //! Filter Points by removing those without significant intensity.
     void significantSolutions();
-    typedef std::vector<point>::iterator Iterator;
-    typedef std::vector<point>::const_iterator ConstIterator;
+    typedef std::vector<Point>::iterator Iterator;
+    typedef std::vector<Point>::const_iterator ConstIterator;
+    //! \return Returns an Iterator pointing to the first element in the container.
     Iterator begin();
+    //! \return Returns an Iterator pointing to the end of the container.
     Iterator end();
+    //! \return Returns an ConstIterator pointing to the first element in the container.
     ConstIterator cbegin();
+    //! \return Returns an ConstIterator pointing to the end of the container.
     ConstIterator cend();
 private:
-    std::vector<point> results;
+    std::vector<Point> results;
 };
 
 inline const size_t Results::size() const

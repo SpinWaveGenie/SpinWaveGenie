@@ -34,7 +34,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     */
     
     double SA = 1.3;
-    double SB = 0.3;
+    double SB = 0.25;
     double theta0 = x[0];
     double theta1 = x[1];
     
@@ -228,7 +228,7 @@ int main()
     cout << minf << endl;
     */
     
-    for(double field = -1.0; field<1.1;field+=0.1)
+    for(double field = 0.0; field<5.1;field+=0.1)
     {
         nlopt::opt opt(nlopt::LN_SBPLX,2);
         std::vector<double> ub(2);
@@ -246,7 +246,7 @@ int main()
         
         double minf = 0.0;
             
-        x[0] = 0.25*M_PI;
+        x[0] = 0.75*M_PI;
         x[1] = 0.75*M_PI;
         
         double parameters[6] = {-2.5,-12.0,-12.0,0.0,-1.2,field};
@@ -255,6 +255,8 @@ int main()
             
         cout << "H = " << field/2.0/5.7883818066e-2;
         cout << " Tesla";
+        cout << ", Energy = " << minf;
+        cout << " meV";
         cout << ", theta0 = ";
         if (x[0] > M_PI)
             x[0] = 2.0*M_PI - x[0];

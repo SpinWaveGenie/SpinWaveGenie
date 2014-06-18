@@ -6,10 +6,11 @@
 #include <boost/tuple/tuple.hpp>
 #include <iostream>
 
-//! Struture of Arrays used for storing vectors with three components.
+//! Structure of Arrays used for storing vectors with three components.
 /*!
- Vectors containing three elements are not ideally coellesced in memory. Therefore, we use an alternative where
- where each component is stored in a separate vector and accessed using an Iterator.
+ Vectors containing three elements are not ideally coellesced in memory. 
+ Therefore, we use an alternative where where each component is stored 
+ in a separate vector and accessed using an Iterator.
  */
 
 template<typename T>
@@ -30,13 +31,13 @@ public:
     size_t size();
     //! Clears all data stored in the ThreeVector.
     void clear();
-    //! \return Returns an iterator pointing to the first element
+    //! \return Returns an Iterator pointing to the first element
     Iterator begin();
-    //! \return Returns an iterator pointing to the end of the vector
+    //! \return Returns an Iterator pointing to the end of the vector
     Iterator end();
-    //! \return Returns an iterator pointing to the first element
+    //! \return Returns a ConstIterator pointing to the first element
     ConstIterator cbegin() const;
-    //! \return Returns an iterator pointing to the end fo the vector
+    //! \return Returns an ConstIterator pointing to the end of the vector
     ConstIterator cend() const;
 protected:
     std::vector<T> valuesX;

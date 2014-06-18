@@ -15,14 +15,25 @@
 #include "ThreeVectors.h"
 #include <complex>
 
+
+//! Structure of Arrays used for storing vectors with three components. Only unique vectors are stored.
+/*!
+ Vectors containing three elements are not ideally coellesced in memory.
+ Therefore, we use an alternative where where each component is stored
+ in a separate vector and accessed using an Iterator. Unlike ThreeVectors, only the 
+ unique vectors are stored.
+ */
+
 template<typename T>
 class UniqueThreeVectors: public ThreeVectors<T>
 {
 public:
-    bool operator==(UniqueThreeVectors& other);
+    //!
+    bool operator==(const UniqueThreeVectors& other);
     void insert(T x, T y, T z);
 };
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template<typename T>
 struct isEqual
 {
@@ -45,6 +56,7 @@ struct isEqual
             return false;
     };
 };
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 template<typename T>
 void UniqueThreeVectors<T>::insert(T x, T y, T z)
@@ -56,13 +68,13 @@ void UniqueThreeVectors<T>::insert(T x, T y, T z)
 }
 
 template<typename T>
-bool UniqueThreeVectors<T>::operator==(UniqueThreeVectors<T>& other)
+bool UniqueThreeVectors<T>::operator==(const UniqueThreeVectors<T>& other)
 {
     boost::tuple<T,T,T> MyThreeVector,OtherThreeVector;
     BOOST_FOREACH(MyThreeVector,boost::make_iterator_range(this->begin(),this->end()))
     {
         auto equalVector = isEqual<T>(MyThreeVector);
-        if (std::find_if(other.begin(), other.end(),equalVector)==other.end() )
+        if (std::find_if(other.cbegin(), other.cend(),equalVector)==other.cend() )
             return false;
     }
     return true;

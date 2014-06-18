@@ -12,25 +12,58 @@
 #include <iostream>
 #include <vector>
 
+//! Stores the integration direction and distance.
+/*!
+ This struct stores the integration direction and distance. v0,v1, and v2 fractions of H,K,and L
+ and delta describes the integration distance.
+ */
 struct Axis
 {
-    double v0,v1,v2,delta;
+    //! Fraction of first reciprocal lattice vector in integration direction.
+    double v0;
+    //! Fraction of second reciprocal lattice vector in integration direction.
+    double v1;
+    //! Fraction of third reciprocal lattice vector in integration direction.
+    double v2;
+    //! Integration distance as a fraction of the vector shown above. Total distance is 2*delta
+    double delta;
 };
+
+//! Stores the integration directions and distances used by IntegrateAxes.
+/*!
+ This container stores the integration directions and distances used by the IntegrateAxes class.
+ It allows the user to integrate the calculated \f$ S\left(Q,\omega\right) \f$ over several unseen directions.
+ Axes DO NOT need to be orthogonal.
+ */
 
 class HKLDirections
 {
 public:
+    //! Add integration direction to container.
+    //! \param direction Reciprocal lattice vector to integrate along. Acceptable inputs are 0,1, or 2.
+    //! \param delta Integration distance as a fraction of the reciprocal lattice vector. Total distance is 2*delta.
     void addDirection(int direction, double delta);
+    //! Add integration direction to container.
+    //! \param v0 Fraction of first reciprocal lattice vector in integration direction.
+    //! \param v1 Fraction of second reciprocal lattice vector in integration direction.
+    //! \param v2 Fraction of third reciprocal lattice vector in integration direction.
+    //! \param delta Integration distance as a fraction of the vector shown above. Total distance is 2*delta
     void addDirection(double v0, double v1, double v2, double delta);
+    //! \return Number of integration directions in container.
     const size_t size() const;
+    //! Allow access to container via the subscript operator.
+    //! \param position of Axis in container.
+    //! \return reference to Axis object.
     const Axis& operator[](std::size_t position);
     typedef std::vector<Axis>::iterator Iterator;
     typedef std::vector<Axis>::const_iterator ConstIterator;
-    //! \return Returns an iterator pointing to the first Axis element
+    //! \return Iterator pointing to the first Axis element
     Iterator begin();
-    ConstIterator cbegin();
-    //! \return Returns an iterator pointing to the final Axis element
+    //! \return Iterator pointing to the end of the container.
     Iterator end();
+    //! \return ConstIterator pointing to the first Axis element
+    ConstIterator cbegin();
+    //! \return ConstIterator pointing to the end of the container.
     ConstIterator cend();
 private:
     std::vector<Axis> integrationDirections;

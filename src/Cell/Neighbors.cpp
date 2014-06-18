@@ -7,11 +7,6 @@ using std::complex;
 using std::cout;
 using std::endl;
 
-Neighbors::Neighbors()
-{
-    
-}
-
 void Neighbors::findNeighbors(Cell& cell, string sl1, string sl2 , double min, double max)
 {
     // In principle, we only need to iterate over one atom in the first sublattice. However, iterating over
@@ -97,7 +92,7 @@ complex<double> Neighbors::getGamma(Vector3 K)
     return gamma_rs/numberNeighbors;
 }
 
-double Neighbors::getNumberNeighbors()
+double Neighbors::size()
 {
     return numberNeighbors;
 }

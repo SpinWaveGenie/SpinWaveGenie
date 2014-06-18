@@ -260,7 +260,7 @@ void SpinWave::calculateIntensities()
     
     for (int i=0;i<M;i++)
     {
-        point pt;
+        Point pt;
         pt.frequency = abs(WW[i+M]);
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
         VI.insert(pt);

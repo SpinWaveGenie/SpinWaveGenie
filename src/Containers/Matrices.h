@@ -10,10 +10,12 @@
 
 #include "Eigen/Core"
 
-// Vevtor3d and Matrix3d from the eigen library, so we provide typedefs for them here.
-// I've started replacing Vector3 from the public interface because alternatives often exist.
+// Instead of directly importing Vector3d and Matrix3d from the Eigen library, we provide typedefs for them here.
+// I've started removing Vector3 from public interfaces because alternatives (such as three doubles) are similarly
+// clear, yet don't depend on Eigen.
 
 typedef Eigen::Matrix <double, 3, 1> Vector3;
 typedef Eigen::Matrix <double, 3, 3> Matrix3;
+typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
 
 #endif /* defined(__spin_wave_genie__Matrices__) */

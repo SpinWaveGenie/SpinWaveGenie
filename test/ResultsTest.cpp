@@ -6,7 +6,7 @@
 #include <boost/test/unit_test.hpp>
 #include "Containers/Results.h"
 
-bool areEqual(point first, point second)
+bool areEqual(Point first, Point second)
 {
     double eps = 1.0e-5;
     if (std::abs(first.frequency - second.frequency) < eps &&
@@ -22,7 +22,7 @@ Results getResults()
     
     for (auto i = 0;i!=10;i++)
     {
-        point pt;
+        Point pt;
         pt.frequency = (double)i;
         pt.intensity = (double)i;
         results.insert(pt);

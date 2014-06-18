@@ -70,7 +70,7 @@ void DM_Z_Interaction::calcConstantValues(Cell& cell)
     tmp4 = 0.25*X*S*sin(phi_r-phi_s);
     
     neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
-    z_rs = neighbors.getNumberNeighbors();
+    z_rs = neighbors.size();
 }
 
 

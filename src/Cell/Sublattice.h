@@ -8,7 +8,7 @@
 #include "Containers/Matrices.h"
 #include "Containers/UniqueThreeVectors.h"
 
-//! Describes a sublattice in the unit cell.
+//! Sublattice in the unit cell.
 /*!
  The Sublattice class stores the orientation of the magnetic moment and
  the atomic positions of a particular sublattice. In addition, it calculates rotation
@@ -17,10 +17,12 @@
 class Sublattice
 {
 public:
+    //! Default constructor
     Sublattice();
+    //! Destructor
     ~Sublattice() {};
     //! set name to describe sublattice
-    //! \param name_input a std::string argument unique to each sublattice
+    //! \param nameInput a std::string argument unique to each sublattice
     void setName(std::string nameInput );
     //! returns name of a given sublattice
     //! \return name of sublattice
@@ -32,16 +34,16 @@ public:
     //! \return name of sublattice
     std::string getType() const;
     //! set moment in spherical coordinates r,theta,phi
-    /*! \param spin_input magnitude of spin moment
-     \param theta_input angle 0 <= theta <= pi
-     \param phi_input angle 0 <= phi <= 2*pi
+    /*! \param spinInput magnitude of spin moment
+     \param thetaInput angle \f$ 0 \leq \theta \leq  \pi \f$
+     \param phiInput angle \f$ 0 \leq \phi \leq 2\pi \f$
      */
     void setMoment(double spinInput, double thetaInput , double phiInput);
-    //! \return coordinate r of [r,theta,phi]
+    //! \return coordinate \f$ r  \f$ of \f$ \left( r,\theta,\phi \right) \f$, unitless
     double getMoment() const;
-    //! \return coordinates theta of [r,theta,phi]
+    //! \return coordinates \f$\theta\f$ of \f$ \left( r,\theta,\phi \right) \f$, in radians
     double getTheta() const;
-    //! \return coordinates phi of [r,theta,phi]
+    //! \return coordinates \f$ \phi \f$ of \f$ \left( r,\theta,\phi \right) \f$, in radians
     double getPhi() const;
     //! returns rotation matrix as an Eigen::Matrix3d object
     //! \return rotation matrix
@@ -56,13 +58,13 @@ public:
     void addAtom(double x, double y, double z);
     typedef UniqueThreeVectors<double>::Iterator Iterator;
     typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
-    //! returns iterator to first atomic position;
+    //! returns an Iterator to the first atomic position;
     Iterator begin();
-    //! returns iterator to final atomic position;
+    //! returns an Iterator to the end of the vector;
     Iterator end();
-    //! returns iterator to first atomic position;
+    //! returns a ConstIterator to the first atomic position;
     ConstIterator cbegin();
-    //! returns iterator to final atomic position;
+    //! returns a ConstIterator to the end of the vector;
     ConstIterator cend();
 private:
     std::string name;

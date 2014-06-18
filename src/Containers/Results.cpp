@@ -10,7 +10,7 @@
 #include <cmath>
 using std::vector;
 
-bool evalues_equal(const point& a, const point& b)
+bool evalues_equal(const Point& a, const Point& b)
 {
     // remove eigenvalues that are equal
     double EPS = 1.0e-5;
@@ -22,7 +22,7 @@ void Results::clear()
     results.clear();
 }
 
-void Results::insert(point value)
+void Results::insert(Point value)
 {
     results.push_back(value);
 }
@@ -37,7 +37,7 @@ void Results::uniqueSolutions()
 {
     double EPS = 1.0e-5;
     int VP_pos;
-    vector<point> VI_unique;
+    vector<Point> VI_unique;
     // Find unique eigenvalues
     VI_unique = results;
     std::sort(VI_unique.begin(),VI_unique.end());
@@ -73,7 +73,7 @@ void Results::uniqueSolutions()
 void Results::significantSolutions()
 {
     double ETS = 0.001;
-    vector<point> VI_signif;
+    vector<Point> VI_signif;
     
     for (int k=0;k!=results.size();k++)
     {

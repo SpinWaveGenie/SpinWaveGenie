@@ -66,7 +66,7 @@ void DM_Y_Interaction::calcConstantValues(Cell& cell)
     value3 = -0.25*X*S*sin(theta_s)*sin(phi_r);
     
     neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
-    z_rs = neighbors.getNumberNeighbors();
+    z_rs = neighbors.size();
     //cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
 }
 

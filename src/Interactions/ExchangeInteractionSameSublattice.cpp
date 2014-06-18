@@ -55,7 +55,7 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
           cell.getSublattice(sl_r).getInverseMatrix();
        
     neighbors.findNeighbors(cell,sl_r, sl_r, min, max);
-    double z_rs = neighbors.getNumberNeighbors();
+    double z_rs = neighbors.size();
 
     //cout << "cell check(calcConstantValues): " << cell2.begin()->getName() << endl;
 
@@ -88,7 +88,7 @@ void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN)
     gamma_rs = neighbors.getGamma(K);
     //cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;
 
-    //cout << "number of neighbors: " << neighbors.getNumberNeighbors() << endl;
+    //cout << "number of neighbors: " << neighbors.size() << endl;
     //cout << gamma_rs <<  " " << conj(gamma_rs) << endl;
     //cout << LNrr/value << endl;
     

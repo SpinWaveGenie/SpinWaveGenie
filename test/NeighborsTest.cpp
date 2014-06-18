@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE( FirstNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 3.0, 3.1);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 2);
+    BOOST_CHECK(neighborlist.size() == 2);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE( SecondNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 4.2, 4.3);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 6);
+    BOOST_CHECK(neighborlist.size() == 6);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( ThirdNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 5.2, 5.3);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 12);
+    BOOST_CHECK(neighborlist.size() == 12);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE( FourthNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 6.0, 6.2);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 2);
+    BOOST_CHECK(neighborlist.size() == 2);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE( FifthNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 7.40, 7.43);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 6);
+    BOOST_CHECK(neighborlist.size() == 6);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE( SixthNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 7.44, 7.49);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 12);
+    BOOST_CHECK(neighborlist.size() == 12);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE( SeventhNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 7.9, 8.1);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 12);
+    BOOST_CHECK(neighborlist.size() == 12);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE( EigthNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 8.45, 8.65);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 6);
+    BOOST_CHECK(neighborlist.size() == 6);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE( NinethNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 9.0, 9.1);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 12);
+    BOOST_CHECK(neighborlist.size() == 12);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE( TenthNeighbors )
     Neighbors neighborlist;
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 9.1, 9.2);
     
-    BOOST_CHECK(neighborlist.getNumberNeighbors() == 2);
+    BOOST_CHECK(neighborlist.size() == 2);
     
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {

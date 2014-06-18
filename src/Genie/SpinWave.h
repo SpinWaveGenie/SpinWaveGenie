@@ -24,15 +24,19 @@
 #include "Interactions/Interaction.h"
 #include "Genie/MagneticFormFactor.h"
 #include "Containers/Results.h"
+#include "Containers/Matrices.h"
 
 
-typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic,Eigen::RowMajor> MatrixXcdRowMajor;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
 
 struct results
 {
     double weight;
     long index;
 };
+
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 //! SpinWave Class
 /*!
