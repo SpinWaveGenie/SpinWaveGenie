@@ -9,8 +9,6 @@
 #include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include "Interactions/InteractionFactory.h"
-//#include "CalculateAngles.h"
-
 
 using namespace std;
 using namespace Eigen;
@@ -26,7 +24,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     vector<double> parameters(tmp,tmp+6);
     
     /*cout << "x[i] = ";
-    for (size_t i = 0; i<6;i++)
+    for (size_t i = 0; i<2;i++)
     {
         cout << x[i] << " ";
     }
@@ -34,17 +32,10 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     */
     
     double SA = 1.3;
-    double SB = 0.25;
+    double SB = 0.33;
     double theta0 = x[0];
     double theta1 = x[1];
-    
-    
-    //CalculateAngles angles(SA,SB,parameters[0],parameters[1],parameters[2],parameters[4]);
-    
-    //vector<double> anglesIn = {theta,3.0*M_PI/4.0,theta,7.0*M_PI/4.0,theta,M_PI/4.0,theta,5.0*M_PI/4.0};
-    
-    //cout << angles.calculateEnergy(anglesIn) << endl;
-    
+
     Cell cell;
     cell.setBasisVectors(8.5,8.5,8.5,90.0,90.0,90.0);
     
@@ -74,7 +65,6 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     name = "V0";
     V0.setName(name);
     V0.setType("V3");
-    
     if (theta1 < M_PI)
     {
         V0.setMoment(SB,theta1,3.0*M_PI/4.0);
@@ -111,7 +101,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     name = "V2";
     V2.setName(name);
     V2.setType("V3");
-    if (theta1 < M_PI)
+    if (theta0 < M_PI)
     {
         V2.setMoment(SB,theta0,5.0*M_PI/4.0);
     }
@@ -129,7 +119,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     name = "V3";
     V3.setName(name);
     V3.setType("V3");
-    if (theta1 < M_PI)
+    if (theta0 < M_PI)
     {
         V3.setMoment(SB,theta0,M_PI/4.0);
     }
@@ -191,65 +181,28 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
 
 int main()
 {
-    /*nlopt::opt opt(nlopt::LN_SBPLX,2);
-    std::vector<double> ub(2);
-    ub[0] = 2.0*M_PI;
-    ub[1] = 2.0*M_PI;
-    opt.set_upper_bounds(ub);
-    std::vector<double> lb(2);
-    lb[0] = 0.0;
-    lb[0] = 0.0;
-    opt.set_lower_bounds(lb);
-
-    double parameters[6] = {-2.5,-12.0,-12.0,0.0,-1.2,-0.5};
-    
-    opt.set_ftol_rel(1.0e-8);
-    //opt.set_maxeval(1000);
-
-    std::vector<double> x(2);
-    
-    double minf = 0.0;
-
-    x[0] = 0.25*M_PI;
-    x[1] = 0.75*M_PI;
-    
-    opt.set_min_objective(myfunc, &parameters[0]);
-    opt.optimize(x, minf);
-   
-    if (x[0] > M_PI)
-        x[0] = 2.0*M_PI - x[0];
-    if (x[1] > M_PI)
-        x[1] = 2.0*M_PI - x[1];
-    cout << "theta0 = ";
-    cout << x[0]*180.0/M_PI << endl;
-    cout << "theta1 = ";
-    cout << x[1]*180.0/M_PI << endl;
-    cout << "total energy = ";
-    cout << minf << endl;
-    */
-    
-    for(double field = 0.0; field<5.1;field+=0.1)
+    for(double field = 0.0; field<5.01;field+=0.1)
     {
         nlopt::opt opt(nlopt::LN_SBPLX,2);
-        std::vector<double> ub(2);
-        ub[0] = 2.0*M_PI;
-        ub[1] = 2.0*M_PI;
-        opt.set_upper_bounds(ub);
         std::vector<double> lb(2);
         lb[0] = 0.0;
         lb[0] = 0.0;
         opt.set_lower_bounds(lb);
-        
+        std::vector<double> ub(2);
+        ub[0] = 2.0*M_PI;
+        ub[1] = 2.0*M_PI;
+        opt.set_upper_bounds(ub);
+
         opt.set_ftol_rel(1.0e-10);
             
         std::vector<double> x(2);
         
         double minf = 0.0;
-            
+        
         x[0] = 0.75*M_PI;
         x[1] = 0.75*M_PI;
         
-        double parameters[6] = {-2.5,-12.0,-12.0,0.0,-1.2,field};
+        double parameters[6] = {-2.5,-12.3,-12.3,0.0,-1.2,field};
         opt.set_min_objective(myfunc, &parameters[0]);
         opt.optimize(x, minf);
             
@@ -265,8 +218,6 @@ int main()
         cout << x[0]*180.0/M_PI;
         cout << " Degrees, theta1 = ";
         cout << x[1]*180.0/M_PI << " Degrees" << endl;
-        
     }
- 
     return 0;
 }

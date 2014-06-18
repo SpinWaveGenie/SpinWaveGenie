@@ -7,12 +7,17 @@ Documentation for Spin Wave Genie
 
 This software is based on the following libraries:
 
-pugixml library (http://pugixml.org).
-pugixml is Copyright (C) 2006-2014 Arseny Kapoulkine. 
+pugixml library (http://pugixml.org). <BR>
+Copyright (C) 2006-2014 Arseny Kapoulkine. 
 
-The NLopt nonlinear-optimization package (http://ab-initio.mit.edu/nlopt)
-Cubature library (http://ab-initio.mit.edu/wiki/index.php/Cubature)
-Steven G. Johnson
+The NLopt nonlinear-optimization package (http://ab-initio.mit.edu/nlopt). <BR>
+Copyright (C) 2007-2010 Massachusetts Institute of Technology.
+
+Cubature library (http://ab-initio.mit.edu/wiki/index.php/Cubature). <BR>
+Copyright (C) 2005-2013 Steven G. Johnson.
+
+ezProgressBar (http://sourceforge.net/projects/ezprogressbar/). <BR>
+Copyright (C) 2011,2012 Remik Ziemlinski.
 
 <hr>
 
