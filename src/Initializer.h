@@ -1,14 +1,7 @@
 #ifndef __Initializer__
 #define __Initializer__
+#include <map>
 
-#include <iostream>
-#include <sstream>
-#include <new>
-#include <functional>
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/trim.hpp>
 #include "Cell/Cell.h"
 #include "Genie/SpinWaveBuilder.h"
 #include "External/pugixml.hpp"

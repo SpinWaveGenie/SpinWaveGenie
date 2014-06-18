@@ -16,7 +16,6 @@
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
 #include <cmath>
-#include <ctime>
 #include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include <boost/ptr_container/ptr_vector.hpp>

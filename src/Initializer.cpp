@@ -1,10 +1,10 @@
 #include <functional>
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include "Initializer.h"
 #include "Interactions/InteractionFactory.h"
-#include "Interactions/ExchangeInteraction.h"
-#include "Interactions/AnisotropyInteraction.h"
-#include "Interactions/DM_Y_Interaction.h"
-#include "Interactions/DM_Z_Interaction.h"
 #include "SpinWaveDispersion.h"
 #include "SpinWavePlot/TwoDimensionCut.h"
 #include "Containers/PointsAlongLine.h"
