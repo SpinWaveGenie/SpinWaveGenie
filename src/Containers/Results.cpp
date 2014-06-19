@@ -7,6 +7,7 @@
 //
 
 #include "Results.h"
+#include <algorithm>    // std::sort
 #include <cmath>
 using std::vector;
 
