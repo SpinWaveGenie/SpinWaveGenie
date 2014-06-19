@@ -4,6 +4,9 @@
 #include <iostream>
 #include "Containers/ThreeVectors.h"
 
+namespace SpinWaveGenie
+{
+
 //! generates k-points used by the SpinWavePlot routines.
 /*!
  This class generates k-points evenly spaced along a line from the first point to the final point.
@@ -35,4 +38,5 @@ private:
     double kxi,kyi,kzi,kxf,kyf,kzf;
     long numberPoints;    
 };
+    }
 #endif /* defined(__PointsAlongLine__) */

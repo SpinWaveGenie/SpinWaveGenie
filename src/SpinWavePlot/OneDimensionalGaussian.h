@@ -13,6 +13,9 @@
 #include <memory>
 #include "OneDimensionalShapes.h"
 
+namespace SpinWaveGenie
+{
+
 class OneDimensionalGaussian: public OneDimensionalShapes
 {
 public:
@@ -27,5 +30,5 @@ private:
     double getExponentialFactor();
     double FWHM,Tolerance;
 };
-
+}
 #endif /* defined(__OneDimensionalGaussian__) */

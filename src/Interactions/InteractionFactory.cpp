@@ -14,6 +14,9 @@
 #include "AnisotropyInteraction.h"
 #include "MagneticFieldInteraction.h"
 
+namespace SpinWaveGenie
+{
+
 std::unique_ptr<Interaction> InteractionFactory::getExchange(std::string name, double value, std::string sl_r, std::string sl_s, double min, double max)
 {
     if (sl_r.compare(sl_s) == 0)
@@ -52,6 +55,8 @@ std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(std::string name,
 std::unique_ptr<Interaction> InteractionFactory::getMagneticField(std::string name, double value, Vector3 unitVector, std::string sl_r)
 {
     return std::move(std::unique_ptr<Interaction>(new MagneticFieldInteraction(name,value,unitVector,sl_r)));
+}
+    
 }
 
 

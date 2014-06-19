@@ -6,6 +6,8 @@
 #include <boost/test/unit_test.hpp>
 #include "Containers/Results.h"
 
+using namespace SpinWaveGenie;
+
 bool areEqual(Point first, Point second)
 {
     double eps = 1.0e-5;

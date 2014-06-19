@@ -9,6 +9,9 @@
 #include "Sublattice.h"
 #include "Containers/Matrices.h"
 
+namespace SpinWaveGenie
+{
+
 //! Unit cell containing basis vectors and all sublattices.
 /*!
 The Cell class stores the basis vectors and all sublattices in the unit cell.
@@ -70,4 +73,5 @@ private:
     Matrix3 reciprocalVectors;
     std::vector<Sublattice> sublatticeInfo;
 };
-#endif // __Cell_H__ 
+}
+#endif // __Cell_H__

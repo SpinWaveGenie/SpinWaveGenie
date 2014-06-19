@@ -12,6 +12,9 @@
 #include <iostream>
 #include "Interaction.h"
 
+namespace SpinWaveGenie
+{
+
 class AnisotropyInteraction: public Interaction
 {
 public:
@@ -36,5 +39,5 @@ private:
     int r,M;
     std::complex<double> LNrr,LNrrM,LNrMr;
 };
-
+}
 #endif /* defined(__spin_wave_genie__AnisotropyInteraction__) */

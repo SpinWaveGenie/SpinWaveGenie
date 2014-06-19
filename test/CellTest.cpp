@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 
+using namespace SpinWaveGenie;
 
 BOOST_AUTO_TEST_CASE( CubicBasisVectors )
 {

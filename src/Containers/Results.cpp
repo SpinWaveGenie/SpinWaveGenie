@@ -10,6 +10,9 @@
 #include <cmath>
 using std::vector;
 
+namespace SpinWaveGenie
+{
+
 bool evalues_equal(const Point& a, const Point& b)
 {
     // remove eigenvalues that are equal
@@ -83,4 +86,6 @@ void Results::significantSolutions()
         }
     }
     results = VI_signif;
+}
+
 }

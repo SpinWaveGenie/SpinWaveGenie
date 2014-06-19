@@ -12,6 +12,8 @@
 #include "Containers/Energies.h"
 #include "External/ezRateProgressBar.hpp"
 
+namespace SpinWaveGenie
+{
 
 using std::string; using std::vector; using std::unique_ptr;
 using std::cout; using std::endl;
@@ -77,4 +79,6 @@ void TwoDimensionCut::save()
     }
     file << endl;
     file.close();
+}
+
 }

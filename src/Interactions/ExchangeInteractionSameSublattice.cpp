@@ -5,6 +5,9 @@
 using namespace std;
 using namespace Eigen;
 
+namespace SpinWaveGenie
+{
+
 ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(string name_in, double value_in, string sl_r_in, double min_in, double max_in)
 {
     name = name_in;
@@ -97,4 +100,6 @@ void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN)
     LN(r+M,r) += conj(LNrsM)*conj(gamma_rs);
     LN(r+M,r+M) += LNrr + conj(LNrs)*conj(gamma_rs);
     
+}
+
 }

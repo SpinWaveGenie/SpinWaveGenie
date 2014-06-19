@@ -12,6 +12,9 @@
 #include <iostream>
 #include <memory>
 
+namespace SpinWaveGenie
+{
+
 /* Abstract base class */
 class OneDimensionalShapes
 {
@@ -24,5 +27,5 @@ public:
     virtual std::unique_ptr<OneDimensionalShapes> clone() = 0;
     virtual ~OneDimensionalShapes(){};
 };
-
+}
 #endif /* defined(__OneDimensionalShapes__) */

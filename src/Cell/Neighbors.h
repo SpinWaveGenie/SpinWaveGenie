@@ -6,8 +6,12 @@
 #include"Containers/Matrices.h"
 #include "Containers/UniqueThreeVectors.h"
 
-class Sublattice;
-class Cell;
+
+
+namespace SpinWaveGenie
+{
+    class Sublattice;
+    class Cell;
 
 //! Finds neighbors of two sublattices between distances min and max.
 /*!
@@ -46,4 +50,5 @@ private:
     UniqueThreeVectors<double> neighborList;
     double numberNeighbors;
 };
-#endif // __Neighbors_H__ 
+}
+#endif // __Neighbors_H__

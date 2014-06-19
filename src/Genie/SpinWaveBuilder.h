@@ -6,7 +6,9 @@
 #include "Genie/SpinWave.h"
 #include "Interactions/Interaction.h"
 
-
+namespace SpinWaveGenie
+{
+    
 class SpinWaveBuilder
 {
 public:
@@ -21,5 +23,5 @@ private:
     Cell cell;
     boost::ptr_vector<Interaction> interactions;
 };
-
+}
 #endif

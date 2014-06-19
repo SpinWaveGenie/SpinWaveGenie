@@ -9,6 +9,8 @@
 #include "Containers/UniqueThreeVectors.h"
 #include "Cell/Neighbors.h"
 
+using namespace SpinWaveGenie;
+
 Cell createMnBiCell()
 {
     double SA = 2.0;

@@ -16,6 +16,9 @@
 #include "OneDimensionalShapes.h"
 #include "Containers/Energies.h"
 
+namespace SpinWaveGenie
+{
+
 class EnergyResolutionFunction : public SpinWavePlot{
 public:
     EnergyResolutionFunction(){};
@@ -35,5 +38,5 @@ private:
     std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
     SpinWave SW;
 };
-
+}
 #endif /* defined(__EnergyResolutionFunction__) */

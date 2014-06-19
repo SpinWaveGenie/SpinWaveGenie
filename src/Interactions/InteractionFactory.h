@@ -16,6 +16,9 @@
 #include "Containers/Matrices.h"
 #include "Interaction.h"
 
+namespace SpinWaveGenie
+{
+
 class InteractionFactory
 {
 public:
@@ -25,5 +28,5 @@ public:
     std::unique_ptr<Interaction> getMagneticField(std::string name_in, double value_in,Vector3 direction, std::string sl_r_in);
 private:
 };
-
+}
 #endif /* defined(__spin_wave_genie__InteractionFactory__) */

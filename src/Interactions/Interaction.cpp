@@ -1,6 +1,8 @@
 #include "Interaction.h"
 using namespace std;
 
+namespace SpinWaveGenie
+{
 
 bool Interaction::operator<(const Interaction& other) const
 {
@@ -51,6 +53,8 @@ bool Interaction::operator==(const Interaction& other) const
         else
             return false;
     }
+    
+}
     
 }
 

@@ -8,6 +8,8 @@
 #include <boost/test/unit_test.hpp>
 #include "Genie/MagneticFormFactor.h"
 
+using namespace SpinWaveGenie;
+
 class TestCoefficients : public MagneticFormFactor {
 public:
     std::map<std::string,double> testCoefficients()

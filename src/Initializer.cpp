@@ -15,6 +15,7 @@
 #include "Containers/Energies.h"
 using namespace std;
 using namespace boost;
+using namespace SpinWaveGenie;
 
 double stringToDouble(string value)
 {

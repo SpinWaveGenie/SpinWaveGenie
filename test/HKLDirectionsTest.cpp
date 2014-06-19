@@ -6,6 +6,10 @@
 #include <boost/test/unit_test.hpp>
 #include "Containers/HKLDirections.h"
 
+
+using namespace SpinWaveGenie;
+
+
 bool areEqual(Axis first, Axis second)
 {
     if (first.v0 == second.v0 &&

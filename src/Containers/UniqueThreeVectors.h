@@ -15,6 +15,8 @@
 #include "ThreeVectors.h"
 #include <complex>
 
+namespace SpinWaveGenie
+{
 
 //! Structure of Arrays used for storing vectors with three components. Only unique vectors are stored.
 /*!
@@ -79,6 +81,5 @@ bool UniqueThreeVectors<T>::operator==(const UniqueThreeVectors<T>& other)
     }
     return true;
 }
-
-
+}
 #endif /* defined(__positions__UniquePositions__) */

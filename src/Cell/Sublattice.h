@@ -8,6 +8,9 @@
 #include "Containers/Matrices.h"
 #include "Containers/UniqueThreeVectors.h"
 
+namespace SpinWaveGenie
+{
+
 //! Sublattice in the unit cell.
 /*!
  The Sublattice class stores the orientation of the magnetic moment and
@@ -76,4 +79,6 @@ private:
     inverseMatrix;
     UniqueThreeVectors<double> positions;
 };
+}    
+
 #endif // __Sublattice_H__

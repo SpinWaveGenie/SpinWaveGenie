@@ -1,9 +1,13 @@
 #include <iostream>
 #include "Sublattice.h"
 
+
 using std::string;
 using std::cout;
 using std::endl;
+
+namespace SpinWaveGenie
+{
 
 Sublattice::Sublattice()
 {
@@ -116,4 +120,6 @@ Sublattice::Iterator Sublattice::begin()
 Sublattice::Iterator Sublattice::end()
 {
     return positions.end();
+}
+    
 }

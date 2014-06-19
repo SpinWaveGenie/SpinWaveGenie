@@ -15,6 +15,9 @@
 #include "Containers/HKLDirections.h"
 #include "Containers/Energies.h"
 
+namespace SpinWaveGenie
+{
+
 class IntegrateAxes : public SpinWavePlot
 {
 public:
@@ -34,5 +37,5 @@ private:
     double tolerance, volume;
     double kx,ky,kz;
 };
-
+}
 #endif /* defined(__IntegrateAxes__) */

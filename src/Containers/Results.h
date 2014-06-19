@@ -13,6 +13,9 @@
 #include <vector>
 
 
+namespace SpinWaveGenie
+{
+
 //! Stores a frequency and intensity pair.
 /*!
  This struct contains a calculated frequency and its associated intensity.
@@ -90,5 +93,5 @@ inline Results::ConstIterator Results::cend()
 {
     return results.cend();
 }
-
+}
 #endif /* defined(__spin_wave_genie__Results__) */

@@ -8,6 +8,9 @@
 
 #include "HKLDirections.h"
 
+namespace SpinWaveGenie
+{
+
 void HKLDirections::addDirection(double v0, double v1, double v2, double delta)
 {
     Axis direction;
@@ -36,4 +39,6 @@ void HKLDirections::addDirection(int direction, double delta)
     }
     
     this->addDirection(v0, v1, v2, delta);
+}
+
 }

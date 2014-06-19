@@ -22,6 +22,9 @@ using std::exp;
 using std::pow;
 using std::vector;
 
+namespace SpinWaveGenie
+{
+
 MagneticFormFactor::MagneticFormFactor()
 {
     this->initializeMap();
@@ -210,4 +213,6 @@ double MagneticFormFactor::getFormFactor(double x, double y, double z)
     auto begin = boost::make_zip_iterator(boost::make_tuple(Farray.begin(),NormalizedWeights.begin()));
     auto end = boost::make_zip_iterator(boost::make_tuple(Farray.end(),NormalizedWeights.end()));
     return std::accumulate(begin,end,0.0,calculateFormFactor(x,y,z));
+}
+    
 }

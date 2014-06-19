@@ -13,6 +13,9 @@
  in a separate vector and accessed using an Iterator.
  */
 
+namespace SpinWaveGenie
+{
+
 template<typename T>
 class ThreeVectors
 {
@@ -91,5 +94,5 @@ void ThreeVectors<T>::clear()
     valuesY.clear();
     valuesZ.clear();
 }
-
+}
 #endif /* defined(__ThreeVectors__) */

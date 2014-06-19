@@ -12,6 +12,8 @@
 
 using namespace std;
 using namespace Eigen;
+using namespace SpinWaveGenie;
+
 
 double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
 {
@@ -32,7 +34,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     */
     
     double SA = 1.3;
-    double SB = 0.33;
+    double SB = 0.25;
     double theta0 = x[0];
     double theta1 = x[1];
 
@@ -146,8 +148,8 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
     
     Vector3 zhat(0.0,0.0,1.0);
 
-    builder.addInteraction(interactions.getAnisotropy("Daz",parameters[3],zhat,"Mn0"));
-    builder.addInteraction(interactions.getAnisotropy("Daz",parameters[3],zhat,"Mn1"));
+    //builder.addInteraction(interactions.getAnisotropy("Daz",parameters[3],zhat,"Mn0"));
+    //builder.addInteraction(interactions.getAnisotropy("Daz",parameters[3],zhat,"Mn1"));
     
     Vector3 direction(-1.0,1.0,-1.0);
     builder.addInteraction(interactions.getAnisotropy("Db",parameters[4],direction,"V0"));
@@ -181,7 +183,7 @@ double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_
 
 int main()
 {
-    for(double field = 0.0; field<5.01;field+=0.1)
+    for(double field = 0.0; field<5.01;field+=0.5)
     {
         nlopt::opt opt(nlopt::LN_SBPLX,2);
         std::vector<double> lb(2);
@@ -199,10 +201,10 @@ int main()
         
         double minf = 0.0;
         
-        x[0] = 0.75*M_PI;
+        x[0] = 0.25*M_PI;
         x[1] = 0.75*M_PI;
         
-        double parameters[6] = {-2.5,-12.3,-12.3,0.0,-1.2,field};
+        double parameters[6] = {-7.16,-21.6,-21.6,0.0,0.0,field};
         opt.set_min_objective(myfunc, &parameters[0]);
         opt.optimize(x, minf);
             

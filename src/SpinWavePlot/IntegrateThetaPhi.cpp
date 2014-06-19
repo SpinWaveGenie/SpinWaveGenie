@@ -13,6 +13,8 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
 
 IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance)
 {
@@ -113,4 +115,5 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
      cout << endl;
      */
     return fval;
+}
 }

@@ -15,6 +15,9 @@
 #include "OneDimensionalLorentzian.h"
 #include "OneDimensionalGaussian.h"
 
+namespace SpinWaveGenie
+{
+
 class OneDimensionalPseudoVoigt: public OneDimensionalShapes
 {
 public:
@@ -32,5 +35,5 @@ private:
     double eta;
     std::unique_ptr<OneDimensionalShapes> Lorentzian,Gaussian;
 };
-
+}
 #endif /* defined(__OneDimensionalPseudoVoigt__) */

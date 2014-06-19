@@ -7,6 +7,9 @@ using std::complex;
 using std::cout;
 using std::endl;
 
+namespace SpinWaveGenie
+{
+
 void Neighbors::findNeighbors(Cell& cell, string sl1, string sl2 , double min, double max)
 {
     // In principle, we only need to iterate over one atom in the first sublattice. However, iterating over
@@ -107,5 +110,6 @@ Neighbors::Iterator Neighbors::end()
     return Iterator(neighborList.end());
 }
 
+}
 
 

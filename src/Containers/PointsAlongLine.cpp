@@ -1,5 +1,8 @@
 #include "PointsAlongLine.h"
 
+namespace SpinWaveGenie
+{
+
 void PointsAlongLine::setFirstPoint(double kx, double ky, double kz)
 {
     kxi = kx;
@@ -44,4 +47,6 @@ ThreeVectors<double> PointsAlongLine::getPoints()
 {
     calculatePoints();
     return Kpoints;
+}
+
 }

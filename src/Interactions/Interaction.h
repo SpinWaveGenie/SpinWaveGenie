@@ -10,6 +10,9 @@
 
 class Neighbors;
 
+namespace SpinWaveGenie
+{
+
 class Interaction
 {
 public:
@@ -40,6 +43,7 @@ inline
 Interaction* new_clone( const Interaction& o)
 {
     return o.do_clone();
+}
 }
 
 #endif // __Interaction_H__ 

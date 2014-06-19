@@ -12,6 +12,9 @@
 #include <iostream>
 #include <vector>
 
+namespace SpinWaveGenie
+{
+
 //! Stores values of energy calculated by the SpinWavePlot routines.
 /*!
     This container stores values of energy to be calculated by the SpinWavePlot routines.
@@ -97,5 +100,5 @@ inline Energies::ConstIterator Energies::cend()
 {
     return energies.cend();
 }
-
+}
 #endif /* defined(__spin_wave_genie__Energies__) */

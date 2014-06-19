@@ -4,6 +4,9 @@
 using namespace std;
 using namespace Eigen;
 
+namespace SpinWaveGenie
+{
+
 DM_Y_Interaction::DM_Y_Interaction(string name_in, double value_in, string sl_r_in,string sl_s_in, double min_in, double max_in)
 {
     name = name_in;
@@ -98,5 +101,7 @@ void DM_Y_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
     LN(r+M,s+M) += z_rs*conj(gamma_rs)*(value1 + XI*value2 + XI*value3);
     LN(s+M,s+M) += z_rs*value0;
     LN(s+M,r+M) += z_rs*gamma_rs*(value1 - XI*value2 - XI*value3);
+
+}
 
 }

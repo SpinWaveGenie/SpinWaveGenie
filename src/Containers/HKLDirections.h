@@ -12,6 +12,10 @@
 #include <iostream>
 #include <vector>
 
+
+namespace SpinWaveGenie
+{
+
 //! Stores the integration direction and distance.
 /*!
  This struct stores the integration direction and distance. v0,v1, and v2 fractions of H,K,and L
@@ -98,5 +102,5 @@ inline HKLDirections::ConstIterator HKLDirections::cend()
 {
     return integrationDirections.cend();
 }
-
+}
 #endif /* defined(__spin_wave_genie__HKLDirection__) */

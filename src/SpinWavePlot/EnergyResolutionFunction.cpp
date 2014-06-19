@@ -11,6 +11,9 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 EnergyResolutionFunction::EnergyResolutionFunction(unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, Energies energiesIn)
 {
     //std::cout << "Creating Energy Resolution Function" << std::endl;
@@ -92,4 +95,5 @@ std::unique_ptr<SpinWavePlot> EnergyResolutionFunction::clone()
     return unique_ptr<SpinWavePlot>(new EnergyResolutionFunction(*this));
 }
 
+}
 

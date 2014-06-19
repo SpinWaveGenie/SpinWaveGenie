@@ -3,6 +3,9 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 void OneDimensionalGaussian::setFWHM(double InFWHM)
 {
     FWHM = InFWHM;
@@ -45,4 +48,5 @@ double OneDimensionalGaussian::getExponentialFactor()
 unique_ptr<OneDimensionalShapes> OneDimensionalGaussian::clone()
 {
     return unique_ptr<OneDimensionalShapes>(new OneDimensionalGaussian(*this));
+}
 }

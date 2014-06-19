@@ -12,6 +12,9 @@
 #include <iostream>
 #include "Interaction.h"
 
+namespace SpinWaveGenie
+{
+
 class MagneticFieldInteraction: public Interaction
 {
 public:
@@ -36,5 +39,5 @@ private:
     int r,M;
     std::complex<double> LNrr;
 };
-
+}
 #endif /* defined(__spin_wave_genie__MagneticFieldInteraction__) */

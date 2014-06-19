@@ -14,6 +14,9 @@
 #include "Genie/SpinWave.h"
 #include "SpinWavePlot.h"
 
+namespace SpinWaveGenie
+{
+
 struct TwoDimGaussian
 {
     double a,b,c;
@@ -38,6 +41,6 @@ private:
     SpinWave SW;
 };
 
-
+}
 
 #endif /* defined(__spin_wave_genie__TwoDimensionalGaussian__) */

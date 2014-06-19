@@ -8,6 +8,8 @@
 #include "Interactions/Interaction.h"
 #include "Cell/Neighbors.h"
 
+namespace SpinWaveGenie
+{
 
 class DM_Z_Interaction: public Interaction
 {
@@ -32,5 +34,5 @@ private:
     double z_rs;
     std::complex<double> gamma_rs;
 };
-
+}
 #endif

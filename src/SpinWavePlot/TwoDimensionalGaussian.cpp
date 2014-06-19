@@ -16,6 +16,9 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& info, double min, double max, double points)
 {
     MinimumEnergy = min;
@@ -163,4 +166,5 @@ std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double k
     hcubature(EnergyPoints,TwoDimensionResolutionFunction::calc, this, 1, &xmin, &xmax, 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
     
     return fval;
+}
 }

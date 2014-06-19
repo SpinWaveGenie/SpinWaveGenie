@@ -12,6 +12,9 @@
 #include "OneDimensionalLorentzian.h"
 #include "OneDimensionalPseudoVoigt.h"
 
+namespace SpinWaveGenie
+{
+
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double fwhm, double tol)
 {
     std::unique_ptr<OneDimensionalGaussian> resinfo(new OneDimensionalGaussian);
@@ -35,4 +38,6 @@ std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getPseudoVoigt(doub
     resinfo->setFWHM(fwhm);
     resinfo->setTolerance(tol);
     return std::move(resinfo);
+}
+
 }

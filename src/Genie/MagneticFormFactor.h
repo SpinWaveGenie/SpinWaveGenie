@@ -13,6 +13,9 @@
 #include <unordered_map>
 #include <vector>
 
+namespace SpinWaveGenie
+{
+
 //! Calculates the magnetic form factor at a given Q-point.
 /*!
  This class calculates the magnetic form factor at a given Q-point. The analytical approximation \f$ F(Q) = \left< j_0 \right> \f$ is used where
@@ -52,5 +55,5 @@ private:
     std::vector<std::vector<double> > Farray;
     std::vector<double> NormalizedWeights;
 };
-
+}
 #endif /* defined(__MagneticFormFactor__) */

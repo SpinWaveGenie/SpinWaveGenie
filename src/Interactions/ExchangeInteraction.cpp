@@ -5,6 +5,9 @@
 using namespace std;
 using namespace Eigen;
 
+namespace SpinWaveGenie
+{
+
 ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
 {
     name = name_in;
@@ -146,4 +149,6 @@ void ExchangeInteraction::updateMatrix(Vector3d K, MatrixXcd &LN)
     LN(s+M,r) += conj(LNrsM)*gamma_rs;
     LN(s+M,r+M) += LNrs*gamma_rs;
     LN(s+M,s+M) += LNss;
+}
+
 }

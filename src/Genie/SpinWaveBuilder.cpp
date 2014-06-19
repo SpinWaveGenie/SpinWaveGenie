@@ -3,6 +3,9 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 SpinWaveBuilder::SpinWaveBuilder()
 {
 }
@@ -75,4 +78,6 @@ SpinWave SpinWaveBuilder::Create_Element()
 
     }
     return SW;
+}
+    
 }

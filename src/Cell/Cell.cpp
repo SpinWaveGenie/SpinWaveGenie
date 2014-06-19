@@ -4,10 +4,15 @@
 #include <string>
 #include <stdexcept>
 
+
+
 using std::pair;
 using std::string;
 using std::cout;
 using std::endl;
+
+namespace SpinWaveGenie
+{
 
 struct CompareSublatticeNames
 {
@@ -137,5 +142,5 @@ Cell::ConstIterator Cell::cend()
     return sublatticeInfo.cend();
 }
 
-
+}
 

@@ -9,6 +9,9 @@
 using namespace Eigen;
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 
 SpinWave::SpinWave()
 {
@@ -279,3 +282,4 @@ Results SpinWave::getPoints()
     return VI;
 }
 
+}

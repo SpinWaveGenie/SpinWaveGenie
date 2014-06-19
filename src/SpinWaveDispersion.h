@@ -12,13 +12,13 @@ public:
     enum class Options {PrintPosition,PrintFrequency,PrintIntensity};
     void setOptions(Options PrintOptions, bool Value);
     void setFilename(std::string name);
-    void setPoints(ThreeVectors<double> pos);
-    void setGenie(SpinWave SW);
+    void setPoints(SpinWaveGenie::ThreeVectors<double> pos);
+    void setGenie(SpinWaveGenie::SpinWave SW);
     void save();
 private:
-    SpinWave Genie;
+    SpinWaveGenie::SpinWave Genie;
     std::string Filename;
-    UniqueThreeVectors<double> Kpoints;
+    SpinWaveGenie::UniqueThreeVectors<double> Kpoints;
     bool PrintPosition, PrintFrequency, PrintIntensity;
 };
 

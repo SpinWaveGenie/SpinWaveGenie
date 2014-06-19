@@ -11,6 +11,9 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 void OneDimensionalLorentzian::setFWHM(double InFWHM)
 {
     FWHM = InFWHM;
@@ -39,4 +42,6 @@ double OneDimensionalLorentzian::getFunction(double frequency, double energy)
 unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone()
 {
     return unique_ptr<OneDimensionalShapes>(new OneDimensionalLorentzian(*this));
+}
+
 }

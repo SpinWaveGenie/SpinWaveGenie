@@ -9,6 +9,8 @@
 #include <string>
 
 using std::complex;
+using namespace SpinWaveGenie;
+
 
 BOOST_AUTO_TEST_CASE( InsertTest )
 {

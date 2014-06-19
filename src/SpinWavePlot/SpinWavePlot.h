@@ -10,6 +10,9 @@
 #include "OneDimensionalGaussian.h"
 #include "Containers/Energies.h"
 
+namespace SpinWaveGenie
+{
+
 /* Abstract base class */
 class SpinWavePlot
 {
@@ -22,4 +25,5 @@ public:
     virtual ~SpinWavePlot(){};
 };
 
+}
 #endif /* defined(__SpinWavePlot__) */

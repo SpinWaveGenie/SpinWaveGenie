@@ -13,6 +13,9 @@
 #include "SpinWavePlot.h"
 #include "Containers/Energies.h"
 
+namespace SpinWaveGenie
+{
+
 class IntegrateThetaPhi : public SpinWavePlot {
 public:
     IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance);
@@ -30,5 +33,5 @@ private:
     double tol;
     std::unique_ptr<SpinWavePlot> resolutionFunction;
 };
-
+}
 #endif /* defined(__spin_wave_genie__IntegrateThetaPhi__) */

@@ -10,6 +10,8 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
 
 IntegrateAxes::IntegrateAxes(const IntegrateAxes& other)
 {
@@ -156,4 +158,6 @@ void IntegrateAxes::setEnergies(Energies energiesIn)
 std::unique_ptr<SpinWavePlot> IntegrateAxes::clone()
 {
     return unique_ptr<SpinWavePlot>(new IntegrateAxes(*this));
+}
+    
 }

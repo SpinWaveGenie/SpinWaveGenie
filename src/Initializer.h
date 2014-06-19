@@ -6,7 +6,6 @@
 #include "Genie/SpinWaveBuilder.h"
 #include "External/pugixml.hpp"
 
-
 class Init
 {
 public:
@@ -16,13 +15,13 @@ public:
     void save_input(std::string filename);
     // saves Cell into xml file "filename"
     // not yet implemented
-    Cell get_cell();
-    SpinWaveBuilder get_builder();
+    SpinWaveGenie::Cell get_cell();
+    SpinWaveGenie::SpinWaveBuilder get_builder();
     
 private:
     std::map< std::string, std::function< void (const pugi::xml_node&) > > m_parser_map; //!< Map for dispatching parsers based on node type
-    Cell unit_cell;
-    SpinWaveBuilder builder;
+    SpinWaveGenie::Cell unit_cell;
+    SpinWaveGenie::SpinWaveBuilder builder;
     void parseCrystalNode(const pugi::xml_node &node);
     void parseInteractionNode(const pugi::xml_node &node);
     void parseDispersion(const pugi::xml_node &node);

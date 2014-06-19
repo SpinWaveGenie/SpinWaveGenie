@@ -25,7 +25,8 @@
 #include "Containers/Results.h"
 #include "Containers/Matrices.h"
 
-
+namespace SpinWaveGenie
+{
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 
@@ -73,5 +74,5 @@ private:
     boost::ptr_vector<Interaction> interactions;
     MagneticFormFactor formFactor;
 };
-
+}
 #endif /* defined(__SpinWave__) */

@@ -5,6 +5,8 @@
 #include "Cell/Cell.h"
 #include <iostream>
 
+using namespace SpinWaveGenie;
+
 BOOST_AUTO_TEST_CASE( ConstructorsTest )
 {
     Sublattice test;

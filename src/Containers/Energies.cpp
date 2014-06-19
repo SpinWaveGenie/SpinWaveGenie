@@ -9,6 +9,8 @@
 #include "Energies.h"
 #include <algorithm>
 
+namespace SpinWaveGenie
+{
 
 Energies::Energies(double minimum, double maximum, std::size_t numberPoints)
 {
@@ -43,4 +45,6 @@ double* Energies::data()
 void Energies::clear()
 {
     energies.clear();
+}
+
 }

@@ -16,6 +16,9 @@
 #include "SpinWavePlot.h"
 #include "OneDimensionalShapes.h"
 
+namespace SpinWaveGenie
+{
+
 class TwoDimensionCut
 {
 public:
@@ -32,5 +35,5 @@ private:
     ThreeVectors<double> Kpoints;
 };
 
-
+}
 #endif /* defined(__spin_wave_genie__TwoDimensionCut__) */

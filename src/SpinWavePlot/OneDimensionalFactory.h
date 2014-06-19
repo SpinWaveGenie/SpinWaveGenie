@@ -13,6 +13,9 @@
 #include <memory>
 #include "OneDimensionalShapes.h"
 
+namespace SpinWaveGenie
+{
+
 class OneDimensionalFactory
 {
 public:
@@ -21,5 +24,5 @@ public:
     std::unique_ptr<OneDimensionalShapes> getPseudoVoigt(double eta, double fwhm, double tol);
 private:
 };
-
+}
 #endif /* defined(__OneDimensionalFactory__) */

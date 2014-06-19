@@ -9,6 +9,8 @@
 #include "Containers/Matrices.h"
 #include "Cell/Neighbors.h"
 
+namespace SpinWaveGenie
+{
 
 class ExchangeInteractionSameSublattice: public Interaction
 {
@@ -32,5 +34,5 @@ private:
     std::complex<double> gamma_rs;
     std::complex<double> LNrr,LNss,LNrs,LNrsM;
 };
-
+}
 #endif

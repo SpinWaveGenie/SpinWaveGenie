@@ -7,6 +7,8 @@
 #include "Containers/ThreeVectors.h"
 #include "Containers/PointsAlongLine.h"
 
+using namespace SpinWaveGenie;
+
 ThreeVectors<double> getThreeVectors(int number)
 {
     PointsAlongLine test;

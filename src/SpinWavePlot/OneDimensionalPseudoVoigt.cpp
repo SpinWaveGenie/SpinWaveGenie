@@ -11,6 +11,9 @@
 
 using namespace std;
 
+namespace SpinWaveGenie
+{
+
 OneDimensionalPseudoVoigt::OneDimensionalPseudoVoigt()
 {
     Gaussian.reset(new OneDimensionalGaussian);
@@ -53,4 +56,6 @@ double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
 unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone()
 {
     return unique_ptr<OneDimensionalShapes>(new OneDimensionalPseudoVoigt(*this));
+}
+
 }
