@@ -79,6 +79,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
             for(size_t index = energies.getLowerBound(min);index!=UpperBound;index++)
             {
                 fval[index] += pt->intensity*ResolutionFunction->getFunction(pt->frequency,energies[index]);
+
             }
         }
     }

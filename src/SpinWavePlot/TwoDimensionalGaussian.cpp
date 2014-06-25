@@ -46,9 +46,7 @@ namespace SpinWaveGenie
         resinfo->setU(x[0]);
     
         res.setResolutionFunction(move(resinfo));
-        std::vector<double> result(17,1);
-        //result = res.getCut(kx+x[0]*direction[0],ky+x[0]*direction[1],kz+x[0]*direction[2]);
-    
+        vector<double> result = res.getCut(kx+x[0]*direction[0],ky+x[0]*direction[1],kz+x[0]*direction[2]);
         std::copy(result.begin(),result.end(),fval);
         
         return 0;
@@ -89,7 +87,7 @@ namespace SpinWaveGenie
         vector<double> fval(EnergyPoints);
         vector<double> err(EnergyPoints);
     
-        double tmp = (M_PI*M_PI)/(a*c-b*b);
+        double tmp = sqrt((M_PI*M_PI)/(a*c-b*b));
         hcubature(EnergyPoints,TwoDimensionResolutionFunction::calc, this, 1, &xmin, &xmax, 0, tol/tmp, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
         std::for_each(fval.begin(), fval.end(), DivideValue(tmp));
     

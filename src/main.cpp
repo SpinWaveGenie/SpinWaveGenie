@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
     info.b = 0.0;
     info.c = 0.48;
     info.direction = Vector3(0.0,1.0,0.0);
-    info.tol = 1.0e-5;
+    info.tol = 1.0e-6;
     
     size_t EnergyPoints = 17;
     
@@ -123,7 +123,7 @@ int main(int argc, char * argv[])
     PointsAlongLine line;
     line.setFirstPoint(2.0,-1.5,-3.0);
     line.setFinalPoint(2.0,1.5,-3.0);
-    line.setNumberPoints(21);
+    line.setNumberPoints(101);
     ThreeVectors<double> Kpoints = line.getPoints();
     
     Eigen::MatrixXd figure;
@@ -142,15 +142,23 @@ int main(int argc, char * argv[])
         p.update(m);
         for(int n=0;n<EnergyPoints;n++)
         {
-            if (val[n] < 0.0)
+            if (val[n] < 0.0 && std::abs(val[n]) > 1.0e-4)
                 cout << "0.0 > val[" << n << "] = " << val[n] << endl;
             figure(m,n) = val[n];
         }
     }
     p.update(Kpoints.size());
  
+    
     cout << figure << endl;
     
+    /*for (int i=0;i<figure.size();i++)
+    {
+        cout << i << " " << figure.row(i).sum() << endl;
+    }*/
+    
+    //cout << figure.colwise().sum() << endl;
+    //cout << figure.rowwise().sum() << endl;
 
     return 0;
 }

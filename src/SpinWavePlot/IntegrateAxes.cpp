@@ -45,7 +45,7 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
     vector<double> val = resolutionFunction->getCut(tmpx,tmpy,tmpz);
-    
+    //vector<double> val(17,1.0);
 
     
     std::copy(val.begin(),val.end(),retval);
@@ -99,42 +99,12 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
         xmax.push_back(it->delta);
     }
     
-    Matrix3 lattice = resolutionFunction->getCell().getReciprocalVectors();
-
-    switch(dim)
+    volume = 1.0;
+    for (auto it = integrationDirections.begin(); it!= integrationDirections.end(); ++it)
     {
-        case 1:
-        {
-            Vector3 direction = integrationDirections[0].v0*lattice.row(0) + integrationDirections[0].v1*lattice.row(1) + integrationDirections[0].v2*lattice.row(2);
-            direction *= 2.0*integrationDirections[0].delta;
-            
-            volume = std::abs(direction.norm());
-            break;
-        }
-        case 2:
-        {
-            Vector3 firstDirection = integrationDirections[0].v0*lattice.row(0) + integrationDirections[0].v1*lattice.row(1) + integrationDirections[0].v2*lattice.row(2);
-            firstDirection *= 2.0*integrationDirections[0].delta;
-            Vector3 secondDirection = integrationDirections[1].v0*lattice.row(0) + integrationDirections[1].v1*lattice.row(1) + integrationDirections[1].v2*lattice.row(2);
-            secondDirection *= 2.0*integrationDirections[1].delta;
-            
-            volume = std::abs(firstDirection.cross(secondDirection).norm());
-            break;
-        }
-        case 3:
-        {
-            Vector3 firstDirection = integrationDirections[0].v0*lattice.row(0) + integrationDirections[0].v1*lattice.row(1) + integrationDirections[0].v2*lattice.row(2);
-            firstDirection *= 2.0*integrationDirections[0].delta;
-            Vector3 secondDirection = integrationDirections[1].v0*lattice.row(0) + integrationDirections[1].v1*lattice.row(1) + integrationDirections[1].v2*lattice.row(2);
-            secondDirection *= 2.0*integrationDirections[1].delta;
-            Vector3 thirdDirection = integrationDirections[2].v0*lattice.row(0) + integrationDirections[2].v1*lattice.row(1) + integrationDirections[2].v2*lattice.row(2);
-            thirdDirection *= 2.0*integrationDirections[2].delta;
-
-            volume = std::abs(firstDirection.dot(secondDirection.cross(thirdDirection)));
-            break;
-        }
+        volume *= 2.0*it->delta;
     }
-    
+            
     //cout << volume << endl;
     
     //cout << "** " << kx << " " << ky << " " << kz << endl;
