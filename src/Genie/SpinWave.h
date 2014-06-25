@@ -50,8 +50,6 @@ public:
     //! Use SpinWaveBuilder to generate SpinWave instance
     friend class SpinWaveBuilder;
     SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);
-    //!
-    void setKPoint(double KX, double KY, double KZ);
     void clearMatrix();
     const Cell& getCell() const;
     void createMatrix(double KX,double KY,double KZ);

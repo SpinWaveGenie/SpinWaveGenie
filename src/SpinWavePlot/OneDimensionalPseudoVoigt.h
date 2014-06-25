@@ -32,7 +32,7 @@ public:
     std::unique_ptr<OneDimensionalShapes> clone();
     ~OneDimensionalPseudoVoigt(){};
 private:
-    double eta;
+    double eta,tolerance;
     std::unique_ptr<OneDimensionalShapes> Lorentzian,Gaussian;
 };
 }

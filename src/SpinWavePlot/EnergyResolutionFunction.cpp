@@ -41,6 +41,16 @@ EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFu
     ResolutionFunction = move(other.ResolutionFunction->clone());
     return *this;
 }
+    
+    void EnergyResolutionFunction::setResolutionFunction(std::unique_ptr<OneDimensionalShapes> resolutionFunctionIn)
+    {
+        ResolutionFunction = move(resolutionFunctionIn);
+    }
+    
+    void EnergyResolutionFunction::setSpinWave(SpinWave SWIn)
+    {
+        SW = SWIn;
+    }
 
 
 std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, double kz)

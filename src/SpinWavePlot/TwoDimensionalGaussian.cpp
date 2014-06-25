@@ -7,6 +7,8 @@
 //
 
 #include "TwoDimensionalGaussian.h"
+#include "TwoDGaussian.h"
+#include "EnergyResolutionFunction.h"
 #include <cmath>
 #include <algorithm>
 #include <functional>
@@ -14,157 +16,109 @@
 #include "External/cubature.h"
 #include "Containers/Results.h"
 
+
 using namespace std;
 
 namespace SpinWaveGenie
 {
 
-TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& info, double min, double max, double points)
-{
-    MinimumEnergy = min;
-    MaximumEnergy = max;
-    EnergyPoints = points;
-    
-    a = info.a;
-    b = info.b;
-    c = info.c;
-    tol = info.tol;
-    direction = info.direction;
-    SW = info.SW;
-}
+    TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& info, SpinWave SW, Energies energiesIn)
+    {
+        a = info.a;
+        b = info.b;
+        c = info.c;
+        tol = info.tol;
+        info.direction.normalize();
+        direction = info.direction;
 
-int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *fval)
-{
-    assert(fdim == EnergyPoints);
-    assert(dim == 1);
+        energies = energiesIn;
+        res.setSpinWave(SW);
+        res.setEnergies(energies);
     
-    for(int i=0;i!=EnergyPoints;i++)
-    {
-        fval[i] = 0.0;
     }
     
-    double u;
-    switch (direction)
+    int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *fval)
     {
-        case 0:
-            SW.createMatrix(x[0],ky,kz);
-            u = x[0] - kx;
-            break;
-        case 1:
-            SW.createMatrix(kx,x[0],kz);
-            u = x[0] - ky;
-            break;
-        case 2:
-            SW.createMatrix(kx,ky,x[0]);
-            u = x[0] - kz;
-            break;
+        //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
+        unique_ptr<TwoDGaussian> resinfo(new TwoDGaussian());
+        resinfo->setTolerance(0.001*tol);
+        resinfo->setResolution(a,b,c);
+        resinfo->setU(x[0]);
+    
+        res.setResolutionFunction(move(resinfo));
+        std::vector<double> result(17,1);
+        //result = res.getCut(kx+x[0]*direction[0],ky+x[0]*direction[1],kz+x[0]*direction[2]);
+    
+        std::copy(result.begin(),result.end(),fval);
+        
+        return 0;
     }
     
-    //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
-    
-    double maximum = 1.0;
-    double fraction = 1.0e-5;
-    double minEnergy,maxEnergy;
-    
-    double d = log(maximum/fraction);
-    
-    if ((b*b - a*c)*u*u +c*d > 0.0)
+    int TwoDimensionResolutionFunction::calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval)
     {
-        
-        SW.calculate();
-        Results points = SW.getPoints();
-        
-        double firstSolution = (-b*u + sqrt((b*b - a*c)*u*u +c*d))/c;
-        double secondSolution = (a*u*u - d)/(c*firstSolution);
-        
-        //double checkSecond = (-b*u - sqrt((b*b - a*c)*u*u +c*d))/c;
-        //cout << secondSolution << " " << checkSecond << endl;
-        
-        minEnergy = min(firstSolution,secondSolution);
-        maxEnergy = max(firstSolution,secondSolution);
-        
-        //cout << minEnergy << " " << maxEnergy << endl;
-        
-        for(auto pt = points.begin();pt!=points.end();pt++)
-        {
-            //cout << "calculated frequency & intensity: " << frequencies[k] << " " << intensities[k] << "  " << endl;
-            int min_bin = (pt->frequency+minEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-            min_bin = std::max(min_bin,0);
-            min_bin = std::min(min_bin,(int)EnergyPoints);
-            
-            int max_bin = (pt->frequency+maxEnergy - MinimumEnergy)*(EnergyPoints-1)/(MaximumEnergy-MinimumEnergy);
-            max_bin = std::max(max_bin,0);
-            max_bin = std::min(max_bin,(int)EnergyPoints);
-            
-            //cout << min_bin << " " << max_bin << endl;
-            
-            for(int i=min_bin;i!=max_bin;i++)
-            {
-                double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-                fval[i] += pt->intensity*exp(-1.0*(c*pow(pt->frequency-energy,2)+2.0*b*(pt->frequency-energy)*u+a*pow(u,2)));
-            }
-        }
-        
-        double tmp = (a*c-b*b)/(M_PI*M_PI);
-        for(int i=0;i!=EnergyPoints;i++)
-        {
-            fval[i] *= tmp;
-        }
-    }
-    
-    //cout << endl;
-    /*for(int i=0;i!=EnergyPoints;i++)
-     {
-     double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-     cout << energy << " " << fval[i] << " ";
-     }
-     cout << endl;
-     */
-    return 0;
-}
-
-int TwoDimensionResolutionFunction::calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval)
-{
     // Call non-static member function.
-    return static_cast<TwoDimensionResolutionFunction*>(data)->calculateIntegrand(dim,x,fdim,retval);
-}
-
-std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double kyIn, double kzIn)
-{
-    kx = kxIn;
-    ky = kyIn;
-    kz = kzIn;
-    
-    double xmin, xmax;
-    
-    double maximum = 1.0;
-    double fraction = 1.0e-3;
-    
-    double d = log(maximum/fraction);
-    
-    double diff = sqrt(c*d/(a*c-b*b));
-    
-    switch (direction)
-    {
-        case 0:
-            xmin = kx - diff;
-            xmax = kx + diff;
-            break;
-        case 1:
-            xmin = ky - diff;
-            xmax = ky + diff;
-            break;
-        case 2:
-            xmin = kz - diff;
-            xmax = kz + diff;
-            break;
+        return static_cast<TwoDimensionResolutionFunction*>(data)->calculateIntegrand(dim,x,fdim,retval);
     }
     
-    vector<double> fval(EnergyPoints);
-    vector<double> err(EnergyPoints);
+    struct DivideValue
+    {
+        double value;
+        DivideValue(double v)
+        {
+            value = 1.0/v;
+        }
+        void operator()(double &elem) const
+        {
+            elem *= value;
+        }
+    };
     
-    hcubature(EnergyPoints,TwoDimensionResolutionFunction::calc, this, 1, &xmin, &xmax, 0, tol, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+
+    std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double kyIn, double kzIn)
+    {
+        size_t EnergyPoints = energies.size();
+        kx = kxIn;
+        ky = kyIn;
+        kz = kzIn;
     
-    return fval;
-}
+        double xmin, xmax;
+        double d = -log(tol);
+        xmax = sqrt(c*d/(a*c-b*b));
+        xmin = -xmax;
+    
+        vector<double> fval(EnergyPoints);
+        vector<double> err(EnergyPoints);
+    
+        double tmp = (M_PI*M_PI)/(a*c-b*b);
+        hcubature(EnergyPoints,TwoDimensionResolutionFunction::calc, this, 1, &xmin, &xmax, 0, tol/tmp, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+        std::for_each(fval.begin(), fval.end(), DivideValue(tmp));
+    
+        return fval;
+    }
+    
+    const Cell& TwoDimensionResolutionFunction::getCell() const
+    {
+        return res.getCell();
+    }
+    
+    const Energies& TwoDimensionResolutionFunction::getEnergies()
+    {
+        return energies;
+    }
+    
+    void TwoDimensionResolutionFunction::setTolerance(double toleranceIn)
+    {
+        tol = toleranceIn;
+    }
+    
+    void TwoDimensionResolutionFunction::setEnergies(Energies energiesIn)
+    {
+        energies = energiesIn;
+    }
+    
+    std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone()
+    {
+        return unique_ptr<SpinWavePlot>(new TwoDimensionResolutionFunction(*this));
+    }
+    
 }

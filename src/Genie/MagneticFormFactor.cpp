@@ -25,16 +25,20 @@ using std::vector;
 namespace SpinWaveGenie
 {
 
-MagneticFormFactor::MagneticFormFactor()
-{
-    this->initializeMap();
-}
+    MagneticFormFactor::MagneticFormFactor()
+    {
+        this->initializeMap();
+    }
 
-MagneticFormFactor::MagneticFormFactor(std::string type)
-{
-    this->initializeMap();
-    this->setType(type);
-}
+    MagneticFormFactor::MagneticFormFactor(std::string type)
+    {
+        this->initializeMap();
+        this->setType(type);
+    }
+    
+    MagneticFormFactor::MagneticFormFactor(const MagneticFormFactor& other) : coefficients( other.coefficients ), Farray(other.Farray), NormalizedWeights(other.NormalizedWeights)
+    {
+    }
 
 void MagneticFormFactor::initializeMap()
 {

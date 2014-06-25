@@ -19,7 +19,7 @@ namespace SpinWaveGenie
 class OneDimensionalShapes
 {
 public:
-    virtual void setFWHM(double InFWHM) = 0;
+    //virtual void setFWHM(double InFWHM) = 0;
     virtual void setTolerance(double InTolerance) = 0;
     virtual double getMinimumEnergy() = 0;
     virtual double getMaximumEnergy() = 0;

@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include "OneDimensionalPseudoVoigt.h"
+#include "OneDimensionalFactory.h"
 
 using namespace std;
 
@@ -27,12 +28,14 @@ void OneDimensionalPseudoVoigt::setEta(double InEta)
 
 void OneDimensionalPseudoVoigt::setFWHM(double InFWHM)
 {
-    Gaussian->setFWHM(InFWHM);
-    Lorentzian->setFWHM(InFWHM);
+    OneDimensionalFactory factory;
+    Gaussian = factory.getGaussian(InFWHM, tolerance);
+    Lorentzian = factory.getLorentzian(InFWHM, tolerance);
 }
 
 void OneDimensionalPseudoVoigt::setTolerance(double InTolerance)
 {
+    tolerance = InTolerance;
     Gaussian->setTolerance(InTolerance);
     Lorentzian->setTolerance(InTolerance);
 }
@@ -49,8 +52,7 @@ double OneDimensionalPseudoVoigt::getMaximumEnergy()
 
 double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
 {
-    double result = eta*Lorentzian->getFunction(frequency,energy) + (1.0-eta)*Gaussian->getFunction(frequency,energy);
-    return result;
+    return eta*Lorentzian->getFunction(frequency,energy) + (1.0-eta)*Gaussian->getFunction(frequency,energy);
 }
 
 unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone()

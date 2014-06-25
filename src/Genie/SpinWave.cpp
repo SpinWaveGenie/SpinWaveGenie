@@ -49,7 +49,9 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     recip = cell.getReciprocalVectors();
     K << KX,KY,KZ;
     K = K.transpose()*recip;
-    setKPoint(K[0],K[1],K[2]);
+    this->KXP = KX;
+    this->KYP = KY;
+    this->KZP = KZ;
     clearMatrix();
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
@@ -62,13 +64,6 @@ void SpinWave::clearMatrix()
 {
     LN.setZero();
     VI.clear();
-}
-
-void SpinWave::setKPoint(double KX, double KY, double KZ)
-{
-    KXP = KX;
-    KYP = KY;
-    KZP = KZ;
 }
 
 const Cell& SpinWave::getCell() const

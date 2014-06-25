@@ -39,13 +39,23 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
         tmpy += x[i]*integrationDirections[i].v1;
         tmpz += x[i]*integrationDirections[i].v2;
     }
+    
+    
     //cout << "** " << x[0] << endl;//<< " " << x[1] << " " << x[2] << endl;
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
     vector<double> val = resolutionFunction->getCut(tmpx,tmpy,tmpz);
     
+
+    
     std::copy(val.begin(),val.end(),retval);
 
+    for (int i=0;i<val.size();i++)
+    {
+        if (retval[i] < 0.0)
+            cout << "0.0 > fval[i] = " << retval[i] << endl;
+    }
+    
     return 0;
 }
 
@@ -84,6 +94,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     
     for (auto it = integrationDirections.begin(); it != integrationDirections.end(); it++)
     {
+        //cout << -1.0*it->delta << " " << it->delta << endl;
         xmin.push_back(-1.0*it->delta);
         xmax.push_back(it->delta);
     }
@@ -97,7 +108,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
             Vector3 direction = integrationDirections[0].v0*lattice.row(0) + integrationDirections[0].v1*lattice.row(1) + integrationDirections[0].v2*lattice.row(2);
             direction *= 2.0*integrationDirections[0].delta;
             
-            volume = direction.norm();
+            volume = std::abs(direction.norm());
             break;
         }
         case 2:
@@ -124,6 +135,8 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
         }
     }
     
+    //cout << volume << endl;
+    
     //cout << "** " << kx << " " << ky << " " << kz << endl;
     //cout << xmin[0] << " " << endl; //<< xmin[1] << " " << xmin[2] << endl;
     //cout << xmax[0] << " " << endl;//<< xmax[1] << " " << xmax[2] << endl;
@@ -131,12 +144,24 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     vector<double> fval(energyPoints);
     vector<double> err(energyPoints);
     
-    hcubature(energyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], 0, tolerance, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+    hcubature(energyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], 0, tolerance/volume, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
     
     //cout << "volume = " << volume << endl;
 
+    /*for (int i=0;i<fval.size();i++)
+    {
+        if (fval[i] < 0.0)
+            cout << "before: 0.0 > fval[i] = " << fval[i] << endl;
+    }*/
+    
     std::for_each(fval.begin(), fval.end(), DivideValue(volume));
 
+    /*for (int i=0;i<fval.size();i++)
+    {
+        if (fval[i] < 0.0)
+            cout << "after: 0.0 > fval[i] = " << fval[i] << endl;
+    }*/
+    
     return fval;
 }
 

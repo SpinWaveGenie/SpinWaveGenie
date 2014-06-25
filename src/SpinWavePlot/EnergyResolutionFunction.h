@@ -26,6 +26,8 @@ public:
     EnergyResolutionFunction& operator=(EnergyResolutionFunction& other);
     EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, Energies energies);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
+    void setSpinWave (SpinWave SWIn);
+    void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn);
     const Cell& getCell() const;
     void setEnergies(Energies energies);
     const Energies& getEnergies();
