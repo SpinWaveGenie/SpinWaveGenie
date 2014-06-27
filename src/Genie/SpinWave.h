@@ -47,6 +47,7 @@ class SpinWave
 {
 public:
     SpinWave();
+    SpinWave(const SpinWave& other) = default;
     //! Use SpinWaveBuilder to generate SpinWave instance
     friend class SpinWaveBuilder;
     SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in);

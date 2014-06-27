@@ -30,7 +30,8 @@ EnergyResolutionFunction::EnergyResolutionFunction(const EnergyResolutionFunctio
     //cout << "Energy Points??? " << other.EnergyPoints << endl;
     //cout << "Energy Points??? " << EnergyPoints << endl;
     SW = other.SW;
-    ResolutionFunction = move(other.ResolutionFunction->clone());
+    if (other.ResolutionFunction)
+        ResolutionFunction = move(other.ResolutionFunction->clone());
 }
 
 EnergyResolutionFunction& EnergyResolutionFunction::operator=(EnergyResolutionFunction& other)

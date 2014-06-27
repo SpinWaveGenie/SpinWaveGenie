@@ -29,6 +29,7 @@ class TwoDimensionResolutionFunction : public SpinWavePlot{
 public:
     TwoDimensionResolutionFunction(){};
     TwoDimensionResolutionFunction(TwoDimGaussian& info,SpinWave SW, Energies energies);
+    TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction& other) = default;
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
@@ -44,7 +45,6 @@ private:
     double a,b,c;
     double kx,ky,kz;
     Vector3 direction;
-    SpinWave SW;
     EnergyResolutionFunction res;
 };
 

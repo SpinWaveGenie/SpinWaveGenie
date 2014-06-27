@@ -45,8 +45,6 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
     vector<double> val = resolutionFunction->getCut(tmpx,tmpy,tmpz);
-    //vector<double> val(17,1.0);
-
     
     std::copy(val.begin(),val.end(),retval);
 
@@ -118,11 +116,11 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     
     //cout << "volume = " << volume << endl;
 
-    /*for (int i=0;i<fval.size();i++)
+    for (int i=0;i<fval.size();i++)
     {
         if (fval[i] < 0.0)
             cout << "before: 0.0 > fval[i] = " << fval[i] << endl;
-    }*/
+    }
     
     std::for_each(fval.begin(), fval.end(), DivideValue(volume));
 

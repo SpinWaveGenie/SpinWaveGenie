@@ -34,14 +34,13 @@ namespace SpinWaveGenie
         energies = energiesIn;
         res.setSpinWave(SW);
         res.setEnergies(energies);
-    
     }
     
     int TwoDimensionResolutionFunction::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *fval)
     {
         //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
         unique_ptr<TwoDGaussian> resinfo(new TwoDGaussian());
-        resinfo->setTolerance(0.001*tol);
+        resinfo->setTolerance(0.01*tol);
         resinfo->setResolution(a,b,c);
         resinfo->setU(x[0]);
     
