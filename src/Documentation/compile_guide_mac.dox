@@ -1,55 +1,5 @@
-/*
-Highly Optimized Object-oriented Many-particle Dynamics -- Blue Edition
-(HOOMD-blue) Open Source Software License Copyright 2009-2014 The Regents of
-the University of Michigan All rights reserved.
-
-HOOMD-blue may contain modifications ("Contributions") provided, and to which
-copyright is held, by various Contributors who have granted The Regents of the
-University of Michigan the right to modify and/or distribute such Contributions.
-
-You may redistribute, use, and create derivate works of HOOMD-blue, in source
-and binary forms, provided you abide by the following conditions:
-
-* Redistributions of source code must retain the above copyright notice, this
-list of conditions, and the following disclaimer both in the code and
-prominently in any materials provided with the distribution.
-
-* Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions, and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-* All publications and presentations based on HOOMD-blue, including any reports
-or published results obtained, in whole or in part, with HOOMD-blue, will
-acknowledge its use according to the terms posted at the time of submission on:
-http://codeblue.umich.edu/hoomd-blue/citations.html
-
-* Any electronic documents citing HOOMD-Blue will link to the HOOMD-Blue website:
-http://codeblue.umich.edu/hoomd-blue/
-
-* Apart from the above required attributions, neither the name of the copyright
-holder nor the names of HOOMD-blue's contributors may be used to endorse or
-promote products derived from this software without specific prior written
-permission.
-
-Disclaimer
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS IS'' AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND/OR ANY
-WARRANTIES THAT THIS SOFTWARE IS FREE OF INFRINGEMENT ARE DISCLAIMED.
-
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-
 /*!
-\page page_compile_guide_mac Compiling HOOMD-blue on Mac OS X
+\page page_compile_guide_mac Compiling Spin Wave Genie on Mac OS X
 
 Table of contents:
  - \ref sec_build_mac_prereq
@@ -58,8 +8,8 @@ Table of contents:
 
 \section sec_build_mac_prereq Software Prerequisites
 
-HOOMD-blue requires a number of prerequisite software packages and libraries to be installed before it can be compiled.
-Macports (http://www.macports.org) greatly simplifies the installation of these.
+Spin Wave Genie depends on several software packages and libraries which must installed before it can be compiled.
+The instructions below use Homebrew to greatly simplify installing and managing these dependencies.
 
 This page assumes that you have a standard terminal window open. Commands to run in the terminal will be indicated as
 below:
@@ -70,58 +20,144 @@ hello
 `$` indicates a shell prompt. As demonstrated above, if you type `echo hello`, then you should see the same output
 obtained above on the next line: `hello`
 
-1. **Install macports:**
-Go to [the macports homepage](http://www.macports.org) and download the appropriate dmg for your system. Mount the dmg
-by double-clicking on it. Double-click on the pkg installer for macports and follow the on-screen instructions to
-complete the install. If you have not yet installed the Apple developer tools (Xcode) on your system, you will need to
-do so now. Follow the instructions in [the macports documentation](http://guide.macports.org/). Then run the macports
-selfupdate command to bring your install fully up to date:
+1. **Install XCode with Command Line Tools:**
+Click on this link to [Xcode on the Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12), then click on “View in Mac App Store.”
+The “App Store” app on your Mac will launch and take you the Xcode page. Click on the “Free” button, then click on “Install App.”
+Once the installation is complete, go to your Applications folder and double-click on Xcode. From the menu bar click on "Xcode" followed by "Preferences."
+Click on the “Downloads” icon, then click on the “Install” button next to “Command Line Tools.”
+Confirm the installation was successful by typing the following in a terminal window.
 ~~~~.bash
-$ sudo port selfupdate
-...
+$ clang++ -v
+Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
+Target: x86_64-apple-darwin12.5.0
+Thread model: posix
 ~~~~
 
-2. **Install cmake, boost, and python:**
-Run the following command in a terminal to install all prerequisite software to build hoomd.
+2. **Install Homebrew:**
+[Homebrew](http://brew.sh/) is a package manager for OS X. It will manage all libraries Spin Wave Genie depends on.
+Start by executing the following line
 ~~~~.bash
-$ sudo port install cmake boost +python27 python_select openmpi-default
+$ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ~~~~
-After macports finishes the above command, run
+and follow the on-screen instructions.
+Lastly, we need to tap the keg homebrew/science
 ~~~~.bash
-$ sudo port select python python27
-$ sudo port select mpi openmpi-mp-fortran
-~~~~
-to select the python that macports installed. This step is crucial, or else you will get python <i>version mismatch</i>
-or <i>'NoneType'</i> errors when trying to run hoomd.
-You can switch back to the Apple installed python at any time by running
-~~~~
-$ sudo port select python python26-apple
-~~~~
-or see a list of all python installations you can switch between with
-~~~~
-$ port select python
+$ brew tap homebrew/science
 ~~~~
 
-3. **Install the NVIDIA CUDA toolkit and driver:**
-If you have an NVIDIA GPU, Download the NVIDIA CUDA Toolkit (version 5.5 or newer) appropriate for your system from
-[NVIDIA's CUDA download page](https://developer.nvidia.com/cuda-downloads). To install, open Finder, navigate to the
-directory where you downloaded the file and double-click on it. Follow the on screen prompts to complete the
-installation. Download the [NVIDIA CUDA Drivers](http://www.nvidia.com/object/mac-driver-archive.html).
-To install, open Finder, navigate to the directory where you downloaded the file and double-click on it.
-Follow the on screen prompts to complete the installation.
-
-4. **Install doxygen:**
-[Download the doxygen dmg](http://www.stack.nl/~dimitri/doxygen/). Mount the dmg by double-clicking on it. Install
-by dragging Doxygen to your /Applications directory. Class diagrams are generated automatically when you have graphviz
-installed. You can install it with macports.
+3.**Install Dependencies**
+Install cmake, doxygen
 ~~~~.bash
-$ sudo port install graphviz
+$ brew install cmake
+$ brew install graphviz
+$ brew install doxygen
+$ brew install eigen
+~~~~
+Install boost and Threading Building Blocks, making sure to use the --c++11 option.
+~~~~.bash
+$ brew install boost --c++11
+$ brew install tbb --c++11
+~~~~
+The Nlopt and nexusformat formulas require minor modifications to compile with libc++ instead of the older libstdc++.
+We will need to push these changes upstream so users don't need to manually make these modifications.
+
+Updated nlopt.rb with option --c++11
+\code{.rb}
+require "formula"
+
+class Nlopt < Formula
+  homepage 'http://ab-initio.mit.edu/nlopt'
+  url 'http://ab-initio.mit.edu/nlopt/nlopt-2.4.2.tar.gz'
+  sha1 '838c399d8fffd7aa56b20231e0d7bd3462ca0226'
+  head 'https://github.com/stevengj/nlopt.git'
+
+  depends_on 'octave' => :optional
+  depends_on :python => ['numpy', :optional]
+
+  option:cxx11
+
+  def install
+    ENV.deparallelize
+    args = ["--with-cxx", "--enable-shared", "--prefix=#{prefix}"]
+    args += ["--without-octave"] if build.without? "octave"
+    args += ["--without-python"] if build.without? :python
+    if build.with? 'octave'
+      ENV['OCT_INSTALL_DIR'] = share/'nlopt/oct'
+      ENV['M_INSTALL_DIR'] = share/'nlopt/m'
+      ENV['MKOCTFILE'] = "#{Formula["octave"].bin}/mkoctfile"
+    end
+    ENV.cxx11 if build.cxx11
+    system "./configure", *args
+    system "make"
+    system "make", "install"
+  end
+
+  def caveats
+    s = ''
+    if build.with? 'octave'
+      s += <<-EOS.undent
+      Please add
+        #{share}/nlopt/oct
+      and
+        #{share}/nlopt/m
+      to the Octave path.
+      EOS
+    end
+    if build.with? :python
+      python_version = `python-config --libs`.match('-lpython(\d+\.\d+)').captures.at(0)
+      s += <<-EOS.undent
+      Please add
+        #{lib}/python#{python_version}/site-packages
+      to the Python path.
+      EOS
+    end
+    return s
+  end
+end
+\endcode
+
+Updated nexusformat.rb with option --with-libc++
+\code{.rb}
+require "formula"
+
+class Nexusformat < Formula
+  homepage "http://www.nexusformat.org"
+  url "http://download.nexusformat.org/kits/4.3.1/nexus-4.3.1.tar.gz"
+  sha1 "ed75a442acad8bc14745df42822286fb735ed526"
+
+  depends_on 'hdf5'
+  depends_on 'libmxml'
+  depends_on 'readline' => :recommended
+  depends_on 'doxygen' => :optional
+  option "with-libc++" , "use libc++ instead of libstdc++"
+
+  def install
+    if build.with? "libc++"
+      ENV.append "CXXFLAGS", "-stdlib=libc++"
+    end
+    args = %W[
+      --prefix=#{prefix}
+      --disable-silent-rules
+      --disable-dependency-tracking
+      --disable-debug
+    ]
+
+    system "./configure", *args
+    system "make", "install"
+  end
+
+  test do
+    system "#{bin}/nxdir"
+  end
+end
+\endcode
+
+After updating these two files, run install
+~~~~.bash
+$ brew install nlopt --c++11
+$ brew install nexusformat --with-libc++
 ~~~~
 
-5. **Install git:**
-[Download the git dmg](http://git-scm.com/) and install the software.
-
-\section sec_build_mac_compile Compile hoomd
-
-See \ref sec_build_linux_generic_compile for instructions to compile HOOMD-blue.
+\section sec_build_mac_compile Compile Spin Wave Genie
+See \ref sec_build_linux_generic_compile for instructions to compile Spin Wave Genie.
 */

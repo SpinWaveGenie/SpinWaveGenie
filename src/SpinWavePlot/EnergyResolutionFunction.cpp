@@ -65,6 +65,8 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     SW.calculate();
     Results points = SW.getPoints();
     
+    points.significantSolutions();
+    
     for(auto pt = points.begin();pt!=points.end();pt++)
     {
         if (std::isnan(pt->frequency) || std::isnan(pt->intensity))

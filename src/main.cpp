@@ -28,7 +28,7 @@ using namespace tbb;
 using namespace SpinWaveGenie;
 
 
-size_t numberpoints = 801;
+size_t numberpoints = 101;
 tbb::atomic<int> counter = 0;
 Eigen::MatrixXd mat;
 
@@ -42,7 +42,7 @@ public:
     {
         cut = move(other.cut->clone());
         points = other.points;
-        energyPoints = other.energyPoints;
+        energyPoints = cut->getEnergies().size();
     }
     void operator()( const blocked_range<size_t>& r ) const
     {
@@ -61,8 +61,9 @@ public:
     }
     
     
-    ApplyFoo(unique_ptr<SpinWavePlot> inCut, ThreeVectors<double> inPoints, size_t inEnergyPoints) : cut(move(inCut)), points(inPoints), energyPoints(inEnergyPoints)
+    ApplyFoo(unique_ptr<SpinWavePlot> inCut, ThreeVectors<double> inPoints) : cut(move(inCut)), points(inPoints)
     {
+        energyPoints = cut->getEnergies().size();
     }
 };
 
@@ -79,9 +80,9 @@ void MyThread()
     p.update(numberpoints);
 }
 
-void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points, size_t inEnergyPoints)
+void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points)
 {
-    parallel_for(blocked_range<size_t>(0,points.size()), ApplyFoo(move(cut),points,inEnergyPoints));
+    parallel_for(blocked_range<size_t>(0,points.size()), ApplyFoo(move(cut),points));
 }
 
 
@@ -167,24 +168,24 @@ int main()
     info.b = 0.0;
     info.c = 0.48;
     info.direction = Vector3(0.0,1.0,0.0);
-    info.tol = 1.0e-9;
+    info.tol = 1.0e-8;
     
-    //size_t EnergyPoints = 17;
+    size_t EnergyPoints = 81;
     
-    Energies energies(0.0,80.0,numberpoints);
+    Energies energies(0.0,80.0,EnergyPoints);
+    
+    unique_ptr<SpinWavePlot> gaussian(new TwoDimensionResolutionFunction(info,YFeO3,energies));
     
     //OneDimensionalFactory factory;
-    //auto gauss = factory.getLorentzian(5.0,0.000001);
+    //auto gauss = factory.getLorentzian(5.0,1.0e-7);
     //unique_ptr<SpinWavePlot> gaussian(new EnergyResolutionFunction(move(gauss),YFeO3,energies));
-        
-    unique_ptr<SpinWavePlot> gaussian(new TwoDimensionResolutionFunction(info,YFeO3,energies));
     
     HKLDirections directions;
     directions.addDirection(0, 0.2);
-    directions.addDirection(1,0.05);
+    //directions.addDirection(1,0.05);
     directions.addDirection(2, 0.2);
     
-    unique_ptr<SpinWavePlot> cut(new IntegrateAxes(move(gaussian),directions,1.0e-8));
+    unique_ptr<SpinWavePlot> cut(new IntegrateAxes(move(gaussian),directions,1.0e-9));
     
     PointsAlongLine line;
     line.setFirstPoint(2.0,-1.5,-3.0);
@@ -196,13 +197,13 @@ int main()
     //twodimcut.setPlotObject(move(cut2));
     //twodimcut.setPoints(points);
 
-    mat.resize(numberpoints,numberpoints);
+    mat.resize(EnergyPoints,numberpoints);
 
     tbb::tbb_thread myThread(MyThread);
-    ParallelApplyFoo(move(cut),points,numberpoints);
+    ParallelApplyFoo(move(cut),points);
     myThread.join();
     //mat = twodimcut.getMatrix();
-    std::ofstream file("MnBi_m20L.txt");
+    std::ofstream file("YFeO3_2Km3.txt");
     file << mat << endl;
 
     return 0;

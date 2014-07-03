@@ -9,19 +9,19 @@ Table of contents:
 
 \section sec_software_req Software Prerequisites
 
-HOOMD-blue requires a number of prerequisite software packages and libraries. Detailed instructions on installing these
-on the various platforms that hoomd supports are included below: \ref sec_build_instructions.
+Spin Wave Genie links to on a number of software packages and libraries. Detailed instructions on installing these
+and the Spin Wave Genie library on Apple OS X are below. : \ref sec_build_instructions.
 
 - Required to compile:
-    - CMake 
-    - C++11 Compiler
-    - boost
-    - Eigen
+    - CMake
+    - C++11 Compiler 
+    - boost 
+    - Eigen 
 - For parallel builds
-    - Threading Building Blocks
+    - Threading Building Blocks 
 - For fitting
-    - NLopt
-- Useful developer tools
+    - NLopt 
+- Documentation
     - Doxygen 
 <hr>
 \section sec_build_instructions Build instructions
