@@ -1,210 +1,242 @@
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <vector>
+#include <set>
+#include <array>
 #include <algorithm>
 #include <memory>
 #include <Eigen/Dense>
-#include <unistd.h>
-#include "tbb/tbb.h"
+#include "nlopt.hpp"
 #include "Genie/SpinWave.h"
 #include "Genie/SpinWaveBuilder.h"
 #include "Cell/Cell.h"
 #include "Cell/Neighbors.h"
 #include "Interactions/InteractionFactory.h"
-#include "SpinWavePlot/TwoDimensionalGaussian.h"
-#include "SpinWavePlot/EnergyResolutionFunction.h"
 #include "SpinWavePlot/OneDimensionalFactory.h"
-#include "SpinWavePlot/OneDimensionalShapes.h"
+#include "SpinWavePlot/SpinWavePlot.h"
+#include "SpinWavePlot/EnergyResolutionFunction.h"
 #include "SpinWavePlot/IntegrateAxes.h"
-#include "Containers/PointsAlongLine.h"
-#include "SpinWavePlot/TwoDimensionCut.h"
+#include "Containers/Energies.h"
 #include "Containers/HKLDirections.h"
-#include "External/ezRateProgressBar.hpp"
-
+#include <unistd.h>
+#include "Containers/Energies.h"
+#include "Containers/Results.h"
 
 using namespace std;
-using namespace tbb;
 using namespace SpinWaveGenie;
+typedef Eigen::Matrix <bool, Eigen::Dynamic, Eigen::Dynamic> MatrixXb;
 
-
-size_t numberpoints = 101;
-tbb::atomic<int> counter = 0;
-Eigen::MatrixXd mat;
-
-class ApplyFoo
+class LoadXYZ
 {
-    unique_ptr<SpinWavePlot> cut;
-    ThreeVectors<double> points;
-    size_t energyPoints;
 public:
-    ApplyFoo(const ApplyFoo& other)
-    {
-        cut = move(other.cut->clone());
-        points = other.points;
-        energyPoints = cut->getEnergies().size();
-    }
-    void operator()( const blocked_range<size_t>& r ) const
-    {
-        unique_ptr<SpinWavePlot> cut2(move(cut->clone()));
-        auto it = points.cbegin()+ r.begin();
-        for(size_t i = r.begin(); i!=r.end(); ++i)
-        {
-            vector<double> data = cut2->getCut(it->get<0>(),it->get<1>(),it->get<2>());
-            for (auto j=0;j!=energyPoints;j++)
-            {
-                mat(j,i) = data[j];
-            }
-            it++;
-            counter++;
-        }
-    }
-    
-    
-    ApplyFoo(unique_ptr<SpinWavePlot> inCut, ThreeVectors<double> inPoints) : cut(move(inCut)), points(inPoints)
-    {
-        energyPoints = cut->getEnergies().size();
-    }
+    void readFile(string filename);
+    typedef vector<vector<double> >::iterator Iterator;
+    Iterator begin();
+    Iterator end();
+protected:
+    vector<vector<double> > inputData;
+    MatrixXb mask;
 };
 
-void MyThread()
+void LoadXYZ::readFile(string filename)
 {
-    ez::ezRateProgressBar<int> p(numberpoints);
-    p.units = "Q-points";
-    p.start();
-    while( counter < numberpoints)
+    ifstream file;
+    string output;
+    file.open(filename.c_str());
+    while(getline(file,output))
     {
-        p.update(counter);
-        sleep(1);
+        istringstream parser;
+        parser.str(output);
+        vector<double> tmp(9);
+        parser >> tmp[0] >> tmp[1] >> tmp[2] >> tmp[3] >> tmp[4] >> tmp[5] >> tmp[6] >> tmp[7] >> tmp[8];
+        inputData.push_back(tmp);
     }
-    p.update(numberpoints);
+    file.close();
 }
 
-void ParallelApplyFoo(unique_ptr<SpinWavePlot> cut, ThreeVectors<double> points)
+LoadXYZ::Iterator LoadXYZ::begin()
 {
-    parallel_for(blocked_range<size_t>(0,points.size()), ApplyFoo(move(cut),points));
+    return inputData.begin();
 }
 
+LoadXYZ::Iterator LoadXYZ::end()
+{
+    return inputData.end();
+}
+
+LoadXYZ xyzfile;
+
+double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
+{
+    if (!grad.empty())
+    {
+        cout << "error: no gradient available" << endl;
+    }
+    
+    cout << "parameters: ";
+    cout << x[0] << " " << x[1] << " " << x[2] << " " << x[3] << " " << x[4] << " " << x[5] << " " << x[6] << " " << x[7]  << " " <<  x[8] << " " << x[9] << " " << x[10] << endl;
+
+    
+    double J,J1,J2;
+    J = x[1];
+    J2 = x[2];
+    J1 = x[3];
+    
+    double SA = 2.0;
+    double theta = M_PI/2.0;
+
+    Cell cell;
+    cell.setBasisVectors(4.2827,4.2827,6.1103,90.0,90.0,120.0);
+    
+    Sublattice Spin0;
+    string name = "Spin0";
+    Spin0.setName(name);
+    Spin0.setType("MN2");
+    Spin0.setMoment(SA,theta,0.0);
+    cell.addSublattice(Spin0);
+    cell.addAtom(name,0.0,0.0,0.0);
+    cell.addAtom(name,0.0,0.0,0.5);
+    
+    SpinWaveBuilder builder(cell);
+    InteractionFactory interactionFactory;
+    
+    builder.addInteraction(interactionFactory.getExchange("J1",x[0],name,name,3.0,3.1));
+    builder.addInteraction(interactionFactory.getExchange("J2",x[1],name,name,4.2,4.3));
+    builder.addInteraction(interactionFactory.getExchange("J3",x[2],name,name,5.2,5.3));
+    builder.addInteraction(interactionFactory.getExchange("J4",x[3],name,name,6.0,6.2));
+    builder.addInteraction(interactionFactory.getExchange("J5",x[4],name,name,7.40,7.43));
+    builder.addInteraction(interactionFactory.getExchange("J6",x[5],name,name,7.44,7.49));
+    builder.addInteraction(interactionFactory.getExchange("J7",x[6],name,name,9.0,9.1));
+    builder.addInteraction(interactionFactory.getExchange("J8",x[7],name,name,9.1,9.2));
+    builder.addInteraction(interactionFactory.getExchange("J9",x[8],name,name,9.55,9.65));
+    builder.addInteraction(interactionFactory.getExchange("J10",x[9],name,name,10.05,10.15));
+    builder.addInteraction(interactionFactory.getExchange("J11",x[10],name,name,10.5,10.6));
+
+    
+    cout << cell.getBasisVectors() << endl;
+    cout << cell.getReciprocalVectors() << endl;
+    
+    SpinWave SW = builder.createElement();
+    OneDimensionalFactory factory;
+    auto gauss = factory.getGaussian(7.5,1.0e-8);
+    auto energies = Energies(0.0, 120.0, 1001);
+    
+    unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW, energies));
+    
+    HKLDirections H01;
+    H01.addDirection(1,0.1);
+    H01.addDirection(2, 0.1);
+    
+    HKLDirections H0L;
+    H0L.addDirection(1.0,-0.5,0.0,0.1);
+    H0L.addDirection(1,0.1);
+    
+    unique_ptr<SpinWavePlot> cut(new IntegrateAxes(move(res),H01,1.0e-7));
+    
+    double chisq = 0.0;
+    
+    for (auto it = xyzfile.begin();it!=xyzfile.begin()+16;++it)
+    {
+        cout << "position1: " << (*it)[0] << "," << (*it)[1] << "," <<(*it)[2] << endl;
+        //SW.createMatrix((*it)[0],(*it)[1],(*it)[2]);
+        //SW.calculate();
+        //Results results = SW.getPoints();
+        //double frequency  = results.begin()->frequency;
+        vector<double> values = cut->getCut((*it)[0],(*it)[1],(*it)[2]);
+
+        size_t result = std::distance(values.begin(),std::max_element(values.begin(), values.end()));
+        double frequency = energies[result];
+        chisq += pow((frequency - (*it)[3])/(*it)[4],2);
+        cout << "frequency: " << frequency << "," << (*it)[3] << "," <<(*it)[4] << endl;
+        cout << pow((frequency - (*it)[3])/(*it)[4],2) << endl;
+    }
+    cout << endl;
+    
+    gauss = factory.getGaussian(7.5,1.0e-8);
+    res = unique_ptr<SpinWavePlot>(new EnergyResolutionFunction(move(gauss), SW, energies));
+    cut = unique_ptr<SpinWavePlot>(new IntegrateAxes(move(res),H0L,1.0e-7));
+    
+    for (auto it = xyzfile.begin()+16;it!=xyzfile.end();++it)
+    {
+        cout << "position2: " << (*it)[0] << "," << (*it)[1] << "," <<(*it)[2] << endl;
+        //SW.createMatrix((*it)[0],(*it)[1],(*it)[2]);
+        //SW.calculate();
+        //Results results = SW.getPoints();
+        //double frequency  = results.begin()->frequency;
+        vector<double> values = cut->getCut((*it)[0],(*it)[1],(*it)[2]);
+        
+        size_t result = std::distance(values.begin(),std::max_element(values.begin(), values.end()));
+        double frequency = energies[result];
+        chisq += pow((frequency - (*it)[3])/(*it)[4],2);
+        cout << "frequency: " << frequency << "," << (*it)[3] << "," <<(*it)[4] << endl;
+        cout << pow((frequency - (*it)[3])/(*it)[4],2) << endl;
+    }
+    cout << endl;
+    
+    cout << "chisq = " <<  chisq << endl;
+    return chisq;
+}
 
 int main()
 {
+    string filename = "/Users/svh/Documents/spin_wave_genie/MnBi/MnBi.txt";
+    xyzfile.readFile(filename);
+    
+    std::vector<double> ub(11);
+    ub[0] =  8.0;
+    ub[1] =  8.0;
+    ub[2] =  8.0;
+    ub[3] =  8.0;
+    ub[4] =  8.0;
+    ub[5] =  8.0;
+    ub[6] =  8.0;
+    ub[7] =  8.0;
+    ub[8] =  8.0;
+    ub[9] =  8.0;
+    ub[10] =  8.0;
 
-    tbb::task_scheduler_init init(24);
-    
-    double S = 2.5;
-    double theta = 89.7043537777*M_PI/180.0;
-    double delta = 0.18334649444;
-    
-    Cell cell;
-    cell.setBasisVectors(5.4,5.4,7.63675323681,90.0,90.0,90.0);
-    
-    Sublattice Fe1;
-    Fe1.setName("Fe1");
-    Fe1.setType("FE3");
-    Fe1.setMoment(S,theta,(180.0 + delta)*M_PI/180.0);
-    cell.addSublattice(Fe1);
-    cell.addAtom("Fe1",0.0,0.5,0.0);
-    
-    Sublattice Fe2;
-    Fe2.setName("Fe2");
-    Fe2.setType("FE3");
-    Fe2.setMoment(S,theta,delta*M_PI/180.0);
-    cell.addSublattice(Fe2);
-    cell.addAtom("Fe2",0.0,0.5,0.5);
-    
-    Sublattice Fe3;
-    Fe3.setName("Fe3");
-    Fe3.setType("FE3");
-    Fe3.setMoment(S,theta,(180.0-delta)*M_PI/180.0);
-    cell.addSublattice(Fe3);
-    cell.addAtom("Fe3",0.5,0.0,0.5);
-    
-    Sublattice Fe4;
-    Fe4.setName("Fe4");
-    Fe4.setType("FE3");
-    Fe4.setMoment(S,theta,(360.0-delta)*M_PI/180.0);
-    cell.addSublattice(Fe4);
-    cell.addAtom("Fe4",0.5,0.0,0.0);
-    
-    SpinWaveBuilder builder(cell);
-    InteractionFactory interactions;
-    
-    builder.addInteraction(interactions.getExchange("J1",-4.8982,"Fe1","Fe2",3.8,4.3));
-    builder.addInteraction(interactions.getExchange("J1",-4.8982,"Fe1","Fe4",3.8,4.3));
-    builder.addInteraction(interactions.getExchange("J1",-4.8982,"Fe3","Fe2",3.8,4.3));
-    builder.addInteraction(interactions.getExchange("J1",-4.8982,"Fe3","Fe4",3.8,4.3));
-    
-    builder.addInteraction(interactions.getExchange("J2",-0.252455,"Fe1","Fe1",5.3,5.5));
-    builder.addInteraction(interactions.getExchange("J2",-0.252455,"Fe2","Fe2",5.3,5.5));
-    builder.addInteraction(interactions.getExchange("J2",-0.252455,"Fe3","Fe3",5.3,5.5));
-    builder.addInteraction(interactions.getExchange("J2",-0.252455,"Fe4","Fe4",5.3,5.5));
-    builder.addInteraction(interactions.getExchange("J2",-0.252455,"Fe1","Fe3",5.3,5.5));
-    builder.addInteraction(interactions.getExchange("J2",-0.252455,"Fe2","Fe4",5.3,5.5));
-    
-    Vector3 xhat(1.0,0.0,0.0);
-    Vector3 yhat(0.0,1.0,0.0);
-    Vector3 zhat(0.0,0.0,1.0);
-    
-    builder.addInteraction(interactions.getAnisotropy("Ka",-0.00527847,xhat,"Fe1"));
-    builder.addInteraction(interactions.getAnisotropy("Ka",-0.00527847,xhat,"Fe2"));
-    builder.addInteraction(interactions.getAnisotropy("Ka",-0.00527847,xhat,"Fe3"));
-    builder.addInteraction(interactions.getAnisotropy("Ka",-0.00527847,xhat,"Fe4"));
-    
-    builder.addInteraction(interactions.getAnisotropy("Kc",-0.00294114,zhat,"Fe1"));
-    builder.addInteraction(interactions.getAnisotropy("Kc",-0.00294114,zhat,"Fe2"));
-    builder.addInteraction(interactions.getAnisotropy("Kc",-0.00294114,zhat,"Fe3"));
-    builder.addInteraction(interactions.getAnisotropy("Kc",-0.00294114,zhat,"Fe4"));
-    
-    builder.addInteraction(interactions.getDzyaloshinskiiMoriya("D1",-0.0758301,yhat,"Fe4","Fe1",3.78,4.32));
-    builder.addInteraction(interactions.getDzyaloshinskiiMoriya("D1",-0.0758301,yhat,"Fe2","Fe3",3.78,4.32));
-    
-    builder.addInteraction(interactions.getDzyaloshinskiiMoriya("D2",-0.0281255,zhat,"Fe4","Fe1",3.78,4.32));
-    builder.addInteraction(interactions.getDzyaloshinskiiMoriya("D2",-0.0281255,zhat,"Fe3","Fe2",3.78,4.32));
-    
-    SpinWave YFeO3 = builder.Create_Element();
-    
-    TwoDimGaussian info;
-    info.a = 1109.0;
-    info.b = 0.0;
-    info.c = 0.48;
-    info.direction = Vector3(0.0,1.0,0.0);
-    info.tol = 1.0e-8;
-    
-    size_t EnergyPoints = 81;
-    
-    Energies energies(0.0,80.0,EnergyPoints);
-    
-    unique_ptr<SpinWavePlot> gaussian(new TwoDimensionResolutionFunction(info,YFeO3,energies));
-    
-    //OneDimensionalFactory factory;
-    //auto gauss = factory.getLorentzian(5.0,1.0e-7);
-    //unique_ptr<SpinWavePlot> gaussian(new EnergyResolutionFunction(move(gauss),YFeO3,energies));
-    
-    HKLDirections directions;
-    directions.addDirection(0, 0.2);
-    //directions.addDirection(1,0.05);
-    directions.addDirection(2, 0.2);
-    
-    unique_ptr<SpinWavePlot> cut(new IntegrateAxes(move(gaussian),directions,1.0e-9));
-    
-    PointsAlongLine line;
-    line.setFirstPoint(2.0,-1.5,-3.0);
-    line.setFinalPoint(2.0,1.5,-3.0);
-    line.setNumberPoints(numberpoints);
-    ThreeVectors<double> points = line.getPoints();
 
-    //TwoDimensionCut twodimcut;
-    //twodimcut.setPlotObject(move(cut2));
-    //twodimcut.setPoints(points);
+    std::vector<double> lb(11);
+    lb[0] = -8.0;
+    lb[1] = -8.0;
+    lb[2] = -8.0;
+    lb[3] = -8.0;
+    lb[4] = -8.0;
+    lb[5] = -8.0;
+    lb[6] = -8.0;
+    lb[7] = -8.0;
+    lb[8] = -8.0;
+    lb[9] = -8.0;
+    lb[10] = -8.0;
 
-    mat.resize(EnergyPoints,numberpoints);
+    
+    std::vector<double> x(11);
+    
+    double minf = 0.0;
+    
+    //vector<double> gradient;
+    
+    x[0] = -6.6508;
+    x[1] =  1.16762;
+    x[2] =  1.78181;
+    x[3] =  -1.02878;
+    x[4] =  0.948171;
+    x[5] =  0.672291;
+    x[6] =  0.152505;
+    x[7] =  0.145495;
+    x[8] =  0.0802911;
+    x[9] =  0.12095;
+    x[10] = 0.0999863;
+    nlopt::opt opt(nlopt::LN_SBPLX,11);
+    opt.set_min_objective(myfunc, NULL);
+    opt.set_upper_bounds(ub);
+    opt.set_lower_bounds(lb);
+    opt.set_ftol_abs(5.0e-5);
+    opt.set_maxeval(1000);
+    opt.optimize(x, minf);
+    
+    cout << "minf = " << minf << endl;
 
-    tbb::tbb_thread myThread(MyThread);
-    ParallelApplyFoo(move(cut),points);
-    myThread.join();
-    //mat = twodimcut.getMatrix();
-    std::ofstream file("YFeO3_2Km3.txt");
-    file << mat << endl;
-
-    return 0;
 }

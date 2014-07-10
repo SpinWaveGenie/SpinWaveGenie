@@ -66,7 +66,7 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
     return firstOrder;
 }
 
-SpinWave SpinWaveBuilder::Create_Element()
+SpinWave SpinWaveBuilder::createElement()
 {
     //cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
     SpinWave SW(cell,interactions);

@@ -18,7 +18,7 @@ public:
     void addInteraction(std::unique_ptr<Interaction> in);
     double getEnergy();
     Eigen::VectorXcd getFirstOrderTerms();
-    SpinWave Create_Element();
+    SpinWave createElement();
 private:
     Cell cell;
     boost::ptr_vector<Interaction> interactions;

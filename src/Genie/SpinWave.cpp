@@ -56,6 +56,7 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
+        //cout <<endl << LN << endl;
         iter->updateMatrix(K,LN);
     }
 }
@@ -78,7 +79,7 @@ void SpinWave::calculateEigenvalues()
     LN.block(M,M,M,M) *= -1.0;
     
     LN = LN*2.0;
-    
+        
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
