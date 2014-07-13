@@ -28,7 +28,7 @@ void DM_Y_Interaction::updateInteraction(double value_in, string sl_r_in,string 
     max = max_in;
 }
 
-string DM_Y_Interaction::getName()
+const string& DM_Y_Interaction::getName()
 {
     return name;
 }

@@ -28,7 +28,7 @@ void ExchangeInteraction::updateInteraction(double value_in, string sl_r_in,stri
     max = max_in;
 }
 
-string ExchangeInteraction::getName()
+const string& ExchangeInteraction::getName()
 {
     return name;
 }
@@ -77,21 +77,22 @@ void ExchangeInteraction::calcConstantValues(Cell& cell)
 
 void ExchangeInteraction::calculateEnergy(Cell& cell, double &energy)
 {
-    r = cell.getPosition(sl_r);
-    s = cell.getPosition(sl_s);
-    M = cell.size();
-    
-    neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+    if (neighbors.empty())
+    {
+        neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
+        r = cell.getPosition(sl_r);
+        s = cell.getPosition(sl_s);
+    }
     double z_rs = neighbors.size();
     
-    double Sr = cell.getSublattice(sl_r).getMoment();
-    double Ss = cell.getSublattice(sl_s).getMoment();
+    double Sr = cell[r].getMoment();
+    double Ss = cell[s].getMoment();
     
-    Matrix3 Frs = cell.getSublattice(sl_r).getRotationMatrix()*
-    cell.getSublattice(sl_s).getInverseMatrix();
+    Matrix3 Frs = cell[r].getRotationMatrix()*
+    cell[s].getInverseMatrix();
     
-    Matrix3 Fsr = cell.getSublattice(sl_s).getRotationMatrix()*
-    cell.getSublattice(sl_r).getInverseMatrix();
+    Matrix3 Fsr = cell[s].getRotationMatrix()*
+    cell[r].getInverseMatrix();
     
     energy -= 0.5*value*z_rs*Sr*Ss*(Frs(2,2)+Fsr(2,2));
 }

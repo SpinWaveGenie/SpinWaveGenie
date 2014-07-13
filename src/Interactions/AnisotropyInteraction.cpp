@@ -31,7 +31,7 @@ void AnisotropyInteraction::updateInteraction(double value_in, Vector3 unitVecto
     sl_r = sl_r_in;
 }
 
-string AnisotropyInteraction::getName()
+const string& AnisotropyInteraction::getName()
 {
     return name;
 }
@@ -83,8 +83,12 @@ void AnisotropyInteraction::calcConstantValues(Cell& cell)
 
 void AnisotropyInteraction::calculateEnergy(Cell& cell, double &energy)
 {
-    double S = cell.getSublattice(sl_r).getMoment();
-    const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
+    if (r<0)
+    {
+        r = cell.getPosition(sl_r);
+    }
+    double S = cell[r].getMoment();
+    const Matrix3& inv = cell[r].getInverseMatrix();
     
     for (int i=0; i<3; i++)
     {

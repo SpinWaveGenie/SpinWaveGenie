@@ -17,7 +17,7 @@ public:
     DM_Y_Interaction(std::string name, double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void updateInteraction(double value_in, std::string sl_r_in,std::string sl_s_in, double min_in, double max_in);
     void updateValue(double value_in);
-    std::string getName();
+    const std::string& getName();
     void calcConstantValues(Cell& cell);
     void calculateEnergy(Cell& cell, double &energy);
     void calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);

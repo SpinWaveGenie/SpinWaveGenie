@@ -35,7 +35,7 @@ vector<string> DM_Z_Interaction::sublattices() const
     return sl;
 }
 
-string DM_Z_Interaction::getName()
+const string& DM_Z_Interaction::getName()
 {
     return name;
 }

@@ -32,7 +32,7 @@ class UniqueThreeVectors: public ThreeVectors<T>
 public:
     //!
     bool operator==(const UniqueThreeVectors& other);
-    void insert(T x, T y, T z);
+    bool insert(T x, T y, T z);
 };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -61,12 +61,19 @@ struct isEqual
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 template<typename T>
-void UniqueThreeVectors<T>::insert(T x, T y, T z)
+bool UniqueThreeVectors<T>::insert(T x, T y, T z)
 {
     boost::tuple<T,T,T> MyThreeVector(x,y,z);
     auto equalVector = isEqual<T>(MyThreeVector);
     if (std::find_if(this->begin(), this->end(),equalVector)==this->end())
+    {
         ThreeVectors<T>::insert(x,y,z);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 template<typename T>

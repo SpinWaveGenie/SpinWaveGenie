@@ -27,7 +27,7 @@ void ExchangeInteractionSameSublattice::updateInteraction(double value_in, strin
     max = max_in;
 }
 
-string ExchangeInteractionSameSublattice::getName()
+const string& ExchangeInteractionSameSublattice::getName()
 {
     return name;
 }
@@ -75,10 +75,11 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
 void ExchangeInteractionSameSublattice::calculateEnergy(Cell& cell, double &energy)
 {
     r = cell.getPosition(sl_r);
-    M = cell.size();
-    double Sr = cell.getSublattice(sl_r).getMoment();
+    neighbors.findNeighbors(cell,sl_r, sl_r, min, max);
+    double z_rs = neighbors.size();
+    double Sr = cell[r].getMoment();
     
-    energy -= value*Sr*Sr;
+    energy -= value*z_rs*Sr*Sr;
 }
 
 void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell& cell, VectorXcd &elements )

@@ -23,6 +23,7 @@ protected:
     typedef typename std::vector<T>::iterator ValueIterator;
     typedef typename std::vector<T>::const_iterator ConstValueIterator;
 public:
+    bool empty();
     //! insert three elements x,y,z
     //! \param x zeroth element of type T
     //! \param y first element of type T
@@ -47,6 +48,12 @@ protected:
     std::vector<T> valuesY;
     std::vector<T> valuesZ;
 };
+    
+    template<typename T>
+    bool ThreeVectors<T>::empty()
+    {
+        return valuesX.empty();
+    }
 
 template<typename T>
 void ThreeVectors<T>::insert(T x,T y,T z)

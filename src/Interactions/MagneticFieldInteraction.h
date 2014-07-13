@@ -24,7 +24,7 @@ public:
     void updateInteraction(double value_in,Vector3 direction, std::string sl_r_in);
     //!
     void updateValue(double value_in);
-    std::string getName();
+    const std::string& getName();
     void calcConstantValues(Cell& cell);
     void calculateEnergy(Cell& cell, double &energy);
     void calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
@@ -36,7 +36,7 @@ private:
     std::string name,sl_r;
     Vector3 directions;
     double value;
-    int r,M;
+    int r=-1,M;
     std::complex<double> LNrr;
 };
 }

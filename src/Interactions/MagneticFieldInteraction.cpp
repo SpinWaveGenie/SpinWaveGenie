@@ -32,7 +32,7 @@ void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVe
     sl_r = sl_r_in;
 }
 
-string MagneticFieldInteraction::getName()
+const string& MagneticFieldInteraction::getName()
 {
     return name;
 }
@@ -74,12 +74,16 @@ void MagneticFieldInteraction::calcConstantValues(Cell& cell)
 
 void MagneticFieldInteraction::calculateEnergy(Cell &cell, double &energy)
 {
-    double S = cell.getSublattice(sl_r).getMoment();
-    const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
+    if (r<0)
+    {
+        r = cell.getPosition(sl_r);
+    }
+    double S = cell[r].getMoment();
+    const Matrix3& inv = cell[r].getInverseMatrix();
 
     for (int i=0; i<3; i++)
     {
-        if (abs(directions(i)) > 1.0e-10)
+        if (std::abs(directions(i)) > 1.0e-10)
         {
             energy -= value*S*directions(i)*inv(i,2);
         }
@@ -89,8 +93,9 @@ void MagneticFieldInteraction::calculateEnergy(Cell &cell, double &energy)
 void MagneticFieldInteraction::calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements)
 {
     complex<double> XI (0.0,1.0);
-    double S = cell.getSublattice(sl_r).getMoment();
-    const Matrix3& inv = cell.getSublattice(sl_r).getInverseMatrix();
+    r = cell.getPosition(sl_r);
+    double S = cell[r].getMoment();
+    const Matrix3& inv = cell[r].getInverseMatrix();
     
     for (int i=0; i<3; i++)
     {

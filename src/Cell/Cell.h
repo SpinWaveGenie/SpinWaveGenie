@@ -34,10 +34,10 @@ public:
     void setBasisVectors(double scale, Matrix3 basis);
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    const Matrix3 getBasisVectors() const;
+    const Matrix3& getBasisVectors() const;
     //! get basis vectors as an Eigen::Matrix3d object
     //! \return basis vectors as rows in an Eigen::Matrix3d object
-    const Matrix3 getReciprocalVectors() const;
+    const Matrix3& getReciprocalVectors() const;
     //! Add sublattice to cell
     //! \param sl Sublattice object
     //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
@@ -46,6 +46,7 @@ public:
     //! \param name used to describe sublattice
     //! \return sublattice
     Sublattice& getSublattice(std::string name);
+    Sublattice& operator[](std::size_t position);
     //! Add atom to sublattice name at position pos
     //! \param name Sublattice atom belongs to
     //! \param x x coordinate of atom in fraction of the basis vectors.

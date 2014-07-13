@@ -23,6 +23,9 @@ namespace SpinWaveGenie
 class Neighbors
 {
 public:
+    //! Returns whether of not neighbors have been calculated previously;
+    //! \param 
+    bool empty();
     //! Finds neighbors of two sublattices between distances min and max.
     //! \param cell unit cell
     //! \param sl1 Name of first sublattice
@@ -50,5 +53,6 @@ private:
     UniqueThreeVectors<double> neighborList;
     double numberNeighbors;
 };
+    
 }
 #endif // __Neighbors_H__

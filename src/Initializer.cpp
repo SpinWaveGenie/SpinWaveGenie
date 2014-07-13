@@ -374,8 +374,8 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
         
         SpinWave SW = builder.Create_Element();
         unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(resinfo), SW, Energies(MinEnergy, MaxEnergy, NumberPoints)));
-        Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
         Cut.setPlotObject(move(res));
+        Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);
     }
     Cut.save();
 

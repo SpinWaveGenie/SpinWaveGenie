@@ -6,21 +6,21 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-SpinWaveBuilder::SpinWaveBuilder()
-{
-}
+    SpinWaveBuilder::SpinWaveBuilder(){}
 
-SpinWaveBuilder::SpinWaveBuilder(Cell& cellIn)
-{
-    cell = cellIn;
-    //cout << "cell check(Add_Cell): " << cell.begin()->getName() << endl;
-
-}
+    SpinWaveBuilder::SpinWaveBuilder(Cell& cellIn)
+    {
+        cell = cellIn;
+    }
+    
+    void SpinWaveBuilder::updateCell(Cell & cellIn)
+    {
+        cell = cellIn;
+    }
 
 void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 {
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
-    in->calcConstantValues(cell);
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
     interactions.push_back(in.release());
     interactions.sort();
@@ -29,11 +29,19 @@ void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 void SpinWaveBuilder::addInteraction(Interaction* in)
 {
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
-    in->calcConstantValues(cell);
     //cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
     interactions.push_back(in);
     interactions.sort();
 }
+    
+    void SpinWaveBuilder::updateInteraction(string name, double value)
+    {
+        for (auto it = interactions.begin();it!=interactions.end();it++)
+        {
+            if (name.compare(it->getName()) == 0)
+                it->updateValue(value);
+        }
+    }
 
 double SpinWaveBuilder::getEnergy()
 {
@@ -41,8 +49,9 @@ double SpinWaveBuilder::getEnergy()
     for(auto it=interactions.begin();it!=interactions.end();it++)
     {
         it->calculateEnergy(cell,energy);
-        //cout << energy << endl;
+        //cout << it->getName() << " " << energy << endl;
     }
+    //cout << endl;
     return energy;
 }
 
@@ -69,6 +78,10 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
 SpinWave SpinWaveBuilder::Create_Element()
 {
     //cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
+    for( auto in = interactions.begin();in!=interactions.end();in++)
+    {
+        in->calcConstantValues(cell);
+    }
     SpinWave SW(cell,interactions);
     Eigen::VectorXcd firstOrder = getFirstOrderTerms();
     if (firstOrder.norm() > 0.01)

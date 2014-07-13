@@ -4,8 +4,6 @@
 #include <string>
 #include <stdexcept>
 
-
-
 using std::pair;
 using std::string;
 using std::cout;
@@ -58,12 +56,12 @@ void Cell::setBasisVectors(double scale, Matrix3 basis)
     basisVectors = scale*basis;
 }
 
-const Matrix3 Cell::getBasisVectors() const
+const Matrix3& Cell::getBasisVectors() const
 {
     return basisVectors;
 }
 
-const Matrix3 Cell::getReciprocalVectors() const
+const Matrix3& Cell::getReciprocalVectors() const
 {
     return reciprocalVectors;
 }
@@ -92,6 +90,13 @@ Sublattice& Cell::getSublattice(string name)
     return *it;
 }
 
+    Sublattice& Cell::operator[](std::size_t position)
+    {
+        return sublatticeInfo[position];
+    }
+
+    
+    
 const std::size_t Cell::getPosition(std::string name)
 {
     auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));

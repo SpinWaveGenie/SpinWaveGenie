@@ -18,7 +18,7 @@ public:
     ExchangeInteraction(std::string name, double value, std::string sl_r,std::string sl_s, double min, double max);
     void updateInteraction(double value, std::string sl_r,std::string sl_s, double min, double max);
     virtual void updateValue(double value_in);
-    virtual std::string getName();
+    virtual const std::string& getName();
     void calcConstantValues(Cell& cell);
     void calculateEnergy(Cell& cell, double &energy);
     void calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);

@@ -70,15 +70,13 @@ public:
     //! returns a ConstIterator to the end of the vector;
     ConstIterator cend();
 private:
-    std::string name;
-    std::string type;
-    double spin,
-    theta,
-    phi;
+    std::string name, type;
+    double spin, theta, phi;
     Matrix3 rotationMatrix,
     inverseMatrix;
     UniqueThreeVectors<double> positions;
 };
+    
 }    
 
 #endif // __Sublattice_H__
