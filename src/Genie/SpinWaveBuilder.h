@@ -20,7 +20,7 @@ public:
     void updateInteraction(std::string name, double value);
     double getEnergy();
     Eigen::VectorXcd getFirstOrderTerms();
-    SpinWave Create_Element();
+    SpinWave createElement();
 private:
     Cell cell;
     boost::ptr_vector<Interaction> interactions;

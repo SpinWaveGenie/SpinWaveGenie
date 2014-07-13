@@ -274,7 +274,7 @@ void Init::parseDispersion(const pugi::xml_node &node)
         Dispersion.setPoints(Line.getPoints());
     }
     
-    Dispersion.setGenie(builder.Create_Element());
+    Dispersion.setGenie(builder.createElement());
     Dispersion.save();
 }
 
@@ -372,7 +372,7 @@ void Init::parseTwoDimensionCut(const pugi::xml_node &node)
             cout << "RESOLUTION FUNCTION NOT SET!!!" << endl;
         }
         
-        SpinWave SW = builder.Create_Element();
+        SpinWave SW = builder.createElement();
         unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(resinfo), SW, Energies(MinEnergy, MaxEnergy, NumberPoints)));
         Cut.setPlotObject(move(res));
         Cut.setEnergyPoints(MinEnergy,MaxEnergy,NumberPoints);

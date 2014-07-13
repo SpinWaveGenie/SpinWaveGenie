@@ -59,6 +59,7 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell& cell)
        
     neighbors.findNeighbors(cell,sl_r, sl_r, min, max);
     double z_rs = neighbors.size();
+    //cout << "z_rs = " << z_rs << endl;
 
     //cout << "cell check(calcConstantValues): " << cell2.begin()->getName() << endl;
 

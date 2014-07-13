@@ -21,18 +21,13 @@ void Neighbors::findNeighbors(Cell& cell, string sl1, string sl2 , double min, d
     // all atoms provides a good check that all atoms have the same number of neighbors in the same relative
     // positions
     
-    
-    //cout << "cell check(Neighbors): " << cell.begin()->getName() << endl;
     for(Sublattice::Iterator atom1 = cell.getSublattice(sl1).begin(); atom1!=cell.getSublattice(sl1).end();++atom1)
     //auto atom1 = cell.getSublattice(sl1).begin();
     {
-        // Increase the size of the supercell until the list of neighbors does not change
-        // for two consecutive iterations. A 5x5x5 supercell should good enough for
-        // any physical interaction. If not, a warning message will be printed.
+        //  A 5x5x5 supercell should good enough for any physical interaction.
         UniqueThreeVectors<double> Neighbors;
-        for (long supercellSize = 2;supercellSize<=2;supercellSize++)
+        for (long supercellSize = 5;supercellSize<=5;supercellSize++)
         {
-            bool newterm = false;
             //cout << supercellSize << endl;
             for (Sublattice::Iterator atom2=cell.getSublattice(sl2).begin(); atom2!=cell.getSublattice(sl2).end(); ++atom2)
             {
@@ -55,23 +50,12 @@ void Neighbors::findNeighbors(Cell& cell, string sl1, string sl2 , double min, d
                             if (norm < max && norm > min)
                             {
                                 //cout << "candidate: " << relativeDistance.transpose() << endl;
-                                if(Neighbors.insert(relativeDistance[0],relativeDistance[1],relativeDistance[2]))
-                                {
-                                    newterm = true;
-                                }
-                            }
-                            if (dispAng.norm() < max)
-                            {
-                                newterm = true;
+                                Neighbors.insert(relativeDistance[0],relativeDistance[1],relativeDistance[2]);
                             }
                         }
                     }
                 }
             }
-            if (!newterm)
-                break;
-            if (supercellSize==5)
-                cout << "Couldn't find all neighbors at specified distance" << endl;
         }
         if (atom1 == cell.getSublattice(sl1).begin())
         {
@@ -107,6 +91,7 @@ complex<double> Neighbors::getGamma(Vector3 K)
         //cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
         double dot_prod = K[0]*nbr->get<0>() + K[1]*nbr->get<1>() + K[2]*nbr->get<2>();
         gamma_rs += exp(MXI*dot_prod);
+        //cout << "gamma_rs = " << gamma_rs << " " << numberNeighbors << endl;
     }
     return gamma_rs/numberNeighbors;
 }
