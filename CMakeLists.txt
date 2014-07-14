@@ -26,6 +26,11 @@ find_package(NLOPT REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(TBB REQUIRED)
 find_package(Nexus REQUIRED)
+
+string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
+if (isRHEL6)
+    set(Boost_NO_BOOST_CMAKE ON)
+endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS program_options unit_test_framework)
 
 option(BUILD_TESTING "Build unit tests" OFF)
