@@ -48,6 +48,8 @@ if( NEXUS_INCLUDE_DIR )
   set( NEXUS_VERSION ${NEXUS_VERSION_TMP} CACHE STRING "" FORCE )
 endif()
 
+mark_as_advanced(NEXUS_INCLUDE_DIR NEXUS_CPP_LIBRARIES NEXUS_C_LIBRARIES NEXUS_VERSION NEXUS_C_LIBRARIES_DEBUG NEXUS_CPP_LIBRARIES_DEBUG)
+
 # Handle the QUIETLY and REQUIRED arguments and set NEXUS_FOUND to TRUE if 
 # all listed variables are TRUE
 include ( FindPackageHandleStandardArgs )

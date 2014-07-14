@@ -1,6 +1,6 @@
 # - Try to find Eigen3 lib
 #
-# This module supports requiring a minimum version, e.g. you can do
+# This module supports requiring a minimum version, e.g. you can do/Users/svh/Desktop/tmp/spin_wave_genie/cmake/FindEigen3.cmake
 #   find_package(Eigen3 3.1.2)
 # to require version 3.1.2 or newer of Eigen3.
 #
