@@ -25,6 +25,7 @@ Interaction* AnisotropyInteraction::do_clone() const
 
 void AnisotropyInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
+    r = -1;
     value = value_in;
     unitVectorIn.normalize();
     directions = unitVectorIn*unitVectorIn.transpose();

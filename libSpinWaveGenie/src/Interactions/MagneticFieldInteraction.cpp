@@ -26,6 +26,7 @@ Interaction* MagneticFieldInteraction::do_clone() const
 
 void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
+    r = -1;
     value = value_in;
     directions = unitVectorIn;
     directions.normalize();
