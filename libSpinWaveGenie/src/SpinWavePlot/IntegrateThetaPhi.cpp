@@ -66,7 +66,7 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     Matrix3 basisVectors = resolutionFunction->getCell().getBasisVectors();
     
     k = tmp.transpose()*basisVectors/(2.0*M_PI);
-    //cout << tmp.transose() << endl;
+    //cout << tmp.norm() << endl;
     //cout << k.transpose() << endl;
     
     vector<double> val = resolutionFunction->getCut(k[0],k[1],k[2]);

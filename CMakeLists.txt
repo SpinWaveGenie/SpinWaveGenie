@@ -18,7 +18,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     message("compiler detected as: GNU compiler")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -march=native" CACHE STRING "compile flags" FORCE)
 elseif(APPLE)
-    message("compiler detected as: LLVM compiler")
+    message("Setting up Xcode for C++11 with libc++.")
+    if(CMAKE_GENERATOR STREQUAL Xcode)
+        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
+        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+    endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -DEIGEN_DONT_PARALLELIZE -msse4" CACHE STRING "compile flags" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
@@ -33,12 +37,17 @@ if (isRHEL6)
 endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS program_options unit_test_framework)
 
+option(BUILD_EXAMPLES "Build SpinWaveGenieExamples" OFF)
 option(BUILD_TESTING "Build unit tests" OFF)
 option(ENABLE_DOXYGEN "Enables building of documentation with doxygen" OFF)
 
 if(BUILD_TESTING)
     enable_testing()
 endif(BUILD_TESTING)
+
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)

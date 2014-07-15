@@ -1,6 +1,7 @@
 #include <fstream>
 #include "SpinWaveGenie/SpinWavePlot/SpinWaveDispersion.h"
 #include "SpinWaveGenie/Containers/Results.h"
+#include "External/ezRateProgressBar.hpp"
 
 using std::string; using std::vector;
 using std::cout; using std::endl;
@@ -49,12 +50,15 @@ void SpinWaveDispersion::save()
 {
     
     std::ofstream file(Filename);
+    ez::ezRateProgressBar<int> p(Kpoints.size());
+    p.units = "Q-points";
+    p.start();
     for(auto it = Kpoints.begin(); it != Kpoints.end(); it++)
     {
         double x = it->get<0>();
         double y = it->get<1>();
         double z = it->get<2>();
-        cout << x << " " << y << " " << z << endl;
+        //cout << x << " " << y << " " << z << endl;
 
         if (PrintPosition)
         {
@@ -82,7 +86,7 @@ void SpinWaveDispersion::save()
         }
         
         file << endl;
+        p.update(std::distance(Kpoints.begin(),it));
     }
+    p.update(Kpoints.size());
 }
-
-

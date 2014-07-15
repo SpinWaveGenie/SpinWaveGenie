@@ -28,7 +28,10 @@ set(LIBRARY_HDRS ${EXTERNAL_HDRS} ${EXTERN_HDRS} ${CELL_HDRS} ${CONTAINERS_HDRS}
 
 include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${TBB_INCLUDE_DIRS} ${NLOPT_INCLUDE_DIRS} ${NEXUS_INCLUDE_DIRS} include src)
 
-add_library(SpinWaveGenie ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+add_library(SpinWaveGenie STATIC ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+
+install(DIRECTORY include/ DESTINATION include)
+install(TARGETS SpinWaveGenie ARCHIVE DESTINATION lib)
 
 if(BUILD_TESTING)
     add_subdirectory(test)
