@@ -12,15 +12,10 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SpinWaveGenie/Containers/Matrices.h"
-#include "SpinWaveGenie/Containers/PointsAlongLine.h"
-#include "SpinWaveGenie/Containers/ThreeVectors.h"
-#include "SpinWaveGenie/Cell/Sublattice.h"
-#include "SpinWaveGenie/Cell/Cell.h"
-#include "SpinWaveGenie/Genie/SpinWaveBuilder.h"
-#include "SpinWaveGenie/Interactions/InteractionFactory.h"
-#include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/SpinWavePlot/SpinWaveDispersion.h"
+#include "SpinWaveGenie/Containers/Containers.h"
+#include "SpinWaveGenie/Genie/Genie.h"
+#include "SpinWaveGenie/Interactions/Interactions.h"
+#include "SpinWaveGenie/Plot/Plot.h"
 
 using namespace std;
 using namespace SpinWaveGenie;

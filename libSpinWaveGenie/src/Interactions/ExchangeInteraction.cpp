@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SpinWaveGenie/Cell/Neighbors.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
 
 using namespace std;

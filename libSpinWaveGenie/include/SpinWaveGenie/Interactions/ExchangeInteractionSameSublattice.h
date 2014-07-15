@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include "SpinWaveGenie/Cell/Cell.h"
+#include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Containers/Matrices.h"
-#include "SpinWaveGenie/Cell/Neighbors.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 
 namespace SpinWaveGenie
 {

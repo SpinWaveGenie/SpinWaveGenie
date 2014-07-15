@@ -17,8 +17,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
-#include "SpinWaveGenie/Cell/Cell.h"
-#include "SpinWaveGenie/Cell/Neighbors.h"
+#include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Genie/MagneticFormFactor.h"

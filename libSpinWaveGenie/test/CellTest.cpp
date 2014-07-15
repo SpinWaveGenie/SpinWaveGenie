@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include "SpinWaveGenie/Cell/Cell.h"
+#include "SpinWaveGenie/Containers/Cell.h"
 
 
 using namespace SpinWaveGenie;

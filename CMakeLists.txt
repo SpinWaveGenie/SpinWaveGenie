@@ -23,7 +23,7 @@ elseif(APPLE)
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
     endif()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -DEIGEN_DONT_PARALLELIZE -msse4" CACHE STRING "compile flags" FORCE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -DEIGEN_DONT_PARALLELIZE -msse4")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 find_package(NLOPT REQUIRED)
@@ -37,7 +37,7 @@ if (isRHEL6)
 endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS program_options unit_test_framework)
 
-option(BUILD_EXAMPLES "Build SpinWaveGenieExamples" OFF)
+option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" ON)
 option(BUILD_TESTING "Build unit tests" OFF)
 option(ENABLE_DOXYGEN "Enables building of documentation with doxygen" OFF)
 

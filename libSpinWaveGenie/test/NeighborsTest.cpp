@@ -5,9 +5,9 @@
 #include <iostream>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include "SpinWaveGenie/Cell/Cell.h"
+#include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
-#include "SpinWaveGenie/Cell/Neighbors.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 
 using namespace SpinWaveGenie;
 

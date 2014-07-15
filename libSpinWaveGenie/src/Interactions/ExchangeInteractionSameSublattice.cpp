@@ -1,6 +1,6 @@
 #include <iostream>
 #include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
-#include "SpinWaveGenie/Cell/Neighbors.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 
 using namespace std;
 using namespace Eigen;

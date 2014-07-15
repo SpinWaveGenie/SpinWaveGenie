@@ -5,7 +5,7 @@
 #include <random>
 
 #include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/Cell/Neighbors.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Matrices.h"
 
 using namespace Eigen;
