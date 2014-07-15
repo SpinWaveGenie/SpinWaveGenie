@@ -45,10 +45,10 @@ int main()
     PointsAlongLine Line;
     Line.setFirstPoint(0.0,0.0,0.0);
     Line.setFinalPoint(0.0,0.0,3.0*2.0*M_PI);
-    Line.setNumberPoints(401);
+    Line.setNumberPoints(801);
     ThreeVectors<double> kPoints = Line.getPoints();
     
-    Energies energies(0.0, 5.0, 401);
+    Energies energies(0.0, 5.0, 801);
     
     
     OneDimensionalFactory factory;

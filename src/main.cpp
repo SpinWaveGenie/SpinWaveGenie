@@ -1,14 +1,12 @@
 #include <cmath>
-#include <nlopt.hpp>
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <algorithm>
 #include <boost/lexical_cast.hpp>
+#include <Eigen/Dense>
 #include "Genie/SpinWaveBuilder.h"
-#include "Initializer.h"
-#include "Cell/Cell.h"
-#include "Cell/Neighbors.h"
+#include "Genie/Neighbors.h"
+#include "Containers/Cell.h"
 #include "Interactions/InteractionFactory.h"
 #include "External/ezRateProgressBar.hpp"
 

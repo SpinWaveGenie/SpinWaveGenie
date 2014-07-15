@@ -35,11 +35,12 @@ string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
 if (isRHEL6)
     set(Boost_NO_BOOST_CMAKE ON)
 endif(isRHEL6)
-find_package(Boost REQUIRED COMPONENTS program_options unit_test_framework)
+find_package(Boost REQUIRED COMPONENTS system thread program_options unit_test_framework)
 
 option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" ON)
 option(BUILD_TESTING "Build unit tests" OFF)
 option(ENABLE_DOXYGEN "Enables building of documentation with doxygen" OFF)
+option(USE_THREADS "Use Threading Building Blocks to improve performance" ON)
 
 if(BUILD_TESTING)
     enable_testing()
@@ -47,6 +48,10 @@ endif(BUILD_TESTING)
 
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
+endif()
+
+if(USE_THREADS)
+add_definitions(-DUSE_THREADS)
 endif()
 
 # add a target to generate API documentation with Doxygen
@@ -61,4 +66,4 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
-
+add_subdirectory(parallelTest)
