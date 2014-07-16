@@ -6,14 +6,12 @@
 
 Install g++, boost, git, cmake, doxygen, boost, eigen, TBB, NeXus and Nlopt.
 
-Currently the dependencies are installed cncs2.sns.gov.
+Stuart Campbell installed these dependencies on cncs2.sns.gov. They could be rolled out to the other analysis computers.
 
+While users could alternatively install some of these dependencies in their home directory, it's considerably more complicated
+and not recommended. 
 
-~~~~.bash
-$ sudo yum install gcc-c++ boost boost-devel python-devel zlib-devel git-all cmake openmpi openmpi-devel cuda
-~~~~
+\section  software_req_install_centos_build Compile Spin Wave Genie
 
-\section  software_req_install_centos_build Compile hoomd
-
-See \ref sec_build_linux_generic_compile for instructions on compiling hoomd.
+See \ref sec_build_linux_generic_compile for instructions on compiling Spin Wave Genie.
 */

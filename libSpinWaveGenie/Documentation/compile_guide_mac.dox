@@ -17,14 +17,16 @@ below:
 $ echo hello
 hello
 ~~~~
-`$` indicates a shell prompt. As demonstrated above, if you type `echo hello`, then you should see the same output
-obtained above on the next line: `hello`
+`$` indicates a shell prompt. As demonstrated above, if you type `echo hello world`, then you should see the same output
+obtained above on the next line: `hello world`
 
 1. **Install XCode with Command Line Tools:**
 Click on this link to [Xcode on the Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12), then click on “View in Mac App Store.”
 The “App Store” app on your Mac will launch and take you the Xcode page. Click on the “Free” button, then click on “Install App.”
+
 Once the installation is complete, go to your Applications folder and double-click on Xcode. From the menu bar click on "Xcode" followed by "Preferences."
 Click on the “Downloads” icon, then click on the “Install” button next to “Command Line Tools.”
+
 Confirm the installation was successful by typing the following in a terminal window.
 ~~~~.bash
 $ clang++ -v
@@ -58,7 +60,8 @@ Install boost and Threading Building Blocks, making sure to use the --c++11 opti
 $ brew install boost --c++11
 $ brew install tbb --c++11
 ~~~~
-The Nlopt and nexusformat formulas require minor modifications to compile with libc++ instead of the older libstdc++.
+In OS X 10.8 Mountain Lion, Nlopt and nexusformat formulas require minor modifications to compile with libc++ instead of the older libstdc++. 
+Starting with OS X 10.9 Mavericks libc++ is the compiler default, so these modifications are not necessary. 
 We will need to push these changes upstream so users don't need to manually make these modifications.
 
 Updated nlopt.rb with option --c++11

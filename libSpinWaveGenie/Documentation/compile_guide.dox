@@ -40,13 +40,12 @@ $ ccmake .
 After changing an option, press *c* to configure then press *g* to generate. The makefile/IDE project is now updated with
 the newly selected options.
 - **BUILD_TESTING** - Enables the compilation of unit tests
+- **USE_THREADS** - Use Threading Building Blocks to spread tasks over multiple CPU cores for better performance
 - **CMAKE_BUILD_TYPE** - sets the build type (case sensitive)
     - **Debug** - Compiles debug information into the library and executables.
-       Enables asserts to check for programming mistakes. HOOMD-blue will run
-       \e very slow if compiled in Debug mode, but problems are easier to
-       identify.
+       Enables asserts to check for programming mistakes. Spin Wave Genie will run
+       very slow in Debug mode, but problems may be easier to identify.
     - **RelWithDebInfo** - Compiles with optimizations and debug symbols. Useful for profiling benchmarks.
-    - **Release** - All compiler optimizations are enabled and asserts are removed.
-       Recommended for production builds: required for any benchmarking.
+    - **Release** - All compiler optimizations are enabled and asserts are removed..
 - **ENABLE_DOXYGEN** - enables the generation of detailed user and developer documentation (Defaults *off*)
 */
