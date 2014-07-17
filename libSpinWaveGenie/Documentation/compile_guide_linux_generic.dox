@@ -19,21 +19,52 @@ $ git clone git+ssh://trac.sns.gov/var/repos/spin_wave_genie
 ~~~~
 and, when prompted, type in your password.
 
+NOTE: there are firewall rules that stop analysis computers in the target building from sshing back to trac.sns.gov. 
+The simplest workaround is the clone the respository in your home directory on analysis.sns.gov, after which the spin_wave_genie directory
+will be available in the same location on the other analysis computers.
 
 Compile and install Spin Wave Genie with makefiles:
+
+Make is one of the most widespread build systems and included with most unix-based operating systems.
+
 ~~~~
 $ cd spin_wave_genie
 $ mkdir build
 $ cd build
 $ cmake ..
-$ make -j 8
+$ make -j N
 $ make install
 ~~~~
-where is the number of cores to use for the compilation.
-
+where N is the number of cores to use for the compilation.
 
 ~~~~
 $ make install
 ~~~~
+
+Compile and install Spin Wave Genie with ninja:
+
+Ninja is another build system born out of the Chromium browser project.  
+Its distinguishing goal is to be fast and builds are always run in parallel.
+
+~~~~
+$ cd spin_wave_genie
+$ mkdir build
+$ cd build
+$ cmake -G Ninja ..
+$ ninja
+$ ninja install
+~~~~
+
+Creating an XCode project:
+
+Software development is often more efficient within an integrated development environment (IDE) such as XCode.
+
+~~~~
+$ cd spin_wave_genie
+$ mkdir build
+$ cd build
+$ cmake -G Ninja ..
+open spin_wave_genie.xcodeproj
+~~~
 
 */

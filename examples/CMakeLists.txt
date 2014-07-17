@@ -4,6 +4,7 @@ LINK_LIBRARIES(${Boost_LIBRARIES} ${TBB_LIBRARIES} SpinWaveGenie)
 
 add_executable(AFMDispersion AFMChain/Dispersion.cpp)
 add_executable(AFMcut AFMChain/TwoDimensionalCut.cpp)
+add_executable(AFMPowderAverage AFMChain/PowderAverage.cpp)
 
 add_executable(FMPowderAverage FMChain/PowderAverage.cpp)
 add_executable(FMDispersion FMChain/Dispersion.cpp)
