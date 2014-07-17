@@ -7,7 +7,6 @@ using std::string; using std::vector;
 using std::cout; using std::endl;
 using namespace SpinWaveGenie;
 
-
 SpinWaveDispersion::SpinWaveDispersion()
 {
     PrintPosition = true;
@@ -48,7 +47,6 @@ void SpinWaveDispersion::setPoints(ThreeVectors<double> pts)
 
 void SpinWaveDispersion::save()
 {
-    
     std::ofstream file(Filename);
     ez::ezRateProgressBar<int> p(Kpoints.size());
     p.units = "Q-points";

@@ -1,39 +1,36 @@
 //
-//  TwoDimensionCut.h
+//  TwoDimensionalCut.h
 //  spin_wave_genie
 //
 //  Created by Hahn, Steven E. on 1/16/14.
 //
 //
 
-#ifndef __spin_wave_genie__TwoDimensionCut__
-#define __spin_wave_genie__TwoDimensionCut__
+#ifndef __spin_wave_genie__TwoDimensionalCut__
+#define __spin_wave_genie__TwoDimensionalCut__
 
-#include <iostream>
 #include <memory>
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
-#include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
-#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 
 namespace SpinWaveGenie
 {
-
-class TwoDimensionCut
+    
+class TwoDimensionalCut
 {
 public:
     void setFilename(std::string name);
+    TwoDimensionalCut();
+    ~TwoDimensionalCut();
     void setPoints(ThreeVectors<double> pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
     void setPlotObject(std::unique_ptr<SpinWavePlot> object);
     Eigen::MatrixXd getMatrix();
     void save();
 private:
-    size_t EnergyPoints;
-    std::unique_ptr<SpinWavePlot> InstrumentResolution;
-    std::string Filename;
-    ThreeVectors<double> Kpoints;
+    class CutImpl;
+    std::unique_ptr<CutImpl> m_p;
 };
 
 }
-#endif /* defined(__spin_wave_genie__TwoDimensionCut__) */
+#endif /* defined(__spin_wave_genie__TwoDimensionalCut__) */

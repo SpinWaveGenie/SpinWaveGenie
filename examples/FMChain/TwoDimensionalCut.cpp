@@ -56,7 +56,7 @@ int main()
     
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW,energies));
     
-    TwoDimensionCut twodimcut;
+    TwoDimensionalCut twodimcut;
     twodimcut.setFilename("FMcut.txt");
     twodimcut.setPlotObject(move(res));
     twodimcut.setPoints(kPoints);

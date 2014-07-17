@@ -70,7 +70,6 @@ namespace SpinWaveGenie
         }
     };
     
-
     std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double kyIn, double kzIn)
     {
         size_t EnergyPoints = energies.size();

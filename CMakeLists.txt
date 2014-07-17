@@ -66,3 +66,4 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
+add_subdirectory(parallelTest)
