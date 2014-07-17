@@ -12,11 +12,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SpinWaveGenie/Containers/Containers.h"
-#include "SpinWaveGenie/Genie/Genie.h"
-#include "SpinWaveGenie/Interactions/Interactions.h"
-#include "SpinWaveGenie/Plot/Plot.h"
-
+#include "SpinWaveGenie/SpinwaveGenie.h"
 using namespace std;
 using namespace SpinWaveGenie;
 
@@ -50,14 +46,13 @@ int main()
     
     Energies energies(0.0, 5.0, 801);
     
-    
     OneDimensionalFactory factory;
     auto gauss = factory.getGaussian(0.15,1.0e-5);
     
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW,energies));
     
     TwoDimensionalCut twodimcut;
-    twodimcut.setFilename("FMcut.txt");
+    twodimcut.setFilename("FMcut");
     twodimcut.setPlotObject(move(res));
     twodimcut.setPoints(kPoints);
     twodimcut.save();

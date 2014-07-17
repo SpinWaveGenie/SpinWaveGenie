@@ -58,7 +58,7 @@ int main()
     unique_ptr<SpinWavePlot> cut(new IntegrateThetaPhi(move(res),1.0e-2));    
 
     TwoDimensionalCut twodimcut;
-    twodimcut.setFilename("FMPowderAverage.txt");
+    twodimcut.setFilename("FMPowderAverage");
     twodimcut.setPlotObject(move(cut));
     twodimcut.setPoints(kPoints);
     twodimcut.save();

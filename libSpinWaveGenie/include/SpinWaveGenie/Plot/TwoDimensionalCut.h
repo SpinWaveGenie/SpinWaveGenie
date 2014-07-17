@@ -19,14 +19,14 @@ namespace SpinWaveGenie
 class TwoDimensionalCut
 {
 public:
-    void setFilename(std::string name);
     TwoDimensionalCut();
-    ~TwoDimensionalCut();
+    void setFilename(std::string name);
     void setPoints(ThreeVectors<double> pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
     void setPlotObject(std::unique_ptr<SpinWavePlot> object);
     Eigen::MatrixXd getMatrix();
     void save();
+    ~TwoDimensionalCut();
 private:
     class CutImpl;
     std::unique_ptr<CutImpl> m_p;

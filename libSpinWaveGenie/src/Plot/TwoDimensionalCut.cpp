@@ -25,13 +25,16 @@ namespace SpinWaveGenie
     {
     public:
         std::string Filename;
+#ifdef USE_THREADS
         tbb::atomic<int> counter;
+#else
+        int counter;
+#endif
         Eigen::MatrixXd mat;
         unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
         SpinWaveGenie::ThreeVectors<double> points;
-    
-        CutImpl(): counter(0) {};
-        CutImpl(unique_ptr<SpinWaveGenie::SpinWavePlot> inCut, SpinWaveGenie::ThreeVectors<double> inPoints): counter(0), cut(move(inCut)), points(inPoints) {};
+        CutImpl() { counter = 0;};
+        CutImpl(unique_ptr<SpinWaveGenie::SpinWavePlot> inCut, SpinWaveGenie::ThreeVectors<double> inPoints): cut(move(inCut)), points(inPoints) { counter = 0;};
     
         void progressBar(int numberPoints)
         {
@@ -61,7 +64,7 @@ namespace SpinWaveGenie
             }
         }
 #ifdef USE_THREADS
-        Eigen::MatrixXd GenerateMatrix()
+        Eigen::MatrixXd generateMatrix()
         {
             mat.resize(cut->getEnergies().size(),points.size());
             TbbExecutor tbbExec(this);
@@ -83,7 +86,7 @@ namespace SpinWaveGenie
             CutImpl* w_;
         };
 #else
-        Eigen::MatrixXd GenerateMatrix()
+        Eigen::MatrixXd generateMatrix()
         {
             mat.resize(cut->getEnergies().size(),points.size());
             boost::thread pbar(bind(&CutImpl::progressBar,this,points.size() ));
@@ -119,18 +122,36 @@ namespace SpinWaveGenie
 
     Eigen::MatrixXd TwoDimensionalCut::getMatrix()
     {
-        return m_p->GenerateMatrix();
+        return m_p->generateMatrix();
     }
 
     void TwoDimensionalCut::save()
     {
-        Eigen::MatrixXd figure = m_p->GenerateMatrix();
-        std::ofstream file(m_p->Filename);
+        Eigen::MatrixXd figure = getMatrix();
+        std::ofstream file(m_p->Filename+".mat");
         if (file.is_open())
         {
-            file << figure;
+            file << figure << endl;
         }
-        file << endl;
         file.close();
+        
+        file.open(m_p->Filename+".x");
+        if (file.is_open())
+        {
+            ThreeVectors<double> pts = m_p->points;
+            for (auto it = pts.begin();it!=pts.end();++it)
+                file << it->get<0>() << "\t" <<  it->get<1>() << "\t" << it->get<2>() << endl;
+        }
+        
+        file.close();
+        file.open(m_p->Filename+".y");
+        if (file.is_open())
+        {
+            Energies energies = m_p->cut->getEnergies();
+            for (auto it = energies.begin();it!=energies.end();++it)
+                file << (*it) << endl;
+        }
+        file.close();
+        
     }
 }
