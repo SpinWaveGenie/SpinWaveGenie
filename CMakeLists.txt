@@ -26,9 +26,9 @@ elseif(APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -DEIGEN_DONT_PARALLELIZE -msse4")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-find_package(NLOPT REQUIRED)
+find_package(NLOPT)
 find_package(Eigen3 REQUIRED)
-find_package(TBB REQUIRED)
+find_package(TBB)
 find_package(Nexus REQUIRED)
 
 string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
@@ -50,7 +50,7 @@ if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-if(USE_THREADS)
+if(USE_THREADS AND ${TBB_FOUND} )
 add_definitions(-DUSE_THREADS)
 endif()
 
@@ -66,6 +66,6 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
-#add_subdirectory(MnV2O4)
+add_subdirectory(MnV2O4)
 #add_subdirectory(CoV2O4)
 #add_subdirectory(CubicPerovskite)

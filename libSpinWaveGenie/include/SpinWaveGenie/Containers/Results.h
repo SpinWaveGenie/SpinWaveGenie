@@ -55,6 +55,7 @@ public:
     void uniqueSolutions();
     //! Filter Points by removing those without significant intensity.
     void significantSolutions(double ETS=1.0e-10);
+    const Point& operator[](std::size_t position);
     typedef std::vector<Point>::iterator Iterator;
     typedef std::vector<Point>::const_iterator ConstIterator;
     //! \return Returns an Iterator pointing to the first element in the container.
@@ -68,6 +69,11 @@ public:
 private:
     std::vector<Point> results;
 };
+    
+inline const Point& Results::operator[](std::size_t bin)
+{
+    return results[bin];
+}
 
 inline const size_t Results::size() const
 {
