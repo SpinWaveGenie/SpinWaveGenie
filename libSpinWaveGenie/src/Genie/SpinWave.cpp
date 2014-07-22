@@ -82,9 +82,9 @@ void SpinWave::calculateEigenvalues()
     
     LN = LN*2.0;
     
-    for(int i=0;i<4;i++)
+    for(int i=0;i<2*M;i++)
     {
-        for( int j=0;j<4;j++)
+        for( int j=0;j<2*M;j++)
         {
             if (std::abs(LN(i,j)) < 1.0e-10)
             {
@@ -234,7 +234,6 @@ void SpinWave::calculateIntensities()
     double S_r,ff;
     ArrayXXcd Intensities(M,3); Intensities.setZero();
     VectorXd SXX,SYY,SZZ;
-    
     long L2 = 0;
     for (Cell::Iterator sl = cell.begin(); sl!=cell.end();++sl) //r
     {

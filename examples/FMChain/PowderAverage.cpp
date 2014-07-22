@@ -24,7 +24,6 @@ int main()
 {
     Cell cell;
     cell.setBasisVectors(1.0,10.0,10.0,90.0,90.0,90.0);
-    
     Sublattice spin0;
     string name0 = "Spin0";
     spin0.setName(name0);

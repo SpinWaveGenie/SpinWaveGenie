@@ -66,5 +66,6 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
+#add_subdirectory(MnV2O4)
 #add_subdirectory(CoV2O4)
 #add_subdirectory(CubicPerovskite)

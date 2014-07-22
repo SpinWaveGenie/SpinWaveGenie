@@ -153,7 +153,6 @@ void MagneticFormFactor::setType(std::string type)
 void MagneticFormFactor::setType(std::string type, double weight)
 {
 
-    
     if ( coefficients.find(type) != coefficients.end() )
     {
         Farray.push_back(coefficients[type]);
