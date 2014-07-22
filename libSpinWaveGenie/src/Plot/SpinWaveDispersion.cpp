@@ -66,6 +66,8 @@ void SpinWaveDispersion::save()
         Genie.createMatrix(x,y,z);
         Genie.calculate();
         Results pts = Genie.getPoints();
+        pts.sort();
+        //pts.significantSolutions();
         
         if(PrintFrequency)
         {

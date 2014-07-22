@@ -61,13 +61,16 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
     firstOrder.setZero(2*cell.size());
     for (auto iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        // vector<string> sls = iter->sublattices();
-        // for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
-        // {
-        // cout << (*iter2) << " ";
-        // }
-        // cout << endl;
-        //firstOrder.setZero(2*M);
+        /*cout << iter->getName() << " ";
+        vector<string> sls = iter->sublattices();
+        for(vector<string>::iterator iter2 = sls.begin();iter2 !=sls.end();++iter2)
+         {
+         cout << (*iter2) << " ";
+         }
+        cout << endl;
+        int M = cell.size();
+        firstOrder.setZero(2*M);
+        */
         iter->calculateFirstOrderTerms(this->cell,firstOrder);
         //cout << firstOrder[2] << " " << firstOrder[8] << endl;
         //cout << firstOrder.transpose() << endl;
@@ -84,7 +87,7 @@ SpinWave SpinWaveBuilder::createElement()
     }
     SpinWave SW(cell,interactions);
     Eigen::VectorXcd firstOrder = getFirstOrderTerms();
-    if (firstOrder.norm() > 0.01)
+    if (firstOrder.norm() > 0.1)
     {
         cout << "Warning! Nonzero first order terms present." << endl;
         cout << firstOrder.transpose() << endl;

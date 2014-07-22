@@ -65,7 +65,7 @@ std::vector<double> EnergyResolutionFunction::getCut(double kx, double ky, doubl
     SW.calculate();
     Results points = SW.getPoints();
     
-    points.significantSolutions();
+    //points.significantSolutions();
     
     for(auto pt = points.begin();pt!=points.end();pt++)
     {

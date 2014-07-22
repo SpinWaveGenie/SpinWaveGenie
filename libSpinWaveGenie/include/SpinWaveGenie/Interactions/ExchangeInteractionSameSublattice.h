@@ -32,7 +32,7 @@ private:
     int r,s,M;
     double value,min,max;
     std::complex<double> gamma_rs;
-    std::complex<double> LNrr,LNss,LNrs,LNrsM;
+    std::complex<double> LNrr,LNrs;
 };
 }
 #endif

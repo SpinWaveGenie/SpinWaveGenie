@@ -74,9 +74,8 @@ void Results::uniqueSolutions()
     results = VI_unique;
 }
 
-void Results::significantSolutions()
+void Results::significantSolutions(double ETS)
 {
-    double ETS = 0.001;
     vector<Point> VI_signif;
     
     for (int k=0;k!=results.size();k++)

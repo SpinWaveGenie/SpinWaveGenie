@@ -9,3 +9,6 @@ add_executable(AFMPowderAverage AFMChain/PowderAverage.cpp)
 add_executable(FMPowderAverage FMChain/PowderAverage.cpp)
 add_executable(FMDispersion FMChain/Dispersion.cpp)
 add_executable(FMcut FMChain/TwoDimensionalCut.cpp)
+
+add_executable(VillainDispersion Villain/Dispersion.cpp)
+

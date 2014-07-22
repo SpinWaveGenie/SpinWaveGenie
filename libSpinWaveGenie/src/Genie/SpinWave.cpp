@@ -58,7 +58,6 @@ void SpinWave::createMatrix(double KX,double KY,double KZ)
     boost::ptr_vector<Interaction>::iterator iter;
     for (iter = interactions.begin(); iter != interactions.end(); iter++)
     {
-        //cout <<endl << LN << endl;
         iter->updateMatrix(K,LN);
     }
 }
@@ -76,12 +75,24 @@ const Cell& SpinWave::getCell() const
 
 void SpinWave::calculateEigenvalues()
 {
+    //cout << LN << endl << endl;
     
     LN.block(0,M,M,M) *= -1.0;
     LN.block(M,M,M,M) *= -1.0;
     
     LN = LN*2.0;
-        
+    
+    for(int i=0;i<4;i++)
+    {
+        for( int j=0;j<4;j++)
+        {
+            if (std::abs(LN(i,j)) < 1.0e-10)
+            {
+                LN(i,j) = complex<double>(0.0,0.0);
+            }
+        }
+    }
+
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
@@ -176,6 +187,8 @@ void SpinWave::calculateWeights()
     // Reorder the XX's by the weights
     //
     
+    
+    
     partition(AL.begin(), AL.end(),IsPositive);
 
     for(int L1=0;L1<N;L1++)
@@ -254,7 +267,6 @@ void SpinWave::calculateIntensities()
     Intensities *= Intensities.conjugate();
     Intensities *= 1.0/(4.0*M);
     
-    
     SXX = Intensities.col(0).real();
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
@@ -263,6 +275,7 @@ void SpinWave::calculateIntensities()
     {
         Point pt;
         pt.frequency = abs(WW[i+M]);
+        //cout << SXX(i) << " " << SYY(i) << " " << SZZ(i) << endl;
         pt.intensity = SXX(i) + SYY(i) + SZZ(i) - (pow(KX,2)*SXX(i) + pow(KY,2)*SYY(i) + pow(KZ,2)*SZZ(i))/(pow(KX,2)+pow(KY,2)+pow(KZ,2));
         VI.insert(pt);
     }

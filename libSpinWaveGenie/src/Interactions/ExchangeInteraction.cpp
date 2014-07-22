@@ -104,17 +104,17 @@ void ExchangeInteraction::calculateFirstOrderTerms(Cell& cell, VectorXcd &elemen
     s = cell.getPosition(sl_s);
     M = cell.size();
     
-    double Sr = cell.getSublattice(sl_r).getMoment();
-    double Ss = cell.getSublattice(sl_s).getMoment();
+    double Sr = cell[r].getMoment();
+    double Ss = cell[s].getMoment();
 
     neighbors.findNeighbors(cell,sl_r, sl_s, min, max);
     double z_rs = neighbors.size();
     
-    Matrix3 Frs = cell.getSublattice(sl_r).getRotationMatrix()*
-    cell.getSublattice(sl_s).getInverseMatrix();
+    Matrix3 Frs = cell[r].getRotationMatrix()*
+    cell[s].getInverseMatrix();
     
-    Matrix3 Fsr = cell.getSublattice(sl_s).getRotationMatrix()*
-    cell.getSublattice(sl_r).getInverseMatrix();
+    Matrix3 Fsr = cell[s].getRotationMatrix()*
+    cell[r].getInverseMatrix();
     
     complex<double> F1rs(Frs(0,2),Frs(1,2));
     complex<double> F2rs(Frs(2,0),Frs(2,1));

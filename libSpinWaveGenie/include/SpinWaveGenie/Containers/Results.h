@@ -54,7 +54,7 @@ public:
     //! Filter Points by combining those with identical frequencies.
     void uniqueSolutions();
     //! Filter Points by removing those without significant intensity.
-    void significantSolutions();
+    void significantSolutions(double ETS=1.0e-10);
     typedef std::vector<Point>::iterator Iterator;
     typedef std::vector<Point>::const_iterator ConstIterator;
     //! \return Returns an Iterator pointing to the first element in the container.
