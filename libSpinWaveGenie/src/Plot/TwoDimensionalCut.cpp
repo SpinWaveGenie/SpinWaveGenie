@@ -16,14 +16,13 @@
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
 using namespace tbb;
-#else
+#endif
 
+//fix for gcc 4.4 only having cstdatomic
 #ifdef HAVE_ATOMIC_H
 #include <atomic>
 #else
 #include <cstdatomic>
-#endif
-
 #endif
 
 using namespace std;
@@ -34,11 +33,7 @@ namespace SpinWaveGenie
     {
     public:
         std::string Filename;
-#ifdef USE_THREADS
-        tbb::atomic<int> counter;
-#else
         atomic_int counter;
-#endif
         Eigen::MatrixXd mat;
         unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
         SpinWaveGenie::ThreeVectors<double> points;

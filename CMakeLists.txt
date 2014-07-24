@@ -23,7 +23,7 @@ elseif(APPLE)
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
     endif()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -DEIGEN_DONT_PARALLELIZE -msse4")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ ")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 find_package(NLOPT)
@@ -52,6 +52,12 @@ endif()
 
 if(USE_THREADS AND TBB_FOUND )
 add_definitions(-DUSE_THREADS)
+endif()
+
+INCLUDE (CheckIncludeFileCXX)
+CHECK_INCLUDE_FILE_CXX( atomic HAVE_ATOMIC)
+if(HAVE_ATOMIC)
+    add_definitions(-DHAVE_ATOMIC_H)
 endif()
 
 # add a target to generate API documentation with Doxygen
