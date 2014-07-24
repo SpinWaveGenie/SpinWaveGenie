@@ -16,7 +16,16 @@
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
 using namespace tbb;
+#else
+
+#ifdef HAVE_ATOMIC_H
+#include <atomic>
+#else
+#include <cstdatomic>
 #endif
+
+#endif
+
 using namespace std;
 
 namespace SpinWaveGenie
@@ -28,7 +37,7 @@ namespace SpinWaveGenie
 #ifdef USE_THREADS
         tbb::atomic<int> counter;
 #else
-        int counter;
+        atomic_int counter;
 #endif
         Eigen::MatrixXd mat;
         unique_ptr<SpinWaveGenie::SpinWavePlot> cut;

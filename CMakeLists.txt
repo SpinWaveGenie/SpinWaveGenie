@@ -50,7 +50,7 @@ if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-if(USE_THREADS AND ${TBB_FOUND} )
+if(USE_THREADS AND TBB_FOUND )
 add_definitions(-DUSE_THREADS)
 endif()
 
@@ -66,6 +66,6 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
-add_subdirectory(MnV2O4)
+#add_subdirectory(MnV2O4)
 #add_subdirectory(CoV2O4)
 #add_subdirectory(CubicPerovskite)

@@ -51,9 +51,9 @@ BOOST_AUTO_TEST_CASE(FirstOrderTest)
     double soln = -3.0*sqrt(2.0/2.0)*sin(M_PI/6);
     Eigen::VectorXcd result = builder.getFirstOrderTerms();
     BOOST_CHECK_CLOSE(result(0).real(),soln,1.0e-5);
-    BOOST_CHECK_CLOSE(result(0).imag(),0.0,1.0e-5);
+    BOOST_CHECK_SMALL(result(0).imag(),1.0e-5);
     BOOST_CHECK_CLOSE(result(1).real(),soln,1.0e-5);
-    BOOST_CHECK_CLOSE(result(1).imag(),0.0,1.0e-5);
+    BOOST_CHECK_SMALL(result(1).imag(),1.0e-5);
 }
 
 BOOST_AUTO_TEST_CASE(SecondOrderTest)
@@ -67,11 +67,11 @@ BOOST_AUTO_TEST_CASE(SecondOrderTest)
     result.setZero(2,2);
     magneticField->updateMatrix(Vector3(0.0,0.0,1.0), result);
     BOOST_CHECK_CLOSE(result(0,0).real(),soln,1.0e-5);
-    BOOST_CHECK_CLOSE(result(0,0).imag(),0.0,1.0e-5);
-    BOOST_CHECK_CLOSE(result(0,1).real(),0.0,1.0e-5);
-    BOOST_CHECK_CLOSE(result(0,1).imag(),0.0,1.0e-5);
-    BOOST_CHECK_CLOSE(result(1,0).real(),0.0,1.0e-5);
-    BOOST_CHECK_CLOSE(result(1,0).imag(),0.0,1.0e-5);
+    BOOST_CHECK_SMALL(result(0,0).imag(),1.0e-5);
+    BOOST_CHECK_SMALL(result(0,1).real(),1.0e-5);
+    BOOST_CHECK_SMALL(result(0,1).imag(),1.0e-5);
+    BOOST_CHECK_SMALL(result(1,0).real(),1.0e-5);
+    BOOST_CHECK_SMALL(result(1,0).imag(),1.0e-5);
     BOOST_CHECK_CLOSE(result(1,1).real(),soln,1.0e-5);
-    BOOST_CHECK_CLOSE(result(1,1).imag(),0.0,1.0e-5);
+    BOOST_CHECK_SMALL(result(1,1).imag(),1.0e-5);
 }

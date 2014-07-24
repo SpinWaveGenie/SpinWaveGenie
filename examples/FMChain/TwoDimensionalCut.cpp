@@ -12,7 +12,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SpinWaveGenie/SpinwaveGenie.h"
+#include "SpinWaveGenie/SpinWaveGenie.h"
 using namespace std;
 using namespace SpinWaveGenie;
 
