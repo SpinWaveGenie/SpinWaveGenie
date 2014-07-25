@@ -12,10 +12,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "SpinWaveGenie/Containers/Containers.h"
-#include "SpinWaveGenie/Genie/Genie.h"
-#include "SpinWaveGenie/Interactions/Interactions.h"
-#include "SpinWaveGenie/Plot/Plot.h"
+#include "SpinWaveGenie/SpinWaveGenie.h"
 
 using namespace std;
 using namespace SpinWaveGenie;
@@ -60,7 +57,6 @@ int main()
     
     Energies energies(0.0, 3.0, 801);
     
-    
     OneDimensionalFactory factory;
     auto gauss = factory.getGaussian(0.15,1.0e-5);
     
@@ -70,8 +66,6 @@ int main()
     twodimcut.setFilename("AFMcut");
     twodimcut.setPlotObject(move(res));
     twodimcut.setPoints(kPoints);
-    
-    TwoDimensionalCut other(twodimcut);
-    other.save();
+    twodimcut.save();
     return 0;
 }

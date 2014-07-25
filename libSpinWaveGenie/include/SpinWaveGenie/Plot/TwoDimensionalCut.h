@@ -20,7 +20,10 @@ class TwoDimensionalCut
 {
 public:
     TwoDimensionalCut();
-    TwoDimensionalCut(const TwoDimensionalCut& Other);
+    TwoDimensionalCut(const TwoDimensionalCut& other);
+    TwoDimensionalCut& operator= (const TwoDimensionalCut& other);
+    TwoDimensionalCut(TwoDimensionalCut&& other);
+    TwoDimensionalCut& operator= (TwoDimensionalCut&& other);
     void setFilename(std::string name);
     void setPoints(ThreeVectors<double> pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);

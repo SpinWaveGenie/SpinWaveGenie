@@ -101,7 +101,7 @@ namespace SpinWaveGenie
         Eigen::MatrixXd generateMatrix()
         {
             mat.resize(cut->getEnergies().size(),points.size());
-            boost::thread pbar(bind(&CutImpl::progressBar,this,points.size() ));
+            thread pbar(&CutImpl::progressBar,this,points.size());
             partialCut(0,points.size());
             pbar.join();
             return mat;
@@ -110,9 +110,25 @@ namespace SpinWaveGenie
     };
 
     TwoDimensionalCut::TwoDimensionalCut() : m_p{ new CutImpl{} } {};
-    TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut& other) : m_p(other.m_p->clone())
+    TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut& other) : m_p(other.m_p->clone()) {}
+    TwoDimensionalCut& TwoDimensionalCut::operator= (const TwoDimensionalCut& other)
     {
-        
+        m_p = move(other.m_p->clone());
+        return *this;
+    }
+    TwoDimensionalCut::TwoDimensionalCut(TwoDimensionalCut&& other)
+    {
+        m_p = move(other.m_p);
+        other.m_p = NULL;
+    }
+    TwoDimensionalCut& TwoDimensionalCut::operator= (TwoDimensionalCut&& other)
+    {
+        if (m_p != other.m_p)
+        {
+            m_p = move(other.m_p);
+            other.m_p = NULL;
+        }
+        return *this;
     }
     
     TwoDimensionalCut::~TwoDimensionalCut() {};
@@ -169,6 +185,5 @@ namespace SpinWaveGenie
                 file << (*it) << endl;
         }
         file.close();
-        
     }
 }
