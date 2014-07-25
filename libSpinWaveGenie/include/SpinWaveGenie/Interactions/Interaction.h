@@ -8,10 +8,11 @@
 
 //! Base class for all classes describing magnetic interactions
 
-class Neighbors;
 
 namespace SpinWaveGenie
 {
+
+class Neighbors;
 
 class Interaction
 {
