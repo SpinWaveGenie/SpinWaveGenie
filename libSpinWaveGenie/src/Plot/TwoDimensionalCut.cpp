@@ -11,8 +11,8 @@
 #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "External/ezRateProgressBar.hpp"
+#include <thread>
 #include <unistd.h>
-#include <boost/thread/thread.hpp>
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
 using namespace tbb;
@@ -72,7 +72,8 @@ namespace SpinWaveGenie
         {
             mat.resize(cut->getEnergies().size(),points.size());
             TbbExecutor tbbExec(this);
-            boost::thread myThread(bind(&CutImpl::progressBar,this,points.size() ));
+            //thread myThread(bind(&CutImpl::progressBar,this,points.size()));
+            thread myThread(&CutImpl::progressBar,this,points.size());
             tbb::parallel_for(tbb::blocked_range<size_t>(0,points.size()),tbbExec);
             myThread.join();
            return mat;

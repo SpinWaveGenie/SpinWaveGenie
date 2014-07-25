@@ -35,7 +35,7 @@ string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
 if (isRHEL6)
     set(Boost_NO_BOOST_CMAKE ON)
 endif(isRHEL6)
-find_package(Boost REQUIRED COMPONENTS system thread program_options unit_test_framework)
+find_package(Boost REQUIRED COMPONENTS system program_options unit_test_framework)
 
 option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" ON)
 option(BUILD_TESTING "Build unit tests" OFF)
