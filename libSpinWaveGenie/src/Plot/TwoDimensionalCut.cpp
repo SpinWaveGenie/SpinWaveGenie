@@ -32,14 +32,21 @@ namespace SpinWaveGenie
     class TwoDimensionalCut::CutImpl
     {
     public:
-        std::string Filename;
+        std::string filename;
         atomic_int counter;
         Eigen::MatrixXd mat;
         unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
         SpinWaveGenie::ThreeVectors<double> points;
         CutImpl() { counter = 0;};
         CutImpl(unique_ptr<SpinWaveGenie::SpinWavePlot> inCut, SpinWaveGenie::ThreeVectors<double> inPoints): cut(move(inCut)), points(inPoints) { counter = 0;};
-    
+        std::unique_ptr<CutImpl> clone()
+        {
+            std::unique_ptr<CutImpl> newCut(new CutImpl(cut->clone(),points));
+            newCut->filename = filename;
+            newCut->mat = mat;
+            return std::move(newCut);
+        };
+
         void progressBar(int numberPoints)
         {
             ez::ezRateProgressBar<int> p(numberPoints);
@@ -103,11 +110,16 @@ namespace SpinWaveGenie
     };
 
     TwoDimensionalCut::TwoDimensionalCut() : m_p{ new CutImpl{} } {};
+    TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut& other) : m_p(other.m_p->clone())
+    {
+        
+    }
+    
     TwoDimensionalCut::~TwoDimensionalCut() {};
 
     void TwoDimensionalCut::setFilename(string name)
     {
-        m_p->Filename = name;
+        m_p->filename = name;
     }
     
     void TwoDimensionalCut::setPlotObject(unique_ptr<SpinWavePlot> object)
@@ -133,14 +145,14 @@ namespace SpinWaveGenie
     void TwoDimensionalCut::save()
     {
         Eigen::MatrixXd figure = getMatrix();
-        std::ofstream file(m_p->Filename+".mat");
+        std::ofstream file(m_p->filename+".mat");
         if (file.is_open())
         {
             file << figure << endl;
         }
         file.close();
         
-        file.open(m_p->Filename+".x");
+        file.open(m_p->filename+".x");
         if (file.is_open())
         {
             ThreeVectors<double> pts = m_p->points;
@@ -149,7 +161,7 @@ namespace SpinWaveGenie
         }
         
         file.close();
-        file.open(m_p->Filename+".y");
+        file.open(m_p->filename+".y");
         if (file.is_open())
         {
             Energies energies = m_p->cut->getEnergies();

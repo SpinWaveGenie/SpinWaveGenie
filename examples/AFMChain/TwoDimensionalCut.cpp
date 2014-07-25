@@ -67,9 +67,11 @@ int main()
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW,energies));
     
     TwoDimensionalCut twodimcut;
-    twodimcut.setFilename("AFMcut.txt");
+    twodimcut.setFilename("AFMcut");
     twodimcut.setPlotObject(move(res));
     twodimcut.setPoints(kPoints);
-    twodimcut.save();
+    
+    TwoDimensionalCut other(twodimcut);
+    other.save();
     return 0;
 }

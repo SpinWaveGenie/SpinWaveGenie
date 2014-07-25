@@ -20,6 +20,7 @@ class TwoDimensionalCut
 {
 public:
     TwoDimensionalCut();
+    TwoDimensionalCut(const TwoDimensionalCut& Other);
     void setFilename(std::string name);
     void setPoints(ThreeVectors<double> pos);
     void setEnergyPoints(double min, double max, size_t numberpoints);
