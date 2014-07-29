@@ -75,14 +75,14 @@ const Cell& SpinWave::getCell() const
 
 void SpinWave::calculateEigenvalues()
 {
-    //cout << LN << endl << endl;
+    //cout << LN << endl;
     
     LN.block(0,M,M,M) *= -1.0;
     LN.block(M,M,M,M) *= -1.0;
     
     LN = LN*2.0;
     
-    for(int i=0;i<2*M;i++)
+    /*for(int i=0;i<2*M;i++)
     {
         for( int j=0;j<2*M;j++)
         {
@@ -92,6 +92,8 @@ void SpinWave::calculateEigenvalues()
             }
         }
     }
+    */
+    //cout << LN << endl << endl;
 
     ces.compute(LN);
     if (ces.info() != Success)
