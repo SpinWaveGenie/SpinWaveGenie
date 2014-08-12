@@ -2,11 +2,11 @@
 #define __Sublattice_H__
 
 #define _USE_MATH_DEFINES
-#include <Eigen/Dense>
 #include <vector>
 #include <string>
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
+
 
 namespace SpinWaveGenie
 {

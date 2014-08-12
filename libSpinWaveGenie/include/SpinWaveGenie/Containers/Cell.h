@@ -3,15 +3,18 @@
 #define __Cell_H__
 
 #define _USE_MATH_DEFINES
-#include <Eigen/Dense>
 #include <vector>
 #include <string>
 #include "SpinWaveGenie/Containers/Sublattice.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
+
+namespace Eigen
+{
+    typedef Matrix<double, 3, 1> Vector3;
+    typedef Matrix<double, 3, 3> Matrix3;
+}
 
 namespace SpinWaveGenie
 {
-
 //! Unit cell containing basis vectors and all sublattices.
 /*!
 The Cell class stores the basis vectors and all sublattices in the unit cell.

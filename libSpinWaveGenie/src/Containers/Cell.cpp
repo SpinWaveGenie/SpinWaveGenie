@@ -1,5 +1,5 @@
 #include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
+#include <Eigen/Dense>
 #include <iostream>
 #include <string>
 #include <stdexcept>

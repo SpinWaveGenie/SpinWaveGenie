@@ -112,7 +112,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     vector<double> fval(energyPoints);
     vector<double> err(energyPoints);
     
-    hcubature(energyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], 0, tolerance/volume, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+    hcubature(energyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], 100000, tolerance/volume, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
     
     //cout << "volume = " << volume << endl;
 

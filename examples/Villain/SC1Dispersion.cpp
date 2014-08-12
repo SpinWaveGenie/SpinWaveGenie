@@ -100,7 +100,6 @@ std::vector<double> findAngles()
     return thetaphi;
 }
 
-
 int main()
 {
     

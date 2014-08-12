@@ -1,6 +1,6 @@
-include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${spin_wave_genie_SOURCE_DIR}/libSpinWaveGenie/include ${TBB_INCLUDE} ${NLOPT_INCLUDE_DIRECTORY})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-LINK_LIBRARIES(SpinWaveGenie ${Boost_LIBRARIES} ${TBB_LIBRARIES} ${NLOPT_LIBRARIES})
+include_directories( ${EIGEN3_INCLUDE_DIR} ${spin_wave_genie_SOURCE_DIR}/libSpinWaveGenie/include ${NLOPT_INCLUDE_DIRECTORY})
+LINK_DIRECTORIES()
+LINK_LIBRARIES(SpinWaveGenie ${NLOPT_LIBRARIES})
 
 add_executable(AFMDispersion AFMChain/Dispersion.cpp)
 add_executable(AFMcut AFMChain/TwoDimensionalCut.cpp)

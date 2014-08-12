@@ -105,7 +105,7 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
     vector<double> fval(energyPoints);
     vector<double> err(energyPoints);
     
-    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, xmin.data(), xmax.data(), 0, tol, 0, ERROR_INDIVIDUAL, fval.data(), err.data());
+    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, xmin.data(), xmax.data(), 100000, tol, 0, ERROR_INDIVIDUAL, fval.data(), err.data());
     
     /*for(int i=0;i!=EnergyPoints;i++)
      {
