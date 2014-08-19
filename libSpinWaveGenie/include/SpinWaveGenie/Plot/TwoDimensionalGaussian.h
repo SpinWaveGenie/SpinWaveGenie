@@ -33,7 +33,7 @@ public:
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
-    void setTolerance(double toleranceIn);
+    void setTolerance(double tol, int maxEvals = 100000);
     std::unique_ptr<SpinWavePlot> clone();
     const Cell& getCell() const;
     const Energies& getEnergies();
@@ -41,7 +41,8 @@ public:
     ~TwoDimensionResolutionFunction(){};
 private:
     Energies energies;
-    double tol;
+    int maximumEvaluations;
+    double tolerance;
     double a,b,c;
     double kx,ky,kz;
     Vector3 direction;

@@ -58,10 +58,10 @@ public:
     void addAtom(std::string name, double x, double y, double z);
     //! Returns the position where sublattice name is stored.
     //! \param name name of sublattice.
-    const std::size_t getPosition(std::string name);
+    std::size_t getPosition(std::string name);
     //! Returns the number of sublattices in the cell
     //! \return number of sublattices
-    const size_t size() const;
+    size_t size() const;
     typedef std::vector<Sublattice>::iterator Iterator;
     typedef std::vector<Sublattice>::const_iterator ConstIterator;
     //! \return Returns an Iterator pointing to the first Sublattice element

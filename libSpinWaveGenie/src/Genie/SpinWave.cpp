@@ -31,12 +31,12 @@ SpinWave::SpinWave(Cell& cell_in, boost::ptr_vector<Interaction> interactions_in
     
     SS.setZero(N);
     
-    for (int j=0;j<M;j++)
+    for (size_t j=0;j<M;j++)
     {
         SS(j) = 1.0;
     }
     
-    for (int j=M;j<2*M;j++)
+    for (size_t j=M;j<2*M;j++)
     {
         SS(j) = -1.0;
     }
@@ -82,9 +82,9 @@ void SpinWave::calculateEigenvalues()
     
     LN = LN*2.0;
     
-    /*for(int i=0;i<2*M;i++)
+    for(size_t i=0;i<2*M;i++)
     {
-        for( int j=0;j<2*M;j++)
+        for(size_t j=0;j<2*M;j++)
         {
             if (std::abs(LN(i,j)) < 1.0e-10)
             {
@@ -92,14 +92,14 @@ void SpinWave::calculateEigenvalues()
             }
         }
     }
-    */
+    
     //cout << LN << endl << endl;
 
     ces.compute(LN);
     if (ces.info() != Success)
         cout << ces.info() << endl;
     
-    for (int i=0;i<N;i++)
+    for (size_t i=0;i<N;i++)
     {
         complex<double> lambda = ces.eigenvalues()[i];
         VectorXcd v = ces.eigenvectors().col(i);
@@ -136,9 +136,9 @@ void SpinWave::calculateWeights()
         MatrixXcd ortho_test = XX*SS.asDiagonal()*XX.adjoint();
         IPR.setZero();
         IR = 1;
-        for (int L1=0;L1<N;L1++)
+        for (size_t L1=0;L1<N;L1++)
         {
-            for (int L2=0;L2<N;L2++)
+            for (size_t L2=0;L2<N;L2++)
             {
                 if (L1 != L2 && abs(ortho_test(L1,L2)) > 1.0E-5)
                 {
@@ -155,14 +155,14 @@ void SpinWave::calculateWeights()
             TEST = ortho_test.diagonal();
             break;
         }
-        for (int L1=0;L1<N;L1++)
+        for (size_t L1=0;L1<N;L1++)
         {
             IFL = 0;
-            for (int L2=0;L2<N;L2++)
+            for (size_t L2=0;L2<N;L2++)
             {
                 if (L2 > L1 && IPR(L1,L2) != 0 && IFL == 0)
                 {
-                    for(int J=0;J<N;J++)
+                    for(size_t J=0;J<N;J++)
                     {
                         XX(L1,J) -= XX(L2,J)*ortho_test(L1,L2)/ortho_test(L2,L2);
                     }
@@ -178,7 +178,7 @@ void SpinWave::calculateWeights()
     }
     
     vector<results> AL(N);
-    for (int L1=0;L1<N;L1++)
+    for (size_t L1=0;L1<N;L1++)
     {
         AL[L1].weight = TEST[L1].real();
         AL[L1].index = L1;
@@ -193,7 +193,7 @@ void SpinWave::calculateWeights()
     
     partition(AL.begin(), AL.end(),IsPositive);
 
-    for(int L1=0;L1<N;L1++)
+    for(size_t L1=0;L1<N;L1++)
     {
         WW(L1) = ces.eigenvalues()[AL[L1].index].real(); //eigenvalue
     }
@@ -202,11 +202,11 @@ void SpinWave::calculateWeights()
     //The swap moves row L1 to a new position and the index must be
     //updated to reflect this.
     int old_index;
-    for(int L1=0;L1<N;L1++)
+    for(size_t L1=0;L1<N;L1++)
     {
-        for(int L2=L1;L2<N;L2++)
+        for(size_t L2=L1;L2<N;L2++)
         {
-            if( L1 == AL[L2].index)
+            if( static_cast<int>(L1) == AL[L2].index)
             {
                 old_index = L2;
                 break;
@@ -253,9 +253,9 @@ void SpinWave::calculateIntensities()
             formFactor.setType("MN2");
             ff = 0.8*ff+ 0.2*formFactor.getFormFactor(KX,KY,KZ);
         }*/
-        for(int L=0;L<M;L++) //n
+        for(size_t L=0;L<M;L++) //n
         {
-            for(int L1=0;L1<3;L1++) //alpha
+            for(size_t L1=0;L1<3;L1++) //alpha
             {
                 complex<double> Intensities_r = (V_r(L1,0) - XI*V_r(L1,1)) * XIN(L2,L+M)
                 +  (V_r(L1,0) + XI*V_r(L1,1)) * XIN(L2+M,L+M);
@@ -272,7 +272,7 @@ void SpinWave::calculateIntensities()
     SYY = Intensities.col(1).real();
     SZZ = Intensities.col(2).real();
     
-    for (int i=0;i<M;i++)
+    for (size_t i=0;i<M;i++)
     {
         Point pt;
         pt.frequency = abs(WW[i+M]);

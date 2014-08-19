@@ -48,8 +48,9 @@ double SpinWaveBuilder::getEnergy()
     double energy = 0.0;
     for(auto it=interactions.begin();it!=interactions.end();it++)
     {
+        //energy = 0.0;
         it->calculateEnergy(cell,energy);
-        //cout << it->getName() << " " << energy << endl;
+        cout << it->getName() << " " << energy/4.0 << endl;
     }
     //cout << endl;
     return energy;

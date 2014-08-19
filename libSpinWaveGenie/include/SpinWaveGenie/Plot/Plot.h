@@ -11,6 +11,7 @@
 
 #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
 #include "SpinWaveGenie/Plot/IntegrateAxes.h"
+#include "SpinWaveGenie/Plot/IntegrateEnergy.h"
 #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 #include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"

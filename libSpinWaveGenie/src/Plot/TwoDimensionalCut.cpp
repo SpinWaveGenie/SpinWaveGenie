@@ -67,7 +67,7 @@ namespace SpinWaveGenie
             {
                 auto it = points.begin()+m;
                 vector<double> val = cutclone->getCut(it->get<0>(),it->get<1>(),it->get<2>());
-                for(int n=0;n<val.size();n++)
+                for(size_t n=0;n<val.size();n++)
                 {
                     mat(n,m) = val[n];
                 }

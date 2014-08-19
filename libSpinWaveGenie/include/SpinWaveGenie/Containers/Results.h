@@ -46,7 +46,7 @@ public:
     //! Insert Point struct into container.
     void insert(Point value);
     //! \return size of Results container.
-    const std::size_t size() const;
+    std::size_t size() const;
     //! Sort Results by frequency.
     void sort();
     //! Clear results container so that the size is zero.
@@ -75,7 +75,7 @@ inline const Point& Results::operator[](std::size_t bin)
     return results[bin];
 }
 
-inline const size_t Results::size() const
+inline size_t Results::size() const
 {
     return results.size();
 }

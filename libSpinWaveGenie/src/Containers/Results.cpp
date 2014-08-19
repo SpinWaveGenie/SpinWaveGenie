@@ -55,7 +55,7 @@ void Results::uniqueSolutions()
         VI_unique[i].intensity = 0.0;
     }
     
-    for (int i=0;i<results.size();i++)
+    for (std::size_t i=0;i<results.size();i++)
     {
         VP_pos = NU; //set position to a nonsense value
         for (int j=0;j<NU;j++)
@@ -78,7 +78,7 @@ void Results::significantSolutions(double ETS)
 {
     vector<Point> VI_signif;
     
-    for (int k=0;k!=results.size();k++)
+    for (size_t k=0;k!=results.size();k++)
     {
         if (results[k].intensity > ETS )
         {

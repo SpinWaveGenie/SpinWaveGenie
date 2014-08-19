@@ -18,8 +18,10 @@ namespace SpinWaveGenie
 
 class IntegrateThetaPhi : public SpinWavePlot {
 public:
-    IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance);
-    IntegrateThetaPhi(const IntegrateThetaPhi& other);
+    IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance = 0.01, int maxEvals = 100000);
+    IntegrateThetaPhi(const IntegrateThetaPhi& other) : maximumEvaluations(other.maximumEvaluations),
+                                                        tolerance(other.tolerance),
+                                                        resolutionFunction(move(other.resolutionFunction->clone())) {};
     std::unique_ptr<SpinWavePlot> clone();
     const Cell& getCell() const;
     const Energies& getEnergies();
@@ -29,8 +31,8 @@ public:
 private:
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
-    double r;
-    double tol;
+    int maximumEvaluations;
+    double r, tolerance;
     std::unique_ptr<SpinWavePlot> resolutionFunction;
 };
 }

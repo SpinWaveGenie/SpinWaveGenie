@@ -16,13 +16,15 @@ namespace SpinWaveGenie
 IntegrateAxes::IntegrateAxes(const IntegrateAxes& other)
 {
     resolutionFunction = move(other.resolutionFunction->clone());
+    this->maximumEvaluations = other.maximumEvaluations;
     this->tolerance = other.tolerance;
     this->integrationDirections = other.integrationDirections;
 }
 
-IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tolerance)
+IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals)
 {
-    this->tolerance = tolerance;
+    this->tolerance = tol;
+    this->maximumEvaluations = maxEvals;
     this->integrationDirections = directions;
     this->resolutionFunction = move(resFunction);
 }
@@ -48,7 +50,7 @@ int IntegrateAxes::calculateIntegrand(unsigned dim, const double *x, unsigned fd
     
     std::copy(val.begin(),val.end(),retval);
 
-    for (int i=0;i<val.size();i++)
+    for (size_t i=0;i<val.size();i++)
     {
         if (retval[i] < 0.0)
             cout << "0.0 > fval[i] = " << retval[i] << endl;
@@ -112,11 +114,11 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     vector<double> fval(energyPoints);
     vector<double> err(energyPoints);
     
-    hcubature(energyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], 100000, tolerance/volume, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
+    hcubature(energyPoints,IntegrateAxes::calc, this, dim, &xmin[0], &xmax[0], maximumEvaluations, tolerance/volume, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
     
     //cout << "volume = " << volume << endl;
 
-    for (int i=0;i<fval.size();i++)
+    for (size_t i=0;i<fval.size();i++)
     {
         if (fval[i] < 0.0)
             cout << "before: 0.0 > fval[i] = " << fval[i] << endl;

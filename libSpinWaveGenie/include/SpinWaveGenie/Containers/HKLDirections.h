@@ -54,7 +54,7 @@ public:
     //! \param delta Integration distance as a fraction of the vector shown above. Total distance is 2*delta
     void addDirection(double v0, double v1, double v2, double delta);
     //! \return Number of integration directions in container.
-    const size_t size() const;
+    size_t size() const;
     //! Allow access to container via the subscript operator.
     //! \param position of Axis in container.
     //! \return reference to Axis object.
@@ -78,7 +78,7 @@ inline const Axis& HKLDirections::operator[](std::size_t position)
     return integrationDirections[position];
 }
 
-inline const size_t HKLDirections::size() const
+inline size_t HKLDirections::size() const
 {
     return integrationDirections.size();
 }

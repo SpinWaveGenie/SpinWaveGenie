@@ -16,16 +16,11 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tolerance)
+IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol, int maxEvals)
 {
-    tol = tolerance;
+    tolerance = tol;
+    maximumEvaluations = maxEvals;
     resolutionFunction = move(object);
-}
-
-IntegrateThetaPhi::IntegrateThetaPhi(const IntegrateThetaPhi& other)
-{
-    tol = other.tol;
-    resolutionFunction = move(other.resolutionFunction->clone());
 }
 
 std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
@@ -79,7 +74,7 @@ int IntegrateThetaPhi::calculateIntegrand(unsigned dim, const double *x, unsigne
     //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
     double factor = sin(theta)/(4.0*M_PI);
     size_t energyPoints = resolutionFunction->getEnergies().size();
-    for(int i=0;i!=energyPoints;i++)
+    for(size_t i=0;i!=energyPoints;i++)
     {
         retval[i] = factor*val[i];
     }
@@ -105,7 +100,7 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
     vector<double> fval(energyPoints);
     vector<double> err(energyPoints);
     
-    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, xmin.data(), xmax.data(), 100000, tol, 0, ERROR_INDIVIDUAL, fval.data(), err.data());
+    hcubature(energyPoints,IntegrateThetaPhi::calc, this, dim, xmin.data(), xmax.data(), maximumEvaluations, tolerance, 0, ERROR_INDIVIDUAL, fval.data(), err.data());
     
     /*for(int i=0;i!=EnergyPoints;i++)
      {

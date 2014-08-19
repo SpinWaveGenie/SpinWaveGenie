@@ -97,7 +97,7 @@ Sublattice& Cell::getSublattice(string name)
 
     
     
-const std::size_t Cell::getPosition(std::string name)
+std::size_t Cell::getPosition(std::string name)
 {
     auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
     if (it == sublatticeInfo.end())
@@ -122,7 +122,7 @@ void Cell::addAtom(std::string name, double x, double y, double z)
     getSublattice(name).addAtom(pos[0], pos[1], pos[2]);
 }
 
-const size_t Cell::size() const
+size_t Cell::size() const
 {
     return sublatticeInfo.size();
 }

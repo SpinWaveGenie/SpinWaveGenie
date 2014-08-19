@@ -22,7 +22,7 @@ class IntegrateAxes : public SpinWavePlot
 {
 public:
     IntegrateAxes(const IntegrateAxes& other);
-    IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol);
+    IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01, int maxEval = 100000);
     std::vector<double> getCut(double kx, double ky, double kz);
     int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
     static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
@@ -34,7 +34,8 @@ public:
 private:
     std::unique_ptr<SpinWavePlot> resolutionFunction;
     HKLDirections integrationDirections;
-    double tolerance, volume;
+    int maximumEvaluations;
+    double tolerance,volume;
     double kx,ky,kz;
 };
 }
