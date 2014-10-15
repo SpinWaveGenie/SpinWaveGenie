@@ -1,11 +1,11 @@
 /*! \page page_example_scripts Examples
 \b Examples:
 
-1. \ref FerromagneticChain "Ferromagnetic Chain" - demonstrates
+1. \ref FerromagneticChain "Ferromagnetic Chain" - demonstrates calculation of the spin wave dispersion, 2D cuts, and powder averaging in a system with an analytical solution. 
     \n
-2. \ref AntiferromagneticChain "Antiferromagnetic Chain" - demonstrates
+2. \ref AntiferromagneticChain "Antiferromagnetic Chain" - demonstrates calculation of the spin wave dispersion, 2D cuts, and powder averaging in a slightly more complicated system with an analytical solution.
     \n
-3. \ref VillainModel "2D Villain Model" - demonstrates
+3. \ref VillainModel "2D Villain Model" - demonstrates calculation of the canting angle, spin wave dispersion and intensity in a slightly 2-dimensional system with an analytical solution.
     \n
 4. \ref MnF2 "Spin waves in MnF2" - demonstrates calculation of spin wave dispersion and 2D cuts in a collinear antiferromagnet.
     \n
@@ -18,7 +18,10 @@
 */
 
 /*! \example FerromagneticChain
-Coming Soon!
+\image latex FMChain.pdf 
+\image html FMChain.jpg
+\image latex FMavg.pdf
+\image html FMavg.jpg
 */
 
 /*! \example AntiferromagneticChain

@@ -23,10 +23,11 @@ obtained above on the next line: `hello world`
 1. **Install XCode with Command Line Tools:**
 Click on this link to [Xcode on the Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12), then click on “View in Mac App Store.”
 The “App Store” app on your Mac will launch and take you the Xcode page. Click on the “Free” button, then click on “Install App.”
-
-Once the installation is complete, go to your Applications folder and double-click on Xcode. From the menu bar click on "Xcode" followed by "Preferences."
-Click on the “Downloads” icon, then click on the “Install” button next to “Command Line Tools.”
-
+Once the installation is complete, go to your Applications folder, double-click on Xcode and accept the license agreement. 
+Install Command Line Tools either through the Mac App Store or from the command line.
+~~~~.bash
+$ xcode-select --install
+~~~~
 Confirm the installation was successful by typing the following in a terminal window.
 ~~~~.bash
 $ clang++ -v
@@ -39,7 +40,7 @@ Thread model: posix
 [Homebrew](http://brew.sh/) is a package manager for OS X. It will manage all libraries Spin Wave Genie depends on.
 Start by executing the following line
 ~~~~.bash
-$ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ~~~~
 and follow the on-screen instructions.
 Lastly, we need to tap the keg homebrew/science
@@ -47,120 +48,21 @@ Lastly, we need to tap the keg homebrew/science
 $ brew tap homebrew/science
 ~~~~
 
-3.**Install Dependencies**
-Install cmake, doxygen
+3. **Install Dependencies**
+First, install the following with homebrew
 ~~~~.bash
 $ brew install cmake
 $ brew install graphviz
 $ brew install doxygen
 $ brew install eigen
+$ brew install nlopt
 ~~~~
 Install boost and Threading Building Blocks, making sure to use the --c++11 option.
 ~~~~.bash
 $ brew install boost --c++11
 $ brew install tbb --c++11
 ~~~~
-In OS X 10.8 Mountain Lion, Nlopt and nexusformat formulas require minor modifications to compile with libc++ instead of the older libstdc++. 
-Starting with OS X 10.9 Mavericks libc++ is the compiler default, so these modifications are not necessary. 
-We will need to push these changes upstream so users don't need to manually make these modifications.
-
-Updated nlopt.rb with option --c++11
-\code{.rb}
-require "formula"
-
-class Nlopt < Formula
-  homepage 'http://ab-initio.mit.edu/nlopt'
-  url 'http://ab-initio.mit.edu/nlopt/nlopt-2.4.2.tar.gz'
-  sha1 '838c399d8fffd7aa56b20231e0d7bd3462ca0226'
-  head 'https://github.com/stevengj/nlopt.git'
-
-  depends_on 'octave' => :optional
-  depends_on :python => ['numpy', :optional]
-
-  option:cxx11
-
-  def install
-    ENV.deparallelize
-    args = ["--with-cxx", "--enable-shared", "--prefix=#{prefix}"]
-    args += ["--without-octave"] if build.without? "octave"
-    args += ["--without-python"] if build.without? :python
-    if build.with? 'octave'
-      ENV['OCT_INSTALL_DIR'] = share/'nlopt/oct'
-      ENV['M_INSTALL_DIR'] = share/'nlopt/m'
-      ENV['MKOCTFILE'] = "#{Formula["octave"].bin}/mkoctfile"
-    end
-    ENV.cxx11 if build.cxx11
-    system "./configure", *args
-    system "make"
-    system "make", "install"
-  end
-
-  def caveats
-    s = ''
-    if build.with? 'octave'
-      s += <<-EOS.undent
-      Please add
-        #{share}/nlopt/oct
-      and
-        #{share}/nlopt/m
-      to the Octave path.
-      EOS
-    end
-    if build.with? :python
-      python_version = `python-config --libs`.match('-lpython(\d+\.\d+)').captures.at(0)
-      s += <<-EOS.undent
-      Please add
-        #{lib}/python#{python_version}/site-packages
-      to the Python path.
-      EOS
-    end
-    return s
-  end
-end
-\endcode
-
-Updated nexusformat.rb with option --with-libc++
-\code{.rb}
-require "formula"
-
-class Nexusformat < Formula
-  homepage "http://www.nexusformat.org"
-  url "http://download.nexusformat.org/kits/4.3.1/nexus-4.3.1.tar.gz"
-  sha1 "ed75a442acad8bc14745df42822286fb735ed526"
-
-  depends_on 'hdf5'
-  depends_on 'libmxml'
-  depends_on 'readline' => :recommended
-  depends_on 'doxygen' => :optional
-  option "with-libc++" , "use libc++ instead of libstdc++"
-
-  def install
-    if build.with? "libc++"
-      ENV.append "CXXFLAGS", "-stdlib=libc++"
-    end
-    args = %W[
-      --prefix=#{prefix}
-      --disable-silent-rules
-      --disable-dependency-tracking
-      --disable-debug
-    ]
-
-    system "./configure", *args
-    system "make", "install"
-  end
-
-  test do
-    system "#{bin}/nxdir"
-  end
-end
-\endcode
-
-After updating these two files, run install
-~~~~.bash
-$ brew install nlopt --c++11
-$ brew install nexusformat --with-libc++
-~~~~
 
 \section sec_build_mac_compile Compile Spin Wave Genie
-See \ref sec_build_linux_generic_compile for instructions to compile Spin Wave Genie.
+See \subpage page_compile_guide_linux_generic for instructions to compile Spin Wave Genie.
 */

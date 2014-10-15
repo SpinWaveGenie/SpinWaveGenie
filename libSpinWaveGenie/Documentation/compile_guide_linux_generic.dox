@@ -63,8 +63,8 @@ Software development is often more efficient within an integrated development en
 $ cd spin_wave_genie
 $ mkdir build
 $ cd build
-$ cmake -G Ninja ..
+$ cmake -G Xcode ..
 open spin_wave_genie.xcodeproj
-~~~
+~~~~
 
 */

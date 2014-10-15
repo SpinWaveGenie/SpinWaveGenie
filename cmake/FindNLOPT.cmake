@@ -5,7 +5,6 @@
 # NLOPT_LIBRARIES - List of libraries when using nlopt.
 # NLOPT_FOUND - True if nlopt found.
 
-
 IF (NLOPT_INCLUDE_DIR)
 # Already in cache, be silent
 SET (nlopt_FIND_QUIETLY TRUE)

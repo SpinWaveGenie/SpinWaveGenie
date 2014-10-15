@@ -18,27 +18,26 @@
 
 namespace SpinWaveGenie
 {
-
-class EnergyResolutionFunction : public SpinWavePlot{
-public:
-    EnergyResolutionFunction(){};
-    EnergyResolutionFunction(const EnergyResolutionFunction& other);
-    EnergyResolutionFunction& operator=(EnergyResolutionFunction& other);
-    EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, Energies energies);
-    std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
-    void setSpinWave (SpinWave SWIn);
-    void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn);
-    const Cell& getCell() const;
-    void setEnergies(Energies energies);
-    const Energies& getEnergies();
-    std::unique_ptr<SpinWavePlot> clone();
-    ~EnergyResolutionFunction(){};
-private:
-    void calculateEnergies();
-    std::size_t getBin(double Energy);
-    Energies energies;
-    std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
-    SpinWave SW;
-};
+    class EnergyResolutionFunction : public SpinWavePlot{
+    public:
+        EnergyResolutionFunction(){};
+        EnergyResolutionFunction(const EnergyResolutionFunction& other);
+        EnergyResolutionFunction& operator=(EnergyResolutionFunction& other);
+        EnergyResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, SpinWave SWIn, Energies energies);
+        std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
+        void setSpinWave (SpinWave SWIn);
+        void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn);
+        const Cell& getCell() const;
+        void setEnergies(Energies energies);
+        const Energies& getEnergies();
+        std::unique_ptr<SpinWavePlot> clone();
+        ~EnergyResolutionFunction(){};
+    private:
+        void calculateEnergies();
+        std::size_t getBin(double Energy);
+        Energies energies;
+        std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
+        SpinWave SW;
+    };
 }
 #endif /* defined(__EnergyResolutionFunction__) */

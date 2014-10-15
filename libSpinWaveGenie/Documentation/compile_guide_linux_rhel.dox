@@ -4,9 +4,9 @@
 
 \section software_req_install_centos_dev Development environment
 
-Install g++, boost, git, cmake, doxygen, boost, eigen, TBB, NeXus and Nlopt.
+Install g++, boost, git, cmake, doxygen, boost, eigen, TBB and Nlopt.
 
-Stuart Campbell installed these dependencies on cncs2.sns.gov. They could be rolled out to the other analysis computers.
+These dependencies on cncs2.sns.gov and the SNS analysis cluster. They could be rolled out to other analysis computers.
 
 While users could alternatively install some of these dependencies in their home directory, it's considerably more complicated
 and not recommended. 
