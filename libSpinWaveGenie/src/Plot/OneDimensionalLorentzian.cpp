@@ -31,7 +31,7 @@ double OneDimensionalLorentzian::getMinimumEnergy()
 
 double OneDimensionalLorentzian::getMaximumEnergy()
 {
-    return (0.5*FWHM)*sqrt(1.0/Tolerance - 1.0);
+    return (0.5*FWHM)*sqrt(2.0/(M_PI*FWHM*Tolerance) - 1.0);
 }
 
 double OneDimensionalLorentzian::getFunction(double frequency, double energy)

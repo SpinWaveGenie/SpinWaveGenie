@@ -118,7 +118,7 @@ EnergyResolution<T>& EnergyResolution<T>::operator=(EnergyResolution& other)
                 double min = pt->frequency + ResolutionFunction->getMinimumEnergy();
                 double max = pt->frequency + ResolutionFunction->getMaximumEnergy();
                 size_t UpperBound = energies.getUpperBound(max);
-                //cout << min << " " << energies.getLowerBound(min) << " " << max << " " << UpperBound << endl;
+                //std::cout << min << " " << energies.getLowerBound(min) << " " << max << " " << UpperBound << std::endl;
                 for(size_t index = energies.getLowerBound(min); index!=UpperBound;index++)
                 {
                     fval[index] += pt->intensity*ResolutionFunction->getFunction(pt->frequency,energies[index]);
