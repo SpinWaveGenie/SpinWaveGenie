@@ -7,7 +7,7 @@
 //
 
 #include "SpinWaveGenie/Plot/IntegrateEnergy.h"
-#include "External/cubature.h"
+#include "cuba.h"
 
 using namespace std;
 
@@ -25,6 +25,7 @@ namespace SpinWaveGenie
     
     IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol, int maxEvals)
     {
+        setenv("CUBACORES","0",1);
         this->resolutionFunction = move(resFunction);
         this->centeredEnergies = energies;
         this->delta = delta;
@@ -32,17 +33,18 @@ namespace SpinWaveGenie
         this->maximumEvaluations = maxEvals;
     }
     
-    int IntegrateEnergy::calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval)
+    int IntegrateEnergy::calculateIntegrand(const int* ndim, const double *x, const int* ncomp, double *retval)
     {
+        int dim = *ndim;
+        int fdim = *ncomp;
         //cout << "** " << x[0] << endl;//<< " " << x[1] << " " << x[2] << endl;
-        //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
         assert(dim==1);
         assert(fdim == std::distance(centeredEnergies.begin(),centeredEnergies.end()));
         
         Energies newEnergies;
         for(auto value = centeredEnergies.begin();value != centeredEnergies.end();value++)
         {
-            newEnergies.insert(*value+*x);
+            newEnergies.insert(*value+delta*(2.0*(*x)-1.0));
         }
         
         resolutionFunction->setEnergies(newEnergies);
@@ -51,34 +53,14 @@ namespace SpinWaveGenie
         
         std::copy(val.begin(),val.end(),retval);
         
-        for (size_t i=0;i<val.size();i++)
-        {
-            if (retval[i] < 0.0)
-                cout << "0.0 > fval[i] = " << retval[i] << endl;
-        }
-        
         return 0;
     }
     
-    int IntegrateEnergy::calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval)
+    int IntegrateEnergy::calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata)
     {
         // Call non-static member function.
-        return static_cast<IntegrateEnergy*>(data)->calculateIntegrand(dim,x,fdim,retval);
+        return static_cast<IntegrateEnergy*>(userdata)->calculateIntegrand(ndim,xx,ncomp,ff);
     }
-    
-    struct DivideValue
-    {
-        double value;
-        DivideValue(double v)
-        {
-            value = 1.0/v;
-        }
-        void operator()(double &elem) const
-        {
-            elem *= value;
-        }
-    };
-    
     
     std::vector<double> IntegrateEnergy::getCut(double kxIn, double kyIn, double kzIn)
     {
@@ -91,29 +73,10 @@ namespace SpinWaveGenie
         size_t energyPoints = centeredEnergies.size();
         vector<double> fval(energyPoints);
         vector<double> err(energyPoints);
+        vector<double> prob(energyPoints);
         
-        double minimumEnergy = -delta;
-        double maximumEnergy = delta;
-        
-        double volume = 2.0*delta;
-        
-        hcubature(energyPoints,IntegrateEnergy::calc, this, dim, &minimumEnergy, &maximumEnergy, maximumEvaluations, tolerance/volume, 0, ERROR_INDIVIDUAL, &fval[0], &err[0]);
-        
-        //cout << "volume = " << volume << endl;
-        
-        for (size_t i=0;i<fval.size();i++)
-        {
-            if (fval[i] < 0.0)
-                cout << "before: 0.0 > fval[i] = " << fval[i] << endl;
-        }
-        
-        std::for_each(fval.begin(), fval.end(), DivideValue(volume));
-        
-        /*for (int i=0;i<fval.size();i++)
-         {
-         if (fval[i] < 0.0)
-         cout << "after: 0.0 > fval[i] = " << fval[i] << endl;
-         }*/
+        int nregions,neval,fail;
+        Cuhre(dim,energyPoints, IntegrateEnergy::calc, this, 1, 1000.0, tolerance, 0, 0, 50000,0,NULL, NULL,&nregions, &neval, &fail, &fval[0],&err[0], &prob[0]);
         
         return fval;
     }
@@ -137,5 +100,4 @@ namespace SpinWaveGenie
     {
         return unique_ptr<SpinWavePlot>(new IntegrateEnergy(*this));
     }
-    
 }

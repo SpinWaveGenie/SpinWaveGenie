@@ -24,8 +24,8 @@ public:
     IntegrateAxes(const IntegrateAxes& other);
     IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01, int maxEval = 100000);
     std::vector<double> getCut(double kx, double ky, double kz);
-    int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
-    static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
+    int calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval);
+    static int calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata);
     std::unique_ptr<SpinWavePlot> clone();
     const Cell& getCell() const;
     const Energies& getEnergies();
@@ -37,6 +37,7 @@ private:
     int maximumEvaluations;
     double tolerance,volume;
     double kx,ky,kz;
+    std::vector<double> xmin,xmax;
 };
 }
 #endif /* defined(__IntegrateAxes__) */

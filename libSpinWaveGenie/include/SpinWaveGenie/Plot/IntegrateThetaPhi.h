@@ -29,8 +29,10 @@ public:
     std::vector<double> getCut(double kx,double ky, double kz);
     ~IntegrateThetaPhi(){};
 private:
-    int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
-    static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
+    //int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
+    //static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
+    int calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval);
+    static int calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata);
     int maximumEvaluations;
     double r, tolerance;
     std::unique_ptr<SpinWavePlot> resolutionFunction;
