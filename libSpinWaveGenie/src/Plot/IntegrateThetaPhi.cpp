@@ -18,6 +18,7 @@ namespace SpinWaveGenie
 
 IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol, int maxEvals)
 {
+    setenv("CUBACORES","0",1);
     tolerance = tol;
     maximumEvaluations = maxEvals;
     resolutionFunction = move(object);
@@ -72,7 +73,6 @@ int IntegrateThetaPhi::calculateIntegrand(const int* dim, const double *x,const 
     //}
     
     //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
-    //double factor = 2.0*M_PI*M_PI*sin(theta)/(4.0*M_PI);
     double factor = sin(theta)*M_PI_2;
     size_t energyPoints = resolutionFunction->getEnergies().size();
     for(size_t i=0;i!=energyPoints;i++)
