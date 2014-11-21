@@ -52,7 +52,7 @@ private:
 };
 }
 
-BOOST_AUTO_TEST_CASE( LorentzianFunction )
+BOOST_AUTO_TEST_CASE( SphericalHarmonics )
 {
     std::unique_ptr<SphericalHarmonics> res(new SphericalHarmonics());
     res->setEnergies(Energies(0.0,0.0,1));
