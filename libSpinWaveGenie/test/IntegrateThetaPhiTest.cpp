@@ -16,6 +16,7 @@ public:
     SphericalHarmonics()
     {
         m_Cell.setBasisVectors(1.0,1.0,1.0,90.0,90.0,90.0);
+        m_Energies = Energies(0.0,0.0,1);
     }
     std::unique_ptr<SpinWavePlot> clone()
     {
@@ -39,11 +40,8 @@ public:
         double theta = acos(kz/r);
         double phi = atan2(ky,kx);
         double tmp1 = boost::math::spherical_harmonic_r(2, 0, theta,phi);
-        double tmp2 = boost::math::spherical_harmonic_r(1, 0, theta,phi);
-        std::vector<double> output;
-        output.push_back(tmp1*tmp2);
-        //std::cout << output[0] << std::endl;
-        return output;
+        double tmp2 = boost::math::spherical_harmonic_r(4, 0, theta,phi);
+        return std::vector<double>(1,tmp1*tmp2);
     };
     ~SphericalHarmonics(){};
 private:
@@ -55,9 +53,8 @@ private:
 BOOST_AUTO_TEST_CASE( SphericalHarmonicsTest )
 {
     std::unique_ptr<SphericalHarmonics> res(new SphericalHarmonics());
-    res->setEnergies(Energies(0.0,0.0,1));
     std::unique_ptr<SpinWavePlot> cut(new IntegrateThetaPhi(move(res),0.001));
     std::vector<double> result = cut->getCut(0.0,0.0,1.0);
-    std::cout << result[0]*4.0*M_PI << std::endl;
+    std::cout << result[0]*4.0*M_PI << std::endl; //result from IntegrateThetaPhi is divided by 4*M_PI
 }
 
