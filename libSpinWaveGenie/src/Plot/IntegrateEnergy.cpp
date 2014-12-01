@@ -38,7 +38,7 @@ namespace SpinWaveGenie
         int dim = *ndim;
         int fdim = *ncomp;
         //cout << "** " << x[0] << endl;//<< " " << x[1] << " " << x[2] << endl;
-        assert(dim==1);
+        //assert(dim==1);
         assert(fdim == std::distance(centeredEnergies.begin(),centeredEnergies.end()));
         
         Energies newEnergies;
@@ -50,9 +50,15 @@ namespace SpinWaveGenie
         resolutionFunction->setEnergies(newEnergies);
         
         vector<double> val = resolutionFunction->getCut(kx,ky,kz);
-        
+
+        for(auto it = val.begin();it!=val.end();++it)
+        {
+            *it *= 2.0*delta;
+        }
+               
         std::copy(val.begin(),val.end(),retval);
         
+
         return 0;
     }
     
@@ -72,12 +78,19 @@ namespace SpinWaveGenie
         
         size_t energyPoints = centeredEnergies.size();
         vector<double> fval(energyPoints);
-        vector<double> err(energyPoints);
+        vector<double> error(energyPoints);
         vector<double> prob(energyPoints);
         
-        int nregions,neval,fail;
-        Cuhre(dim,energyPoints, IntegrateEnergy::calc, this, 1, 1000.0, tolerance, 0, 0, 50000,0,NULL, NULL,&nregions, &neval, &fail, &fval[0],&err[0], &prob[0]);
-        
+        int nregions;
+        int neval,fail;
+        Cuhre(dim,energyPoints, IntegrateEnergy::calc, this, 1, tolerance, tolerance, 0, 0, 50000,9,NULL, NULL,&nregions, &neval, &fail, &fval[0],&error[0], &prob[0]);
+    
+        /*Vegas(dim,energyPoints,IntegrateEnergy::calc,this,1,
+              tolerance,tolerance,3, 9999,
+              0 , 500000, 1000, 1000, 10000,
+              1,NULL,NULL,
+              &neval, &fail, &fval[0], &error[0], &prob[0]);
+         */
         return fval;
     }
     

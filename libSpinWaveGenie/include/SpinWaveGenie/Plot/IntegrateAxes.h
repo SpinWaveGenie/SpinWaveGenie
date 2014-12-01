@@ -35,7 +35,7 @@ private:
     std::unique_ptr<SpinWavePlot> resolutionFunction;
     HKLDirections integrationDirections;
     int maximumEvaluations;
-    double tolerance,volume;
+    double tolerance;
     double kx,ky,kz;
     std::vector<double> xmin,xmax;
 };

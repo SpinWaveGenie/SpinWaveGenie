@@ -17,6 +17,8 @@ add_executable(NeighborsTest NeighborsTest.cpp)
 add_executable(MagneticFieldInteractionTest MagneticFieldInteractionTest.cpp)
 add_executable(EnergyResolutionFunctionTest EnergyResolutionFunctionTest.cpp)
 add_executable(IntegrateThetaPhiTest IntegrateThetaPhiTest.cpp)
+add_executable(IntegrateEnergyTest IntegrateEnergyTest.cpp)
+
 
 add_test(NAME SublatticeTest COMMAND ${EXECUTABLE_OUTPUT_PATH}/SublatticeTest)
 add_test(NAME CellTest COMMAND CellTest)
@@ -31,3 +33,4 @@ add_test(NAME NeighborsTest COMMAND NeighborsTest)
 add_Test(NAME MagneticFieldInteractionTest COMMAND MagneticFieldInteractionTest)
 add_Test(NAME EnergyResolutionFunctionTest COMMAND EnergyResolutionFunctionTest)
 add_Test(NAME IntegrateThetaPhiTest COMMAND IntegrateThetaPhiTest)
+add_Test(NAME IntegrateEnergyTest COMMAND IntegrateEnergyTest)

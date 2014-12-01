@@ -23,8 +23,6 @@ namespace SpinWaveGenie
         IntegrateEnergy(const IntegrateEnergy& other);
         IntegrateEnergy(std::unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol = 0.01, int maxEval = 100000);
         std::vector<double> getCut(double kx, double ky, double kz);
-        //int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
-        //static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
         int calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval);
         static int calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata);
         std::unique_ptr<SpinWavePlot> clone();
