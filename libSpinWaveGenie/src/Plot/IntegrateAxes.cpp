@@ -6,7 +6,7 @@
 //
 //
 #include "SpinWaveGenie/Plot/IntegrateAxes.h"
-#include "cuba.h"
+#include "AdaptiveSimpson.h"
 
 using namespace std;
 
@@ -23,46 +23,45 @@ IntegrateAxes::IntegrateAxes(const IntegrateAxes& other)
 
 IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals)
 {
-    setenv("CUBACORES","0",1);
     this->tolerance = tol;
     this->maximumEvaluations = maxEvals;
     this->integrationDirections = directions;
     this->resolutionFunction = move(resFunction);
 }
 
-int IntegrateAxes::calculateIntegrand(const int* ndim, const double *x, const int* ncomp, double *retval)
+std::vector<double> IntegrateAxes::calculateIntegrand(std::deque<double>& x)
 {
-    int dim = *ndim;
     double tmpx=kx,tmpy=ky,tmpz=kz;
     //cout << dim << " dimensions" << endl;
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
-    
-    
-    for(unsigned i = 0; i!=dim; i++)
+
+    for(unsigned i = 0; i!=x.size(); i++)
     {
-        double xx = xmin[i]+x[i]*(xmax[i]-xmin[i]);
-        //cout << i << "\t" << xx << endl;
-        tmpx += xx*integrationDirections[i].v0;
-        tmpy += xx*integrationDirections[i].v1;
-        tmpz += xx*integrationDirections[i].v2;
+        //cout << i << "\t" << x[i] << endl;
+        tmpx += x[i]*integrationDirections[i].v0;
+        tmpy += x[i]*integrationDirections[i].v1;
+        tmpz += x[i]*integrationDirections[i].v2;
     }
     //cout << endl;
     
     //cout << "** " << x[0] << endl;//<< " " << x[1] << " " << x[2] << endl;
     //cout << " " << tmpx << " " << tmpy << " " << tmpz << endl;
     
-    vector<double> val = resolutionFunction->getCut(tmpx,tmpy,tmpz);
-    
-    std::copy(val.begin(),val.end(),retval);
-    
-    return 0;
+    return resolutionFunction->getCut(tmpx,tmpy,tmpz);
 }
-
-int IntegrateAxes::calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata)
+    
+struct DivideValue
 {
-
-    return static_cast<IntegrateAxes*>(userdata)->calculateIntegrand(ndim,xx,ncomp,ff);
-}
+    double value;
+    DivideValue(double v)
+    {
+        value = 1.0/v;
+    }
+    void operator()(double &elem) const
+    {
+        elem *= value;
+    }
+};
 
 std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
 {
@@ -71,12 +70,10 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     kz = kzIn;
     
     int dim = integrationDirections.size();
-    
     xmin.clear();
     xmin.reserve(dim);
     xmax.clear();
     xmax.reserve(dim);
-    
     for (auto it = integrationDirections.begin(); it != integrationDirections.end(); it++)
     {
         //cout << -1.0*it->delta << " " << it->delta << endl;
@@ -84,19 +81,22 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
         xmax.push_back(it->delta);
     }
     
-    //cout << "** " << kx << " " << ky << " " << kz << endl;
-    //cout << xmin[0] << " " << endl; //<< xmin[1] << " " << xmin[2] << endl;
-    //cout << xmax[0] << " " << endl;//<< xmax[1] << " " << xmax[2] << endl;
-    size_t energyPoints = resolutionFunction->getEnergies().size();    
-    vector<double> fval(energyPoints);
-    vector<double> err(energyPoints);
-    vector<double> prob(energyPoints);
+    double volume = 1.0;
+    for (auto it = integrationDirections.begin(); it!= integrationDirections.end(); ++it)
+    {
+        volume *= 2.0*it->delta;
+    }
+    //cout << volume << endl;
     
-    int nregions, // the actual number of subregions needed
-    neval, // the actual number of integrand evaluations needed.
-    fail; // error flag: 0, the desired accuracy was reached. −1, dimension out of range. > 0, the accuracy goal was not met within the allowed maximum number of integrand evaluations.
-    Cuhre(dim,energyPoints, IntegrateAxes::calc, this, 1, 1000.0, tolerance, 0, 0, 50000,0,NULL, NULL,&nregions, &neval, &fail, &fval[0],&err[0], &prob[0]);
-    return fval;
+    std::function< std::vector<double>(std::deque<double>& x)> funct = std::bind<std::vector<double> >(&IntegrateAxes::calculateIntegrand,this,std::placeholders::_1);
+    AdaptiveSimpson test;
+    test.setFunction(funct);
+    test.setInterval(xmin,xmax);
+    test.setPrecision(tolerance*volume);
+    test.setMaximumRecursionDepth(maximumEvaluations);
+    std::vector<double> result = test.integrate();
+    std::for_each(result.begin(), result.end(), DivideValue(volume));
+    return result;
 }
 
 const Cell& IntegrateAxes::getCell() const

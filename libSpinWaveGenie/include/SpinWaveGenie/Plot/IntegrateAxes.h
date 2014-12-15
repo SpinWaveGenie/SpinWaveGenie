@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
+#include <deque>
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/HKLDirections.h"
 #include "SpinWaveGenie/Containers/Energies.h"
@@ -22,10 +24,8 @@ class IntegrateAxes : public SpinWavePlot
 {
 public:
     IntegrateAxes(const IntegrateAxes& other);
-    IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01, int maxEval = 100000);
+    IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01, int maxEval = 100);
     std::vector<double> getCut(double kx, double ky, double kz);
-    int calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval);
-    static int calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata);
     std::unique_ptr<SpinWavePlot> clone();
     const Cell& getCell() const;
     const Energies& getEnergies();
@@ -37,6 +37,7 @@ private:
     int maximumEvaluations;
     double tolerance;
     double kx,ky,kz;
+    std::vector<double> calculateIntegrand(std::deque<double>& x);
     std::vector<double> xmin,xmax;
 };
 }

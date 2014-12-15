@@ -11,11 +11,11 @@
 #include <algorithm>
 #include <functional>
 #include "SpinWaveGenie/Genie/SpinWave.h"
-#include "cuba.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
 #include "SpinWaveGenie/Plot/TwoDGaussian.h"
 #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
+#include "AdaptiveSimpson.h"
 
 using namespace std;
 
@@ -23,42 +23,27 @@ namespace SpinWaveGenie
 {
     TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian& info, SpinWave SW, Energies energiesIn)
     {
-        setenv("CUBACORES","0",1);
         a = info.a;
         b = info.b;
         c = info.c;
         info.direction.normalize();
         direction = info.direction;
         tolerance = info.tol;
-        maximumEvaluations = 100000;
+        maximumEvaluations = 100;
         energies = energiesIn;
         res.setSpinWave(SW);
         res.setEnergies(energies);
     }
     
-    int TwoDimensionResolutionFunction::calculateIntegrand(const int* ndim, const double *x, const int* ncomp, double *retval)
+    std::vector<double> TwoDimensionResolutionFunction::calculateIntegrand(std::deque<double>& x)
     {
-        //int dim = *ndim;
-        //int fdim = *ncomp;
-        //cout << x[0] << " " << ky << " " << kz << " " << u << endl;
-        double scaled_u = x[0]*2.0*xmax;
-        
         unique_ptr<TwoDGaussian> resinfo(new TwoDGaussian());
-        resinfo->setTolerance(0.01*tolerance);
+        resinfo->setTolerance(0.1*tolerance);
         resinfo->setResolution(a,b,c);
-        resinfo->setU(scaled_u);
+        resinfo->setU(x[0]);
     
         res.setResolutionFunction(move(resinfo));
-        vector<double> result = res.getCut(kx+scaled_u*direction[0],ky+scaled_u*direction[1],kz+scaled_u*direction[2]);
-        std::copy(result.begin(),result.end(),retval);
-        return 0;
-    }
-    
-    int TwoDimensionResolutionFunction::calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata)
-    {
-        // Call non-static member function.
-        return static_cast<TwoDimensionResolutionFunction*>(userdata)->calculateIntegrand(ndim,xx,ncomp,ff);
-
+        return res.getCut(kx+x[0]*direction[0],ky+x[0]*direction[1],kz+x[0]*direction[2]);
     }
     
     struct DivideValue
@@ -76,23 +61,26 @@ namespace SpinWaveGenie
     
     std::vector<double> TwoDimensionResolutionFunction::getCut(double kxIn, double kyIn, double kzIn)
     {
-        size_t EnergyPoints = energies.size();
         kx = kxIn;
         ky = kyIn;
         kz = kzIn;
     
+        std::vector<double> xmin(1), xmax(1);
         double d = -log(tolerance);
-        xmax = sqrt(c*d/(a*c-b*b));
-    
-        vector<double> fval(EnergyPoints);
-        vector<double> err(EnergyPoints);
-        vector<double> prob(EnergyPoints);
-        
-        int nregions, neval, fail;
-        Cuhre(1,EnergyPoints, TwoDimensionResolutionFunction::calc, this, 1, 1000.0, tolerance*2.0*xmax, 0, 0, 50000,0,NULL, NULL,&nregions, &neval, &fail, &fval[0],&err[0], &prob[0]);
-        double tmp = sqrt((M_PI*M_PI)/(a*c-b*b))/(2.0*xmax);
-        std::for_each(fval.begin(), fval.end(), DivideValue(tmp));
-        return fval;
+        xmax[0] = sqrt(c*d/(a*c-b*b));
+        xmin[0] = -1.0*xmax[0];
+
+        double tmp = sqrt((M_PI*M_PI)/(a*c-b*b));
+
+        std::function< std::vector<double>(std::deque<double>& x)> funct = std::bind<std::vector<double> >(&TwoDimensionResolutionFunction::calculateIntegrand,this,std::placeholders::_1);
+        AdaptiveSimpson test;
+        test.setFunction(funct);
+        test.setInterval(xmin,xmax);
+        test.setPrecision(tolerance);
+        test.setMaximumRecursionDepth(maximumEvaluations);
+        std::vector<double> result = test.integrate();
+        std::for_each(result.begin(), result.end(), DivideValue(tmp));
+        return result;
     }
     
     const Cell& TwoDimensionResolutionFunction::getCell() const

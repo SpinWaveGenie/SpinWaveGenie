@@ -46,7 +46,7 @@ namespace SpinWaveGenie
 BOOST_AUTO_TEST_CASE( ConstantFunctionTest )
 {
     std::unique_ptr<SpinWaveGenie::SpinWavePlot> res(new SpinWaveGenie::ConstantFunction());
-    std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateThetaPhi(move(res),0.001));
+    std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateThetaPhi(move(res),1.0e-10));
     std::vector<double> result = cut->getCut(0.0,0.0,1.0);
     //result from IntegrateThetaPhi is divided by 4*M_PI
     BOOST_CHECK_CLOSE(result[0],1.0,1.0e-5);
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE( SphericalHarmonicsTest )
         for(unsigned n2=0;n2<4;++n2)
         {
             std::unique_ptr<SpinWaveGenie::SphericalHarmonics> res(new SpinWaveGenie::SphericalHarmonics(n1,n2));
-            std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateThetaPhi(move(res),0.001));
+            std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateThetaPhi(move(res),1.0e-12));
             std::vector<double> result = cut->getCut(0.0,0.0,1.0);
             if (n1 == n2)
             {

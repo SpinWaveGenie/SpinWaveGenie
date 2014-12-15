@@ -53,7 +53,7 @@ namespace SpinWaveGenie
     };
 }
 
-BOOST_AUTO_TEST_CASE( ConstantFunctionTest )
+BOOST_AUTO_TEST_CASE( NormalDistributionTest )
 {
     std::unique_ptr<SpinWaveGenie::SpinWavePlot> res(new SpinWaveGenie::IntegrateNormalDistribution());
     
@@ -61,6 +61,7 @@ BOOST_AUTO_TEST_CASE( ConstantFunctionTest )
     std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateEnergy(move(res),centeredEnergies,10.0,0.000001));
     std::vector<double> result = cut->getCut(0.0,0.0,1.0);
     BOOST_CHECK_CLOSE(result[0],1.0,1.0e-5);
+    BOOST_CHECK_CLOSE(result[1],1.0,1.0e-5);
 }
 
 

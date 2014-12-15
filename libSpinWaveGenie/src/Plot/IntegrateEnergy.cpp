@@ -7,7 +7,7 @@
 //
 
 #include "SpinWaveGenie/Plot/IntegrateEnergy.h"
-#include "cuba.h"
+#include "AdaptiveSimpson.h"
 
 using namespace std;
 
@@ -25,7 +25,6 @@ namespace SpinWaveGenie
     
     IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol, int maxEvals)
     {
-        setenv("CUBACORES","0",1);
         this->resolutionFunction = move(resFunction);
         this->centeredEnergies = energies;
         this->delta = delta;
@@ -33,39 +32,19 @@ namespace SpinWaveGenie
         this->maximumEvaluations = maxEvals;
     }
     
-    int IntegrateEnergy::calculateIntegrand(const int* ndim, const double *x, const int* ncomp, double *retval)
+    std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double>& x)
     {
-        int dim = *ndim;
-        int fdim = *ncomp;
-        //cout << "** " << x[0] << endl;//<< " " << x[1] << " " << x[2] << endl;
-        //assert(dim==1);
-        assert(fdim == std::distance(centeredEnergies.begin(),centeredEnergies.end()));
+        assert(x.size()==1);
         
         Energies newEnergies;
         for(auto value = centeredEnergies.begin();value != centeredEnergies.end();value++)
         {
-            newEnergies.insert(*value+delta*(2.0*(*x)-1.0));
+            newEnergies.insert(*value+x[0]);
         }
         
         resolutionFunction->setEnergies(newEnergies);
         
-        vector<double> val = resolutionFunction->getCut(kx,ky,kz);
-
-        for(auto it = val.begin();it!=val.end();++it)
-        {
-            *it *= 2.0*delta;
-        }
-               
-        std::copy(val.begin(),val.end(),retval);
-        
-
-        return 0;
-    }
-    
-    int IntegrateEnergy::calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata)
-    {
-        // Call non-static member function.
-        return static_cast<IntegrateEnergy*>(userdata)->calculateIntegrand(ndim,xx,ncomp,ff);
+        return resolutionFunction->getCut(kx,ky,kz);
     }
     
     std::vector<double> IntegrateEnergy::getCut(double kxIn, double kyIn, double kzIn)
@@ -73,25 +52,16 @@ namespace SpinWaveGenie
         kx = kxIn;
         ky = kyIn;
         kz = kzIn;
-        
-        int dim = 1;
-        
-        size_t energyPoints = centeredEnergies.size();
-        vector<double> fval(energyPoints);
-        vector<double> error(energyPoints);
-        vector<double> prob(energyPoints);
-        
-        int nregions;
-        int neval,fail;
-        Cuhre(dim,energyPoints, IntegrateEnergy::calc, this, 1, tolerance, tolerance, 0, 0, 50000,9,NULL, NULL,&nregions, &neval, &fail, &fval[0],&error[0], &prob[0]);
-    
-        /*Vegas(dim,energyPoints,IntegrateEnergy::calc,this,1,
-              tolerance,tolerance,3, 9999,
-              0 , 500000, 1000, 1000, 10000,
-              1,NULL,NULL,
-              &neval, &fail, &fval[0], &error[0], &prob[0]);
-         */
-        return fval;
+   
+        std::function< std::vector<double>(std::deque<double>& x)> funct = std::bind<std::vector<double> >(&IntegrateEnergy::calculateIntegrand,this,std::placeholders::_1);
+        AdaptiveSimpson test;
+        test.setFunction(funct);
+        std::vector<double> xmin = {-1.0*delta};
+        std::vector<double> xmax = {delta};
+        test.setInterval(xmin,xmax);
+        test.setPrecision(tolerance);
+        test.setMaximumRecursionDepth(maximumEvaluations);
+        return test.integrate();
     }
     
     const Cell& IntegrateEnergy::getCell() const

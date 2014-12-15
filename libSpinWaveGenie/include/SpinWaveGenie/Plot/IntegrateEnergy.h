@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
+#include <deque>
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Energies.h"
 
@@ -23,14 +25,13 @@ namespace SpinWaveGenie
         IntegrateEnergy(const IntegrateEnergy& other);
         IntegrateEnergy(std::unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol = 0.01, int maxEval = 100000);
         std::vector<double> getCut(double kx, double ky, double kz);
-        int calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval);
-        static int calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata);
         std::unique_ptr<SpinWavePlot> clone();
         const Cell& getCell() const;
         const Energies& getEnergies();
         void setEnergies(Energies energies);
         ~IntegrateEnergy(){};
     private:
+        std::vector<double> calculateIntegrand(std::deque<double>& x);
         std::unique_ptr<SpinWavePlot> resolutionFunction;
         int maximumEvaluations;
         double tolerance,delta;

@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <deque>
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Energies.h"
@@ -30,10 +31,6 @@ public:
     TwoDimensionResolutionFunction(){};
     TwoDimensionResolutionFunction(TwoDimGaussian& info,SpinWave SW, Energies energies);
     TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction& other) = default;
-    //int calculateIntegrand(unsigned dim, const double *x, unsigned fdim, double *retval);
-    //static int calc(unsigned dim, const double *x, void *data, unsigned fdim, double *retval);
-    int calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval);
-    static int calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata);
     std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
     void setTolerance(double tol, int maxEvals = 100000);
     std::unique_ptr<SpinWavePlot> clone();
@@ -42,6 +39,7 @@ public:
     void setEnergies(Energies energies);
     ~TwoDimensionResolutionFunction(){};
 private:
+    std::vector<double> calculateIntegrand(std::deque<double>& x);
     Energies energies;
     int maximumEvaluations;
     double tolerance;

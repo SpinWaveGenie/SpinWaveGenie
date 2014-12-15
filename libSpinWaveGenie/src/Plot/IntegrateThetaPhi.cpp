@@ -8,7 +8,7 @@
 
 #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 #include <vector>
-#include "cuba.h"
+#include "AdaptiveSimpson.h"
 
 
 using namespace std;
@@ -18,7 +18,6 @@ namespace SpinWaveGenie
 
 IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol, int maxEvals)
 {
-    setenv("CUBACORES","0",1);
     tolerance = tol;
     maximumEvaluations = maxEvals;
     resolutionFunction = move(object);
@@ -44,12 +43,11 @@ void IntegrateThetaPhi::setEnergies(Energies energiesIn)
     resolutionFunction->setEnergies(energiesIn);
 }
 
-
-int IntegrateThetaPhi::calculateIntegrand(const int* dim, const double *x,const int* fdim, double *retval)
+std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double>& x)
 {
     Vector3 tmp,k;
-    double theta = x[0]*M_PI;
-    double phi = x[1]*2.0*M_PI;
+    double theta = x[0];
+    double phi = x[1];
     
     //cout << "r= " << r << endl;
     //cout << "theta= " << theta << endl;
@@ -73,47 +71,30 @@ int IntegrateThetaPhi::calculateIntegrand(const int* dim, const double *x,const 
     //}
     
     //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
-    double factor = sin(theta)*M_PI_2;
-    size_t energyPoints = resolutionFunction->getEnergies().size();
-    for(size_t i=0;i!=energyPoints;i++)
+    double factor = sin(theta)/(4.0*M_PI);
+    for(size_t i=0;i!=val.size();i++)
     {
-        retval[i] = factor*val[i];
+        val[i] *= factor;
     }
-    //cout << endl;
-    return 0;
-}
-
-int IntegrateThetaPhi::calc(const int *ndim, const double xx[], const int *ncomp, double ff[], void *userdata)
-{
-    // Call non-static member function.
-    return static_cast<IntegrateThetaPhi*>(userdata)->calculateIntegrand(ndim,xx,ncomp,ff);
+    
+    //std::transform(val.begin(), val.end(),val.begin(),std::bind(std::multiplies<double>(), factor, std::placeholders::_1));
+    return val;
 }
 
 std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
 {
-    //std::vector<double> xmin = {0.0,0.0};
-    //std::vector<double> xmax = {M_PI,2.0*M_PI};
-    int dim = 2;
+    std::vector<double> xmin = {0.0,0.0};
+    std::vector<double> xmax = {M_PI,2.0*M_PI};
     r = std::abs(kz);
     
     //cout << "dispAng = " << r << endl;
-    size_t energyPoints = resolutionFunction->getEnergies().size();
-    vector<double> fval(energyPoints);
-    vector<double> err(energyPoints);
-    vector<double> prob(energyPoints);
-    
-    int nregions, // the actual number of subregions needed
-    neval, // the actual number of integrand evaluations needed.
-    fail; // error flag: 0, the desired accuracy was reached. −1, dimension out of range. > 0, the accuracy goal was not met within the allowed maximum number of integrand evaluations.
-    Cuhre(dim,energyPoints, IntegrateThetaPhi::calc, this, 1, 1000.0, tolerance, 0, 0, 50000,0,NULL, NULL,&nregions, &neval, &fail, &fval[0],&err[0], &prob[0]);
 
-    /*for(int i=0;i!=EnergyPoints;i++)
-     {
-     double energy = MinimumEnergy + (MaximumEnergy-MinimumEnergy)*(double)i/(double)(EnergyPoints-1);
-     cout << energy << " " << fval[i] << " ";
-     }
-     cout << endl;
-     */
-    return fval;
+    std::function< std::vector<double>(std::deque<double>& x)> funct = std::bind<std::vector<double> >(&IntegrateThetaPhi::calculateIntegrand,this,std::placeholders::_1);
+    AdaptiveSimpson test;
+    test.setFunction(funct);
+    test.setInterval(xmin,xmax);
+    test.setPrecision(tolerance);
+    test.setMaximumRecursionDepth(maximumEvaluations);
+    return test.integrate();
 }
 }
