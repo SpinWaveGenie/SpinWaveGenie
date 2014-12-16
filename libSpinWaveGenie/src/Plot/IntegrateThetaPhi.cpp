@@ -72,12 +72,7 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double>& x)
     
     //cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
     double factor = sin(theta)/(4.0*M_PI);
-    for(size_t i=0;i!=val.size();i++)
-    {
-        val[i] *= factor;
-    }
-    
-    //std::transform(val.begin(), val.end(),val.begin(),std::bind(std::multiplies<double>(), factor, std::placeholders::_1));
+    std::transform(val.begin(), val.end(),val.begin(),std::bind(std::multiplies<double>(), factor, std::placeholders::_1));
     return val;
 }
 
