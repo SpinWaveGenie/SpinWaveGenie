@@ -33,8 +33,7 @@ int main()
     
     InteractionFactory interactions;
     
-    Vector3 xhat(1.0,0.0,0.0);
-    builder.addInteraction(interactions.getExchange("J",-1.0,name0,name0,0.9,1.1));
+    builder.addInteraction(interactions.getExchange("J",1.0,name0,name0,0.9,1.1));
 
     SpinWave SW = builder.createElement();
     
