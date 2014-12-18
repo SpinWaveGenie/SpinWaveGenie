@@ -36,18 +36,17 @@ int main()
     
     InteractionFactory interactions;
     
-    Vector3 xhat(1.0,0.0,0.0);
-    builder.addInteraction(interactions.getExchange("J",-1.0,name0,name0,0.9,1.1));
+    builder.addInteraction(interactions.getExchange("J",1.0,name0,name0,0.9,1.1));
 
     SpinWave SW = builder.createElement();
     
     PointsAlongLine Line;
     Line.setFirstPoint(0.0,0.0,0.0);
     Line.setFinalPoint(0.0,0.0,3.0*2.0*M_PI);
-    Line.setNumberPoints(101);
+    Line.setNumberPoints(401);
     ThreeVectors<double> kPoints = Line.getPoints();
     
-    Energies energies(0.0, 5.0, 101);
+    Energies energies(0.0, 5.0, 401);
     
     
     OneDimensionalFactory factory;

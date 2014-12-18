@@ -173,7 +173,7 @@ void SpinWave::calculateWeights()
         if (ito==maxIterations-1)
         {
             TEST = ortho_test.diagonal();
-            cout << "Error calculating frequencies" << endl;
+            //cout << "Error calculating frequencies" << endl;
         }
     }
     
