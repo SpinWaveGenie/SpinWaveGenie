@@ -25,7 +25,7 @@ public:
     AdaptiveSimpson() : m_epsilon(1.0e-5),m_maxRecursionDepth(10) {};
     //! set function calculating the integrand.
     //! \param integrand function object must be of this type.
-    void setFunction(std::function< std::vector<double>(std::deque<double>& evaluationPoints)> integrand)
+    void setFunction(std::function< std::vector<double>(std::deque<double>& evaluationPoints)> const& integrand)
     {
         m_integrand = integrand;
     };

@@ -127,11 +127,12 @@ std::vector<double> AdaptiveSimpson::adaptiveSimpsons(double lowerBound, double 
     }
     else
     {
-        std::vector<double> left = adaptiveSimpsons(lowerBound, c, epsilon/2.0, Sleft,  fa, fc, fd, recursionLevel+1);
+        //in place of std::vector<double> left, reuse result.
+        result = adaptiveSimpsons(lowerBound, c, epsilon/2.0, Sleft,  fa, fc, fd, recursionLevel+1);
         std::vector<double> right = adaptiveSimpsons(c, upperBound, epsilon/2.0, Sright, fc, fb, fe, recursionLevel+1);
         
-        std::insert_iterator<std::vector<double> > insertResult(result,result.begin());
-        std::transform (left.begin(), left.end(), right.begin(), insertResult, std::plus<double>());
+        //std::insert_iterator<std::vector<double> > insertResult(result,result.begin());
+        std::transform (result.begin(), result.end(), right.begin(), result.begin(), std::plus<double>());
     }
     return result;
 }
