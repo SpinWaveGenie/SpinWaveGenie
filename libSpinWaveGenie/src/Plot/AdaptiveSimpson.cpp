@@ -1,5 +1,6 @@
 #include "AdaptiveSimpson.h"
 #include <iterator>
+#include <algorithm>
 
 void AdaptiveSimpson::setInterval(std::vector<double>& lowerBounds, std::vector<double>& upperBounds)
 {

@@ -45,14 +45,14 @@ void runTest(std::unique_ptr<OneDimensionalShapes> resolutionFunction)
     BOOST_CHECK_CLOSE(testme[25]/testme[30],0.5,0.01);
     
     //check lower bound;
-    auto min_zeros = std::find_if(testme.begin(), testme.end(), [](double value){return value > 1.0e-3;} );
+    auto min_zeros = std::find_if(testme.begin(), testme.end(),std::bind(std::greater<double>(),std::placeholders::_1,1.0e-3));
     BOOST_CHECK_EQUAL(std::distance(testme.begin(),min_zeros),energies.getLowerBound(min));
     
     double shouldBeZero = std::accumulate(testme.begin(),min_zeros,0.0);
     BOOST_CHECK_CLOSE(shouldBeZero,0.0,1.0e-15);
     
     //check upper bound
-    auto max_zeros = std::find_if_not(min_zeros+1, testme.end(), [](double value){return value > 1.0e-3;} );
+    auto max_zeros = std::find_if_not(min_zeros+1, testme.end(),std::bind(std::greater<double>(),std::placeholders::_1,1.0e-3));
     BOOST_CHECK_EQUAL(std::distance(testme.begin(),max_zeros),energies.getUpperBound(max));
     
     shouldBeZero = std::accumulate(max_zeros,testme.end(),0.0);
