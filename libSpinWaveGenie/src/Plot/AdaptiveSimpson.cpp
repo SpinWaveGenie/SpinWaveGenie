@@ -2,7 +2,7 @@
 #include <iterator>
 #include <algorithm>
 
-void AdaptiveSimpson::setInterval(std::vector<double>& lowerBounds, std::vector<double>& upperBounds)
+void AdaptiveSimpson::setInterval(const std::vector<double>& lowerBounds, const std::vector<double>& upperBounds)
 {
     assert(lowerBounds.size() == upperBounds.size());
     m_lowerBound = lowerBounds.back();
@@ -57,7 +57,7 @@ std::vector<double> AdaptiveSimpson::integrate()
     {
         S.push_back(prefactor*(fa[i] + 4.0*fc[i] + fb[i]));
     }
-    return this->adaptiveSimpsons(m_lowerBound, m_upperBound, m_epsilon, S, fa, fb, fc,0);
+    return this->adaptive(m_lowerBound, m_upperBound, m_epsilon, S, fa, fb, fc,0);
 };
 
 
@@ -69,8 +69,10 @@ double calculateResult(double S,double S2)
 //
 // Recursive auxiliary function for adaptiveSimpsons() function below
 //
-std::vector<double> AdaptiveSimpson::adaptiveSimpsons(double lowerBound, double upperBound, double epsilon,
-                                                       std::vector<double> S, std::vector<double>& fa, std::vector<double>& fb, std::vector<double>& fc, int recursionLevel) {
+std::vector<double> AdaptiveSimpson::adaptive(double lowerBound, double upperBound,
+                    double epsilon, const std::vector<double>& S, const std::vector<double>& fa,
+                    const std::vector<double>& fb, const std::vector<double>& fc, int recursionLevel)
+{
     double c = (lowerBound + upperBound)/2, h = upperBound - lowerBound;
     double d = (lowerBound + c)/2, e = (c + upperBound)/2;
     std::vector<double> fd,fe;
@@ -108,9 +110,7 @@ std::vector<double> AdaptiveSimpson::adaptiveSimpsons(double lowerBound, double 
         Sleft.push_back(prefactor*(fa[i] + 4.0*fd[i] + fc[i]));
         Sright.push_back(prefactor*(fc[i] + 4.0*fe[i] + fb[i]));
         S2.push_back(Sleft[i] + Sright[i]);
-        if (done && std::abs(S2[i] - S[i]) <= eps_comparison)
-            done = true;
-        else
+        if (std::abs(S2[i] - S[i]) > eps_comparison)
             done = false;
     }
     if (recursionLevel > m_maxRecursionDepth)
@@ -118,21 +118,22 @@ std::vector<double> AdaptiveSimpson::adaptiveSimpsons(double lowerBound, double 
         done = true;
     }
     
-    std::vector<double> result;
-    result.reserve(size);
+    //std::vector<double> result;
+    //result.reserve(size);
     if (done)
     {
-        std::insert_iterator<std::vector<double> > insertResult(result,result.begin());
-        std::transform (S.begin(), S.end(), S2.begin(), insertResult, calculateResult);
+        //std::insert_iterator<std::vector<double> > insertResult(result,result.begin());
+        std::transform (S.begin(), S.end(), S2.begin(), S2.begin(), calculateResult);
+        return S2;
     }
     else
     {
         //in place of std::vector<double> left, reuse result.
-        result = adaptiveSimpsons(lowerBound, c, epsilon/2.0, Sleft,  fa, fc, fd, recursionLevel+1);
-        std::vector<double> right = adaptiveSimpsons(c, upperBound, epsilon/2.0, Sright, fc, fb, fe, recursionLevel+1);
+        std::vector<double> left  = adaptive(lowerBound, c, epsilon/2.0, Sleft,  fa, fc, fd, recursionLevel+1);
+        std::vector<double> right = adaptive(c, upperBound, epsilon/2.0, Sright, fc, fb, fe, recursionLevel+1);
         
         //std::insert_iterator<std::vector<double> > insertResult(result,result.begin());
-        std::transform (result.begin(), result.end(), right.begin(), result.begin(), std::plus<double>());
+        std::transform (left.begin(), left.end(), right.begin(), left.begin(), std::plus<double>());
+        return left;
     }
-    return result;
 }

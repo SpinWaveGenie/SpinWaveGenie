@@ -25,23 +25,23 @@ public:
     AdaptiveSimpson() : m_epsilon(1.0e-5),m_maxRecursionDepth(10) {};
     //! set function calculating the integrand.
     //! \param integrand function object must be of this type.
-    void setFunction(std::function< std::vector<double>(std::deque<double>& evaluationPoints)> const& integrand)
+    void setFunction(const std::function< std::vector<double>(std::deque<double>& evaluationPoints)> & integrand)
     {
         m_integrand = integrand;
     };
     //! set interval in which to integrate over.
     //! \param lowerBounds array containing the lower bounds of each integral
     //! \param upperBounds array containign the upper bounds of each integral
-    void setInterval(std::vector<double>& lowerBounds, std::vector<double>& upperBounds);
+    void setInterval(const std::vector<double>& lowerBounds, const std::vector<double>& upperBounds);
     //! sets the minimum estimated error.
     //! \param epsilon default is 1.0e-5.
-    void setPrecision(double epsilon)
+    void setPrecision(const double epsilon)
     {
         m_epsilon = epsilon;
     };
     //! sets the maximum number of times the algorithm with subdivide before returning.
     //! \param maxRecursionDepth
-    void setMaximumRecursionDepth(int maxRecursionDepth)
+    void setMaximumRecursionDepth(const int maxRecursionDepth)
     {
         m_maxRecursionDepth = maxRecursionDepth;
     };
@@ -54,11 +54,11 @@ private:
     std::vector<double> m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions;
     std::deque<double> m_evaluationPointsOuterDimensions;
     int m_maxRecursionDepth;
-    std::vector<double> adaptiveSimpsons(double lowerBound, double upperBound, double epsilon,
-                                         std::vector<double> S, std::vector<double>& fa,
-                                         std::vector<double>& fb, std::vector<double>& fc,
+    std::vector<double> adaptive(double lowerBound, double upperBound, double epsilon,
+                                         const std::vector<double>& S, const std::vector<double>& fa,
+                                         const std::vector<double>& fb, const std::vector<double>& fc,
                                          int recursionLevel);
-    void setAdditionalEvaluationPoints(std::deque<double> evaluationPoints)
+    void setAdditionalEvaluationPoints(const std::deque<double>& evaluationPoints)
     {
         m_evaluationPointsOuterDimensions = evaluationPoints;
     };

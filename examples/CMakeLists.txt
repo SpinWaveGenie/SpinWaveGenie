@@ -1,4 +1,4 @@
-include_directories( ${EIGEN3_INCLUDE_DIR} ${spin_wave_genie_SOURCE_DIR}/libSpinWaveGenie/include ${NLOPT_INCLUDE_DIRECTORY})
+include_directories( ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} ${spin_wave_genie_SOURCE_DIR}/libSpinWaveGenie/include ${NLOPT_INCLUDE_DIRECTORY})
 LINK_DIRECTORIES()
 LINK_LIBRARIES(SpinWaveGenie ${NLOPT_LIBRARIES})
 
