@@ -25,7 +25,7 @@ public:
     SimpsonImpl() : m_epsilon(1.0e-3), m_maxRecursionDepth(1000) {};
     std::vector<double> sumPieces(std::priority_queue<helper>& pieces);
     helper createElement(const helper& mostError,bool first);
-    std::tuple<helper,helper> splitElement(const helper& mostError);
+    std::pair<helper,helper> splitElement(const helper& mostError);
     std::vector<double> integrate();
     std::function< std::vector<double>(std::deque<double>& evaluationPoints)> m_integrand;
     double m_lowerBound,m_upperBound,m_epsilon;
@@ -111,11 +111,11 @@ helper AdaptiveSimpson::SimpsonImpl::createElement(const helper& mostError, bool
     return element;
 }
 
-std::tuple<helper,helper> AdaptiveSimpson::SimpsonImpl::splitElement(const helper& mostError)
+std::pair<helper,helper> AdaptiveSimpson::SimpsonImpl::splitElement(const helper& mostError)
 {
     helper element1 = this->createElement(mostError,true);
     helper element2 = this->createElement(mostError,false);
-    return std::tie(element1,element2);
+    return std::make_pair(element1,element2);
 }
 
 std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<helper>& pieces)
