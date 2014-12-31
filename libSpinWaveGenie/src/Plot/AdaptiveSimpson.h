@@ -1,52 +1,51 @@
+#ifndef __AdaptiveSimpsons__
+#define __AdaptiveSimpsons__
+
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include <deque>
 #include <functional>
+#include <deque>
+#include <memory>
 
 class AdaptiveSimpson
 {
-    //! Numerical Integration using the Adaptive Simpson's method.
-    /*!
-     This class integrates a vector-valued integrand over multiple dimensions.
-     
-     The number of dimension is determined by the size of the vectors passed
-     to setInterval and must match the number of evaluation points passed 
-     to m_integrand.
-     
-     Performance may not scale well to large numbers of dimensions.
-     
-     Method described on Wikipedia:
-     http://en.wikipedia.org/wiki/Adaptive_Simpson%27s_method
-     */
 public:
-    //! Default constructor set default value of epsilon and the recusion depth.
-    AdaptiveSimpson() : m_epsilon(1.0e-5),m_maxRecursionDepth(10) {};
-    //! set function calculating the integrand.
-    //! \param integrand function object must be of this type.
+    AdaptiveSimpson();
+    AdaptiveSimpson(const AdaptiveSimpson& other);
+    AdaptiveSimpson& operator= (const AdaptiveSimpson& other);
+    AdaptiveSimpson(AdaptiveSimpson&& other);
+    AdaptiveSimpson& operator= (AdaptiveSimpson&& other);
+    void setFunction(const std::function< std::vector<double>(std::deque<double>& evaluationPoints)> & integrand);
+    void setInterval(const std::vector<double>& lowerBounds, const std::vector<double>& upperBounds);
+    void setPrecision(double epsilon);
+    void setMaximumRecursionDepth(int maxRecursionDepth);
+    std::vector<double> integrate();
+    void setAdditionalEvaluationPoints(const std::deque<double>& evaluationPoints);
+    ~AdaptiveSimpson();
+private:
+    class SimpsonImpl;
+    std::unique_ptr<SimpsonImpl> m_p;
+};
+
+/*class AdaptiveSimpson
+{
+public:
+    AdaptiveSimpson() : m_epsilon(1.0e-15),m_maxRecursionDepth(1.0e2) {};
     void setFunction(const std::function< std::vector<double>(std::deque<double>& evaluationPoints)> & integrand)
     {
         m_integrand = integrand;
     };
-    //! set interval in which to integrate over.
-    //! \param lowerBounds array containing the lower bounds of each integral
-    //! \param upperBounds array containign the upper bounds of each integral
     void setInterval(const std::vector<double>& lowerBounds, const std::vector<double>& upperBounds);
-    //! sets the minimum estimated error.
-    //! \param epsilon default is 1.0e-5.
-    void setPrecision(const double epsilon)
+    void setPrecision(double epsilon)
     {
         m_epsilon = epsilon;
     };
-    //! sets the maximum number of times the algorithm with subdivide before returning.
-    //! \param maxRecursionDepth
-    void setMaximumRecursionDepth(const int maxRecursionDepth)
+    void setMaximumRecursionDepth(long maxRecursionDepth)
     {
         m_maxRecursionDepth = maxRecursionDepth;
     };
-    //! Performs the integration
-    //! \returns result of the integration.
     std::vector<double> integrate();
 private:
     std::function< std::vector<double>(std::deque<double>& evaluationPoints)> m_integrand;
@@ -54,14 +53,13 @@ private:
     std::vector<double> m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions;
     std::deque<double> m_evaluationPointsOuterDimensions;
     int m_maxRecursionDepth;
-    std::vector<double> adaptive(double lowerBound, double upperBound, double epsilon,
-                                         const std::vector<double>& S, const std::vector<double>& fa,
-                                         const std::vector<double>& fb, const std::vector<double>& fc,
-                                         int recursionLevel);
+public:
     void setAdditionalEvaluationPoints(const std::deque<double>& evaluationPoints)
     {
         m_evaluationPointsOuterDimensions = evaluationPoints;
     };
 };
+*/
 
+#endif /* defined(__AdaptiveSimpsons__) */
 

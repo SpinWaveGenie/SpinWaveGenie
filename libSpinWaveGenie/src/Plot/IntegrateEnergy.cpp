@@ -53,7 +53,7 @@ namespace SpinWaveGenie
         ky = kyIn;
         kz = kzIn;
    
-        std::function< std::vector<double>(std::deque<double>& x)> funct = std::bind<std::vector<double> >(&IntegrateEnergy::calculateIntegrand,this,std::placeholders::_1);
+        auto funct = std::bind<std::vector<double> >(&IntegrateEnergy::calculateIntegrand,this,std::placeholders::_1);
         AdaptiveSimpson test;
         test.setFunction(funct);
         std::vector<double> xmin = {-1.0*delta};
