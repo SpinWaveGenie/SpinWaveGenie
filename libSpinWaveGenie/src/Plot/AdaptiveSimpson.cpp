@@ -2,15 +2,17 @@
 
 #include <queue>
 #include <algorithm>
+#include <limits>
 
 struct helper
 {
+    helper() : error(0.0) {};
     std::vector<double> fa,fb,fc,fd,fe;
     std::vector<double> S,Sleft,Sright;
     double lowerlimit;
     double upperlimit;
     double epsilon;
-    double error = 0.0;
+    double error;
     bool operator<(const helper& rhs) const
     {
         return this->error/this->epsilon < rhs.error/rhs.epsilon;
@@ -20,15 +22,16 @@ struct helper
 class AdaptiveSimpson::SimpsonImpl
 {
 public:
+    SimpsonImpl() : m_epsilon(1.0e-3), m_maxRecursionDepth(1000) {};
     std::vector<double> sumPieces(std::priority_queue<helper>& pieces);
     helper createElement(const helper& mostError,bool first);
-    std::pair<helper,helper> splitElement(const helper& mostError);
+    std::tuple<helper,helper> splitElement(const helper& mostError);
     std::vector<double> integrate();
     std::function< std::vector<double>(std::deque<double>& evaluationPoints)> m_integrand;
-    double m_lowerBound,m_upperBound,m_epsilon = 1.0e-3;
+    double m_lowerBound,m_upperBound,m_epsilon;
     std::vector<double> m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions;
     std::deque<double> m_evaluationPointsOuterDimensions;
-    int m_maxRecursionDepth = 1000;
+    int m_maxRecursionDepth;
     std::unique_ptr<SimpsonImpl> clone();
 };
 
@@ -108,7 +111,7 @@ helper AdaptiveSimpson::SimpsonImpl::createElement(const helper& mostError, bool
     return element;
 }
 
-std::pair<helper,helper> AdaptiveSimpson::SimpsonImpl::splitElement(const helper& mostError)
+std::tuple<helper,helper> AdaptiveSimpson::SimpsonImpl::splitElement(const helper& mostError)
 {
     helper element1 = this->createElement(mostError,true);
     helper element2 = this->createElement(mostError,false);
