@@ -12,27 +12,28 @@
 namespace SpinWaveGenie
 {
 
-class ExchangeInteractionSameSublattice: public Interaction
+class ExchangeInteractionSameSublattice : public Interaction
 {
 public:
-    ExchangeInteractionSameSublattice(std::string name, double value, std::string sl_r, double min, double max);
-    void updateInteraction(double value, std::string sl_r, double min, double max);
-    virtual void updateValue(double value_in);
-    virtual const std::string& getName();
-    void calcConstantValues(Cell& cell);
-    void calculateEnergy(Cell& cell, double &energy);
-    void calculateFirstOrderTerms(Cell& cell, Eigen::VectorXcd &elements);
-    void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
-    std::vector<std::string> sublattices() const;
-    virtual Interaction* do_clone() const;
-    virtual ~ExchangeInteractionSameSublattice(){};
+  ExchangeInteractionSameSublattice(std::string name, double value, std::string sl_r, double min, double max);
+  void updateInteraction(double value, std::string sl_r, double min, double max);
+  virtual void updateValue(double value_in);
+  virtual const std::string &getName();
+  void calcConstantValues(Cell &cell);
+  void calculateEnergy(Cell &cell, double &energy);
+  void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements);
+  void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
+  std::vector<std::string> sublattices() const;
+  virtual Interaction *do_clone() const;
+  virtual ~ExchangeInteractionSameSublattice(){};
+
 private:
-    Neighbors neighbors;
-    std::string name,sl_r,sl_s;
-    int r,s,M;
-    double value,min,max;
-    std::complex<double> gamma_rs;
-    std::complex<double> LNrr,LNrs;
+  Neighbors neighbors;
+  std::string name, sl_r, sl_s;
+  int r, s, M;
+  double value, min, max;
+  std::complex<double> gamma_rs;
+  std::complex<double> LNrr, LNrs;
 };
 }
 #endif

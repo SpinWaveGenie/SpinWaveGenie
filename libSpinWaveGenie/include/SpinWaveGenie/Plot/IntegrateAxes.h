@@ -23,22 +23,24 @@ namespace SpinWaveGenie
 class IntegrateAxes : public SpinWavePlot
 {
 public:
-    IntegrateAxes(const IntegrateAxes& other);
-    IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01, int maxEval = 100);
-    std::vector<double> getCut(double kx, double ky, double kz);
-    std::unique_ptr<SpinWavePlot> clone();
-    const Cell& getCell() const;
-    const Energies& getEnergies();
-    void setEnergies(Energies energies);
-    ~IntegrateAxes(){};
+  IntegrateAxes(const IntegrateAxes &other);
+  IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01,
+                int maxEval = 100);
+  std::vector<double> getCut(double kx, double ky, double kz);
+  std::unique_ptr<SpinWavePlot> clone();
+  const Cell &getCell() const;
+  const Energies &getEnergies();
+  void setEnergies(Energies energies);
+  ~IntegrateAxes(){};
+
 private:
-    std::unique_ptr<SpinWavePlot> resolutionFunction;
-    HKLDirections integrationDirections;
-    int maximumEvaluations;
-    double tolerance;
-    double kx,ky,kz;
-    std::vector<double> calculateIntegrand(std::deque<double>& x);
-    std::vector<double> xmin,xmax;
+  std::unique_ptr<SpinWavePlot> resolutionFunction;
+  HKLDirections integrationDirections;
+  int maximumEvaluations;
+  double tolerance;
+  double kx, ky, kz;
+  std::vector<double> calculateIntegrand(std::deque<double> &x);
+  std::vector<double> xmin, xmax;
 };
 }
 #endif /* defined(__IntegrateAxes__) */

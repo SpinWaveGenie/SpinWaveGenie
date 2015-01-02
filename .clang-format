@@ -1,0 +1,6 @@
+---
+BasedOnStyle:  LLVM
+BreakBeforeBraces: Allman
+ColumnLimit: 120
+...
+

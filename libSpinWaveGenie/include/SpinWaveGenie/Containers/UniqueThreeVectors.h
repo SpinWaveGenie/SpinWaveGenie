@@ -22,71 +22,66 @@ namespace SpinWaveGenie
 /*!
  Vectors containing three elements are not ideally coellesced in memory.
  Therefore, we use an alternative where where each component is stored
- in a separate vector and accessed using an Iterator. Unlike ThreeVectors, only the 
+ in a separate vector and accessed using an Iterator. Unlike ThreeVectors, only the
  unique vectors are stored.
  */
 
-template<typename T>
-class UniqueThreeVectors: public ThreeVectors<T>
+template <typename T> class UniqueThreeVectors : public ThreeVectors<T>
 {
 public:
-    //!
-    bool operator==(const UniqueThreeVectors& other);
-    bool insert(T x, T y, T z);
+  //!
+  bool operator==(const UniqueThreeVectors &other);
+  bool insert(T x, T y, T z);
 };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template<typename T>
-struct isEqual
+template <typename T> struct isEqual
 {
-    double epsilon;
-    boost::tuple<T,T,T> FirstVector;
-    isEqual(boost::tuple<T,T,T> First)
-    {
-        epsilon = 1.0e-8;
-        FirstVector = First;
-        
-    };
-    bool operator()(boost::tuple<T,T,T> SecondVector)
-    {
-        T x = FirstVector.template get<0>() - SecondVector.template get<0>();
-        T y = FirstVector.template get<1>() - SecondVector.template get<1>();
-        T z = FirstVector.template get<2>() - SecondVector.template get<2>();
-        if (std::abs(x) < epsilon && std::abs(y) < epsilon && std::abs(z) < epsilon)
-            return true;
-        else
-            return false;
-    };
+  double epsilon;
+  boost::tuple<T, T, T> FirstVector;
+  isEqual(boost::tuple<T, T, T> First)
+  {
+    epsilon = 1.0e-8;
+    FirstVector = First;
+  };
+  bool operator()(boost::tuple<T, T, T> SecondVector)
+  {
+    T x = FirstVector.template get<0>() - SecondVector.template get<0>();
+    T y = FirstVector.template get<1>() - SecondVector.template get<1>();
+    T z = FirstVector.template get<2>() - SecondVector.template get<2>();
+    if (std::abs(x) < epsilon && std::abs(y) < epsilon && std::abs(z) < epsilon)
+      return true;
+    else
+      return false;
+  };
 };
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
-template<typename T>
-bool UniqueThreeVectors<T>::insert(T x, T y, T z)
+template <typename T> bool UniqueThreeVectors<T>::insert(T x, T y, T z)
 {
-    boost::tuple<T,T,T> MyThreeVector(x,y,z);
-    auto equalVector = isEqual<T>(MyThreeVector);
-    if (std::find_if(this->begin(), this->end(),equalVector)==this->end())
-    {
-        ThreeVectors<T>::insert(x,y,z);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+  boost::tuple<T, T, T> MyThreeVector(x, y, z);
+  auto equalVector = isEqual<T>(MyThreeVector);
+  if (std::find_if(this->begin(), this->end(), equalVector) == this->end())
+  {
+    ThreeVectors<T>::insert(x, y, z);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
-template<typename T>
-bool UniqueThreeVectors<T>::operator==(const UniqueThreeVectors<T>& other)
+template <typename T> bool UniqueThreeVectors<T>::operator==(const UniqueThreeVectors<T> &other)
 {
-    boost::tuple<T,T,T> MyThreeVector,OtherThreeVector;
-    BOOST_FOREACH(MyThreeVector,boost::make_iterator_range(this->begin(),this->end()))
-    {
-        auto equalVector = isEqual<T>(MyThreeVector);
-        if (std::find_if(other.cbegin(), other.cend(),equalVector)==other.cend() )
-            return false;
-    }
-    return true;
+  boost::tuple<T, T, T> MyThreeVector, OtherThreeVector;
+  BOOST_FOREACH (MyThreeVector, boost::make_iterator_range(this->begin(), this->end()))
+  {
+    auto equalVector = isEqual<T>(MyThreeVector);
+    if (std::find_if(other.cbegin(), other.cend(), equalVector) == other.cend())
+      return false;
+  }
+  return true;
 }
 }
 #endif /* defined(__positions__UniquePositions__) */

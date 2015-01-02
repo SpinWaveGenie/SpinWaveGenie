@@ -16,19 +16,20 @@
 namespace SpinWaveGenie
 {
 
-class OneDimensionalLorentzian: public OneDimensionalShapes
+class OneDimensionalLorentzian : public OneDimensionalShapes
 {
 public:
-    void setFWHM(double InFWHM);
-    void setTolerance(double InTolerance);
-    double getMinimumEnergy();
-    double getMaximumEnergy();
-    double getFunction(double frequency, double energy);
-    std::unique_ptr<OneDimensionalShapes> clone();
-    ~OneDimensionalLorentzian(){};
+  void setFWHM(double InFWHM);
+  void setTolerance(double InTolerance);
+  double getMinimumEnergy();
+  double getMaximumEnergy();
+  double getFunction(double frequency, double energy);
+  std::unique_ptr<OneDimensionalShapes> clone();
+  ~OneDimensionalLorentzian(){};
+
 private:
-    double getExponentialFactor();
-    double FWHM,Tolerance;
+  double getExponentialFactor();
+  double FWHM, Tolerance;
 };
 }
 #endif /* defined(__OneDimensionalLorentzian__) */

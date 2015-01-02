@@ -18,22 +18,24 @@
 namespace SpinWaveGenie
 {
 
-class OneDimensionalPseudoVoigt: public OneDimensionalShapes
+class OneDimensionalPseudoVoigt : public OneDimensionalShapes
 {
 public:
-    OneDimensionalPseudoVoigt();
-    OneDimensionalPseudoVoigt(const OneDimensionalPseudoVoigt& other) : Lorentzian( other.Lorentzian->clone() ) , Gaussian( other.Gaussian->clone() ) {};
-    void setEta(double InEta);
-    void setFWHM(double InFWHM);
-    void setTolerance(double InTolerance);
-    double getMinimumEnergy();
-    double getMaximumEnergy();
-    double getFunction(double frequency, double energy);
-    std::unique_ptr<OneDimensionalShapes> clone();
-    ~OneDimensionalPseudoVoigt(){};
+  OneDimensionalPseudoVoigt();
+  OneDimensionalPseudoVoigt(const OneDimensionalPseudoVoigt &other)
+      : Lorentzian(other.Lorentzian->clone()), Gaussian(other.Gaussian->clone()){};
+  void setEta(double InEta);
+  void setFWHM(double InFWHM);
+  void setTolerance(double InTolerance);
+  double getMinimumEnergy();
+  double getMaximumEnergy();
+  double getFunction(double frequency, double energy);
+  std::unique_ptr<OneDimensionalShapes> clone();
+  ~OneDimensionalPseudoVoigt(){};
+
 private:
-    double eta,tolerance;
-    std::unique_ptr<OneDimensionalShapes> Lorentzian,Gaussian;
+  double eta, tolerance;
+  std::unique_ptr<OneDimensionalShapes> Lorentzian, Gaussian;
 };
 }
 #endif /* defined(__OneDimensionalPseudoVoigt__) */

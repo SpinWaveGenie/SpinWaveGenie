@@ -16,19 +16,20 @@
 namespace SpinWaveGenie
 {
 
-class OneDimensionalGaussian: public OneDimensionalShapes
+class OneDimensionalGaussian : public OneDimensionalShapes
 {
 public:
-    void setFWHM(double InFWHM);
-    void setTolerance(double InTolerance);
-    double getMinimumEnergy();
-    double getMaximumEnergy();
-    double getFunction(double frequency, double energy);
-    std::unique_ptr<OneDimensionalShapes> clone();
-    ~OneDimensionalGaussian(){};
+  void setFWHM(double InFWHM);
+  void setTolerance(double InTolerance);
+  double getMinimumEnergy();
+  double getMaximumEnergy();
+  double getFunction(double frequency, double energy);
+  std::unique_ptr<OneDimensionalShapes> clone();
+  ~OneDimensionalGaussian(){};
+
 private:
-    double getExponentialFactor();
-    double FWHM,Tolerance;
+  double getExponentialFactor();
+  double FWHM, Tolerance;
 };
 }
 #endif /* defined(__OneDimensionalGaussian__) */

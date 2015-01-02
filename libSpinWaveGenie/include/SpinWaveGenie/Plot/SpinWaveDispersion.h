@@ -8,18 +8,24 @@
 class SpinWaveDispersion
 {
 public:
-    SpinWaveDispersion();
-    enum class Options {PrintPosition,PrintFrequency,PrintIntensity};
-    void setOptions(Options PrintOptions, bool Value);
-    void setFilename(std::string name);
-    void setPoints(SpinWaveGenie::ThreeVectors<double> pos);
-    void setGenie(SpinWaveGenie::SpinWave SW);
-    void save();
+  SpinWaveDispersion();
+  enum class Options
+  {
+    PrintPosition,
+    PrintFrequency,
+    PrintIntensity
+  };
+  void setOptions(Options PrintOptions, bool Value);
+  void setFilename(std::string name);
+  void setPoints(SpinWaveGenie::ThreeVectors<double> pos);
+  void setGenie(SpinWaveGenie::SpinWave SW);
+  void save();
+
 private:
-    SpinWaveGenie::SpinWave Genie;
-    std::string Filename;
-    SpinWaveGenie::UniqueThreeVectors<double> Kpoints;
-    bool PrintPosition, PrintFrequency, PrintIntensity;
+  SpinWaveGenie::SpinWave Genie;
+  std::string Filename;
+  SpinWaveGenie::UniqueThreeVectors<double> Kpoints;
+  bool PrintPosition, PrintFrequency, PrintIntensity;
 };
 
 #endif /* defined(__SpinWaveDispersion__) */
