@@ -107,7 +107,7 @@ helper AdaptiveSimpson::SimpsonImpl::createElement(const helper& mostError, bool
     }
     element.lowerlimit = a;
     element.upperlimit = b;
-    element.epsilon = std::max(mostError.epsilon/sqrt(2.0),std::numeric_limits<double>::epsilon());
+    element.epsilon = std::max(mostError.epsilon*M_SQRT1_2,std::numeric_limits<double>::epsilon());
     return element;
 }
 
