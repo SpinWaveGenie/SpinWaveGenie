@@ -93,7 +93,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
     test.setFunction(funct);
     test.setInterval(xmin,xmax);
     test.setPrecision(tolerance*volume);
-    test.setMaximumRecursionDepth(maximumEvaluations);
+    test.setMaximumDivisions(maximumEvaluations);
     std::vector<double> result = test.integrate();
     std::for_each(result.begin(), result.end(), DivideValue(volume));
     return result;

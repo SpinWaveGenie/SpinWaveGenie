@@ -90,7 +90,7 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx,double ky, double kz)
     test.setFunction(funct);
     test.setInterval(xmin,xmax);
     test.setPrecision(tolerance);
-    test.setMaximumRecursionDepth(maximumEvaluations);
+    test.setMaximumDivisions(maximumEvaluations);
     return test.integrate();
 }
 }

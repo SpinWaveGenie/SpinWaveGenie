@@ -19,16 +19,19 @@ public:
 class GaussKronrod::GKImpl
 {
 public:
-  GKImpl() : m_epsilon(1.0e-3), m_maxRecursionDepth(1000)
+  GKImpl() : m_epsilon(1.0e-5), m_maximumDivisions(1000)
   {
-    points =  {{-0.991455371120813,-0.949107912342759,-0.864864423359769,-0.741531185599394,-0.586087235467691,-0.405845151377397,-0.207784955007898, 0.0,0.207784955007898,0.405845151377397,
-      0.586087235467691, 0.741531185599394, 0.864864423359769, 0.949107912342759, 0.991455371120813}};
-    gweights = {{0.129484966168870, 0.279705391489277, 0.381830050505119, 0.417959183673469, 0.381830050505119, 0.279705391489277, 0.129484966168870}};
-    kweights = {{0.022935322010529, 0.063092092629979, 0.104790010322250, 0.140653259715525, 0.169004726639267, 0.190350578064785, 0.204432940075298, 0.209482141084728,
-      0.204432940075298, 0.190350578064785, 0.169004726639267, 0.140653259715525, 0.104790010322250, 0.063092092629979, 0.022935322010529}};
+    points = {{-0.991455371120813, -0.949107912342759, -0.864864423359769, -0.741531185599394, -0.586087235467691,
+               -0.405845151377397, -0.207784955007898, 0.0, 0.207784955007898, 0.405845151377397, 0.586087235467691,
+               0.741531185599394, 0.864864423359769, 0.949107912342759, 0.991455371120813}};
+    gweights = {{0.129484966168870, 0.279705391489277, 0.381830050505119, 0.417959183673469, 0.381830050505119,
+                 0.279705391489277, 0.129484966168870}};
+    kweights = {{0.022935322010529, 0.063092092629979, 0.104790010322250, 0.140653259715525, 0.169004726639267,
+                 0.190350578064785, 0.204432940075298, 0.209482141084728, 0.204432940075298, 0.190350578064785,
+                 0.169004726639267, 0.140653259715525, 0.104790010322250, 0.063092092629979, 0.022935322010529}};
   };
-  std::array<double,7> gweights;
-  std::array<double,15> points, kweights;
+  std::array<double, 7> gweights;
+  std::array<double, 15> points, kweights;
   std::vector<double> sumPieces(std::priority_queue<gaussianhelper> &pieces);
   gaussianhelper createElement(const gaussianhelper &mostError, bool first);
   std::pair<gaussianhelper, gaussianhelper> splitElement(const gaussianhelper &mostError);
@@ -37,7 +40,7 @@ public:
   double m_lowerBound, m_upperBound, m_epsilon;
   std::vector<double> m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions;
   std::deque<double> m_evaluationPointsOuterDimensions;
-  int m_maxRecursionDepth;
+  int m_maximumDivisions;
   std::unique_ptr<GKImpl> clone();
 };
 
@@ -48,11 +51,8 @@ std::unique_ptr<GaussKronrod::GKImpl> GaussKronrod::GKImpl::clone()
 
 struct getx
 {
-  double a,b;
-  double operator()(double u)
-  {
-    return 0.5*(a+b - (b-a)*u);
-  };
+  double a, b;
+  double operator()(double u) { return 0.5 * (a + b - (b - a) * u); };
 };
 
 gaussianhelper GaussKronrod::GKImpl::createElement(const gaussianhelper &mostError, bool first)
@@ -75,10 +75,10 @@ gaussianhelper GaussKronrod::GKImpl::createElement(const gaussianhelper &mostErr
     GaussKronrod test;
     test.setFunction(m_integrand);
     test.setInterval(m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions);
-    test.setMaximumRecursionDepth(m_maxRecursionDepth);
+    test.setMaximumDivisions(m_maximumDivisions);
     test.setPrecision(m_epsilon);
-  
-    //i=0
+
+    // i=0
     m_evaluationPointsOuterDimensions[0] = pos(points[0]);
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     std::vector<double> ka = test.integrate();
@@ -86,93 +86,92 @@ gaussianhelper GaussKronrod::GKImpl::createElement(const gaussianhelper &mostErr
     m_evaluationPointsOuterDimensions[0] = pos(points[1]);
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     std::vector<double> ga = test.integrate();
-    
+
     std::size_t size = ka.size();
-    std::vector<double> S = std::vector<double>(size,0.0);
-    element.S2 = std::vector<double>(size,0.0);
+    std::vector<double> S = std::vector<double>(size, 0.0);
+    element.S2 = std::vector<double>(size, 0.0);
     for (std::size_t j = 0; j < size; j++)
     {
-      S[j] += ga[j]*gweights[0];
-      element.S2[j] += ka[j]*kweights[0] + ga[j]*kweights[1];
+      S[j] += ga[j] * gweights[0];
+      element.S2[j] += ka[j] * kweights[0] + ga[j] * kweights[1];
     }
-    
-    for (std::size_t i=1; i<7; i++)
+
+    for (std::size_t i = 1; i < 7; i++)
     {
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i]);
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i]);
       test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
       ka = test.integrate();
-      
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i+1]);
+
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i + 1]);
       test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
       ga = test.integrate();
-      
+
       for (std::size_t j = 0; j < size; j++)
       {
-        S[j] += ga[j]*gweights[i];
-        element.S2[j] += ka[j]*kweights[2*i] + ga[j]*kweights[2*i+1];
+        S[j] += ga[j] * gweights[i];
+        element.S2[j] += ka[j] * kweights[2 * i] + ga[j] * kweights[2 * i + 1];
       }
     }
-    
-    //i = 7
+
+    // i = 7
     m_evaluationPointsOuterDimensions[0] = pos(points[14]);
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     ka = test.integrate();
-    double prefactor = 0.5*(pos.b-pos.a);
+    double prefactor = 0.5 * (pos.b - pos.a);
     for (std::size_t j = 0; j < size; j++)
     {
       S[j] *= prefactor;
-      element.S2[j] += ka[j]*kweights[14];
+      element.S2[j] += ka[j] * kweights[14];
       element.S2[j] *= prefactor;
-      element.error = std::max(element.error,pow(200.0*std::abs(element.S2[j] - S[j]),1.5));
+      element.error = std::max(element.error, pow(200.0 * std::abs(element.S2[j] - S[j]), 1.5));
     }
   }
   else
   {
-    
-    //i=0
+
+    // i=0
     m_evaluationPointsOuterDimensions[0] = pos(points[0]);
     std::vector<double> ka = m_integrand(m_evaluationPointsOuterDimensions);
-    
+
     m_evaluationPointsOuterDimensions[0] = pos(points[1]);
     std::vector<double> ga = m_integrand(m_evaluationPointsOuterDimensions);
-    
+
     std::size_t size = ka.size();
-    std::vector<double> S = std::vector<double>(size,0.0);
-    element.S2 = std::vector<double>(size,0.0);
+    std::vector<double> S = std::vector<double>(size, 0.0);
+    element.S2 = std::vector<double>(size, 0.0);
     for (std::size_t j = 0; j < size; j++)
     {
-      S[j] += ga[j]*gweights[0];
-      element.S2[j] += ka[j]*kweights[0] + ga[j]*kweights[1];
+      S[j] += ga[j] * gweights[0];
+      element.S2[j] += ka[j] * kweights[0] + ga[j] * kweights[1];
     }
-    
-    for (std::size_t i=1; i<7; i++)
+
+    for (std::size_t i = 1; i < 7; i++)
     {
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i]);
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i]);
       ka = m_integrand(m_evaluationPointsOuterDimensions);
-      
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i+1]);
+
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i + 1]);
       ga = m_integrand(m_evaluationPointsOuterDimensions);
-      
+
       for (std::size_t j = 0; j < size; j++)
       {
-        S[j] += ga[j]*gweights[i];
-        element.S2[j] += ka[j]*kweights[2*i] + ga[j]*kweights[2*i+1];
+        S[j] += ga[j] * gweights[i];
+        element.S2[j] += ka[j] * kweights[2 * i] + ga[j] * kweights[2 * i + 1];
       }
     }
-    
-    //i = 7
+
+    // i = 7
     m_evaluationPointsOuterDimensions[0] = pos(points[14]);
     ka = m_integrand(m_evaluationPointsOuterDimensions);
-    double prefactor = 0.5*(pos.b-pos.a);
+    double prefactor = 0.5 * (pos.b - pos.a);
     for (std::size_t j = 0; j < size; j++)
     {
       S[j] *= prefactor;
-      element.S2[j] += ka[j]*kweights[14];
+      element.S2[j] += ka[j] * kweights[14];
       element.S2[j] *= prefactor;
-      element.error = std::max(element.error,pow(200.0*std::abs(element.S2[j] - S[j]),1.5));
+      element.error = std::max(element.error, pow(200.0 * std::abs(element.S2[j] - S[j]), 1.5));
     }
   }
-    
   element.lowerlimit = pos.a;
   element.upperlimit = pos.b;
   element.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
@@ -195,7 +194,7 @@ std::vector<double> GaussKronrod::GKImpl::sumPieces(std::priority_queue<gaussian
     auto element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
     {
-      //double S2 = element.Sleft[i] + element.Sright[i];
+      // double S2 = element.Sleft[i] + element.Sright[i];
       sum[i] += element.S2[i];
     }
     pieces.pop();
@@ -206,112 +205,112 @@ std::vector<double> GaussKronrod::GKImpl::sumPieces(std::priority_queue<gaussian
 std::vector<double> GaussKronrod::GKImpl::integrate()
 {
   gaussianhelper element;
-  
+
   getx pos;
   pos.a = m_lowerBound;
   pos.b = m_upperBound;
-  
+
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
     GaussKronrod test;
     test.setFunction(m_integrand);
     test.setInterval(m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions);
-    test.setMaximumRecursionDepth(m_maxRecursionDepth);
+    test.setMaximumDivisions(m_maximumDivisions);
     test.setPrecision(m_epsilon);
-    
-    //i=0
+
+    // i=0
     m_evaluationPointsOuterDimensions.push_front(pos(points[0]));
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     std::vector<double> ka = test.integrate();
-    
+
     m_evaluationPointsOuterDimensions[0] = pos(points[1]);
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     std::vector<double> ga = test.integrate();
-    
+
     std::size_t size = ka.size();
-    std::vector<double> S = std::vector<double>(size,0.0);
-    element.S2 = std::vector<double>(size,0.0);
+    std::vector<double> S = std::vector<double>(size, 0.0);
+    element.S2 = std::vector<double>(size, 0.0);
     for (std::size_t j = 0; j < size; j++)
     {
-      S[j] += ga[j]*gweights[0];
-      element.S2[j] += ka[j]*kweights[0] + ga[j]*kweights[1];
+      S[j] += ga[j] * gweights[0];
+      element.S2[j] += ka[j] * kweights[0] + ga[j] * kweights[1];
     }
-    
-    for (std::size_t i=1; i<7; i++)
+
+    for (std::size_t i = 1; i < 7; i++)
     {
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i]);
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i]);
       test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
       ka = test.integrate();
-      
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i+1]);
+
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i + 1]);
       test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
       ga = test.integrate();
-      
+
       for (std::size_t j = 0; j < size; j++)
       {
-        S[j] += ga[j]*gweights[i];
-        element.S2[j] += ka[j]*kweights[2*i] + ga[j]*kweights[2*i+1];
+        S[j] += ga[j] * gweights[i];
+        element.S2[j] += ka[j] * kweights[2 * i] + ga[j] * kweights[2 * i + 1];
       }
     }
-    
-    //i = 7
+
+    // i = 7
     m_evaluationPointsOuterDimensions[0] = pos(points[14]);
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     ka = test.integrate();
-    double prefactor = 0.5*(pos.b-pos.a);
+    double prefactor = 0.5 * (pos.b - pos.a);
     for (std::size_t j = 0; j < size; j++)
     {
       S[j] *= prefactor;
-      element.S2[j] += ka[j]*kweights[14];
+      element.S2[j] += ka[j] * kweights[14];
       element.S2[j] *= prefactor;
-      element.error = std::max(element.error,pow(200.0*std::abs(element.S2[j] - S[j]),1.5));
+      element.error = std::max(element.error, pow(200.0 * std::abs(element.S2[j] - S[j]), 1.5));
     }
   }
   else
   {
-    
-    //i=0
+
+    // i=0
     m_evaluationPointsOuterDimensions.push_front(pos(points[0]));
     std::vector<double> ka = m_integrand(m_evaluationPointsOuterDimensions);
-    
+
     m_evaluationPointsOuterDimensions[0] = pos(points[1]);
     std::vector<double> ga = m_integrand(m_evaluationPointsOuterDimensions);
-    
+
     std::size_t size = ka.size();
-    std::vector<double> S = std::vector<double>(size,0.0);
-    element.S2 = std::vector<double>(size,0.0);
+    std::vector<double> S = std::vector<double>(size, 0.0);
+    element.S2 = std::vector<double>(size, 0.0);
     for (std::size_t j = 0; j < size; j++)
     {
-      S[j] += ga[j]*gweights[0];
-      element.S2[j] += ka[j]*kweights[0] + ga[j]*kweights[1];
+      S[j] += ga[j] * gweights[0];
+      element.S2[j] += ka[j] * kweights[0] + ga[j] * kweights[1];
     }
-    
-    //i=1..6
-    for (std::size_t i=1; i<7; i++)
+
+    // i=1..6
+    for (std::size_t i = 1; i < 7; i++)
     {
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i]);
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i]);
       ka = m_integrand(m_evaluationPointsOuterDimensions);
-      
-      m_evaluationPointsOuterDimensions[0] = pos(points[2*i+1]);
+
+      m_evaluationPointsOuterDimensions[0] = pos(points[2 * i + 1]);
       ga = m_integrand(m_evaluationPointsOuterDimensions);
-      
+
       for (std::size_t j = 0; j < size; j++)
       {
-        S[j] += ga[j]*gweights[i];
-        element.S2[j] += ka[j]*kweights[2*i] + ga[j]*kweights[2*i+1];
+        S[j] += ga[j] * gweights[i];
+        element.S2[j] += ka[j] * kweights[2 * i] + ga[j] * kweights[2 * i + 1];
       }
     }
-    
-    //i = 7
+
+    // i = 7
     m_evaluationPointsOuterDimensions[0] = pos(points[14]);
     ka = m_integrand(m_evaluationPointsOuterDimensions);
-    double prefactor = 0.5*(pos.b-pos.a);
+    double prefactor = 0.5 * (pos.b - pos.a);
     for (std::size_t j = 0; j < size; j++)
     {
       S[j] *= prefactor;
-      element.S2[j] += ka[j]*kweights[14];
+      element.S2[j] += ka[j] * kweights[14];
       element.S2[j] *= prefactor;
-      element.error = std::max(element.error,pow(200.0*std::abs(element.S2[j] - S[j]),1.5));
+      element.error = std::max(element.error, pow(200.0 * std::abs(element.S2[j] - S[j]), 1.5));
     }
   }
   element.lowerlimit = pos.a;
@@ -319,10 +318,10 @@ std::vector<double> GaussKronrod::GKImpl::integrate()
   element.epsilon = m_epsilon;
 
   std::priority_queue<gaussianhelper, std::vector<gaussianhelper>> myqueue;
-    myqueue.emplace(std::move(element));
+  myqueue.emplace(element);
 
   gaussianhelper element1, element2;
-  while (myqueue.size() < m_maxRecursionDepth)
+  while (myqueue.size() < m_maximumDivisions)
   {
     auto mostError = myqueue.top();
     if (mostError.error < mostError.epsilon)
@@ -332,8 +331,8 @@ std::vector<double> GaussKronrod::GKImpl::integrate()
 
     std::tie(element1, element2) = splitElement(mostError);
     myqueue.pop();
-    myqueue.emplace(std::move(element1));
-    myqueue.emplace(std::move(element2));
+    myqueue.emplace(element1);
+    myqueue.emplace(element2);
   }
 
   return sumPieces(myqueue);
@@ -352,7 +351,7 @@ GaussKronrod &GaussKronrod::operator=(const GaussKronrod &other)
 GaussKronrod::GaussKronrod(GaussKronrod &&other)
 {
   m_p = move(other.m_p);
-  other.m_p = nullptr;
+  other.m_p = NULL;
 }
 
 GaussKronrod &GaussKronrod::operator=(GaussKronrod &&other)
@@ -360,7 +359,7 @@ GaussKronrod &GaussKronrod::operator=(GaussKronrod &&other)
   if (m_p != other.m_p)
   {
     m_p = move(other.m_p);
-    other.m_p = nullptr;
+    other.m_p = NULL;
   }
   return *this;
 }
@@ -388,7 +387,7 @@ void GaussKronrod::setInterval(const std::vector<double> &lowerBounds, const std
 
 void GaussKronrod::setPrecision(double epsilon) { m_p->m_epsilon = epsilon; }
 
-void GaussKronrod::setMaximumRecursionDepth(int maxRecursionDepth) { m_p->m_maxRecursionDepth = maxRecursionDepth; }
+void GaussKronrod::setMaximumDivisions(int maximumDivisions) { m_p->m_maximumDivisions = maximumDivisions; }
 std::vector<double> GaussKronrod::integrate() { return m_p->integrate(); }
 
 void GaussKronrod::setAdditionalEvaluationPoints(const std::deque<double> &evaluationPoints)

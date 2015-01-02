@@ -77,7 +77,7 @@ namespace SpinWaveGenie
         test.setFunction(funct);
         test.setInterval(xmin,xmax);
         test.setPrecision(tolerance);
-        test.setMaximumRecursionDepth(maximumEvaluations);
+        test.setMaximumDivisions(maximumEvaluations);
         std::vector<double> result = test.integrate();
         std::for_each(result.begin(), result.end(), DivideValue(tmp));
         return result;

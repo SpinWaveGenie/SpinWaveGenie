@@ -60,7 +60,7 @@ namespace SpinWaveGenie
         std::vector<double> xmax = {delta};
         test.setInterval(xmin,xmax);
         test.setPrecision(tolerance);
-        test.setMaximumRecursionDepth(maximumEvaluations);
+        test.setMaximumDivisions(maximumEvaluations);
         return test.integrate();
     }
     
