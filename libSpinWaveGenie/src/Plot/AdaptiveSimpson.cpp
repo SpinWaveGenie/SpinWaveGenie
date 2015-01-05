@@ -21,8 +21,8 @@ class AdaptiveSimpson::SimpsonImpl
 public:
   SimpsonImpl() : m_epsilon(1.0e-5), m_maximumDivisions(1000){};
   std::vector<double> sumPieces(std::priority_queue<helper> &pieces);
-  helper createElement(const helper &mostError, bool first);
-  std::pair<helper, helper> splitElement(const helper &mostError);
+  void createElement(const helper &mostError, helper &element1, bool first);
+  void splitElement(const helper &mostError, helper &element1, helper &element2);
   std::vector<double> integrate();
   std::function<std::vector<double>(std::deque<double> &evaluationPoints)> m_integrand;
   double m_lowerBound, m_upperBound, m_epsilon;
@@ -37,9 +37,8 @@ std::unique_ptr<AdaptiveSimpson::SimpsonImpl> AdaptiveSimpson::SimpsonImpl::clon
   return std::unique_ptr<AdaptiveSimpson::SimpsonImpl>(new SimpsonImpl(*this));
 }
 
-helper AdaptiveSimpson::SimpsonImpl::createElement(const helper &mostError, bool first)
+void AdaptiveSimpson::SimpsonImpl::createElement(const helper &mostError,helper &element, bool first)
 {
-  helper element;
   double a, b;
   if (first)
   {
@@ -105,14 +104,12 @@ helper AdaptiveSimpson::SimpsonImpl::createElement(const helper &mostError, bool
   element.lowerlimit = a;
   element.upperlimit = b;
   element.epsilon = std::max(mostError.epsilon / sqrt(2.0), std::numeric_limits<double>::epsilon());
-  return element;
 }
 
-std::pair<helper, helper> AdaptiveSimpson::SimpsonImpl::splitElement(const helper &mostError)
+void AdaptiveSimpson::SimpsonImpl::splitElement(const helper &mostError,helper& element1,helper& element2)
 {
-  helper element1 = this->createElement(mostError, true);
-  helper element2 = this->createElement(mostError, false);
-  return std::make_pair(element1, element2);
+  this->createElement(mostError,element1,true);
+  this->createElement(mostError,element2,false);
 }
 
 std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<helper> &pieces)
@@ -121,7 +118,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<
   std::vector<double> sum(size);
   while (pieces.size() > 0)
   {
-    auto element = pieces.top();
+    const helper& element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
     {
       double S2 = element.Sleft[i] + element.Sright[i];
@@ -198,19 +195,18 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   std::priority_queue<helper, std::vector<helper>> myqueue;
   myqueue.emplace(first);
 
-  helper element1, element2;
   while (myqueue.size() < m_maximumDivisions)
   {
-    auto mostError = myqueue.top();
+    const helper &mostError = myqueue.top();
     if (mostError.error < mostError.epsilon)
       break;
 
     // std::cout << mostError.error << " " << mostError.epsilon << std::endl;
-
-    std::tie(element1, element2) = splitElement(mostError);
+    helper element1, element2;
+    splitElement(mostError,element1,element2);
     myqueue.pop();
-    myqueue.emplace(element1);
-    myqueue.emplace(element2);
+      myqueue.emplace(std::move(element1));
+      myqueue.emplace(std::move(element2));
   }
 
   return sumPieces(myqueue);
