@@ -137,7 +137,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::sumPieces(std::priority_queue<Bool
   std::vector<double> sum(size);
   while (pieces.size() > 0)
   {
-    auto element = pieces.top();
+    const BooleHelper& element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
     {
       double S2 = element.Sleft[i] + element.Sright[i];
