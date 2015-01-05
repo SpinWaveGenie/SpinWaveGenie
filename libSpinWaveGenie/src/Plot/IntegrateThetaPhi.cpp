@@ -8,7 +8,8 @@
 
 #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 #include <vector>
-#include "AdaptiveSimpson.h"
+#include "AdaptiveBoole.h"
+//#include "AdaptiveSimpson.h"
 //#include "GaussKronrod.h"
 
 using namespace std;
@@ -78,7 +79,8 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx, double ky, double kz)
 
   auto funct = std::bind<std::vector<double>>(&IntegrateThetaPhi::calculateIntegrand, this, std::placeholders::_1);
   // GaussKronrod test;
-  AdaptiveSimpson test;
+  // AdaptiveSimpson test;
+  AdaptiveBoole test;
   test.setFunction(funct);
   test.setInterval(xmin, xmax);
   test.setPrecision(tolerance);
