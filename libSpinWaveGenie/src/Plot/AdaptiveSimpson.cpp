@@ -21,8 +21,8 @@ class AdaptiveSimpson::SimpsonImpl
 public:
   SimpsonImpl() : m_epsilon(1.0e-5), m_maximumDivisions(1000){};
   std::vector<double> sumPieces(std::priority_queue<helper> &pieces);
-  void createElement(const helper &mostError, helper &element1, bool first);
-  void splitElement(const helper &mostError, helper &element1, helper &element2);
+  void createElement(helper &mostError, helper &element1);
+  void splitElement(helper &mostError, helper &element1);
   std::vector<double> integrate();
   std::function<std::vector<double>(std::deque<double> &evaluationPoints)> m_integrand;
   double m_lowerBound, m_upperBound, m_epsilon;
@@ -37,36 +37,27 @@ std::unique_ptr<AdaptiveSimpson::SimpsonImpl> AdaptiveSimpson::SimpsonImpl::clon
   return std::unique_ptr<AdaptiveSimpson::SimpsonImpl>(new SimpsonImpl(*this));
 }
 
-void AdaptiveSimpson::SimpsonImpl::createElement(const helper &mostError,helper &element, bool first)
+void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &element)
 {
-  double a, b;
-  if (first)
-  {
-    a = mostError.lowerlimit;
-    b = (mostError.lowerlimit + mostError.upperlimit) / 2.0;
-  }
-  else
-  {
-    a = (mostError.lowerlimit + mostError.upperlimit) / 2.0;
-    b = mostError.upperlimit;
-  }
-  double c = (a + b) / 2.0;
-  double d = (a + c) / 2.0;
-  double e = (c + b) / 2.0;
-  if (first)
-  {
-    element.fa = std::move(mostError.fa);
-    element.fb = mostError.fc;
-    element.fc = std::move(mostError.fd);
-    element.S = std::move(mostError.Sleft);
-  }
-  else
-  {
-    element.fa = std::move(mostError.fc);
-    element.fb = std::move(mostError.fb);
-    element.fc = std::move(mostError.fe);
-    element.S = std::move(mostError.Sright);
-  }
+  double a1 = mostError.lowerlimit;
+  double b1 = 0.5*(mostError.lowerlimit + mostError.upperlimit);
+  double c1 = 0.5*(a1 + b1);
+  double d1 = 0.5*(a1 + c1);
+  double e1 = 0.5*(c1 + b1);
+  double a2 = 0.5*(mostError.lowerlimit + mostError.upperlimit);
+  double b2 = mostError.upperlimit;
+  double c2 = 0.5*(a2 + b2);
+  double d2 = 0.5*(a2 + c2);
+  double e2 = 0.5*(c2 + b2);
+
+  element.fa = std::move(mostError.fa);
+  element.fb = mostError.fc;
+  element.fc = std::move(mostError.fd);
+  element.S = std::move(mostError.Sleft);
+  
+  mostError.fa = std::move(mostError.fc);
+  mostError.fc = std::move(mostError.fe);
+  mostError.S = std::move(mostError.Sright);
 
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
@@ -75,41 +66,63 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const helper &mostError,helper 
     test.setInterval(m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions);
     test.setMaximumDivisions(m_maximumDivisions);
     test.setPrecision(m_epsilon);
-    m_evaluationPointsOuterDimensions[0] = d;
+    m_evaluationPointsOuterDimensions[0] = d1;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     element.fd = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = e;
+    m_evaluationPointsOuterDimensions[0] = e1;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     element.fe = test.integrate();
+    m_evaluationPointsOuterDimensions[0] = d2;
+    test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
+    mostError.fd = test.integrate();
+    m_evaluationPointsOuterDimensions[0] = e2;
+    test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
+    mostError.fe = test.integrate();
   }
   else
   {
-    m_evaluationPointsOuterDimensions[0] = d;
+    m_evaluationPointsOuterDimensions[0] = d1;
     element.fd = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = e;
+    m_evaluationPointsOuterDimensions[0] = e1;
     element.fe = m_integrand(m_evaluationPointsOuterDimensions);
+    m_evaluationPointsOuterDimensions[0] = d2;
+    mostError.fd = m_integrand(m_evaluationPointsOuterDimensions);
+    m_evaluationPointsOuterDimensions[0] = e2;
+    mostError.fe = m_integrand(m_evaluationPointsOuterDimensions);
   }
 
   std::size_t size = element.fa.size();
 
-  double prefactor = (b - a) / 12.0;
+  double prefactor = (b1 - a1) / 12.0;
   element.Sleft.reserve(size);
   element.Sright.reserve(size);
+  
+  mostError.Sleft.reserve(size);
+  mostError.Sright.reserve(size);
+  
+  mostError.error = 0.0;
   for (std::size_t i = 0; i < size; i++)
   {
     element.Sleft.emplace_back(prefactor * (element.fa[i] + 4.0 * element.fd[i] + element.fc[i]));
     element.Sright.emplace_back(prefactor * (element.fc[i] + 4.0 * element.fe[i] + element.fb[i]));
     element.error = std::max(element.error, std::abs(15.0 * (element.Sleft[i] + element.Sright[i] - element.S[i])));
+    
+    mostError.Sleft.emplace_back(prefactor * (mostError.fa[i] + 4.0 * mostError.fd[i] + mostError.fc[i]));
+    mostError.Sright.emplace_back(prefactor * (mostError.fc[i] + 4.0 * mostError.fe[i] + mostError.fb[i]));
+    mostError.error = std::max(element.error, std::abs(15.0 * (mostError.Sleft[i] + mostError.Sright[i] - mostError.S[i])));
   }
-  element.lowerlimit = a;
-  element.upperlimit = b;
+  element.lowerlimit = a1;
+  element.upperlimit = b1;
   element.epsilon = std::max(mostError.epsilon / sqrt(2.0), std::numeric_limits<double>::epsilon());
+  
+  mostError.lowerlimit = a2;
+  mostError.upperlimit = b2;
+  mostError.epsilon = std::max(mostError.epsilon / sqrt(2.0), std::numeric_limits<double>::epsilon());
 }
 
-void AdaptiveSimpson::SimpsonImpl::splitElement(const helper &mostError,helper& element1,helper& element2)
+void AdaptiveSimpson::SimpsonImpl::splitElement(helper &mostError,helper& element)
 {
-  this->createElement(mostError,element1,true);
-  this->createElement(mostError,element2,false);
+  this->createElement(mostError,element);
 }
 
 std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<helper> &pieces)
@@ -197,16 +210,16 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 
   while (myqueue.size() < m_maximumDivisions)
   {
-    const helper &mostError = myqueue.top();
+    helper mostError(myqueue.top());
     if (mostError.error < mostError.epsilon)
       break;
 
     // std::cout << mostError.error << " " << mostError.epsilon << std::endl;
-    helper element1, element2;
-    splitElement(mostError,element1,element2);
+    helper element;
+    splitElement(mostError,element);
     myqueue.pop();
-      myqueue.emplace(std::move(element1));
-      myqueue.emplace(std::move(element2));
+    myqueue.emplace(std::move(mostError));
+    myqueue.emplace(std::move(element));
   }
 
   return sumPieces(myqueue);
