@@ -113,11 +113,11 @@ void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &eleme
   }
   element.lowerlimit = a1;
   element.upperlimit = b1;
-  element.epsilon = std::max(mostError.epsilon / sqrt(2.0), std::numeric_limits<double>::epsilon());
+  element.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
   
   mostError.lowerlimit = a2;
   mostError.upperlimit = b2;
-  mostError.epsilon = std::max(mostError.epsilon / sqrt(2.0), std::numeric_limits<double>::epsilon());
+  mostError.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
 }
 
 void AdaptiveSimpson::SimpsonImpl::splitElement(helper &mostError,helper& element)
@@ -129,13 +129,14 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<
 {
   std::size_t size = pieces.top().Sleft.size();
   std::vector<double> sum(size);
+  double prefactor = 1.0/15.0;
   while (pieces.size() > 0)
   {
     const helper& element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
     {
       double S2 = element.Sleft[i] + element.Sright[i];
-      sum[i] += S2 + (S2 - element.S[i]) / 15.0;
+      sum[i] += S2 + prefactor*(S2 - element.S[i]);
     }
     pieces.pop();
   }
