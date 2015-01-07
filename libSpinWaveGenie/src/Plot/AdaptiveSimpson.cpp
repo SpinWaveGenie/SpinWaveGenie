@@ -109,7 +109,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &eleme
     
     mostError.Sleft.emplace_back(prefactor * (mostError.fa[i] + 4.0 * mostError.fd[i] + mostError.fc[i]));
     mostError.Sright.emplace_back(prefactor * (mostError.fc[i] + 4.0 * mostError.fe[i] + mostError.fb[i]));
-    mostError.error = std::max(element.error, std::abs(15.0 * (mostError.Sleft[i] + mostError.Sright[i] - mostError.S[i])));
+    mostError.error = std::max(mostError.error, std::abs(15.0 * (mostError.Sleft[i] + mostError.Sright[i] - mostError.S[i])));
   }
   element.lowerlimit = a1;
   element.upperlimit = b1;
