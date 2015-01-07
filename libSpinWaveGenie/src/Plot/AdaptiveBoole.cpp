@@ -42,14 +42,14 @@ void AdaptiveBoole::BooleImpl::createElement(const BooleHelper &mostError, Boole
   if (first)
   {
     a = mostError.lowerlimit;
-    b = (mostError.lowerlimit + mostError.upperlimit) / 2.0;
+    b = 0.5*(mostError.lowerlimit + mostError.upperlimit);
   }
   else
   {
-    a = (mostError.lowerlimit + mostError.upperlimit) / 2.0;
+    a = 0.5*(mostError.lowerlimit + mostError.upperlimit);
     b = mostError.upperlimit;
   }
-  double tmp = (b - a) / 8.0;
+  double tmp = 0.125*(b - a);
   double c = a + tmp;
   double e = a + 3.0 * tmp;
   double g = a + 5.0 * tmp;
@@ -155,7 +155,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::integrate()
   double a = m_lowerBound;
   double b = m_upperBound;
 
-  double tmp = (b - a) / 8.0;
+  double tmp = 0.125*(b - a);
   double c = a + tmp;
   double d = a + 2.0 * tmp;
   double e = a + 3.0 * tmp;
