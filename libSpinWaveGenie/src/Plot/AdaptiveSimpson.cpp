@@ -7,6 +7,7 @@
 struct helper
 {
   helper() : error(0.0){};
+  double c,d,e;
   std::vector<double> fa, fb, fc, fd, fe;
   std::vector<double> S, Sleft, Sright;
   double lowerlimit;
@@ -14,6 +15,9 @@ struct helper
   double epsilon;
   double error;
   bool operator<(const helper &rhs) const { return this->error / this->epsilon < rhs.error / rhs.epsilon; }
+  void resetBounds(double lowerlimit, double upperlimit);
+  void initializeError();
+  void updateError();
 };
 
 class AdaptiveSimpson::SimpsonImpl
@@ -37,87 +41,105 @@ std::unique_ptr<AdaptiveSimpson::SimpsonImpl> AdaptiveSimpson::SimpsonImpl::clon
   return std::unique_ptr<AdaptiveSimpson::SimpsonImpl>(new SimpsonImpl(*this));
 }
 
+void helper::resetBounds(double lower, double upper)
+{
+  lowerlimit = lower;
+  upperlimit = upper;
+  c = 0.5*(lowerlimit + upperlimit);
+  d = 0.5*(lowerlimit + c);
+  e = 0.5*(c + upperlimit);
+}
+
+void helper::updateError()
+{
+  error = 0.0;
+  const std::size_t size = fa.size();
+  double prefactor = (upperlimit - lowerlimit) / 12.0;
+  Sleft.reserve(size);
+  Sright.reserve(size);
+  for (std::size_t i = 0; i < fa.size(); i++)
+  {
+    Sleft.emplace_back(prefactor * (fa[i] + 4.0 * fd[i] + fc[i]));
+    Sright.emplace_back(prefactor * (fc[i] + 4.0 * fe[i] + fb[i]));
+    error = std::max(error, std::abs(15.0 * (Sleft[i] + Sright[i] - S[i])));
+  }
+}
+
+void helper::initializeError()
+{
+  const std::size_t size = fa.size();
+  S.reserve(size);
+  Sleft.reserve(size);
+  Sright.reserve(size);
+  double prefactor = (upperlimit - lowerlimit) / 12.0;
+  for (std::size_t i = 0; i < size; i++)
+  {
+    S.emplace_back(2.0 * prefactor * (fa[i] + 4.0 * fb[i] + fc[i]));
+    Sleft.emplace_back(prefactor * (fa[i] + 4.0 * fd[i] + fc[i]));
+    Sright.emplace_back(prefactor * (fc[i] + 4.0 * fe[i] + fb[i]));
+    error = std::max(error, std::abs(15.0 * (Sleft[i] + Sright[i] - S[i])));
+  }
+}
+
+
 void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &element)
 {
-  double a1 = mostError.lowerlimit;
-  double b1 = 0.5*(mostError.lowerlimit + mostError.upperlimit);
-  double c1 = 0.5*(a1 + b1);
-  double d1 = 0.5*(a1 + c1);
-  double e1 = 0.5*(c1 + b1);
-  double a2 = 0.5*(mostError.lowerlimit + mostError.upperlimit);
-  double b2 = mostError.upperlimit;
-  double c2 = 0.5*(a2 + b2);
-  double d2 = 0.5*(a2 + c2);
-  double e2 = 0.5*(c2 + b2);
+  //new
+  element.resetBounds(mostError.lowerlimit,0.5*(mostError.lowerlimit + mostError.upperlimit));
+  element.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
 
   element.fa = std::move(mostError.fa);
   element.fb = mostError.fc;
   element.fc = std::move(mostError.fd);
   element.S = std::move(mostError.Sleft);
   
+  //mostError
+  mostError.resetBounds(0.5*(mostError.lowerlimit + mostError.upperlimit),mostError.upperlimit);
+  mostError.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
+  
   mostError.fa = std::move(mostError.fc);
   mostError.fc = std::move(mostError.fe);
   mostError.S = std::move(mostError.Sright);
-
+  
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
+    //both
     AdaptiveSimpson test;
     test.setFunction(m_integrand);
     test.setInterval(m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions);
     test.setMaximumDivisions(m_maximumDivisions);
     test.setPrecision(m_epsilon);
-    m_evaluationPointsOuterDimensions[0] = d1;
+    //element
+    m_evaluationPointsOuterDimensions[0] = element.d;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     element.fd = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = e1;
+    m_evaluationPointsOuterDimensions[0] = element.e;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     element.fe = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = d2;
+    //mostError
+    m_evaluationPointsOuterDimensions[0] = mostError.d;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     mostError.fd = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = e2;
+    m_evaluationPointsOuterDimensions[0] = mostError.e;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     mostError.fe = test.integrate();
   }
   else
   {
-    m_evaluationPointsOuterDimensions[0] = d1;
+    //element
+    m_evaluationPointsOuterDimensions[0] = element.d;
     element.fd = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = e1;
+    m_evaluationPointsOuterDimensions[0] = element.e;
     element.fe = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = d2;
+    //mostError
+    m_evaluationPointsOuterDimensions[0] = mostError.d;
     mostError.fd = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = e2;
+    m_evaluationPointsOuterDimensions[0] = mostError.e;
     mostError.fe = m_integrand(m_evaluationPointsOuterDimensions);
   }
 
-  std::size_t size = element.fa.size();
-
-  double prefactor = (b1 - a1) / 12.0;
-  element.Sleft.reserve(size);
-  element.Sright.reserve(size);
-  
-  mostError.Sleft.reserve(size);
-  mostError.Sright.reserve(size);
-  
-  mostError.error = 0.0;
-  for (std::size_t i = 0; i < size; i++)
-  {
-    element.Sleft.emplace_back(prefactor * (element.fa[i] + 4.0 * element.fd[i] + element.fc[i]));
-    element.Sright.emplace_back(prefactor * (element.fc[i] + 4.0 * element.fe[i] + element.fb[i]));
-    element.error = std::max(element.error, std::abs(15.0 * (element.Sleft[i] + element.Sright[i] - element.S[i])));
-    
-    mostError.Sleft.emplace_back(prefactor * (mostError.fa[i] + 4.0 * mostError.fd[i] + mostError.fc[i]));
-    mostError.Sright.emplace_back(prefactor * (mostError.fc[i] + 4.0 * mostError.fe[i] + mostError.fb[i]));
-    mostError.error = std::max(mostError.error, std::abs(15.0 * (mostError.Sleft[i] + mostError.Sright[i] - mostError.S[i])));
-  }
-  element.lowerlimit = a1;
-  element.upperlimit = b1;
-  element.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
-  
-  mostError.lowerlimit = a2;
-  mostError.upperlimit = b2;
-  mostError.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
+  element.updateError();
+  mostError.updateError();
 }
 
 void AdaptiveSimpson::SimpsonImpl::splitElement(helper &mostError,helper& element)
@@ -146,13 +168,9 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<
 std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 {
   helper first;
-
-  double a = m_lowerBound;
-  double b = m_upperBound;
-  double c = (a + b) / 2.0;
-  double d = (a + c) / 2.0;
-  double e = (c + b) / 2.0;
-
+  first.resetBounds(m_lowerBound,m_upperBound);
+  first.epsilon = m_epsilon;
+  
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
     AdaptiveSimpson test;
@@ -160,54 +178,40 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
     test.setInterval(m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions);
     test.setMaximumDivisions(m_maximumDivisions);
     test.setPrecision(m_epsilon);
-    m_evaluationPointsOuterDimensions.push_front(a);
+    m_evaluationPointsOuterDimensions.push_front(first.lowerlimit);
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     first.fa = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = b;
+    m_evaluationPointsOuterDimensions[0] = first.upperlimit;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     first.fb = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = c;
+    m_evaluationPointsOuterDimensions[0] = first.c;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     first.fc = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = d;
+    m_evaluationPointsOuterDimensions[0] = first.d;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     first.fd = test.integrate();
-    m_evaluationPointsOuterDimensions[0] = e;
+    m_evaluationPointsOuterDimensions[0] = first.e;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     first.fe = test.integrate();
   }
   else
   {
-    m_evaluationPointsOuterDimensions.push_front(a);
+    m_evaluationPointsOuterDimensions.push_front(first.lowerlimit);
     first.fa = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = b;
+    m_evaluationPointsOuterDimensions[0] = first.upperlimit;
     first.fb = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = c;
+    m_evaluationPointsOuterDimensions[0] = first.c;
     first.fc = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = d;
+    m_evaluationPointsOuterDimensions[0] = first.d;
     first.fd = m_integrand(m_evaluationPointsOuterDimensions);
-    m_evaluationPointsOuterDimensions[0] = e;
+    m_evaluationPointsOuterDimensions[0] = first.e;
     first.fe = m_integrand(m_evaluationPointsOuterDimensions);
   }
 
-  std::size_t size = first.fa.size();
-  first.S.reserve(size);
-  first.Sleft.reserve(size);
-  first.Sright.reserve(size);
-  double prefactor = (b - a) / 12.0;
-  for (std::size_t i = 0; i < size; i++)
-  {
-    first.S.emplace_back(2.0 * prefactor * (first.fa[i] + 4.0 * first.fb[i] + first.fc[i]));
-    first.Sleft.emplace_back(prefactor * (first.fa[i] + 4.0 * first.fd[i] + first.fc[i]));
-    first.Sright.emplace_back(prefactor * (first.fc[i] + 4.0 * first.fe[i] + first.fb[i]));
-    first.error = std::max(first.error, std::abs(15.0 * (first.Sleft[i] + first.Sright[i] - first.S[i])));
-  }
-  first.lowerlimit = m_lowerBound;
-  first.upperlimit = m_upperBound;
-  first.epsilon = m_epsilon;
+  first.initializeError();
 
   std::priority_queue<helper, std::vector<helper>> myqueue;
-  myqueue.emplace(first);
+  myqueue.emplace(std::move(first));
 
   while (myqueue.size() < m_maximumDivisions)
   {
