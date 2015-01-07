@@ -7,7 +7,7 @@
 struct helper
 {
   helper() : error(0.0){};
-  double c,d,e;
+  double c, d, e;
   std::vector<double> fa, fb, fc, fd, fe;
   std::vector<double> S, Sleft, Sright;
   double lowerlimit;
@@ -45,9 +45,9 @@ void helper::resetBounds(double lower, double upper)
 {
   lowerlimit = lower;
   upperlimit = upper;
-  c = 0.5*(lowerlimit + upperlimit);
-  d = 0.5*(lowerlimit + c);
-  e = 0.5*(c + upperlimit);
+  c = 0.5 * (lowerlimit + upperlimit);
+  d = 0.5 * (lowerlimit + c);
+  e = 0.5 * (c + upperlimit);
 }
 
 void helper::updateError()
@@ -81,42 +81,41 @@ void helper::initializeError()
   }
 }
 
-
-void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &element)
+void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError, helper &element)
 {
-  //new
-  element.resetBounds(mostError.lowerlimit,0.5*(mostError.lowerlimit + mostError.upperlimit));
+  // new
+  element.resetBounds(mostError.lowerlimit, 0.5 * (mostError.lowerlimit + mostError.upperlimit));
   element.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
 
   element.fa = std::move(mostError.fa);
   element.fb = mostError.fc;
   element.fc = std::move(mostError.fd);
   element.S = std::move(mostError.Sleft);
-  
-  //mostError
-  mostError.resetBounds(0.5*(mostError.lowerlimit + mostError.upperlimit),mostError.upperlimit);
+
+  // mostError
+  mostError.resetBounds(0.5 * (mostError.lowerlimit + mostError.upperlimit), mostError.upperlimit);
   mostError.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
-  
+
   mostError.fa = std::move(mostError.fc);
   mostError.fc = std::move(mostError.fe);
   mostError.S = std::move(mostError.Sright);
-  
+
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
-    //both
+    // both
     AdaptiveSimpson test;
     test.setFunction(m_integrand);
     test.setInterval(m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions);
     test.setMaximumDivisions(m_maximumDivisions);
     test.setPrecision(m_epsilon);
-    //element
+    // element
     m_evaluationPointsOuterDimensions[0] = element.d;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     element.fd = test.integrate();
     m_evaluationPointsOuterDimensions[0] = element.e;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     element.fe = test.integrate();
-    //mostError
+    // mostError
     m_evaluationPointsOuterDimensions[0] = mostError.d;
     test.setAdditionalEvaluationPoints(m_evaluationPointsOuterDimensions);
     mostError.fd = test.integrate();
@@ -126,12 +125,12 @@ void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &eleme
   }
   else
   {
-    //element
+    // element
     m_evaluationPointsOuterDimensions[0] = element.d;
     element.fd = m_integrand(m_evaluationPointsOuterDimensions);
     m_evaluationPointsOuterDimensions[0] = element.e;
     element.fe = m_integrand(m_evaluationPointsOuterDimensions);
-    //mostError
+    // mostError
     m_evaluationPointsOuterDimensions[0] = mostError.d;
     mostError.fd = m_integrand(m_evaluationPointsOuterDimensions);
     m_evaluationPointsOuterDimensions[0] = mostError.e;
@@ -142,23 +141,23 @@ void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError,helper &eleme
   mostError.updateError();
 }
 
-void AdaptiveSimpson::SimpsonImpl::splitElement(helper &mostError,helper& element)
+void AdaptiveSimpson::SimpsonImpl::splitElement(helper &mostError, helper &element)
 {
-  this->createElement(mostError,element);
+  this->createElement(mostError, element);
 }
 
 std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<helper> &pieces)
 {
   std::size_t size = pieces.top().Sleft.size();
   std::vector<double> sum(size);
-  double prefactor = 1.0/15.0;
+  double prefactor = 1.0 / 15.0;
   while (pieces.size() > 0)
   {
-    const helper& element = pieces.top();
+    const helper &element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
     {
       double S2 = element.Sleft[i] + element.Sright[i];
-      sum[i] += S2 + prefactor*(S2 - element.S[i]);
+      sum[i] += S2 + prefactor * (S2 - element.S[i]);
     }
     pieces.pop();
   }
@@ -168,9 +167,9 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<
 std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 {
   helper first;
-  first.resetBounds(m_lowerBound,m_upperBound);
+  first.resetBounds(m_lowerBound, m_upperBound);
   first.epsilon = m_epsilon;
-  
+
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
     AdaptiveSimpson test;
@@ -221,7 +220,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 
     // std::cout << mostError.error << " " << mostError.epsilon << std::endl;
     helper element;
-    splitElement(mostError,element);
+    splitElement(mostError, element);
     myqueue.pop();
     myqueue.emplace(std::move(mostError));
     myqueue.emplace(std::move(element));

@@ -79,8 +79,8 @@ std::vector<double> IntegrateThetaPhi::getCut(double kx, double ky, double kz)
 
   auto funct = std::bind<std::vector<double>>(&IntegrateThetaPhi::calculateIntegrand, this, std::placeholders::_1);
   // GaussKronrod test;
-   AdaptiveSimpson test;
-  //AdaptiveBoole test;
+  AdaptiveSimpson test;
+  // AdaptiveBoole test;
   test.setFunction(funct);
   test.setInterval(xmin, xmax);
   test.setPrecision(tolerance);

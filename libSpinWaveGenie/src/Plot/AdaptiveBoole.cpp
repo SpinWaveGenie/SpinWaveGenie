@@ -20,8 +20,8 @@ class AdaptiveBoole::BooleImpl
 public:
   BooleImpl() : m_epsilon(1.0e-5), m_maximumDivisions(10){};
   std::vector<double> sumPieces(std::priority_queue<BooleHelper> &pieces);
-  void createElement(const BooleHelper &mostError,BooleHelper &element, bool first);
-  void splitElement(const BooleHelper &mostError,BooleHelper &element1,BooleHelper &element2);
+  void createElement(const BooleHelper &mostError, BooleHelper &element, bool first);
+  void splitElement(const BooleHelper &mostError, BooleHelper &element1, BooleHelper &element2);
   std::vector<double> integrate();
   std::function<std::vector<double>(std::deque<double> &evaluationPoints)> m_integrand;
   double m_lowerBound, m_upperBound, m_epsilon;
@@ -36,20 +36,20 @@ std::unique_ptr<AdaptiveBoole::BooleImpl> AdaptiveBoole::BooleImpl::clone()
   return std::unique_ptr<AdaptiveBoole::BooleImpl>(new BooleImpl(*this));
 }
 
-void AdaptiveBoole::BooleImpl::createElement(const BooleHelper &mostError, BooleHelper& element, bool first)
+void AdaptiveBoole::BooleImpl::createElement(const BooleHelper &mostError, BooleHelper &element, bool first)
 {
   double a, b;
   if (first)
   {
     a = mostError.lowerlimit;
-    b = 0.5*(mostError.lowerlimit + mostError.upperlimit);
+    b = 0.5 * (mostError.lowerlimit + mostError.upperlimit);
   }
   else
   {
-    a = 0.5*(mostError.lowerlimit + mostError.upperlimit);
+    a = 0.5 * (mostError.lowerlimit + mostError.upperlimit);
     b = mostError.upperlimit;
   }
-  double tmp = 0.125*(b - a);
+  double tmp = 0.125 * (b - a);
   double c = a + tmp;
   double e = a + 3.0 * tmp;
   double g = a + 5.0 * tmp;
@@ -126,9 +126,9 @@ void AdaptiveBoole::BooleImpl::createElement(const BooleHelper &mostError, Boole
 
 void AdaptiveBoole::BooleImpl::splitElement(const BooleHelper &mostError, BooleHelper &element1, BooleHelper &element2)
 {
-  this->createElement(mostError, element1,true);
-  this->createElement(mostError, element2,false);
-  //return std::make_pair(element1, element2);
+  this->createElement(mostError, element1, true);
+  this->createElement(mostError, element2, false);
+  // return std::make_pair(element1, element2);
 }
 
 std::vector<double> AdaptiveBoole::BooleImpl::sumPieces(std::priority_queue<BooleHelper> &pieces)
@@ -137,7 +137,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::sumPieces(std::priority_queue<Bool
   std::vector<double> sum(size);
   while (pieces.size() > 0)
   {
-    const BooleHelper& element = pieces.top();
+    const BooleHelper &element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
     {
       double S2 = element.Sleft[i] + element.Sright[i];
@@ -155,7 +155,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::integrate()
   double a = m_lowerBound;
   double b = m_upperBound;
 
-  double tmp = 0.125*(b - a);
+  double tmp = 0.125 * (b - a);
   double c = a + tmp;
   double d = a + 2.0 * tmp;
   double e = a + 3.0 * tmp;
@@ -163,8 +163,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::integrate()
   double g = a + 5.0 * tmp;
   double h = a + 6.0 * tmp;
   double i = a + 7.0 * tmp;
-  //std::cout << b << " " << a + 8.0 * tmp << std::endl;
-  
+  // std::cout << b << " " << a + 8.0 * tmp << std::endl;
 
   if (m_lowerBoundsInnerDimensions.size() > 0)
   {
@@ -249,7 +248,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::integrate()
 
   while (myqueue.size() < m_maximumDivisions)
   {
-    const BooleHelper& mostError = myqueue.top();
+    const BooleHelper &mostError = myqueue.top();
     if (mostError.error < mostError.epsilon)
       break;
 
@@ -258,7 +257,7 @@ std::vector<double> AdaptiveBoole::BooleImpl::integrate()
     // std::cout << "mostError: " << mostError.S[0] << " " << mostError.Sleft[0] << " " << mostError.Sright[0] << " "
     // << mostError.error << std::endl;
     BooleHelper element1, element2;
-    splitElement(mostError,element1,element2);
+    splitElement(mostError, element1, element2);
     // std::cout << "element1: " << element1.S[0] << " " << element1.Sleft[0] << " " << element1.Sright[0] << " "  <<
     // element1.error << " "  << element1.epsilon << " " << myqueue.size() << std::endl;
     // std::cout << "element2: " << element2.S[0] << " " << element2.Sleft[0] << " " << element2.Sright[0] << " "  <<
