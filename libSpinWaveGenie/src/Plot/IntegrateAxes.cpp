@@ -6,7 +6,7 @@
 //
 //
 #include "SpinWaveGenie/Plot/IntegrateAxes.h"
-#include "AdaptiveSimpson.h"
+#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
 
 using namespace std;
 

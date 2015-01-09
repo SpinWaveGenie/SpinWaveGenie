@@ -14,7 +14,7 @@
 #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
 #include "SpinWaveGenie/Plot/TwoDGaussian.h"
 #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
-#include "AdaptiveSimpson.h"
+#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
 
 using namespace std;
 

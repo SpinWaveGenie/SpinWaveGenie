@@ -1,5 +1,8 @@
-#include "AdaptiveSimpson.h"
+#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
 
+#include <cassert>
+#include <cmath>
+#include <iostream>
 #include <queue>
 #include <algorithm>
 #include <limits>
@@ -7,11 +10,9 @@
 struct helper
 {
   helper() : error(0.0){};
-  double c, d, e;
+  double lowerlimit,upperlimit,c, d, e;
   std::vector<double> fa, fb, fc, fd, fe;
   std::vector<double> S, Sleft, Sright;
-  double lowerlimit;
-  double upperlimit;
   double epsilon;
   double error;
   bool operator<(const helper &rhs) const { return this->error / this->epsilon < rhs.error / rhs.epsilon; }
@@ -83,7 +84,7 @@ void helper::initializeError()
 
 void AdaptiveSimpson::SimpsonImpl::createElement(helper &mostError, helper &element)
 {
-  // new
+  // element
   element.resetBounds(mostError.lowerlimit, 0.5 * (mostError.lowerlimit + mostError.upperlimit));
   element.epsilon = std::max(mostError.epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
 

@@ -6,11 +6,9 @@
 //
 //
 
-#include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 #include <vector>
-//#include "AdaptiveBoole.h"
-#include "AdaptiveSimpson.h"
-//#include "GaussKronrod.h"
+#include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
+#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
 
 using namespace std;
 
