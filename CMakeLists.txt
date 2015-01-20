@@ -31,7 +31,6 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 find_package(NLOPT)
 find_package(Eigen3 REQUIRED)
 find_package(TBB)
-find_package(Nexus REQUIRED)
 
 string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
 if (isRHEL6)
