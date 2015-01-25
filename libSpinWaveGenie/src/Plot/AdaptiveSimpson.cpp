@@ -213,7 +213,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   std::priority_queue<helper, std::vector<helper>> myqueue;
   myqueue.emplace(std::move(first));
 
-  while (myqueue.size() < m_maximumDivisions)
+  while (myqueue.size() < static_cast<std::size_t>(m_maximumDivisions))
   {
     helper mostError(myqueue.top());
     if (mostError.error < mostError.epsilon)
