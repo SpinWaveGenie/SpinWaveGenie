@@ -13,7 +13,7 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - cmake ../
+  - cmake -DBUILD_TESTING=ON ../
 
 script:
   - make
