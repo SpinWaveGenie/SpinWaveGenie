@@ -38,7 +38,7 @@ if (isRHEL6)
 endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
-option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" ON)
+option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" OFF)
 option(BUILD_TESTING "Build unit tests" OFF)
 option(ENABLE_DOXYGEN "Enables building of documentation with doxygen" OFF)
 option(USE_THREADS "Use Threading Building Blocks to improve performance" ON)
