@@ -33,7 +33,7 @@ public:
   double m_lowerBound, m_upperBound, m_epsilon;
   std::vector<double> m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions;
   std::deque<double> m_evaluationPointsOuterDimensions;
-  int m_maximumDivisions;
+  std::size_t m_maximumDivisions;
   std::unique_ptr<SimpsonImpl> clone();
 };
 
@@ -213,7 +213,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   std::priority_queue<helper, std::vector<helper>> myqueue;
   myqueue.emplace(std::move(first));
 
-  while (myqueue.size() < static_cast<std::size_t>(m_maximumDivisions))
+  while (myqueue.size() < m_maximumDivisions)
   {
     helper mostError(myqueue.top());
     if (mostError.error < mostError.epsilon)
@@ -279,7 +279,7 @@ void AdaptiveSimpson::setInterval(const std::vector<double> &lowerBounds, const 
 
 void AdaptiveSimpson::setPrecision(double epsilon) { m_p->m_epsilon = epsilon; }
 
-void AdaptiveSimpson::setMaximumDivisions(int maximumDivisions) { m_p->m_maximumDivisions = maximumDivisions; }
+void AdaptiveSimpson::setMaximumDivisions(std::size_t maximumDivisions) { m_p->m_maximumDivisions = maximumDivisions; }
 std::vector<double> AdaptiveSimpson::integrate() { return m_p->integrate(); }
 
 void AdaptiveSimpson::setAdditionalEvaluationPoints(const std::deque<double> &evaluationPoints)

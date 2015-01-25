@@ -40,7 +40,7 @@ public:
   void setPrecision(double epsilon);
   //! sets the maximum number of times the algorithm with subdivide before returning.
   //! \param maximumDivisions default is 1000.
-  void setMaximumDivisions(int maximumDivisions);
+  void setMaximumDivisions(std::size_t maximumDivisions);
   //! Performs the integration
   //! \returns result of the integration.
   std::vector<double> integrate();
