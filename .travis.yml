@@ -15,8 +15,8 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../
+  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../ ; fi
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../ ; fi
 
 script:
   - make
