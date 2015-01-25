@@ -27,7 +27,7 @@ elseif(APPLE)
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 find_package(NLOPT)
