@@ -26,7 +26,7 @@ elseif(APPLE)
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
-elseif(CMAKE_CXX_COMPILER_ID = "Clang")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
