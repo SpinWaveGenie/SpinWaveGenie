@@ -1,11 +1,3 @@
-//
-//  SpinWave.h
-//  Spin Wave Genie
-//
-//  Created by Hahn, Steven E. on 1/7/13.
-//  Copyright (c) 2013 Oak Ridge National Laboratory. All rights reserved.
-//
-
 #ifndef __SpinWave_H__
 #define __SpinWave_H__
 

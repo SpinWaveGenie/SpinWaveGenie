@@ -1,10 +1,3 @@
-//
-//  main.cpp
-//  Spin Wave Fit
-//
-//  Created by Hahn, Steven E. on 1/7/13.
-//  Copyright (c) 2013 Oak Ridge National Laboratory. All rights reserved.
-//
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
