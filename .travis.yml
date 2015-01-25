@@ -1,0 +1,25 @@
+language: cpp
+
+compiler:
+  - gcc
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libboost-dev
+  - sudo apt-get install -qq libboost-test-dev
+  - sudo apt-get install -qq libtbb-dev
+  - sudo apt-get install -qq libnlopt-dev
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ../
+
+script:
+  - make
+  - ctest
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
