@@ -19,10 +19,8 @@ before_install:
   - ./scripts/install-deps-${TRAVIS_OS_NAME}.sh 
 
 before_script:
-  - mkdir build
-  - cd build
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../ ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cmake -DBUILD_TESTING=ON  ../ ; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cmake -DBUILD_TESTING=ON  . ; fi
 
 script:
   - make
@@ -45,6 +43,6 @@ addons:
       name: "SpinWaveGenie/SpinWaveGenie"
       description: "Build submitted via Travis CI"
     notification_email: hahnse@ornl.gov
-    build_command_prepend: "mkdir build; cd build; cmake ../; make clean"
+    build_command_prepend: "cmake -DBUILD_TESTING=ON .; make clean"
     build_command:   "make -j 4"
     branch_pattern: coverity_scan

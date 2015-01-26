@@ -1,12 +1,12 @@
 #!/bin/bash
-brew update
+brew update --quiet
 
 brew tap homebrew/science
 
-brew install eigen
-brew install nlopt
-brew install tbb --c++11
+brew install --quiet eigen
+brew install --quiet nlopt
+brew install --quiet tbb --c++11
 #cmake and boost are already installed
-#brew install cmake
-#brew install boost --c++11
+#brew install --quiet cmake
+#brew install --quiet boost --c++11
 
