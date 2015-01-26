@@ -21,10 +21,8 @@ before_install:
   - sudo apt-get install -qq libtbb-dev
 
 before_script:
-  - mkdir build
-  - cd build
-  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../; fi
+  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  .; fi
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  .; fi
 
 script:
   - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
@@ -46,6 +44,6 @@ addons:
       name: "SpinWaveGenie/SpinWaveGenie"
       description: "Build submitted via Travis CI"
     notification_email: hahnse@ornl.gov
-    build_command_prepend: "mkdir build; cd build; cmake ../; make clean"
+    build_command_prepend: "cmake .; make clean"
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
