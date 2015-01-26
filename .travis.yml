@@ -36,8 +36,14 @@ before_install:
     fi
 
 before_script:
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cmake -DBUILD_TESTING=ON  . ; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
+    then 
+      CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; 
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
+    then 
+      cmake -DBUILD_TESTING=ON  . ; 
+    fi
 
 script:
   - make
