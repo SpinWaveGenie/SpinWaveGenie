@@ -30,7 +30,7 @@ before_install:
     then 
       sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
       sudo apt-get update -qq;
-      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
+      #sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
       sudo apt-get install -qq libboost-dev;
       sudo apt-get install -qq libboost-test-dev;
       sudo apt-get install -qq libeigen3-dev;
@@ -40,7 +40,9 @@ before_install:
 before_script:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
     then 
-      CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; 
+      export CC=gcc-4.4;
+      export CXX=g++-4.4;
+      cmake -DBUILD_TESTING=ON  . ; 
     fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
     then 
