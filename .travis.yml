@@ -16,7 +16,25 @@ matrix:
       compiler: clang
 
 before_install:
-  - ./scripts/install-deps-${TRAVIS_OS_NAME}.sh 
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then 
+      brew tap homebrew/science
+      # many formulas are updated, so we suppress the output.
+      brew update > /dev/null 2>&1
+
+      brew install --quiet eigen
+      brew install --quiet nlopt
+      brew install --quiet tbb --c++11
+      #cmake and boost are already installed
+    ; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then 
+      sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+      sudo apt-get update -qq
+      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev
+      sudo apt-get install -qq libboost-dev
+      sudo apt-get install -qq libboost-test-dev
+      sudo apt-get install -qq libeigen3-dev
+      sudo apt-get install -qq libtbb-dev
+    ; fi
 
 before_script:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; fi
