@@ -12,8 +12,6 @@ matrix:
   exclude:
     - os: osx
       compiler: gcc
-    - os: linux
-      compiler: clang
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
@@ -28,24 +26,26 @@ before_install:
     then 
       sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
       sudo apt-get update -qq;
+      if [ "$CXX" == "g++" ]; 
+      then 
+        sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++-4.4-dev; 
+      elif [ "$CXX" == "clang++" ]; 
+      then 
+        sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev; 
+      fi
       sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
-      sudo apt-get install -qq libboost-dev;
-      sudo apt-get install -qq libboost-test-dev;
+      sudo apt-get install -qq libboost-dev libboost-test-dev;
       sudo apt-get install -qq libeigen3-dev;
       sudo apt-get install -qq libtbb-dev;
     fi
 
 before_script:
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
-    then 
+  - if [ "$CXX" == "g++" ]; 
+    then
       export CC=gcc-4.4;
       export CXX=g++-4.4;
-      cmake -DBUILD_TESTING=ON  .; 
-    fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
-    then 
-      cmake -DBUILD_TESTING=ON  .; 
-    fi
+    fi 
+  - cmake -DBUILD_TESTING=ON  .; 
 
 script:
   - make
