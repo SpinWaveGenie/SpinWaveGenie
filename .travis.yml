@@ -7,7 +7,8 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
-  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++-4.4-dev ; fi
+  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev ; fi
+  #clang requires updated version of libstdc++ 
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev ; fi
   - sudo apt-get install -qq libboost-dev
   - sudo apt-get install -qq libboost-test-dev
