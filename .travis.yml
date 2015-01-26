@@ -38,11 +38,13 @@ before_install:
 before_script:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
     then 
-      CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; 
+      export CC=gcc-4.4;
+      export CXX=g++-4.4;
+      cmake -DBUILD_TESTING=ON  .; 
     fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
     then 
-      cmake -DBUILD_TESTING=ON  . ; 
+      cmake -DBUILD_TESTING=ON  .; 
     fi
 
 script:
@@ -53,19 +55,3 @@ notifications:
   email:
     on_success: change
     on_failure: always
-
-env:
-  global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "iEULeaC9mf9PVTasF8nrCFRepmUGWaGikOqPB9Dbmm1LSBvVT4Z5SurbU9Gh0IljgNp/SJ1388mZ3b2duYxfcGsq8tPNCO/ZySWvK3AIhPKCql3vGCHybD1yMaPkG/ZU5hE9E+uCAZuIQVeOUvMsNQPP4mcjvzstvmuy7aGbIvg="
-
-addons:
-  coverity_scan:
-    project:
-      name: "SpinWaveGenie/SpinWaveGenie"
-      description: "Build submitted via Travis CI"
-    notification_email: hahnse@ornl.gov
-    build_command_prepend: "cmake -DBUILD_TESTING=ON .; make clean"
-    build_command:   "make -j 4"
-    branch_pattern: coverity_scan
