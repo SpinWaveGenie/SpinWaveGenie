@@ -4,6 +4,11 @@ compiler:
   - gcc
   - clang
 
+matrix:
+  exclude:
+    - compiler: clang
+      env: COVERITY_SCAN_BRANCH_PATTERN=coverity_scan
+
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
@@ -18,8 +23,8 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../ ; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../ ; fi
+  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../; fi; fi
+  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../; fi; fi
 
 script:
   - make
