@@ -4,25 +4,48 @@ compiler:
   - gcc
   - clang
 
+os:
+  - linux
+  - osx
+
 matrix:
   exclude:
-    - compiler: clang
+    - os: osx
+      compiler: gcc
+    - os: osx
       env: COVERITY_SCAN_BRANCH_PATTERN=coverity_scan
+    - os: linux
+      compiler: clang
 
 before_install:
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
-  - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev ; fi
-  #clang requires updated version of libstdc++ 
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev ; fi
-  - sudo apt-get install -qq libboost-dev
-  - sudo apt-get install -qq libboost-test-dev
-  - sudo apt-get install -qq libeigen3-dev
-  - sudo apt-get install -qq libtbb-dev
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
+    then 
+      brew tap homebrew/science;
+      brew update > /dev/null 2>&1;
+      brew install --quiet eigen;
+      brew install --quiet nlopt;
+      brew install --quiet tbb --c++11;
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
+    then 
+      sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
+      sudo apt-get update -qq;
+      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
+      sudo apt-get install -qq libboost-dev;
+      sudo apt-get install -qq libboost-test-dev;
+      sudo apt-get install -qq libeigen3-dev;
+      sudo apt-get install -qq libtbb-dev;
+    fi
 
 before_script:
-  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  .; fi
-  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  .; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
+    then 
+      CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  . ; 
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
+    then 
+      cmake -DBUILD_TESTING=ON  . ; 
+    fi
 
 script:
   - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
