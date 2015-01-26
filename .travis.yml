@@ -23,12 +23,11 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../; fi; fi
-  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../; fi; fi
+  - if [ "$CXX" == "g++" ]; then CC=gcc-4.4 CXX=g++-4.4 cmake -DBUILD_TESTING=ON  ../; fi
+  - if [ "$CXX" == "clang++" ]; then cmake -DBUILD_TESTING=ON  ../; fi
 
 script:
-  - make
-  - make test
+  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
 
 notifications:
   email:
