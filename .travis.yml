@@ -1,53 +1,23 @@
+# for coverity, use a single build using the system compiler
+
 language: cpp
 
 compiler:
   - gcc
-  - clang
 
 os:
   - linux
-  - osx
-
-matrix:
-  exclude:
-    - os: osx
-      compiler: gcc
-    - os: osx
-      env: COVERITY_SCAN_BRANCH_PATTERN=coverity_scan
-    - os: linux
-      compiler: clang
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
-    then 
-      brew tap homebrew/science;
-      brew update > /dev/null 2>&1;
-      brew install --quiet eigen;
-      brew install --quiet nlopt;
-      brew install --quiet tbb --c++11;
-    fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
-    then 
-      sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
-      sudo apt-get update -qq;
-      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
-      sudo apt-get install -qq libboost-dev;
-      sudo apt-get install -qq libboost-test-dev;
-      sudo apt-get install -qq libeigen3-dev;
-      sudo apt-get install -qq libtbb-dev;
-    fi
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
+  - sudo apt-get update -qq;
+  - sudo apt-get install -qq libboost-dev;
+  - sudo apt-get install -qq libboost-test-dev;
+  - sudo apt-get install -qq libeigen3-dev;
+  - sudo apt-get install -qq libtbb-dev;
 
 before_script:
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
-    then 
-      export CC=gcc-4.4;
-      export CXX=g++-4.4;
-      cmake -DBUILD_TESTING=ON  . ; 
-    fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
-    then 
-      cmake -DBUILD_TESTING=ON  . ; 
-    fi
+    cmake -DBUILD_TESTING=ON  . ; 
 
 script:
   - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
@@ -62,12 +32,6 @@ env:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "iEULeaC9mf9PVTasF8nrCFRepmUGWaGikOqPB9Dbmm1LSBvVT4Z5SurbU9Gh0IljgNp/SJ1388mZ3b2duYxfcGsq8tPNCO/ZySWvK3AIhPKCql3vGCHybD1yMaPkG/ZU5hE9E+uCAZuIQVeOUvMsNQPP4mcjvzstvmuy7aGbIvg="
-   # Coverity run condition (avoid matrix multiple runs), need customized
-   # build script. Need an update if new matrix cases.
-   - coverity_scan_run_condition='"$CC" = gcc-4.4 -a "$TRAVIS_OS_NAME" != osx'
-   # Coverity script test mode (if true no uploading, avoid reaching the quota)
-   # usual processing: false.
-   - coverity_scan_script_test_mode=true
 
 addons:
   coverity_scan:
@@ -75,6 +39,6 @@ addons:
       name: "SpinWaveGenie/SpinWaveGenie"
       description: "Build submitted via Travis CI"
     notification_email: hahnse@ornl.gov
-    build_command_prepend: "cov-configure --gcc; make clean"
+    build_command_prepend: "make clean"
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
