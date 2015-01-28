@@ -14,8 +14,6 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-SpinWave::SpinWave() {}
-
 SpinWave::SpinWave(Cell &cell_in, boost::ptr_vector<Interaction> interactions_in)
 {
   cell = cell_in;
