@@ -25,12 +25,9 @@ IntegrateEnergy::IntegrateEnergy(const IntegrateEnergy &other)
 
 IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol,
                                  int maxEvals)
+    : resolutionFunction(std::move(resFunction)), maximumEvaluations(maxEvals), tolerance(tol), delta(delta), kx(0.0),
+      ky(0.0), kz(0.0), centeredEnergies(energies)
 {
-  this->resolutionFunction = move(resFunction);
-  this->centeredEnergies = energies;
-  this->delta = delta;
-  this->tolerance = tol;
-  this->maximumEvaluations = maxEvals;
 }
 
 std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double> &x)
