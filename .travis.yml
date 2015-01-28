@@ -1,44 +1,57 @@
-# for coverity, use a single build using the system compiler
-
 language: cpp
 
 compiler:
   - gcc
+  - clang
 
 os:
   - linux
+  - osx
+
+matrix:
+  exclude:
+    - os: osx
+      compiler: gcc
 
 before_install:
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
-  - sudo apt-get update -qq;
-  - sudo apt-get install -qq libboost-dev;
-  - sudo apt-get install -qq libboost-test-dev;
-  - sudo apt-get install -qq libeigen3-dev;
-  - sudo apt-get install -qq libtbb-dev;
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
+    then 
+      brew tap homebrew/science;
+      brew update > /dev/null 2>&1;
+      brew install --quiet eigen;
+      brew install --quiet nlopt;
+      brew install --quiet tbb --c++11;
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
+    then 
+      sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
+      sudo apt-get update -qq;
+      sudo apt-get install -qq libboost-dev libboost-test-dev;
+      sudo apt-get install -qq libeigen3-dev;
+      sudo apt-get install -qq libtbb-dev;
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" == "g++" ];
+    then
+      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
+    fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" == "clang++" ];
+    then
+      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
+    fi
 
 before_script:
-    cmake -DBUILD_TESTING=ON  . ; 
+  - if [ "$CXX" == "g++" ]; 
+    then
+      export CC=gcc-4.4;
+      export CXX=g++-4.4;
+    fi 
+  - cmake -DBUILD_TESTING=ON  .; 
 
 script:
-  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
+  - make
+  - make test
 
 notifications:
   email:
     on_success: change
     on_failure: always
-
-env:
-  global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "iEULeaC9mf9PVTasF8nrCFRepmUGWaGikOqPB9Dbmm1LSBvVT4Z5SurbU9Gh0IljgNp/SJ1388mZ3b2duYxfcGsq8tPNCO/ZySWvK3AIhPKCql3vGCHybD1yMaPkG/ZU5hE9E+uCAZuIQVeOUvMsNQPP4mcjvzstvmuy7aGbIvg="
-
-addons:
-  coverity_scan:
-    project:
-      name: "SpinWaveGenie/SpinWaveGenie"
-      description: "Build submitted via Travis CI"
-    notification_email: hahnse@ornl.gov
-    build_command_prepend: "make clean"
-    build_command:   "make -j 4"
-    branch_pattern: coverity_scan
