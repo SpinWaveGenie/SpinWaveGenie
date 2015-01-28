@@ -20,7 +20,7 @@ using namespace std;
 
 namespace SpinWaveGenie
 {
-TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian &info, SpinWave SW, Energies energiesIn)
+TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian &info, SpinWave SW, Energies energiesIn) : kx(0.0),ky(0.0),kz(0.0)
 {
   a = info.a;
   b = info.b;

@@ -49,7 +49,6 @@ private:
   double kx, ky, kz;
   Vector3 direction;
   EnergyResolutionFunction res;
-  double xmax;
 };
 }
 
