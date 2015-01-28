@@ -10,7 +10,7 @@
 struct helper
 {
   helper() : error(0.0){};
-  double lowerlimit,upperlimit,c, d, e;
+  double lowerlimit, upperlimit, c, d, e;
   std::vector<double> fa, fb, fc, fd, fe;
   std::vector<double> S, Sleft, Sright;
   double epsilon;
