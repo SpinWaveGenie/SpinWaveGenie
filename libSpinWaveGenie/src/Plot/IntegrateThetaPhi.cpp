@@ -15,12 +15,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-IntegrateThetaPhi::IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol, int maxEvals)
-{
-  tolerance = tol;
-  maximumEvaluations = maxEvals;
-  resolutionFunction = move(object);
-}
+
 
 std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
 {
