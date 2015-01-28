@@ -15,7 +15,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-OneDimensionalPseudoVoigt::OneDimensionalPseudoVoigt()
+OneDimensionalPseudoVoigt::OneDimensionalPseudoVoigt() : eta(0.0), tolerance(0.001)
 {
   Gaussian.reset(new OneDimensionalGaussian);
   Lorentzian.reset(new OneDimensionalLorentzian);
