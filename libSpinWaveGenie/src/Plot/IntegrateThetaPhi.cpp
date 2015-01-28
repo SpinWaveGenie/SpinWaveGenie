@@ -15,8 +15,6 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-
-
 std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
 {
   return unique_ptr<SpinWavePlot>(new IntegrateThetaPhi(*this));

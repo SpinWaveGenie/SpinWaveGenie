@@ -20,7 +20,8 @@ namespace SpinWaveGenie
 class IntegrateThetaPhi : public SpinWavePlot
 {
 public:
-  IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol = 1.0e-4, int maxEvals = 1000)  : maximumEvaluations(maxEvals), r(0.0), tolerance(tol), resolutionFunction(std::move(object))  { };
+  IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol = 1.0e-4, int maxEvals = 1000)
+      : maximumEvaluations(maxEvals), r(0.0), tolerance(tol), resolutionFunction(std::move(object)){};
   IntegrateThetaPhi(const IntegrateThetaPhi &other)
       : maximumEvaluations(other.maximumEvaluations), tolerance(other.tolerance),
         resolutionFunction(move(other.resolutionFunction->clone())){};
