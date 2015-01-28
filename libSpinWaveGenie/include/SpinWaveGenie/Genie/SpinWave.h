@@ -37,7 +37,7 @@ the spin wave frequencies and intensities.
 class SpinWave
 {
 public:
-  SpinWave();
+  SpinWave() : KXP(0.0), KYP(0.0), KZP(0.0), M(0), N(0), NU(0), MI(0), IM(0){};
   SpinWave(const SpinWave &other) = default;
   //! Use SpinWaveBuilder to generate SpinWave instance
   friend class SpinWaveBuilder;
@@ -54,7 +54,7 @@ private:
   void calculateEigenvalues();
   void calculateWeights();
   void calculateIntensities();
-  size_t M, N;
+  std::size_t M, N;
   int NU, MI, IM;
   Eigen::MatrixXcd LN;
   Eigen::VectorXd SS;
