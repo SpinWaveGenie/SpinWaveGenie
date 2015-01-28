@@ -22,10 +22,13 @@ void SpinWaveDispersion::setOptions(Options PrintOptions, bool Value)
   {
   case (Options::PrintPosition):
     PrintPosition = Value;
+    break;
   case (Options::PrintFrequency):
     PrintFrequency = Value;
+    break;
   case (Options::PrintIntensity):
     PrintIntensity = Value;
+    break;
   }
 }
 
@@ -86,3 +89,4 @@ void SpinWaveDispersion::save()
   }
   p.update(Kpoints.size());
 }
+
