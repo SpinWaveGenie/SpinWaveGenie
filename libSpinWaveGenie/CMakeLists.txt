@@ -29,16 +29,12 @@ set(LIBRARY_HDRS ${EXTERNAL_HDRS} ${EXTERN_HDRS} ${CELL_HDRS} ${CONTAINERS_HDRS}
 include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${TBB_INCLUDE_DIRS} ${NLOPT_INCLUDE_DIRS} /usr/local/include include src)
 #LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 LINK_LIBRARIES(${TBB_LIBRARIES})
-#INCLUDE (CheckIncludeFileCXX)
-#CHECK_INCLUDE_FILE_CXX( atomic HAVE_ATOMIC)
-#if(HAVE_ATOMIC)
-#add_definitions(-DHAVE_ATOMIC_H)
-#endif()
 
 add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
 
-#install(DIRECTORY include/ DESTINATION include)
-#install(TARGETS SpinWaveGenie ARCHIVE DESTINATION lib)
+install(DIRECTORY include/ DESTINATION include)
+install(TARGETS SpinWaveGenie ARCHIVE DESTINATION lib 
+                              LIBRARY DESTINATION lib)
 
 if(BUILD_TESTING)
     add_subdirectory(test)
