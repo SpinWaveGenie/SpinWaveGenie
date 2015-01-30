@@ -7,6 +7,10 @@ Library for simplifying linear spin wave calculations.
 
 [![Build Status](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie.svg?branch=master)](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie)
 
+License
+-----
+SpinWaveGenie is licensed under the 3-clause BSD license. See LICENSE for details.
+
 <a href="https://scan.coverity.com/projects/4034">
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/4034/badge.svg"/>
