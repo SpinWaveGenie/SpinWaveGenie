@@ -25,5 +25,5 @@ ax.set_xlabel(r'distance $(\xi,0,0)$')
 ax.set_xlim(left=0.0,right=3.0)
 ax.set_ylim(bottom=0.0,top=5.0)
 fig.colorbar(im);
-plt.savefig('FMChain.pdf',dpi=600,bbox_inches='tight')
+plt.savefig('FMChain.png',dpi=400,bbox_inches='tight')
 plt.close()
