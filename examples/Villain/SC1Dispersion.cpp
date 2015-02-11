@@ -1,9 +1,6 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
 #include "SpinWaveGenie/SpinWaveGenie.h"
 #include "nlopt.hpp"
 
