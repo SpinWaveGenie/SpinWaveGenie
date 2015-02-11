@@ -35,3 +35,4 @@ add_test(NAME EnergyResolutionFunctionTest COMMAND EnergyResolutionFunctionTest)
 add_test(NAME IntegrateThetaPhiTest COMMAND IntegrateThetaPhiTest)
 add_test(NAME IntegrateEnergyTest COMMAND IntegrateEnergyTest)
 add_test(NAME AdaptiveSimpsonTest COMMAND AdaptiveSimpsonTest)
+
