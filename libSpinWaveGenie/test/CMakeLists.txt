@@ -19,7 +19,6 @@ add_executable(EnergyResolutionFunctionTest EnergyResolutionFunctionTest.cpp)
 add_executable(IntegrateThetaPhiTest IntegrateThetaPhiTest.cpp)
 add_executable(IntegrateEnergyTest IntegrateEnergyTest.cpp)
 add_executable(AdaptiveSimpsonTest AdaptiveSimpsonTest.cpp)
-add_executable(IntegrationTest_FMChain IntegrationTest_FMChain.cpp)
 
 add_test(NAME SublatticeTest COMMAND ${EXECUTABLE_OUTPUT_PATH}/SublatticeTest)
 add_test(NAME CellTest COMMAND CellTest)
@@ -36,5 +35,4 @@ add_test(NAME EnergyResolutionFunctionTest COMMAND EnergyResolutionFunctionTest)
 add_test(NAME IntegrateThetaPhiTest COMMAND IntegrateThetaPhiTest)
 add_test(NAME IntegrateEnergyTest COMMAND IntegrateEnergyTest)
 add_test(NAME AdaptiveSimpsonTest COMMAND AdaptiveSimpsonTest)
-add_test(NAME IntegrationTest_FMChain COMMAND IntegrationTest_FMChain)
 
