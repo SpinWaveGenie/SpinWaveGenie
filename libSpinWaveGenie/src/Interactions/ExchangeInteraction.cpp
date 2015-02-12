@@ -9,7 +9,7 @@ namespace SpinWaveGenie
 {
 
 ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in,
-                                         double max_in)
+                                         double max_in) : name(name_in), r(0), s(0), M(0)
 {
   name = name_in;
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
