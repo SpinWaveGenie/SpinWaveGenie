@@ -23,7 +23,7 @@ class OneDimensionalPseudoVoigt : public OneDimensionalShapes
 public:
   OneDimensionalPseudoVoigt();
   OneDimensionalPseudoVoigt(const OneDimensionalPseudoVoigt &other)
-      : Lorentzian(other.Lorentzian->clone()), Gaussian(other.Gaussian->clone()){};
+      :  eta(other.eta), tolerance(other.tolerance), Lorentzian(other.Lorentzian->clone()), Gaussian(other.Gaussian->clone()){};
   void setEta(double InEta);
   void setFWHM(double InFWHM);
   void setTolerance(double InTolerance);

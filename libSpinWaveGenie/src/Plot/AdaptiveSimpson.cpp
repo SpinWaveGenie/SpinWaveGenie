@@ -9,7 +9,7 @@
 
 struct helper
 {
-  helper() : error(0.0){};
+  helper() : lowerlimit(0.0),upperlimit(0.0),c(0.0),d(0.0),e(0.0), epsilon(1.0e-5), error(0.0) {};
   double lowerlimit,upperlimit,c, d, e;
   std::vector<double> fa, fb, fc, fd, fe;
   std::vector<double> S, Sleft, Sright;
@@ -24,7 +24,7 @@ struct helper
 class AdaptiveSimpson::SimpsonImpl
 {
 public:
-  SimpsonImpl() : m_epsilon(1.0e-5), m_maximumDivisions(1000){};
+  SimpsonImpl() : m_lowerBound(0.0),m_upperBound(0.0), m_epsilon(1.0e-5), m_maximumDivisions(1000){};
   std::vector<double> sumPieces(std::priority_queue<helper> &pieces);
   void createElement(helper &mostError, helper &element1);
   void splitElement(helper &mostError, helper &element1);
