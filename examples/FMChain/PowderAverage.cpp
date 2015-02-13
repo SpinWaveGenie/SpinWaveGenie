@@ -1,14 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <fstream>
-#include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
-#include "SpinWaveGenie/Containers/Containers.h"
-#include "SpinWaveGenie/Genie/Genie.h"
-#include "SpinWaveGenie/Interactions/Interactions.h"
-#include "SpinWaveGenie/Plot/Plot.h"
+#include "SpinWaveGenie/SpinWaveGenie.h"
 
 using namespace std;
 using namespace SpinWaveGenie;

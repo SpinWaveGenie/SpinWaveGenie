@@ -34,7 +34,7 @@ void SpinWaveDispersion::setOptions(Options PrintOptions, bool Value)
 
 void SpinWaveDispersion::setFilename(string name) { Filename = name; }
 
-void SpinWaveDispersion::setGenie(SpinWave SW) { Genie = SW; }
+void SpinWaveDispersion::setGenie(const SpinWave &SW) { Genie = SW ; }
 
 void SpinWaveDispersion::setPoints(ThreeVectors<double> pts)
 {
@@ -89,4 +89,3 @@ void SpinWaveDispersion::save()
   }
   p.update(Kpoints.size());
 }
-

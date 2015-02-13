@@ -1,10 +1,6 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <fstream>
-#include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
 #include "SpinWaveGenie/Containers/Containers.h"
 #include "SpinWaveGenie/Genie/Genie.h"
 #include "SpinWaveGenie/Interactions/Interactions.h"

@@ -1,11 +1,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <fstream>
-#include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
 #include "SpinWaveGenie/SpinWaveGenie.h"
+
 using namespace std;
 using namespace SpinWaveGenie;
 
@@ -33,13 +30,13 @@ int main()
     PointsAlongLine Line;
     Line.setFirstPoint(0.0,0.0,0.0);
     Line.setFinalPoint(3.0,0.0,0.0);
-    Line.setNumberPoints(801);
+    Line.setNumberPoints(401);
     ThreeVectors<double> kPoints = Line.getPoints();
     
-    Energies energies(0.0, 5.0, 801);
+    Energies energies(0.0, 5.0, 401);
     
     OneDimensionalFactory factory;
-    auto gauss = factory.getGaussian(0.15,1.0e-5);
+    auto gauss = factory.getGaussian(0.25,1.0e-5);
     
     unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW,energies));
     

@@ -9,6 +9,7 @@ namespace SpinWaveGenie
 
 DM_Z_Interaction::DM_Z_Interaction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in,
                                    double max_in)
+    : name(name_in), r(0), s(0), M(0), tmp0(0.0), tmp1(0.0), tmp2(0.0), tmp3(0.0), tmp4(0.0), z_rs(0)
 {
   name = name_in;
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);

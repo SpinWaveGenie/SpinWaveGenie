@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(FirstOrderTest)
     InteractionFactory factory;
     SpinWaveBuilder builder(cell);
     builder.addInteraction(factory.getMagneticField("H", -3.0, Vector3(0.0,0.0,1.0),"Spin0"));
-    double soln = -3.0*sqrt(2.0/2.0)*sin(M_PI/6);
+    double soln = -3.0*sin(M_PI/6.0);
     Eigen::VectorXcd result = builder.getFirstOrderTerms();
     BOOST_CHECK_CLOSE(result(0).real(),soln,1.0e-5);
     BOOST_CHECK_SMALL(result(0).imag(),1.0e-5);

@@ -15,16 +15,15 @@ image_array = np.loadtxt('FMcut.mat')
 E_array = np.loadtxt('FMcut.y')
 x_axis = np.loadtxt('FMcut.x')
 
-
 print len(image_array)
 print len(image_array[0])
 print np.max(image_array)
-im = ax.pcolorfast(x_axis[:,0],E_array,image_array,vmin=0.0,vmax=2.0)
+im = ax.pcolorfast(x_axis[:,0],E_array,image_array,vmin=0.0,vmax=1.0)
 ax.scatter(dispersion[0],dispersion[3],c='white')
 ax.set_ylabel(r'Energy (meV)')
 ax.set_xlabel(r'distance $(\xi,0,0)$')
 ax.set_xlim(left=0.0,right=3.0)
 ax.set_ylim(bottom=0.0,top=5.0)
 fig.colorbar(im);
-plt.savefig('FMChain.pdf',dpi=600,bbox_inches='tight')
+plt.savefig('FMChain.png',dpi=400,bbox_inches='tight')
 plt.close()

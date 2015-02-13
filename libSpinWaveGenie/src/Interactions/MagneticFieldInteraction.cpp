@@ -15,8 +15,8 @@ namespace SpinWaveGenie
 
 MagneticFieldInteraction::MagneticFieldInteraction(string name_in, double value_in, Vector3 unitVectorIn,
                                                    string sl_r_in)
+    : name(name_in), r(0), M(0)
 {
-  name = name_in;
   this->updateInteraction(value_in, unitVectorIn, sl_r_in);
 }
 
@@ -24,7 +24,6 @@ Interaction *MagneticFieldInteraction::do_clone() const { return new MagneticFie
 
 void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
-  r = -1;
   value = value_in;
   directions = unitVectorIn;
   directions.normalize();
