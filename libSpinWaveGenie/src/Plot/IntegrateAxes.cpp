@@ -13,7 +13,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-IntegrateAxes::IntegrateAxes(const IntegrateAxes &other)
+IntegrateAxes::IntegrateAxes(const IntegrateAxes &other) : kx(0.0), ky(0.0), kz(0.0)
 {
   resolutionFunction = move(other.resolutionFunction->clone());
   this->maximumEvaluations = other.maximumEvaluations;
@@ -21,7 +21,7 @@ IntegrateAxes::IntegrateAxes(const IntegrateAxes &other)
   this->integrationDirections = other.integrationDirections;
 }
 
-IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals)
+IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals) :  kx(0.0), ky(0.0), kz(0.0)
 {
   this->tolerance = tol;
   this->maximumEvaluations = maxEvals;
