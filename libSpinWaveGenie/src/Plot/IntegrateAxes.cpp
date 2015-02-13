@@ -21,7 +21,8 @@ IntegrateAxes::IntegrateAxes(const IntegrateAxes &other) : kx(0.0), ky(0.0), kz(
   this->integrationDirections = other.integrationDirections;
 }
 
-IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals) :  kx(0.0), ky(0.0), kz(0.0)
+IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals)
+    : kx(0.0), ky(0.0), kz(0.0)
 {
   this->tolerance = tol;
   this->maximumEvaluations = maxEvals;

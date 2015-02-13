@@ -89,4 +89,3 @@ void SpinWaveDispersion::save()
   }
   p.update(Kpoints.size());
 }
-

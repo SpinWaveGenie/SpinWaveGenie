@@ -14,7 +14,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-IntegrateEnergy::IntegrateEnergy(const IntegrateEnergy &other) : kx(0.0),ky(0.0),kz(0.0)
+IntegrateEnergy::IntegrateEnergy(const IntegrateEnergy &other) : kx(0.0), ky(0.0), kz(0.0)
 {
   resolutionFunction = move(other.resolutionFunction->clone());
   this->centeredEnergies = other.centeredEnergies;

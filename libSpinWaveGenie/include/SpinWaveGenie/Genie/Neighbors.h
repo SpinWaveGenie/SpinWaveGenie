@@ -21,7 +21,7 @@ class Cell;
 class Neighbors
 {
 public:
-  Neighbors(): numberNeighbors(0) {} ;
+  Neighbors() : numberNeighbors(0){};
   //! Returns whether of not neighbors have been calculated previously;
   //! \param
   bool empty();

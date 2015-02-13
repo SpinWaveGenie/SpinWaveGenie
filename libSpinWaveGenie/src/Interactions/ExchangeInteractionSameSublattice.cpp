@@ -9,7 +9,8 @@ namespace SpinWaveGenie
 {
 
 ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(string name_in, double value_in, string sl_r_in,
-                                                                     double min_in, double max_in) : name(name_in), r(0), s(0), M(0)
+                                                                     double min_in, double max_in)
+    : name(name_in), r(0), s(0), M(0)
 {
   this->updateInteraction(value_in, sl_r_in, min_in, max_in);
 }
