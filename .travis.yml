@@ -25,7 +25,10 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
     then 
       sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
+      sudo add-apt-repository --yes ppa:smspillaz/cmake-2.8.12;
       sudo apt-get update -qq;
+      sudo apt-get purge -qq cmake;
+      sudo apt-get install -qq cmake;
       sudo apt-get install -qq libboost-dev libboost-test-dev;
       sudo apt-get install -qq libeigen3-dev;
       sudo apt-get install -qq libtbb-dev;
