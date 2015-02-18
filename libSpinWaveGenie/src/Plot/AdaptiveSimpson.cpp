@@ -211,7 +211,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   first.initializeError();
 
   std::priority_queue<helper, std::vector<helper>> myqueue;
-  myqueue.emplace(std::move(first));
+  myqueue.push(std::move(first));
 
   while (myqueue.size() < m_maximumDivisions)
   {
@@ -223,8 +223,8 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
     helper element;
     splitElement(mostError, element);
     myqueue.pop();
-    myqueue.emplace(std::move(mostError));
-    myqueue.emplace(std::move(element));
+    myqueue.push(std::move(mostError));
+    myqueue.push(std::move(element));
   }
 
   return sumPieces(myqueue);
