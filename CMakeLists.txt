@@ -1,6 +1,6 @@
 project(spin_wave_genie)
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.12)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_MACOSX_RPATH FALSE)
 #set(CMAKE_SKIP_RPATH TRUE)
