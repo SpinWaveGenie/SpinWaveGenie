@@ -29,7 +29,7 @@ set(LIBRARY_HDRS ${EXTERNAL_HDRS} ${EXTERN_HDRS} ${CELL_HDRS} ${CONTAINERS_HDRS}
 add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
 
 target_include_directories( SpinWaveGenie INTERFACE PUBLIC include)
-target_include_directories( SpinWaveGenie SYSTEM INTERFACE PUBLIC ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${NLOPT_INCLUDE_DIRS})
+target_include_directories( SpinWaveGenie SYSTEM INTERFACE PUBLIC ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 target_include_directories( SpinWaveGenie PRIVATE src)
 target_include_directories( SpinWaveGenie SYSTEM PRIVATE ${TBB_INCLUDE_DIRS})
 target_link_libraries( SpinWaveGenie PRIVATE ${TBB_LIBRARIES})
