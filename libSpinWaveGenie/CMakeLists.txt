@@ -26,11 +26,13 @@ SOURCE_GROUP("Header Files\\Plot" FILES ${PLOT_HDRS})
 set(LIBRARY_SRCS ${EXTERNAL_SRCS} ${EXTERN_SRCS} ${CELL_SRCS} ${CONTAINERS_SRCS} ${GENIE_SRCS} ${INTERACTIONS_SRCS} ${PLOT_SRCS})
 set(LIBRARY_HDRS ${EXTERNAL_HDRS} ${EXTERN_HDRS} ${CELL_HDRS} ${CONTAINERS_HDRS} ${GENIE_HDRS} ${INTERACTIONS_HDRS} ${PLOT_HDRS})
 
-include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${TBB_INCLUDE_DIRS} ${NLOPT_INCLUDE_DIRS} /usr/local/include include src)
-#LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-LINK_LIBRARIES(${TBB_LIBRARIES})
-
 add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+
+target_include_directories( SpinWaveGenie INTERFACE PUBLIC include)
+target_include_directories( SpinWaveGenie SYSTEM INTERFACE PUBLIC ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+target_include_directories( SpinWaveGenie PRIVATE src)
+target_include_directories( SpinWaveGenie SYSTEM PRIVATE ${TBB_INCLUDE_DIRS})
+target_link_libraries( SpinWaveGenie PRIVATE ${TBB_LIBRARIES})
 
 install(DIRECTORY include/ DESTINATION include)
 install(TARGETS SpinWaveGenie ARCHIVE DESTINATION lib 
