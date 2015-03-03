@@ -52,7 +52,7 @@ install(TARGETS SpinWaveGenie EXPORT SpinWaveGenieTargets
 
 #create package configuration files
 #requires cmake 3.0
-if(CMAKE VERSION_GREATER 3.0)
+if(${CMAKE_VERSION} VERSION_GREATER 3.0)
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file(
         "${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie/SpinWaveGenieConfigVersion.cmake"
@@ -74,7 +74,6 @@ if(CMAKE VERSION_GREATER 3.0)
     set(ConfigPackageLocation lib/cmake/SpinWaveGenie)
     install(EXPORT SpinWaveGenieTargets
             FILE SpinWaveGenieTargets.cmake
-            NAMESPACE Upstream::
             DESTINATION ${ConfigPackageLocation}
     )
 

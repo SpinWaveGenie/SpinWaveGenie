@@ -30,7 +30,6 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-find_package(NLOPT)
 find_package(Eigen3 REQUIRED)
 find_package(TBB)
 
@@ -48,10 +47,6 @@ option(USE_THREADS "Use Threading Building Blocks to improve performance" ON)
 if(BUILD_TESTING)
     enable_testing()
 endif(BUILD_TESTING)
-
-if(BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
 
 if(USE_THREADS AND TBB_FOUND )
 add_definitions(-DUSE_THREADS)
@@ -75,6 +70,10 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
+
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 #add_subdirectory(CubicPerovskite)
 #add_subdirectory(MnV2O4)
 #add_subdirectory(SrCoO2p5)
