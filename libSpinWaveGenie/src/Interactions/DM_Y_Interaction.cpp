@@ -64,9 +64,19 @@ void DM_Y_Interaction::calcConstantValues(Cell &cell)
   // cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
 }
 
-void DM_Y_Interaction::calculateEnergy(Cell &cell, double &energy) {}
+void DM_Y_Interaction::calculateEnergy(Cell &cell, double &energy)
+{
+  //unused parameters cell,energy;
+  (void)cell;
+  (void)energy;
+}
 
-void DM_Y_Interaction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) {}
+void DM_Y_Interaction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements)
+{
+  //unused parameters cell,energy;
+  (void)cell;
+  (void)elements;
+}
 
 void DM_Y_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
 {

@@ -123,6 +123,8 @@ void AnisotropyInteraction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXc
 
 void AnisotropyInteraction::updateMatrix(Vector3 K, Eigen::MatrixXcd &LN)
 {
+  //unused variable K;
+  (void)K;
   LN(r, r) += LNrr;
   LN(r, r + M) += LNrrM;
   LN(r + M, r) += LNrMr;

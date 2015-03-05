@@ -19,7 +19,7 @@ bool evalues_equal(const Point &a, const Point &b)
 {
   // remove eigenvalues that are equal
   double EPS = 1.0e-5;
-  return abs(a.frequency - b.frequency) < EPS;
+  return std::abs(a.frequency - b.frequency) < EPS;
 }
 
 void Results::clear() { results.clear(); }
