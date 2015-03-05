@@ -22,19 +22,20 @@ struct helper
 
 struct ComparePointers
 {
-    bool operator()(const std::shared_ptr<helper> &lhs, const std::shared_ptr<helper> &rhs) const
-    {
-        return lhs->error / lhs->epsilon < rhs->error / rhs->epsilon;
-    }
+  bool operator()(const std::shared_ptr<helper> &lhs, const std::shared_ptr<helper> &rhs) const
+  {
+    return lhs->error / lhs->epsilon < rhs->error / rhs->epsilon;
+  }
 };
 
 class AdaptiveSimpson::SimpsonImpl
 {
 public:
   SimpsonImpl() : m_lowerBound(0.0), m_upperBound(0.0), m_epsilon(1.0e-5), m_maximumDivisions(1000){};
-    std::vector<double> sumPieces(std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> &pieces);
-    void createElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element1);
-    void splitElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element1);
+  std::vector<double> sumPieces(
+      std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> &pieces);
+  void createElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element1);
+  void splitElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element1);
   std::vector<double> integrate();
   std::function<std::vector<double>(std::deque<double> &evaluationPoints)> m_integrand;
   double m_lowerBound, m_upperBound, m_epsilon;
@@ -90,7 +91,8 @@ void helper::initializeError()
   }
 }
 
-void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element)
+void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &mostError,
+                                                 const std::shared_ptr<helper> &element)
 {
   // element
   element->resetBounds(mostError->lowerlimit, 0.5 * (mostError->lowerlimit + mostError->upperlimit));
@@ -150,12 +152,14 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
   mostError->updateError();
 }
 
-void AdaptiveSimpson::SimpsonImpl::splitElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element)
+void AdaptiveSimpson::SimpsonImpl::splitElement(const std::shared_ptr<helper> &mostError,
+                                                const std::shared_ptr<helper> &element)
 {
   this->createElement(mostError, element);
 }
 
-std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> &pieces)
+std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(
+    std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> &pieces)
 {
   std::size_t size = pieces.top()->Sleft.size();
   std::vector<double> sum(size);
@@ -218,7 +222,8 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 
   first->initializeError();
 
-  std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> myqueue((ComparePointers()));
+  std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> myqueue(
+      (ComparePointers()));
   myqueue.push(std::move(first));
 
   while (myqueue.size() < m_maximumDivisions)
