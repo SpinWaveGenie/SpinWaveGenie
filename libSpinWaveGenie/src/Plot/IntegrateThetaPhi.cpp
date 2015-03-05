@@ -62,6 +62,9 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
 
 std::vector<double> IntegrateThetaPhi::getCut(double kx, double ky, double kz)
 {
+  // unused parameters kx, ky;
+  (void)kx;
+  (void)ky;
   std::vector<double> xmin = {0.0, 0.0};
   std::vector<double> xmax = {M_PI, 2.0 * M_PI};
   r = std::abs(kz);

@@ -105,6 +105,8 @@ void MagneticFieldInteraction::calcConstantValues(Cell &cell)
 
 void MagneticFieldInteraction::updateMatrix(Vector3 K, Eigen::MatrixXcd &LN)
 {
+  //unused parameter K;
+  (void)K;
   LN(r, r) += LNrr;
   LN(r + M, r + M) += LNrr;
 }
