@@ -72,11 +72,8 @@ void ExchangeInteractionSameSublattice::calculateEnergy(Cell &cell, double &ener
   energy -= value * z_rs * Sr * Sr;
 }
 
-void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell &cell, VectorXcd &elements)
+void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell & /*cell*/, VectorXcd & /*elements*/)
 {
-  //unused paramets cell, elements
-  (void)cell;
-  (void)elements;
   // first order terms are 0.0
 }
 

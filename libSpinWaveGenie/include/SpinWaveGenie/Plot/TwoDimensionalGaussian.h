@@ -31,7 +31,7 @@ class TwoDimensionResolutionFunction : public SpinWavePlot
 public:
   TwoDimensionResolutionFunction(){};
   TwoDimensionResolutionFunction(TwoDimGaussian &info, const SpinWave &SW, Energies energies);
-  TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction &other) = default;
+  TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction & /*other*/) = default;
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
   void setTolerance(double tol, int maxEvals = 100000);
   std::unique_ptr<SpinWavePlot> clone();

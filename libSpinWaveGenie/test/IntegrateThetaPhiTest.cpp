@@ -32,10 +32,7 @@ namespace SpinWaveGenie
         {
             m_Energies = energies;
         };
-        std::vector<double> getCut(double kx, double ky, double kz)
-        {
-            return std::vector<double>(1,1.0);
-        };
+        std::vector<double> getCut(double /*kx*/, double /*ky*/, double /*kz*/) { return std::vector<double>(1, 1.0); };
         ~ConstantFunction(){};
     private:
         SpinWaveGenie::Cell m_Cell;
