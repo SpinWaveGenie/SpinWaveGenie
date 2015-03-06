@@ -34,6 +34,10 @@ namespace SpinWaveGenie
         };
         std::vector<double> getCut(double kx, double ky, double kz)
         {
+          // unused variables kx,ky,kz
+          (void)kx;
+          (void)ky;
+          (void)kz;
             return std::vector<double>(1,1.0);
         };
         ~ConstantFunction(){};

@@ -15,7 +15,13 @@ class SimpleSpinWave
 public:
     SimpleSpinWave(){};
     SimpleSpinWave(Results input) {m_Results = input;};
-    void createMatrix(double KX,double KY,double KZ) {};
+    void createMatrix(double KX, double KY, double KZ)
+    {
+      // unused variables KX,KY,KZ
+      (void)KX;
+      (void)KY;
+      (void)KZ;
+    };
     void calculate() {};
     Results getPoints() {return m_Results;};
     const Cell& getCell() const {return m_Cell;};
