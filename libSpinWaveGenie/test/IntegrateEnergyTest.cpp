@@ -31,12 +31,8 @@ namespace SpinWaveGenie
         {
             m_Energies = energies;
         };
-        std::vector<double> getCut(double kx, double ky, double kz)
+        std::vector<double> getCut(double /*kx*/, double /*ky*/, double /*kz*/)
         {
-          // unused variables kx,ky,kz;
-          (void)kx;
-          (void)ky;
-          (void)kz;
             double frequency = 10.0;
             double FWHM = 1.0;
             std::vector<double> results;
