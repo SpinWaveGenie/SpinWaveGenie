@@ -49,8 +49,6 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
 
   // cout << "Sr: " << Sr << endl;
 
-  Matrix3 Frs = cell[r].getRotationMatrix() * cell[r].getInverseMatrix();
-
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
   double z_rs = neighbors.size();
   // cout << "z_rs = " << z_rs << endl;
