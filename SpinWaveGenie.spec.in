@@ -35,9 +35,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_includedir}/.DS_Store
 %{_includedir}/SpinWaveGenie/
-%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieConfig.cmake
-%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieConfigVersion.cmake
-%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieTargets-release.cmake
-%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieTargets.cmake
+%{_prefix}/lib/cmake/SpinWaveGenie/
 %{_prefix}/lib/libSpinWaveGenie.so
 %doc
