@@ -74,3 +74,28 @@ add_subdirectory(libSpinWaveGenie)
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
+
+######################################################################
+# configure everything for cpack
+set ( CPACK_PACKAGE_NAME SpinWaveGenie )
+set ( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Library for simplifying linear spin wave calculations" )
+set ( CPACK_PACKAGE_VERSION_MAJOR "${SPINWAVEGENIE_VERSION_MAJOR}" )
+set ( CPACK_PACKAGE_VERSION_MINOR "${SPINWAVEGENIE_VERSION_MINOR}" )
+set ( CPACK_PACKAGE_VERSION_PATCH "${SPINWAVEGENIE_VERSION_PATCH}" )
+set ( CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}" )
+
+set ( CPACK_PACKAGE_VENDOR "Steven Hahn" )
+set ( CPACK_PACKAGE_URL "http://github.com/SpinWaveGenie/SpinWaveGenie" )
+set ( CPACK_PACKAGE_CONTACT "hahnse@ornl.gov" )
+set ( CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
+set ( CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md )
+set ( CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE )
+set ( CPACK_RPM_PACKAGE_LICENSE "BSD 3-clause License" )
+
+set ( CPACK_RPM_PACKAGE_RELEASE 1 )
+set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
+set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
+set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake gcc-c++ doxygen boost-test boost-devel" )
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
