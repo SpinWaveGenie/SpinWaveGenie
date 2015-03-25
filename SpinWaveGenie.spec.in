@@ -33,7 +33,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{_includedir}/.DS_Store
 %{_includedir}/SpinWaveGenie/
 %{_prefix}/lib/cmake/SpinWaveGenie/
 %{_prefix}/lib/libSpinWaveGenie.so
