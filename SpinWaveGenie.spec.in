@@ -1,0 +1,83 @@
+Name:           @CPACK_PACKAGE_NAME@
+Version:        @CPACK_PACKAGE_VERSION@
+Release:        @CPACK_RPM_PACKAGE_RELEASE@%{?dist}
+Summary:        @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
+Group:          @CPACK_RPM_PACKAGE_GROUP@
+Vendor:         @CPACK_PACKAGE_VENDOR@
+Packager:       @CPACK_PACKAGE_VENDOR@ <@CPACK_PACKAGE_CONTACT@>
+
+License:        @CPACK_RPM_PACKAGE_LICENSE@
+URL:            @CPACK_RPM_PACKAGE_URL@
+Source0:        %{name}-%{version}.tar.gz
+#Source0:        @CPACK_RPM_PACKAGE_URL@/releases/download/v%{version}/SpinWaveGenie-%{version}.tar.gz
+
+BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
+Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
+
+%description
+@CPACK_RPM_PACKAGE_DESCRIPTION@
+
+%prep
+%setup -q
+
+%build
+%cmake %{?el6:-DBoost_NO_BOOST_CMAKE=ON} -DBUILD_TESTING=True
+%{__make} %{?_smp_flags}
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%make_install
+
+%check
+%{__make} test
+
+%files
+%defattr(-,root,root,-)
+%{_prefix}/include/.DS_Store
+%{_prefix}/include/SpinWaveGenie/Containers/Cell.h
+%{_prefix}/include/SpinWaveGenie/Containers/Containers.h
+%{_prefix}/include/SpinWaveGenie/Containers/Energies.h
+%{_prefix}/include/SpinWaveGenie/Containers/HKLDirections.h
+%{_prefix}/include/SpinWaveGenie/Containers/Matrices.h
+%{_prefix}/include/SpinWaveGenie/Containers/PointsAlongLine.h
+%{_prefix}/include/SpinWaveGenie/Containers/Results.h
+%{_prefix}/include/SpinWaveGenie/Containers/Sublattice.h
+%{_prefix}/include/SpinWaveGenie/Containers/ThreeVectors.h
+%{_prefix}/include/SpinWaveGenie/Containers/UniqueThreeVectors.h
+%{_prefix}/include/SpinWaveGenie/Genie/Genie.h
+%{_prefix}/include/SpinWaveGenie/Genie/MagneticFormFactor.h
+%{_prefix}/include/SpinWaveGenie/Genie/Neighbors.h
+%{_prefix}/include/SpinWaveGenie/Genie/SpinWave.h
+%{_prefix}/include/SpinWaveGenie/Genie/SpinWaveBuilder.h
+%{_prefix}/include/SpinWaveGenie/Interactions/AnisotropyInteraction.h
+%{_prefix}/include/SpinWaveGenie/Interactions/DM_Y_Interaction.h
+%{_prefix}/include/SpinWaveGenie/Interactions/DM_Z_Interaction.h
+%{_prefix}/include/SpinWaveGenie/Interactions/ExchangeInteraction.h
+%{_prefix}/include/SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h
+%{_prefix}/include/SpinWaveGenie/Interactions/Interaction.h
+%{_prefix}/include/SpinWaveGenie/Interactions/InteractionFactory.h
+%{_prefix}/include/SpinWaveGenie/Interactions/Interactions.h
+%{_prefix}/include/SpinWaveGenie/Interactions/MagneticFieldInteraction.h
+%{_prefix}/include/SpinWaveGenie/Plot/AdaptiveSimpson.h
+%{_prefix}/include/SpinWaveGenie/Plot/EnergyResolutionFunction.h
+%{_prefix}/include/SpinWaveGenie/Plot/IntegrateAxes.h
+%{_prefix}/include/SpinWaveGenie/Plot/IntegrateEnergy.h
+%{_prefix}/include/SpinWaveGenie/Plot/IntegrateThetaPhi.h
+%{_prefix}/include/SpinWaveGenie/Plot/OneDimensionalFactory.h
+%{_prefix}/include/SpinWaveGenie/Plot/OneDimensionalGaussian.h
+%{_prefix}/include/SpinWaveGenie/Plot/OneDimensionalLorentzian.h
+%{_prefix}/include/SpinWaveGenie/Plot/OneDimensionalPseudoVoigt.h
+%{_prefix}/include/SpinWaveGenie/Plot/OneDimensionalShapes.h
+%{_prefix}/include/SpinWaveGenie/Plot/Plot.h
+%{_prefix}/include/SpinWaveGenie/Plot/SpinWaveDispersion.h
+%{_prefix}/include/SpinWaveGenie/Plot/SpinWavePlot.h
+%{_prefix}/include/SpinWaveGenie/Plot/TwoDGaussian.h
+%{_prefix}/include/SpinWaveGenie/Plot/TwoDimensionalCut.h
+%{_prefix}/include/SpinWaveGenie/Plot/TwoDimensionalGaussian.h
+%{_prefix}/include/SpinWaveGenie/SpinWaveGenie.h
+%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieConfig.cmake
+%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieConfigVersion.cmake
+%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieTargets-release.cmake
+%{_prefix}/lib/cmake/SpinWaveGenie/SpinWaveGenieTargets.cmake
+%{_prefix}/lib/libSpinWaveGenie.so
+%doc
