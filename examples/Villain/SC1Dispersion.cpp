@@ -63,7 +63,7 @@ SpinWaveBuilder getBuilder(double theta_a, double theta_b)
     
 }
 
-double myfunc(const std::vector<double> &x, std::vector<double> &grad, void *my_func_data)
+double myfunc(const std::vector<double> &x, std::vector<double> & /*grad*/, void * /*my_func_data*/)
 {
     SpinWaveBuilder builder = getBuilder(x[0],x[1]);
     return builder.getEnergy();

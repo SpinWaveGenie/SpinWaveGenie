@@ -49,8 +49,6 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
 
   // cout << "Sr: " << Sr << endl;
 
-  Matrix3 Frs = cell[r].getRotationMatrix() * cell[r].getInverseMatrix();
-
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
   double z_rs = neighbors.size();
   // cout << "z_rs = " << z_rs << endl;
@@ -72,7 +70,7 @@ void ExchangeInteractionSameSublattice::calculateEnergy(Cell &cell, double &ener
   energy -= value * z_rs * Sr * Sr;
 }
 
-void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell &cell, VectorXcd &elements)
+void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell & /*cell*/, VectorXcd & /*elements*/)
 {
   // first order terms are 0.0
 }

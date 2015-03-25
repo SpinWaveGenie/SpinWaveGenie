@@ -1,6 +1,6 @@
 project(spin_wave_genie)
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.12)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_MACOSX_RPATH FALSE)
 #set(CMAKE_SKIP_RPATH TRUE)
@@ -18,19 +18,18 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     message("compiler detected as: GNU compiler")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -msse4 -Wall -Wextra -Wno-unused-parameter")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -msse4 -Wall -Wextra")
 elseif(APPLE)
     message("Setting up Xcode for C++11 with libc++.")
     if(CMAKE_GENERATOR STREQUAL Xcode)
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
     endif()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4 -Wall -Wextra -Wpedantic")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic -Wno-unused-parameter")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-find_package(NLOPT)
 find_package(Eigen3 REQUIRED)
 find_package(TBB)
 
@@ -48,10 +47,6 @@ option(USE_THREADS "Use Threading Building Blocks to improve performance" ON)
 if(BUILD_TESTING)
     enable_testing()
 endif(BUILD_TESTING)
-
-if(BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
 
 if(USE_THREADS AND TBB_FOUND )
 add_definitions(-DUSE_THREADS)
@@ -75,9 +70,32 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
-#add_subdirectory(CubicPerovskite)
-#add_subdirectory(MnV2O4)
-#add_subdirectory(SrCoO2p5)
-#add_subdirectory(CoV2O4)
-#add_subdirectory(CubicPerovskite)
-#add_subdirectory(MnSb)
+
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+######################################################################
+# configure everything for cpack
+set ( CPACK_PACKAGE_NAME SpinWaveGenie )
+set ( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Library for simplifying linear spin wave calculations" )
+set ( CPACK_PACKAGE_VERSION_MAJOR "${SPINWAVEGENIE_VERSION_MAJOR}" )
+set ( CPACK_PACKAGE_VERSION_MINOR "${SPINWAVEGENIE_VERSION_MINOR}" )
+set ( CPACK_PACKAGE_VERSION_PATCH "${SPINWAVEGENIE_VERSION_PATCH}" )
+set ( CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}" )
+
+set ( CPACK_PACKAGE_VENDOR "Steven Hahn" )
+set ( CPACK_PACKAGE_URL "http://github.com/SpinWaveGenie/SpinWaveGenie" )
+set ( CPACK_PACKAGE_CONTACT "hahnse@ornl.gov" )
+set ( CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
+set ( CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md )
+set ( CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE )
+set ( CPACK_RPM_PACKAGE_LICENSE "BSD 3-clause License" )
+
+set ( CPACK_RPM_PACKAGE_RELEASE 1 )
+set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
+set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
+set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake gcc-c++ doxygen boost-test boost-devel" )
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )

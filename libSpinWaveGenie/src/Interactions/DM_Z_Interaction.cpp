@@ -38,7 +38,7 @@ const string &DM_Z_Interaction::getName() { return name; }
 
 void DM_Z_Interaction::updateValue(double value_in) { value = value_in; }
 
-void DM_Z_Interaction::calculateEnergy(Cell &cell, double &energy) {}
+void DM_Z_Interaction::calculateEnergy(Cell & /*cell*/, double & /*energy*/) {}
 
 void DM_Z_Interaction::calcConstantValues(Cell &cell)
 {
@@ -66,7 +66,7 @@ void DM_Z_Interaction::calcConstantValues(Cell &cell)
   z_rs = neighbors.size();
 }
 
-void DM_Z_Interaction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) {}
+void DM_Z_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
 void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
 {

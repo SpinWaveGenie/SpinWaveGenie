@@ -1,0 +1,40 @@
+Name:           @CPACK_PACKAGE_NAME@
+Version:        @CPACK_PACKAGE_VERSION@
+Release:        @CPACK_RPM_PACKAGE_RELEASE@%{?dist}
+Summary:        @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
+Group:          @CPACK_RPM_PACKAGE_GROUP@
+Vendor:         @CPACK_PACKAGE_VENDOR@
+Packager:       @CPACK_PACKAGE_VENDOR@ <@CPACK_PACKAGE_CONTACT@>
+
+License:        @CPACK_RPM_PACKAGE_LICENSE@
+URL:            @CPACK_RPM_PACKAGE_URL@
+Source0:        %{name}-%{version}.tar.gz
+#Source0:        @CPACK_RPM_PACKAGE_URL@/releases/download/v%{version}/SpinWaveGenie-%{version}.tar.gz
+
+BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
+Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
+
+%description
+@CPACK_RPM_PACKAGE_DESCRIPTION@
+
+%prep
+%setup -q
+
+%build
+%cmake %{?el6:-DBoost_NO_BOOST_CMAKE=ON} -DBUILD_TESTING=True
+%{__make} %{?_smp_flags}
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%make_install
+
+%check
+%{__make} test
+
+%files
+%defattr(-,root,root,-)
+%{_includedir}/.DS_Store
+%{_includedir}/SpinWaveGenie/
+%{_prefix}/lib/cmake/SpinWaveGenie/
+%{_prefix}/lib/libSpinWaveGenie.so
+%doc
