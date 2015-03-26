@@ -44,10 +44,12 @@ if(BUILD_TESTING)
     add_subdirectory(test)
 endif (BUILD_TESTING)
 
-install(DIRECTORY include/ DESTINATION include)
+include(GNUInstallDirs)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(TARGETS SpinWaveGenie EXPORT SpinWaveGenieTargets 
-                              ARCHIVE DESTINATION lib 
-                              LIBRARY DESTINATION lib)
+                              ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 
 #create package configuration files
@@ -71,7 +73,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0)
     )
 
     #install package configuration files
-    set(ConfigPackageLocation lib/cmake/SpinWaveGenie)
+    set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/SpinWaveGenie)
     install(EXPORT SpinWaveGenieTargets
             FILE SpinWaveGenieTargets.cmake
             DESTINATION ${ConfigPackageLocation}
