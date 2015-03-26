@@ -84,7 +84,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0)
         DESTINATION ${ConfigPackageLocation}
     )
 
-    string(MD5 md5_PackageLocation "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
-    file( WRITE ${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation} "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation}" DESTINATION "$ENV{HOME}/.cmake/packages/SpinWaveGenie/")
+#    string(MD5 md5_PackageLocation "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
+#    file( WRITE ${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation} "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
+#    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation}" DESTINATION "$ENV{HOME}/.cmake/packages/SpinWaveGenie/")
 endif()
