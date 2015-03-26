@@ -22,7 +22,7 @@ Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
 
 %build
 %cmake %{?el6:-DBoost_NO_BOOST_CMAKE=ON} -DBUILD_TESTING=True
-%{__make} %{?_smp_flags}
+%{__make} %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
