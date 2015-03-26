@@ -95,7 +95,7 @@ set ( CPACK_RPM_PACKAGE_LICENSE "BSD 3-clause License" )
 set ( CPACK_RPM_PACKAGE_RELEASE 1 )
 set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
 set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
-set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake gcc-c++ doxygen boost-test boost-devel" )
+set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake >= 2.8.12 gcc-c++ doxygen boost-test boost-devel" )
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
                  ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
