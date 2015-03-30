@@ -1,7 +1,7 @@
 # SpinWaveGenie
 Library for simplifying linear spin wave calculations. 
 
-[Installation Instructions](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/Installing-Spin-Wave-Genie)
+[Developer Installation Instructions](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/Installing-Spin-Wave-Genie)
 
 [Example Scripts](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/Examples)
 
