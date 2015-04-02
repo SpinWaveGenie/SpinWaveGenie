@@ -14,4 +14,5 @@ SpinWaveGenie is licensed under the 3-clause BSD license. See LICENSE for detail
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/4034/badge.svg"/>
 </a>
+
 [![Gitter chat](https://badges.gitter.im/SpinWaveGenie/SpinWaveGenie.png)](https://gitter.im/SpinWaveGenie/SpinWaveGenie "Gitter chat")
