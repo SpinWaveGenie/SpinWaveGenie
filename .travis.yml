@@ -8,18 +8,24 @@ os:
   - linux
   - osx
 
+env:
+  - COVERALLS=true
+  - COVERALLS=false
+
+
 matrix:
   exclude:
     - os: osx
       compiler: gcc
-
+    - os: linux
+      env: COVERALLS=true
+      
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
     then 
       brew tap homebrew/science;
       brew update > /dev/null 2>&1;
       brew install --quiet eigen;
-      brew install --quiet nlopt;
       brew install --quiet tbb --c++11;
     fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
@@ -28,11 +34,8 @@ before_install:
       sudo add-apt-repository --yes ppa:smspillaz/cmake-3.0.2;
       sudo apt-get update -qq;
       sudo apt-get purge -qq cmake;
-      sudo apt-get install -qq cmake;
+      sudo apt-get install -qq cmake libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
       cmake --version;
-      sudo apt-get install -qq libboost-dev libboost-test-dev;
-      sudo apt-get install -qq libeigen3-dev;
-      sudo apt-get install -qq libtbb-dev;
     fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" == "g++" ];
     then
@@ -48,12 +51,22 @@ before_script:
     then
       export CC=gcc-4.4;
       export CXX=g++-4.4;
-    fi 
-  - cmake -DBUILD_TESTING=ON  .; 
+    fi
+  - if [ "$COVERALLS" == "true" ];
+    then 
+      cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
+    else
+      cmake -DBUILD_TESTING=ON  .; 
+    fi
 
 script:
   - make
-  - make test
+  - if [ "$COVERALLS" == "true" ];
+    then 
+      make coveralls;
+    else
+      make test; 
+    fi
 
 notifications:
   email:
