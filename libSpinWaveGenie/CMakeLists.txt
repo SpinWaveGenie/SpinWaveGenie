@@ -26,6 +26,16 @@ SOURCE_GROUP("Header Files\\Plot" FILES ${PLOT_HDRS})
 set(LIBRARY_SRCS ${EXTERNAL_SRCS} ${EXTERN_SRCS} ${CELL_SRCS} ${CONTAINERS_SRCS} ${GENIE_SRCS} ${INTERACTIONS_SRCS} ${PLOT_SRCS})
 set(LIBRARY_HDRS ${EXTERNAL_HDRS} ${EXTERN_HDRS} ${CELL_HDRS} ${CONTAINERS_HDRS} ${GENIE_HDRS} ${INTERACTIONS_HDRS} ${PLOT_HDRS})
 
+if (COVERALLS)
+    set(COVERAGE_SRCS ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+
+    # Create the coveralls target.
+    coveralls_setup(
+        "${COVERAGE_SRCS}" # The source files.
+        ON                 # If we should upload.
+        )
+endif()
+
 add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
 
 #We need need the header files both to build SpinWaveGenie and for the interface.

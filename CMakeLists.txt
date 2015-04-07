@@ -16,9 +16,21 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
+if(BUILD_TESTING)
+    enable_testing()
+endif(BUILD_TESTING)
+
+# We probably don't want this to run on every build.
+option(COVERALLS "Generate coveralls data" OFF)
+
+if (COVERALLS)
+    include(Coveralls)
+    coveralls_turn_on_coverage()
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "compiler detected as: GNU compiler")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -msse4 -Wall -Wextra")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -Wall -Wextra")
 elseif(APPLE)
     message(STATUS "Setting up Xcode for C++11 with libc++.")
     if(CMAKE_GENERATOR STREQUAL Xcode)
