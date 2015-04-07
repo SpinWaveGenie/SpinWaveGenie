@@ -17,8 +17,10 @@ SpinWaveGenie is licensed under the 3-clause BSD license. See LICENSE for detail
 [![Coverage Status](https://coveralls.io/repos/SpinWaveGenie/SpinWaveGenie/badge.svg)](https://coveralls.io/r/SpinWaveGenie/SpinWaveGenie)
 
 Public User Conversations
+
 [![Gitter chat](https://badges.gitter.im/SpinWaveGenie/SpinWaveGenie.png)](https://gitter.im/SpinWaveGenie/Users "Gitter chat")
 
 Contributor Converstations
+
 [![Gitter chat](https://badges.gitter.im/SpinWaveGenie/SpinWaveGenie.png)](https://gitter.im/SpinWaveGenie "Gitter chat")
 
