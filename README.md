@@ -20,9 +20,9 @@ SpinWaveGenie is licensed under the 3-clause BSD license. See LICENSE for detail
 
 Public User Conversations
 
-[![Gitter chat](https://badges.gitter.im/SpinWaveGenie/SpinWaveGenie.png)](https://gitter.im/SpinWaveGenie/Users "Gitter chat")
+[![Gitter chat](https://badges.gitter.im/SpinWaveGenie/Users.svg)](https://gitter.im/SpinWaveGenie/Users "Gitter chat")
 
 Contributor Converstations
 
-[![Gitter chat](https://badges.gitter.im/SpinWaveGenie/SpinWaveGenie.png)](https://gitter.im/SpinWaveGenie "Gitter chat")
+[![Gitter chat](https://badges.gitter.im/SpinWaveGenie.svg)](https://gitter.im/SpinWaveGenie "Gitter chat")
 
