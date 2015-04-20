@@ -2,7 +2,7 @@
 #define __Neighbors_H__
 
 #define _USE_MATH_DEFINES
-#include <iostream>
+#include <ostream>
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 
@@ -45,10 +45,10 @@ public:
   //! \return Returns an Iterator pointing to the final element of the neighbor list
   Iterator end();
   //! \return Returns an ConstIterator pointing to the first element of the neighbor list
-  ConstIterator cbegin();
+  ConstIterator cbegin() const;
   //! \return Returns an ConstIterator pointing to the final element of the neighbor list
-  ConstIterator cend();
-
+  ConstIterator cend() const;
+  friend std::ostream& operator<<( std::ostream &output, const Neighbors &n);
 private:
   UniqueThreeVectors<double> neighborList;
   double numberNeighbors;

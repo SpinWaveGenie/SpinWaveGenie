@@ -2,7 +2,7 @@
 #define BOOST_TEST_MAIN
 #include <cmath>
 #include <exception>
-#include <iostream>
+#include <sstream>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include "SpinWaveGenie/Containers/Cell.h"
@@ -194,5 +194,26 @@ BOOST_AUTO_TEST_CASE( TenthNeighbors )
     {
         double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
         BOOST_CHECK_SMALL(dist - 9.16545,eps);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(PrintList)
+{
+    Cell cell = createMnBiCell();
+    Neighbors neighborlist;
+    neighborlist.findNeighbors(cell,"Spin0", "Spin0", 9.0, 9.1);
+    std::stringstream teststream;
+    std::string header;
+    
+    teststream << neighborlist;
+    std::getline(teststream,header,'\n');
+    BOOST_CHECK_EQUAL("  x         y         z",header);
+  
+    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+    {
+      double x,y,z;
+      teststream >> x >> y >> z;
+      double dist = sqrt(pow(nbr->get<0>()-x,2)+pow(nbr->get<1>()-y,2)+pow(nbr->get<2>()-z,2));
+      BOOST_CHECK_SMALL(dist,1.0e-5);
     }
 }
