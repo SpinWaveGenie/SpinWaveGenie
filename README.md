@@ -9,7 +9,6 @@ Library for simplifying linear spin wave calculations.
 
 
 -----
-SpinWaveGenie is licensed under the 3-clause BSD license. See LICENSE for details.
 
 [![BSD License](https://img.shields.io/badge/license-BSD-blue.svg)](http://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie.svg?branch=master)](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie) 
