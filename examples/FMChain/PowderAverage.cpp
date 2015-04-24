@@ -29,10 +29,10 @@ int main()
     PointsAlongLine Line;
     Line.setFirstPoint(0.0,0.0,0.0);
     Line.setFinalPoint(0.0,0.0,3.0*2.0*M_PI);
-    Line.setNumberPoints(401);
+    Line.setNumberPoints(201);
     ThreeVectors<double> kPoints = Line.getPoints();
     
-    Energies energies(0.0, 5.0, 401);
+    Energies energies(0.0, 5.0, 201);
     
     OneDimensionalFactory factory;
     auto gauss = factory.getGaussian(0.25,1.0e-2);
