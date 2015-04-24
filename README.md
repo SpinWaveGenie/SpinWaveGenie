@@ -20,7 +20,7 @@ Public User Conversations
 
 [![Gitter chat](https://badges.gitter.im/SpinWaveGenie/Users.svg)](https://gitter.im/SpinWaveGenie/Users "Gitter chat")
 
-Contributor Converstations
+Contributor Conversations
 
 [![Gitter chat](https://badges.gitter.im/SpinWaveGenie.svg)](https://gitter.im/SpinWaveGenie "Gitter chat")
 
