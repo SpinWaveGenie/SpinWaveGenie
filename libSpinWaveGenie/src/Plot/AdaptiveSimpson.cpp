@@ -179,6 +179,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(
 
 std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 {
+
   std::shared_ptr<helper> first = std::make_shared<helper>();
   first->resetBounds(m_lowerBound, m_upperBound);
   first->epsilon = m_epsilon;
@@ -238,6 +239,9 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
     myqueue.push(std::move(element));
   }
 
+  // reset the evaluation points;
+  this->m_evaluationPointsOuterDimensions.pop_front();
+
   return sumPieces(myqueue);
 }
 
@@ -253,8 +257,11 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(const AdaptiveSimpson &other)
 
 AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other)
 {
-  m_p = move(other.m_p);
-  other.m_p = NULL;
+  if (m_p != other.m_p)
+  {
+    m_p = move(other.m_p);
+    other.m_p = NULL;
+  }
 }
 
 AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)
@@ -267,8 +274,8 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)
   return *this;
 }
 
-void
-AdaptiveSimpson::setFunction(const std::function<std::vector<double>(std::deque<double> &evaluationPoints)> &integrand)
+void AdaptiveSimpson::setFunction(
+    const std::function<std::vector<double>(std::deque<double> &evaluationPoints)> &integrand)
 {
   m_p->m_integrand = integrand;
 }
