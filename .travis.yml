@@ -23,8 +23,8 @@ matrix:
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
     then 
-      brew tap homebrew/science;
       brew update > /dev/null 2>&1;
+      brew tap homebrew/science;
       brew install --quiet eigen;
       brew install --quiet tbb --c++11;
     fi
@@ -56,7 +56,7 @@ before_script:
     then 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
     else
-      cmake -DBUILD_TESTING=ON  .; 
+      cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
     fi
 
 script:
