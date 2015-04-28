@@ -113,14 +113,14 @@ BOOST_AUTO_TEST_CASE(GaussianFunctionTest)
 {
   std::function<std::vector<double>(std::deque<double> & x)> f =
       std::bind<std::vector<double>>(gaussianFunction, std::placeholders::_1);
-  AdaptiveSimpson test;
+  AdaptiveSimpson test,moveTest;
   test.setFunction(f);
   std::vector<double> lower_bounds = {0.0, 0.0};
   std::vector<double> upper_bounds = {1.0, 1.0};
   test.setInterval(lower_bounds, upper_bounds);
   auto result = test.integrate();
   BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-3);
-  AdaptiveSimpson moveTest(std::move(test));
+  moveTest = std::move(test);
   result = moveTest.integrate();
   BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-3);
 }
