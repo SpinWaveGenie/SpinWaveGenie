@@ -21,14 +21,15 @@ matrix:
       env: COVERALLS=true
       
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; 
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; 
     then 
-      brew tap homebrew/science;
       brew update > /dev/null 2>&1;
+      brew tap homebrew/science;
       brew install --quiet eigen;
       brew install --quiet tbb --c++11;
+      brew install --quiet nlopt;
     fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; 
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
     then 
       sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
       sudo add-apt-repository --yes ppa:smspillaz/cmake-3.0.2;
@@ -37,11 +38,11 @@ before_install:
       sudo apt-get install -qq cmake libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
       cmake --version;
     fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" == "g++" ];
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "g++" ];
     then
       sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
     fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CXX" == "clang++" ];
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
     then
       sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
     fi
@@ -56,7 +57,12 @@ before_script:
     then 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
     else
-      cmake -DBUILD_TESTING=ON  .; 
+      if [ "$TRAVIS_OS_NAME" == "osx" ];
+      then
+        cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
+      else
+        cmake -DBUILD_TESTING=ON .;
+      fi
     fi
 
 script:
