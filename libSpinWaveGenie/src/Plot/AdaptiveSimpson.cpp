@@ -257,8 +257,11 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(const AdaptiveSimpson &other)
 
 AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other)
 {
-  m_p = move(other.m_p);
-  other.m_p = NULL;
+  if (m_p != other.m_p)
+  {
+    m_p = move(other.m_p);
+    other.m_p = NULL;
+  }
 }
 
 AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)

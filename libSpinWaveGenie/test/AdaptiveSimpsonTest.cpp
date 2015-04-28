@@ -108,6 +108,7 @@ std::vector<double> gaussianFunction(std::deque<double> &x)
   return result;
 }
 
+//also test move assignment operator.
 BOOST_AUTO_TEST_CASE(GaussianFunctionTest)
 {
   std::function<std::vector<double>(std::deque<double> & x)> f =
@@ -118,6 +119,9 @@ BOOST_AUTO_TEST_CASE(GaussianFunctionTest)
   std::vector<double> upper_bounds = {1.0, 1.0};
   test.setInterval(lower_bounds, upper_bounds);
   auto result = test.integrate();
+  BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-3);
+  AdaptiveSimpson moveTest(std::move(test));
+  result = moveTest.integrate();
   BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-3);
 }
 
@@ -202,14 +206,14 @@ BOOST_AUTO_TEST_CASE(ComplexFunctionTest)
 {
   std::function<std::vector<double>(std::deque<double> & x)> f =
       std::bind<std::vector<double>>(complexFunction, std::placeholders::_1);
-  AdaptiveSimpson test;
+  AdaptiveSimpson test,copyTest;
   test.setFunction(f);
-  std::vector<double> lower_bounds = {0.0, 0.0, 0.0};
-  std::vector<double> upper_bounds = {1.0, 1.0, 1.0};
+  std::vector<double> lower_bounds = {0.0, 0.0};
+  std::vector<double> upper_bounds = {1.0, 1.0};
   test.setInterval(lower_bounds, upper_bounds);
-  AdaptiveSimpson copyTest = test;
   auto result1 = test.integrate();
   BOOST_CHECK_CLOSE(result1[0], 1.0, 1.0e-3);
+  copyTest = test;
   auto result2 = copyTest.integrate();
   BOOST_CHECK_CLOSE(result2[0], 1.0, 1.0e-3);
 }
