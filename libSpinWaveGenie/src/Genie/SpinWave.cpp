@@ -103,7 +103,9 @@ void SpinWave::calculateEigenvalues()
   }
 }
 
-bool IsPositive(results i) { return i.weight > 0; }
+bool isPositive(const results &i) { return i.weight > 0; }
+
+bool greaterThan(const results &a, const results &b) { return a.weight > b.weight; }
 
 void SpinWave::calculateWeights()
 {
@@ -179,8 +181,12 @@ void SpinWave::calculateWeights()
   //
   // Reorder the XX's by the weights
   //
+  std::partition(AL.begin(), AL.end(), isPositive);
 
-  partition(AL.begin(), AL.end(), IsPositive);
+  // If two eigenvalues are approx. zero, std::partition
+  // may fail to separate positive and negative weights.
+  if (!isPositive(AL[M - 1]) || isPositive(AL[M]))
+    std::sort(AL.begin(), AL.end(), greaterThan);
 
   for (size_t L1 = 0; L1 < N; L1++)
   {
