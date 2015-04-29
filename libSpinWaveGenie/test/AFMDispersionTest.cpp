@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(DispersionTest)
   PointsAlongLine Line;
   Line.setFirstPoint(0.0, 0.0, 0.0);
   Line.setFinalPoint(3.0, 0.0, 0.0);
-  Line.setNumberPoints(61);
+  Line.setNumberPoints(64);
   ThreeVectors<double> kPoints = Line.getPoints();
 
   for (auto it = kPoints.begin(); it != kPoints.end(); ++it)
