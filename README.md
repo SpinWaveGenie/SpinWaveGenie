@@ -22,5 +22,5 @@ Public User Conversations
 
 Contributor Conversations
 
-[![Gitter chat](https://badges.gitter.im/SpinWaveGenie.svg)](https://gitter.im/SpinWaveGenie "Gitter chat")
+[![Gitter chat](https://badges.gitter.im/SpinWaveGenie/SpinWaveGenie.svg)](https://gitter.im/SpinWaveGenie/SpinWaveGenie "Gitter chat")
 
