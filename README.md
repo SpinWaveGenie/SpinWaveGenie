@@ -8,6 +8,8 @@
 [![Coverage Status](https://coveralls.io/repos/SpinWaveGenie/SpinWaveGenie/badge.svg)](https://coveralls.io/r/SpinWaveGenie/SpinWaveGenie)
 
 # SpinWaveGenie
+
+[![Join the chat at https://gitter.im/SpinWaveGenie/SpinWaveGenie](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SpinWaveGenie/SpinWaveGenie?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Library for simplifying linear spin wave calculations. 
 
 [User Installation Instructions](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/User-Installation-Instructions)
