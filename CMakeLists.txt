@@ -42,6 +42,26 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+option(WITH_ASAN "Enable address sanitizer" OFF)
+if(WITH_ASAN)
+  message(STATUS "enabling address sanitizer")
+  add_compile_options(-fno-omit-frame-pointer -fno-common -g -fsanitize=address)
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address" )
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address" )
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address" )
+endif()
+
+option(WITH_UBSAN "Enable address sanitizer" OFF)
+if(WITH_UBSAN)
+  message(STATUS "enabling address sanitizer")
+  add_compile_options(-fno-omit-frame-pointer -fno-common -g -fsanitize=undefined -fno-sanitize-recover)
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=undefined" )
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined" )
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=undefined" )
+endif()
+
+
+
 find_package(Eigen3 REQUIRED)
 find_package(TBB)
 
