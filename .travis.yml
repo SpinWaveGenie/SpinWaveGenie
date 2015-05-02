@@ -39,11 +39,11 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "g++" ];
     then
-      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev clang-3.6;
+      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
     then
-      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
+      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-devi clang-3.6;
     fi
 
 before_script:
@@ -61,7 +61,7 @@ before_script:
         cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
       elif [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
       then
-        CC=clang-3.6 CXX =clang++-3.6 cmake -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;   
+        CC=clang-3.6 CXX=clang++-3.6 cmake -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;   
       else
         cmake -DBUILD_TESTING=ON .;
       fi
