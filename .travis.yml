@@ -73,7 +73,7 @@ script:
     then 
       make coveralls;
     else
-      make test; 
+      ctest --output-on-failure; 
     fi
 
 notifications:
