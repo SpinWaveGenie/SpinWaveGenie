@@ -43,7 +43,7 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
     then
-      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-devi clang-3.6;
+      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev clang-3.6;
     fi
 
 before_script:
