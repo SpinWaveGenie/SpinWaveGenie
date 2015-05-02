@@ -43,7 +43,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 option(WITH_SANITIZERS "Enable sanitizers" OFF)
-if(WITH_ASAN)
+if(WITH_SANITIZERS)
   message(STATUS "enabling address sanitizer")
   set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -g -fsanitize=address,memory,undefined -fno-sanitize-recover")
   add_compile_options(${SAN_FLAGS})
