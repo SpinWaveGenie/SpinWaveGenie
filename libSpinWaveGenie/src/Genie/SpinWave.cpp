@@ -273,9 +273,12 @@ void SpinWave::calculateIntensities()
     Point pt;
     pt.frequency = abs(WW[i + M]);
     // cout << SXX(i) << " " << SYY(i) << " " << SZZ(i) << endl;
-    pt.intensity =
-        SXX(i) + SYY(i) + SZZ(i) -
-        (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
+    double qSquared = (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
+    if (qSquared < std::numeric_limits<double>::epsilon())
+      pt.intensity = nan("");
+    else
+      pt.intensity =
+          SXX(i) + SYY(i) + SZZ(i) - (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / qSquared;
     VI.insert(pt);
   }
 }
