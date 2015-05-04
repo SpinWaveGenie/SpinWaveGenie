@@ -275,7 +275,7 @@ void SpinWave::calculateIntensities()
     // cout << SXX(i) << " " << SYY(i) << " " << SZZ(i) << endl;
     double qSquared = (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
     if (qSquared < std::numeric_limits<double>::epsilon())
-      pt.intensity = nan("");
+      pt.intensity = std::numeric_limits<double>::quiet_NaN();
     else
       pt.intensity =
           SXX(i) + SYY(i) + SZZ(i) - (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / qSquared;
