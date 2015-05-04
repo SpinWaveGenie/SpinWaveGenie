@@ -17,6 +17,7 @@ namespace SpinWaveGenie
 SpinWave::SpinWave(Cell &cell_in, boost::ptr_vector<Interaction> interactions_in)
     : KXP(0.0), KYP(0.0), KZP(0.0), NU(0), MI(0), IM(0)
 {
+
   cell = cell_in;
   interactions = interactions_in;
   M = cell.size();
@@ -272,9 +273,12 @@ void SpinWave::calculateIntensities()
     Point pt;
     pt.frequency = abs(WW[i + M]);
     // cout << SXX(i) << " " << SYY(i) << " " << SZZ(i) << endl;
-    pt.intensity =
-        SXX(i) + SYY(i) + SZZ(i) -
-        (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
+    double qSquared = (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
+    if (qSquared < std::numeric_limits<double>::epsilon())
+      pt.intensity = std::numeric_limits<double>::quiet_NaN();
+    else
+      pt.intensity =
+          SXX(i) + SYY(i) + SZZ(i) - (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / qSquared;
     VI.insert(pt);
   }
 }

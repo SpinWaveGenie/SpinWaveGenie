@@ -42,6 +42,17 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+option(WITH_SANITIZERS "Enable sanitizers" OFF)
+if(WITH_SANITIZERS)
+  message(STATUS "enabling address & undefined behavior sanitizers")
+  file(WRITE ${PROJECT_BINARY_DIR}/ubsan.txt "fun:*_Ios_Fmtflags*")
+  set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -g -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
+  add_compile_options(-fno-omit-frame-pointer -fno-common -g -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${SAN_FLAGS}" )
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${SAN_FLAGS}" )
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SAN_FLAGS}" )
+endif()
+
 find_package(Eigen3 REQUIRED)
 find_package(TBB)
 

@@ -69,7 +69,11 @@ BOOST_AUTO_TEST_CASE(DispersionTest)
     soln.insert(tmp);
 
     tmp.frequency = sqrt(4.0 * J * S * S * (1.0 + cos(M_PI * k)) * (J * (1.0 - cos(M_PI * k)) + D));
-    tmp.intensity = 0.25 * S * sqrt((J * (1.0 - cos(M_PI * k)) + D) / (J * (1.0 + cos(M_PI * k))));
+    double denominator = (J * (1.0 + cos(M_PI * k)));
+    if (std::abs(denominator) < std::numeric_limits<double>::epsilon())
+      tmp.intensity = std::numeric_limits<double>::quiet_NaN();
+    else
+      tmp.intensity = 0.25 * S * sqrt((J * (1.0 - cos(M_PI * k)) + D) / denominator);
     soln.insert(tmp);
     soln.sort();
 
