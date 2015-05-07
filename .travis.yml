@@ -43,7 +43,7 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
     then
-      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
+      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev clang-3.4;
     fi
 
 before_script:
@@ -61,14 +61,19 @@ before_script:
         cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
       elif [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
       then
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
+        cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
       else
         cmake -DBUILD_TESTING=ON .;
       fi
     fi
 
 script:
-  - make
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
+    then
+      scan-build make;
+    else
+      make;
+    fi
   - if [ "$COVERALLS" == "true" ];
     then 
       make coveralls;
