@@ -61,7 +61,7 @@ before_script:
         cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
       elif [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
       then
-        cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
+        scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
       else
         cmake -DBUILD_TESTING=ON .;
       fi
