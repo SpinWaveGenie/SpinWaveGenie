@@ -1,0 +1,31 @@
+version: 2.4.{build}
+
+branches:
+  except:
+  - coverity_scan
+
+configuration: Release
+
+environment:
+  PROJECT_BASE: "C:/projects/morebin"
+  PATH: "%PROJECT_BASE%/boost_date_time-vc120.1.58.0.0/lib/native/address-model-64/lib;%PROJECT_BASE%/boost_program_options-vc120.1.58.0.0/lib/native/address-model-64/lib;%PATH%"
+
+
+platform: x64
+
+install:
+- cmd: cd c:\
+- cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC120.git
+
+before_build:
+- ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
+- cmd: dir
+- cmd: md build
+- cmd: cd build
+- cmd: cmake --version
+- ps: cmake -G "Visual Studio 12 Win64" -C ../appveyor.cmake ..
+
+build:
+  project: C:\projects\SpinWaveGenie\build\spin_wave_genie.sln
+  parallel: true
+  verbosity: normal
