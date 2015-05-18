@@ -12,7 +12,7 @@
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "External/ezRateProgressBar.hpp"
 #include <thread>
-#include <unistd.h>
+#include <Windows.h>
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
 using namespace tbb;
@@ -59,7 +59,7 @@ public:
     while (counter < numberPoints)
     {
       p.update(counter);
-      sleep(1);
+      Sleep(1);
     }
     p.update(numberPoints);
   }
