@@ -7,7 +7,7 @@ branches:
 configuration: Release
 
 environment:
-  PATH: "C:/projects/ThirdParyVC120/lib:%PATH%"
+  PATH: "C:/projects/ThirdParyVC120/lib;%PATH%"
 
 platform: x64
 
@@ -27,4 +27,4 @@ build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
-- cmd: ctest -C Release -j 2
+- cmd: ctest -C Release --output-on-failure
