@@ -7,14 +7,13 @@ branches:
 configuration: Release
 
 environment:
-  PROJECT_BASE: "C:/projects/morebin"
-  PATH: "%PROJECT_BASE%/boost_date_time-vc120.1.58.0.0/lib/native/address-model-64/lib;%PROJECT_BASE%/boost_program_options-vc120.1.58.0.0/lib/native/address-model-64/lib;%PATH%"
+  PROJECT_BASE: "C:/projects/spinwavegenie"
 
 
 platform: x64
 
 install:
-- cmd: cd c:\
+- cmd: cd c:\projects
 - cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC120.git
 
 before_build:

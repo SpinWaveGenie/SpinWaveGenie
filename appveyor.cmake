@@ -1,4 +1,4 @@
-set(BUILD_DIR C:/ThirdPartyVC120 CACHE PATH "")
+set(BUILD_DIR C:/projects/ThirdPartyVC120 CACHE PATH "")
 set(Boost_INCLUDE_DIR ${BUILD_DIR}/include CACHE PATH "")
 set(Boost_LIBRARY_DIR ${BUILD_DIR}/lib CACHE PATH "")
 set(EIGEN3_INCLUDE_DIR ${BUILD_DIR}/include CACHE PATH "")
