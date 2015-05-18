@@ -1,4 +1,4 @@
-version: 2.4.{build}
+version: 0.2.{build}
 
 branches:
   except:
@@ -7,8 +7,7 @@ branches:
 configuration: Release
 
 environment:
-  PROJECT_BASE: "C:/projects/spinwavegenie"
-
+  PATH: "C:/projects/ThirdParyVC120/lib:%PATH%"
 
 platform: x64
 
@@ -22,9 +21,9 @@ before_build:
 - cmd: md build
 - cmd: cd build
 - cmd: cmake --version
-- ps: cmake -G "Visual Studio 12 Win64" -C ../appveyor.cmake ..
+- cmd: cmake -G "Visual Studio 12 Win64" -C ../appveyor.cmake ..
 
 build:
-  project: C:\projects\SpinWaveGenie\build\spin_wave_genie.sln
+  project: C:\projects\spinwavegenie\build\spin_wave_genie.sln
   parallel: true
   verbosity: normal
