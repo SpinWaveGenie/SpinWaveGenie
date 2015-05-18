@@ -54,7 +54,10 @@ if(WITH_SANITIZERS)
 endif()
 
 find_package(Eigen3 REQUIRED)
-find_package(TBB)
+
+if(USE_THREADS)
+  find_package(TBB)
+endif()
 
 string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
 if (isRHEL6)
