@@ -23,5 +23,5 @@ before_build:
 - cmd: cmake --version
 - cmd: cmake -G "Visual Studio 12 Win64" -C ../appveyor.cmake ..
 
-build:
+build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
