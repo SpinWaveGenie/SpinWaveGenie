@@ -7,7 +7,7 @@ branches:
 configuration: Release
 
 environment:
-  PATH: "C:/projects/ThirdParyVC120/lib;%PATH%"
+  PATH: "C:/projects/ThirdPartyVC120/lib;%PATH%"
 
 platform: x64
 
