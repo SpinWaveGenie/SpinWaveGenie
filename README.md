@@ -1,6 +1,7 @@
 
 [![BSD License](https://img.shields.io/badge/license-BSD-blue.svg)](http://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie.svg?branch=master)](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie) 
+[![Build status](https://ci.appveyor.com/api/projects/status/2m7m8u685l1vqk4u?svg=true)](https://ci.appveyor.com/project/quantumsteve/spinwavegenie)
 <a href="https://scan.coverity.com/projects/4034">
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/4034/badge.svg"/>
