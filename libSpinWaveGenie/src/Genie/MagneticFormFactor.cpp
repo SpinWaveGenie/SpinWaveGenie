@@ -42,7 +42,7 @@ void MagneticFormFactor::initializeMap()
 {
   coefficients =
 #ifdef _WIN32
-	  std::initializer_list<std::pair<const std::string, std::vector<double>>>
+                 std::initializer_list<std::pair<const std::string, std::vector<double>>>
 #endif
 	             {{"NONE", vector<double>{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}},
                   {"AM2", vector<double>{0.474300, 21.776100, 1.580000, 5.690200, -1.077900, 4.145100, 0.021800}},

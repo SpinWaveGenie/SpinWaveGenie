@@ -17,7 +17,6 @@ install:
 
 before_build:
 - ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
-- cmd: dir
 - cmd: md build
 - cmd: cd build
 - cmd: cmake --version
