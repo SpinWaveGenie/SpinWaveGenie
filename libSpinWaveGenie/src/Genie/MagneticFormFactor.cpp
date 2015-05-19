@@ -40,7 +40,11 @@ MagneticFormFactor::MagneticFormFactor(const MagneticFormFactor &other)
 
 void MagneticFormFactor::initializeMap()
 {
-  coefficients = {{"NONE", vector<double>{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}},
+  coefficients =
+#ifdef _WIN32
+                 std::initializer_list<std::pair<const std::string, std::vector<double>>>
+#endif
+	             {{"NONE", vector<double>{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}},
                   {"AM2", vector<double>{0.474300, 21.776100, 1.580000, 5.690200, -1.077900, 4.145100, 0.021800}},
                   {"AM3", vector<double>{0.423900, 19.573900, 1.457300, 5.872200, -0.905200, 3.968200, 0.023800}},
                   {"AM4", vector<double>{0.373700, 17.862499, 1.352100, 6.042600, -0.751400, 3.719900, 0.025800}},

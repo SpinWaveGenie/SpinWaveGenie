@@ -36,8 +36,15 @@ if (COVERALLS)
         )
 endif()
 
-add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
-
+if(WIN32)
+  #include(GenerateExportHeader)
+  #add_compiler_export_flags()
+  add_definitions( -DBOOST_ALL_NO_LIB -DBOOST_ALL_DYN_LINK)
+  add_library(SpinWaveGenie STATIC ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+  #generate_export_header(SpinWaveGenie)
+else()
+  add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+endif()
 #We need need the header files both to build SpinWaveGenie and for the interface.
 target_include_directories( SpinWaveGenie PRIVATE include )               
 set_property( TARGET SpinWaveGenie PROPERTY

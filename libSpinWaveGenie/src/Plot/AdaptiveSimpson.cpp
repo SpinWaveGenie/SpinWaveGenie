@@ -1,11 +1,13 @@
-#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
-
-#include <cassert>
+#define _USE_MATH_DEFINES
+#define NOMINMAX
 #include <cmath>
+#include <cassert>
 #include <iostream>
 #include <queue>
 #include <algorithm>
 #include <limits>
+#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
+
 
 struct helper
 {
@@ -96,7 +98,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
 {
   // element
   element->resetBounds(mostError->lowerlimit, 0.5 * (mostError->lowerlimit + mostError->upperlimit));
-  element->epsilon = std::max(mostError->epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
+  element->epsilon = std::max(mostError->epsilon /M_SQRT2, std::numeric_limits<double>::epsilon());
 
   element->fa = std::move(mostError->fa);
   element->fb = mostError->fc;
@@ -105,7 +107,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
 
   // mostError
   mostError->resetBounds(0.5 * (mostError->lowerlimit + mostError->upperlimit), mostError->upperlimit);
-  mostError->epsilon = std::max(mostError->epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
+  mostError->epsilon = std::max(mostError->epsilon / M_SQRT2, std::numeric_limits<double>::epsilon());
 
   mostError->fa = std::move(mostError->fc);
   mostError->fc = std::move(mostError->fe);
@@ -232,9 +234,9 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
     std::shared_ptr<helper> mostError = myqueue.top();
     if (mostError->error < mostError->epsilon)
       break;
+    myqueue.pop();
     std::shared_ptr<helper> element = std::make_shared<helper>();
     splitElement(mostError, element);
-    myqueue.pop();
     myqueue.push(std::move(mostError));
     myqueue.push(std::move(element));
   }
