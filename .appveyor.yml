@@ -27,4 +27,4 @@ build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
-- cmd: ctest -C Release --output-on-failure
+- cmd: ctest -C Release -V
