@@ -9,7 +9,15 @@
 [![Coverage Status](https://coveralls.io/repos/SpinWaveGenie/SpinWaveGenie/badge.svg)](https://coveralls.io/r/SpinWaveGenie/SpinWaveGenie)
 
 # SpinWaveGenie
-Library for simplifying linear spin wave calculations. 
+Library for simplifying linear spin wave calculations.
+
+
+* **Performant**. SpinWaveGenie is written in C++ using many C++11 features. Linear algebra operations utilize the Eigen library and the code is parallelized over Q-points using the Intel Threading Building Blocks.
+* **Extensible**. New interactions can easily be added by inheriting an abstract base class. Additional post-processing effects can be added via composition.
+* **Post-processing**. Convolute your model calculation with a resolution function and/or integrate each data point over a region in reciprocal space.
+* **Cross-platform**. Our continuous integration platform builds on linux, OS X and Windows. A Homebrew formula and RPM package simplify user installation.
+Free. SpinWaveGenie and all of its dependencies are freely available and open source.
+
 
 [User Installation Instructions](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/User-Installation-Instructions)
 
