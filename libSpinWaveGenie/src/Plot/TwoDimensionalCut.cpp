@@ -13,9 +13,9 @@
 #include "External/ezRateProgressBar.hpp"
 #include <thread>
 #ifdef _WIN32
-  #include <Windows.h>
+#include <Windows.h>
 #else
-  #include <unistd.h>
+#include <unistd.h>
 #endif
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
@@ -37,7 +37,7 @@ class TwoDimensionalCut::CutImpl
 {
 public:
   std::string filename;
-  atomic_int counter;
+  atomic_size_t counter;
   Eigen::MatrixXd mat;
   unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
   SpinWaveGenie::ThreeVectors<double> points;
@@ -66,7 +66,7 @@ public:
 #ifdef _WIN32
       Sleep(1);
 #else
-	  sleep(1);
+      sleep(1);
 #endif
     }
     p.update(numberPoints);

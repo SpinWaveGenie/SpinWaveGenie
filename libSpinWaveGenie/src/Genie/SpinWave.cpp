@@ -202,7 +202,7 @@ void SpinWave::calculateWeights()
   {
     for (size_t L2 = L1; L2 < N; L2++)
     {
-      if (static_cast<int>(L1) == AL[L2].index)
+      if (L1 == AL[L2].index)
       {
         old_index = L2;
         break;

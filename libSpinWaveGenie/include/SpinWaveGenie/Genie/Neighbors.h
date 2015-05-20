@@ -48,7 +48,8 @@ public:
   ConstIterator cbegin() const;
   //! \return Returns an ConstIterator pointing to the final element of the neighbor list
   ConstIterator cend() const;
-  friend std::ostream& operator<<( std::ostream &output, const Neighbors &n);
+  friend std::ostream &operator<<(std::ostream &output, const Neighbors &n);
+
 private:
   UniqueThreeVectors<double> neighborList;
   std::size_t numberNeighbors;

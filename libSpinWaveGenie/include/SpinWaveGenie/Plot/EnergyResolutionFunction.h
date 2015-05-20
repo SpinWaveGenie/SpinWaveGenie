@@ -28,7 +28,7 @@ public:
   EnergyResolution(){};
   EnergyResolution(const EnergyResolution &other);
   EnergyResolution &operator=(EnergyResolution &other);
-  EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T& SWIn, Energies energies);
+  EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn, Energies energies);
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
   void setSpinWave(const T &SWIn);
   void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn);
@@ -39,8 +39,6 @@ public:
   ~EnergyResolution(){};
 
 private:
-  //void calculateEnergies();
-  //std::size_t getBin(double Energy);
   Energies energies;
   std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
   T SW;

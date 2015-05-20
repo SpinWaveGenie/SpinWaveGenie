@@ -8,7 +8,6 @@
 #include <limits>
 #include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
 
-
 struct helper
 {
   helper() : lowerlimit(0.0), upperlimit(0.0), c(0.0), d(0.0), e(0.0), epsilon(1.0e-5), error(0.0){};
@@ -98,7 +97,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
 {
   // element
   element->resetBounds(mostError->lowerlimit, 0.5 * (mostError->lowerlimit + mostError->upperlimit));
-  element->epsilon = std::max(mostError->epsilon /M_SQRT2, std::numeric_limits<double>::epsilon());
+  element->epsilon = std::max(mostError->epsilon / M_SQRT2, std::numeric_limits<double>::epsilon());
 
   element->fa = std::move(mostError->fa);
   element->fb = mostError->fc;
