@@ -8,6 +8,8 @@
 </a>
 [![Coverage Status](https://coveralls.io/repos/SpinWaveGenie/SpinWaveGenie/badge.svg)](https://coveralls.io/r/SpinWaveGenie/SpinWaveGenie)
 
+---
+
 # SpinWaveGenie
 Library for simplifying linear spin wave calculations.
 
@@ -17,11 +19,15 @@ Library for simplifying linear spin wave calculations.
 * **Cross-platform**. Our continuous integration platforms build on Linux, OS X and Windows. A Homebrew formula and RPM package simplify user installation.
 Free. SpinWaveGenie and all of its dependencies are freely available and open source.
 
+## Documenation
+
 [User Installation Instructions](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/User-Installation-Instructions)
 
 [Developer Installation Instructions](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/Installing-SpinWaveGenie)
 
 [Example Scripts](https://github.com/SpinWaveGenie/SpinWaveGenie/wiki/Examples)
+
+## Community
 
 Public User Conversations
 
