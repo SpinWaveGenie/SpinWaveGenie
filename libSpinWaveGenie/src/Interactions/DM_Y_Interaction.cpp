@@ -42,8 +42,7 @@ void DM_Y_Interaction::calcConstantValues(Cell &cell)
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
   M = cell.size();
-  assert(r != -1 && s != -1);
-
+  
   // cout << r << "\t" << s << endl << F << endl;
   // cout << endl;
 
@@ -60,7 +59,7 @@ void DM_Y_Interaction::calcConstantValues(Cell &cell)
   value3 = -0.25 * X * S * sin(theta_s) * sin(phi_r);
 
   neighbors.findNeighbors(cell, sl_r, sl_s, min, max);
-  z_rs = neighbors.size();
+  z_rs = static_cast<double>(neighbors.size());
   // cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
 }
 

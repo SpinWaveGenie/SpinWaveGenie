@@ -24,7 +24,7 @@ namespace SpinWaveGenie
 struct results
 {
   double weight;
-  long index;
+  std::size_t index;
 };
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */

@@ -43,10 +43,7 @@ vector<string> MagneticFieldInteraction::sublattices() const
 
 void MagneticFieldInteraction::calculateEnergy(Cell &cell, double &energy)
 {
-  if (r < 0)
-  {
-    r = cell.getPosition(sl_r);
-  }
+  r = cell.getPosition(sl_r);
   double S = cell[r].getMoment();
   const Matrix3 &inv = cell[r].getInverseMatrix();
 
