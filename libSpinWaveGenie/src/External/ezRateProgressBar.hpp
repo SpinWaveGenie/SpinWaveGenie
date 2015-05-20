@@ -16,6 +16,7 @@ v2.1.0 20111130 rsz Templatized counter to make increments possible with reals. 
 #ifndef EZ_RATEPROGRESSBAR_H
 #define EZ_RATEPROGRESSBAR_H
 
+#include <stdint.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -23,6 +24,7 @@ v2.1.0 20111130 rsz Templatized counter to make increments possible with reals. 
 #include <string.h>
 #include <assert.h>
 #include <iomanip>
+#include <boost/format.hpp>
 
 #ifdef WIN32
 #include <windows.h>
@@ -56,7 +58,7 @@ public:
     if (v >= 1) {
       stm << (long long)v;
       str = stm.str();
-      for(int i=str.size()-3; i>0; i-=3) str.insert(i, 1, ',');
+      for(int64_t i=str.size()-3; i>0; i-=3) str.insert(i, 1, ',');
     } else {
       stm << std::fixed << std::setprecision(3) << v;
       str = stm.str();
@@ -85,10 +87,10 @@ public:
     std::string str;
     commaNumber(n, str);
     // Width of "123,456".
-    int nWidth = str.size();
+    std::size_t nWidth = str.size();
     unitsWidth = strlen(units);
     // Width of "123,456 MB".
-    int nUnitsWidth = nWidth + unitsWidth + 1;
+    std::size_t nUnitsWidth = nWidth + unitsWidth + 1;
     // "Processed" is 9 chars.
     if (nUnitsWidth > 9)
       procColWidth = nUnitsWidth;
@@ -116,16 +118,20 @@ public:
     sec = (sec > 0 ? sec : 0);
     unsigned int mins = sec/60;
     sec -= mins*60;
-    char tmp[8];
+    //char tmp[8];
+	std::stringstream tmp;
     out.clear();
-    sprintf(tmp, "%02u:", hours);
-    out.append(tmp);
+    //sprintf(tmp, "%02u:", hours);
+	tmp << boost::format("%02u:") % hours;
+    //out.append(tmp);
   
-    sprintf(tmp, "%02u:", mins);
-    out.append(tmp);
+    //sprintf(tmp, "%02u:", mins);
+	tmp << boost::format("%02u:") % mins;
+    //out.append(tmp);
     
-    sprintf(tmp, "%02u", sec);
-    out.append(tmp);
+    //sprintf(tmp, "%02u", sec);
+	tmp << boost::format("%02u:") % sec;
+    out.append(tmp.str());
   }
   
   void operator++() {
@@ -146,21 +152,23 @@ public:
     // Abort if at least 1 second didn't elapse, unless newvalue will get us to 100%.
     if ( ((endTime-prevTime)/1000000.0 < 1.0) && (newvalue < n) ) return;
     prevTime = endTime;
-    float dt = (endTime-startTime)/1000000.0;
+    double dt = (endTime-startTime)/1000000.0;
     //if (dt < 1) return; // Was meant to avoid division by zero when time was in whole numbers.
     cur = newvalue;
-    char pctstr[8];
-    float Pct = ((double)cur)/n;
-    sprintf(pctstr, "%3d%%", (int)(100*Pct));
+    //char pctstr[8];
+	std::stringstream pctstr;
+    double Pct = ((double)cur)/n;
+    //sprintf(pctstr, "%3d%%", (int)(100*Pct));
+	pctstr << boost::format("%3d%%") % static_cast<int>(100 * Pct);
     std::string out;
     out.reserve(80);
-    out.append(pctstr);
+    out.append(pctstr.str());
     // Seconds.
     std::string tstr;
     out.append(" | ");
     secondsToString( (unsigned int)dt, tstr);
     out.append(tstr);
-    int pad, newwidth;
+    int64_t pad, newwidth;
     if (Pct >= 1.0) {
       // Print overall time and newline.
       out.append(" |  00:00:00 | ");
@@ -193,7 +201,7 @@ public:
       fflush(stdout);
       done = 1;
     } else {
-      float eta=0.;
+      double eta=0.;
       if (Pct > 0.0) {
         eta = dt*(1.0-Pct)/Pct;
       }
@@ -243,10 +251,10 @@ public:
   T cur;
   char done;
   unsigned short pct; // Stored as 0-1000, so 2.5% is encoded as 25.
-  unsigned char width; // Length of previously printed line we need to overwrite.
-  unsigned int unitsWidth;
-  unsigned int procColWidth;
-  unsigned int unprocColWidth;
+  int64_t width; // Length of previously printed line we need to overwrite.
+  std::size_t unitsWidth;
+  std::size_t procColWidth;
+  std::size_t unprocColWidth;
   const char * units; // Unit string to show for processed data.
   long long startTime, prevTime, endTime;
   #ifdef WIN32

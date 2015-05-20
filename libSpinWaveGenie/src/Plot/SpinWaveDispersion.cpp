@@ -47,7 +47,7 @@ void SpinWaveDispersion::setPoints(ThreeVectors<double> pts)
 void SpinWaveDispersion::save()
 {
   std::ofstream file(Filename);
-  ez::ezRateProgressBar<int> p(Kpoints.size());
+  ez::ezRateProgressBar<std::size_t> p(Kpoints.size());
   p.units = "Q-points";
   p.start();
   for (auto it = Kpoints.begin(); it != Kpoints.end(); it++)

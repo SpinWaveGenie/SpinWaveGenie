@@ -37,7 +37,7 @@ private:
   std::string name, sl_r;
   Matrix3 directions;
   double value;
-  int r, M;
+  std::size_t r, M;
   std::complex<double> LNrr, LNrrM, LNrMr;
 };
 }

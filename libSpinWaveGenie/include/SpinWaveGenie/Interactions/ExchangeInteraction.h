@@ -30,7 +30,7 @@ public:
 private:
   Neighbors neighbors;
   std::string name, sl_r, sl_s;
-  int r, s, M;
+  std::size_t r, s, M;
   double value, min, max;
   std::complex<double> gamma_rs;
   std::complex<double> LNrr, LNss, LNrs, LNrsM;

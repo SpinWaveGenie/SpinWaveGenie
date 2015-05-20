@@ -55,9 +55,9 @@ public:
     return std::move(newCut);
   };
 
-  void progressBar(int numberPoints)
+  void progressBar(std::size_t numberPoints)
   {
-    ez::ezRateProgressBar<int> p(numberPoints);
+    ez::ezRateProgressBar<std::size_t> p(numberPoints);
     p.units = "Q-points";
     p.start();
     while (counter < numberPoints)

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
@@ -38,8 +39,8 @@ public:
   ~EnergyResolution(){};
 
 private:
-  void calculateEnergies();
-  std::size_t getBin(double Energy);
+  //void calculateEnergies();
+  //std::size_t getBin(double Energy);
   Energies energies;
   std::unique_ptr<OneDimensionalShapes> ResolutionFunction;
   T SW;

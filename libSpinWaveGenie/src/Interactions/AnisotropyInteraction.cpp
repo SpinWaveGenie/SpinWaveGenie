@@ -53,8 +53,8 @@ void AnisotropyInteraction::calcConstantValues(Cell &cell)
   LNrMr = complex<double>(0.0, 0.0);
   LNrrM = complex<double>(0.0, 0.0);
 
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++)
+  for (std::size_t i = 0; i < 3; i++)
+    for (std::size_t j = 0; j < 3; j++)
     {
       // cout << i << " " << j << " " << directions(i,j) << endl;
       if (abs(directions(i, j)) > 1.0e-10)
@@ -75,10 +75,7 @@ void AnisotropyInteraction::calcConstantValues(Cell &cell)
 
 void AnisotropyInteraction::calculateEnergy(Cell &cell, double &energy)
 {
-  if (r < 0)
-  {
-    r = cell.getPosition(sl_r);
-  }
+  r = cell.getPosition(sl_r);
   double S = cell[r].getMoment();
   const Matrix3 &inv = cell[r].getInverseMatrix();
 
