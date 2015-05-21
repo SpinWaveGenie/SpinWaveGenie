@@ -9,7 +9,7 @@ elseif(APPLE AND NOT "${CMAKE_CXX_FLAGS}" MATCHES "c\\+\\+11")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -msse4")
 endif()
 
-if(NOT SpinWaveGenie)
+if(NOT TARGET SpinWaveGenie)
   find_package(SpinWaveGenie)
 endif()
 add_executable(YFeO3 TwoDimensionalCut.cpp CommonFunctions.cpp)
