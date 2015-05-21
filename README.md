@@ -17,7 +17,7 @@ Library for simplifying linear spin wave calculations.
 * **Extensible**. New interactions can easily be added by inheriting an abstract base class. Additional post-processing effects can be added via composition.
 * **Post-processing**. Convolute your model calculation with a resolution function and/or integrate each data point over a region in reciprocal space.
 * **Cross-platform**. Our continuous integration platforms build on Linux, OS X and Windows. A Homebrew formula and RPM package simplify user installation.
-Free. SpinWaveGenie and all of its dependencies are freely available and open source.
+* **Free**. SpinWaveGenie and all of its dependencies are freely available and open source.
 
 ## Documenation
 
