@@ -33,7 +33,7 @@ Public User Conversations
 
 [![Gitter chat](https://badges.gitter.im/SpinWaveGenie/Users.svg)](https://gitter.im/SpinWaveGenie/Users "Gitter chat")
 
-[Follow @SpinWaveGenie](https://twitter.com/SpinWaveGenie)
+[Follow @SpinWaveGenie on twitter](https://twitter.com/SpinWaveGenie)
 
 Contributor Conversations
 
