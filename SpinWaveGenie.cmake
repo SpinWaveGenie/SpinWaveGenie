@@ -1,6 +1,0 @@
-set(BUILD_DIR C:/Users/Steve/Desktop/LibrariesThirdPartyVC120 CACHE PATH "")
-set(Boost_INCLUDE_DIR ${BUILD_DIR}/include CACHE PATH "")
-set(Boost_LIBRARY_DIR ${BUILD_DIR}/lib CACHE PATH "")
-set(EIGEN3_INCLUDE_DIR ${BUILD_DIR}/include CACHE PATH "")
-set(USE_THREADS OFF)
-#set(TBB_INSTALL_DIR ${}BUILD_DIR} CACHE PATH "")
