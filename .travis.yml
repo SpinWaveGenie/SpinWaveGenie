@@ -9,7 +9,7 @@ matrix:
       env: CLANG_STATIC_ANALYZER=true
     - os: linux
       compiler: clang
-      env: SANITIZERS=true
+      env: CLANG_SANITIZERS=true
     - os: osx
       compiler: clang
     - os: osx
@@ -52,9 +52,12 @@ before_script:
   - if [ -z "$COVERALLS" ]; 
     then 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
-    elif [ -z "$SANITIZERS" ];
+    elif [ -z "$CLANG_STATIC_ANALYZER" ];
     then
-      CC=ccc-analyzer CXX=c++-analyzer scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
+      CC=ccc-analyzer CXX=c++-analyzer cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
+    elif [ -z "$CLANG_SANITIZERS" ];
+    then 
+      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
     else
       if [ "$TRAVIS_OS_NAME" == "osx" ];
       then
