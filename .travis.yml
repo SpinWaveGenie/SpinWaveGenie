@@ -1,24 +1,21 @@
 language: cpp
 
-compiler:
-  - gcc
-  - clang
-
-os:
-  - linux
-  - osx
-
-env:
-  - COVERALLS=true
-  - COVERALLS=false
-
 matrix:
-  exclude:
-    - os: osx
-      compiler: gcc
-    - os: linux
+  include:
+    - os:linux
+      compiler:gcc
+    - os:linux
+      compiler:clang
+      env: CLANG_STATIC_ANALYZER=true
+    - os:linux
+      compiler:clang
+      env: SANITIZERS=true
+    - os:osx
+      compiler:clang
+    - os:osx
+      compiler:clang
       env: COVERALLS=true
-      
+    
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; 
     then 
@@ -52,16 +49,16 @@ before_script:
       export CC=gcc-4.4;
       export CXX=g++-4.4;
     fi
-  - if [ "$COVERALLS" == "true" ];
+  - if [ -z "$COVERALLS" ] 
     then 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
+    elif [ -z "$SANITIZERS" ]
+    then
+      CC=ccc-analyzer CXX=c++-analyzer scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
     else
       if [ "$TRAVIS_OS_NAME" == "osx" ];
       then
         cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
-      elif [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
-      then
-        CC=ccc-analyzer CXX=c++-analyzer scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=OFF .;
       else
         cmake -DBUILD_TESTING=ON .;
       fi
@@ -74,7 +71,7 @@ script:
     else
       make;
     fi
-  - if [ "$COVERALLS" == "true" ];
+  - if [ -z "$COVERALLS" ];
     then 
       make coveralls;
     else
