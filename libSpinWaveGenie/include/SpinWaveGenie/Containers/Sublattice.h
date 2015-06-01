@@ -1,7 +1,6 @@
 #ifndef __Sublattice_H__
 #define __Sublattice_H__
 
-#define _USE_MATH_DEFINES
 #include <vector>
 #include <string>
 #include "SpinWaveGenie/Containers/Matrices.h"

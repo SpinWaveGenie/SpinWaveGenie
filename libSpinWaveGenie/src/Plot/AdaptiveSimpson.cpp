@@ -1,5 +1,3 @@
-#define _USE_MATH_DEFINES
-#define NOMINMAX
 #include <cmath>
 #include <cassert>
 #include <iostream>

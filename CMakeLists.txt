@@ -65,6 +65,13 @@ if (isRHEL6)
 endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
+if(WIN32)
+    add_definitions( -DBOOST_ALL_NO_LIB
+                     -DBOOST_ALL_DYN_LINK
+                     -D_USE_MATH_DEFINES
+                     -DNOMINMAX)
+endif()
+
 option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" OFF)
 option(BUILD_TESTING "Build unit tests" OFF)
 option(ENABLE_DOXYGEN "Enables building of documentation with doxygen" OFF)

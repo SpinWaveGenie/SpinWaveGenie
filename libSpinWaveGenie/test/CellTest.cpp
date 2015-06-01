@@ -1,6 +1,5 @@
 #define BOOST_TEST_MODULE CellTest
 #define BOOST_TEST_MAIN
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
