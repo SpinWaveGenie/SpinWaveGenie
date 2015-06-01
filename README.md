@@ -7,6 +7,7 @@
        src="https://scan.coverity.com/projects/4034/badge.svg"/>
 </a>
 [![Coverage Status](https://coveralls.io/repos/SpinWaveGenie/SpinWaveGenie/badge.svg)](https://coveralls.io/r/SpinWaveGenie/SpinWaveGenie)
+[![Github Releases](https://img.shields.io/github/downloads/SpinWaveGenie/SpinWaveGenie/latest/total.svg)]()
 
 ---
 
