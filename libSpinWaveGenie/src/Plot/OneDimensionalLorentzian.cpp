@@ -5,7 +5,6 @@
 //  Created by Hahn, Steven E. on 2/5/14.
 //
 //
-
 #include <cmath>
 #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
 

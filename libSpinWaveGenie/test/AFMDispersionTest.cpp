@@ -2,7 +2,6 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <string>
 #include <iostream>

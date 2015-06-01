@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE AdaptiveSimpsonTest
 #define BOOST_TEST_MAIN
+#include <cmath>
 #include <iostream>
 #include <boost/test/unit_test.hpp>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
@@ -12,7 +13,7 @@ std::vector<double> constantFunction(std::deque<double> &x)
   result.reserve(x.size());
   for (std::size_t i = 0; i < x.size(); i++)
   {
-    result.push_back(i + 1);
+    result.push_back(static_cast<double>(i) + 1.0);
   }
   return result;
 };

@@ -1,7 +1,6 @@
 #ifndef __SpinWave_H__
 #define __SpinWave_H__
 
-#define _USE_MATH_DEFINES
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -24,7 +23,7 @@ namespace SpinWaveGenie
 struct results
 {
   double weight;
-  long index;
+  std::size_t index;
 };
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */

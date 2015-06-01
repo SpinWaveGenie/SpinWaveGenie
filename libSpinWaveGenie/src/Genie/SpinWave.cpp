@@ -172,7 +172,7 @@ void SpinWave::calculateWeights()
   }
 
   vector<results> AL(N);
-  for (size_t L1 = 0; L1 < N; L1++)
+  for (std::size_t L1 = 0; L1 < N; L1++)
   {
     AL[L1].weight = TEST[L1].real();
     AL[L1].index = L1;
@@ -197,12 +197,12 @@ void SpinWave::calculateWeights()
   // Swap rows to reflect ordering of eigenvalues.
   // The swap moves row L1 to a new position and the index must be
   // updated to reflect this.
-  int old_index(0);
+  std::size_t old_index(0);
   for (size_t L1 = 0; L1 < N; L1++)
   {
     for (size_t L2 = L1; L2 < N; L2++)
     {
-      if (static_cast<int>(L1) == AL[L2].index)
+      if (L1 == AL[L2].index)
       {
         old_index = L2;
         break;

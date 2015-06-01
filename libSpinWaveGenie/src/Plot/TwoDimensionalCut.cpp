@@ -12,7 +12,11 @@
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "External/ezRateProgressBar.hpp"
 #include <thread>
+#ifdef _WIN32
+#include <Windows.h>
+#else
 #include <unistd.h>
+#endif
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
 using namespace tbb;
@@ -33,7 +37,7 @@ class TwoDimensionalCut::CutImpl
 {
 public:
   std::string filename;
-  atomic_int counter;
+  atomic_size_t counter;
   Eigen::MatrixXd mat;
   unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
   SpinWaveGenie::ThreeVectors<double> points;
@@ -51,15 +55,19 @@ public:
     return std::move(newCut);
   };
 
-  void progressBar(int numberPoints)
+  void progressBar(std::size_t numberPoints)
   {
-    ez::ezRateProgressBar<int> p(numberPoints);
+    ez::ezRateProgressBar<std::size_t> p(numberPoints);
     p.units = "Q-points";
     p.start();
     while (counter < numberPoints)
     {
       p.update(counter);
+#ifdef _WIN32
+      Sleep(1);
+#else
       sleep(1);
+#endif
     }
     p.update(numberPoints);
   }
