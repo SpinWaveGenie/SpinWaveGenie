@@ -2,18 +2,18 @@ language: cpp
 
 matrix:
   include:
-    - os:linux
-      compiler:gcc
-    - os:linux
-      compiler:clang
+    - os: linux
+      compiler: gcc
+    - os: linux
+      compiler: clang
       env: CLANG_STATIC_ANALYZER=true
-    - os:linux
-      compiler:clang
+    - os: linux
+      compiler: clang
       env: SANITIZERS=true
-    - os:osx
-      compiler:clang
-    - os:osx
-      compiler:clang
+    - os: osx
+      compiler: clang
+    - os: osx
+      compiler: clang
       env: COVERALLS=true
     
 before_install:
