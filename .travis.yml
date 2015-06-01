@@ -1,24 +1,21 @@
 language: cpp
 
-compiler:
-  - gcc
-  - clang
-
-os:
-  - linux
-  - osx
-
-env:
-  - COVERALLS=true
-  - COVERALLS=false
-
 matrix:
-  exclude:
-    - os: osx
+  include:
+    - os: linux
       compiler: gcc
     - os: linux
+      compiler: clang
+      env: CLANG_STATIC_ANALYZER=true
+    - os: linux
+      compiler: clang
+      env: CLANG_SANITIZERS=true
+    - os: osx
+      compiler: clang
+    - os: osx
+      compiler: clang
       env: COVERALLS=true
-      
+    
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; 
     then 
@@ -43,7 +40,7 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
     then
-      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
+      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev clang-3.4;
     fi
 
 before_script:
@@ -52,23 +49,36 @@ before_script:
       export CC=gcc-4.4;
       export CXX=g++-4.4;
     fi
-  - if [ "$COVERALLS" == "true" ];
-    then 
+  - if [ "$COVERALLS" == "true" ]; 
+    then
+      echo "CHECKING CODE COVERAGE, $COVERALLS"; 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
+    elif [ "$CLANG_STATIC_ANALYZER" == "true" ];
+    then
+      echo "RUNNING CLANG STATIC ANALYZER, $CLANG_STATIC_ANALYZER";
+      scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
+    elif [ "$CLANG_SANITIZERS" == "true" ];
+    then 
+      echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
+      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
     else
       if [ "$TRAVIS_OS_NAME" == "osx" ];
       then
+        echo "OSX RELEASE BUILD";
         cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
-      elif [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
-      then
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
       else
+        echo "LINUX RELEASE BUILD";
         cmake -DBUILD_TESTING=ON .;
       fi
     fi
 
 script:
-  - make
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
+    then
+      scan-build make;
+    else
+      make;
+    fi
   - if [ "$COVERALLS" == "true" ];
     then 
       make coveralls;
