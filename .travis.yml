@@ -49,10 +49,10 @@ before_script:
       export CC=gcc-4.4;
       export CXX=g++-4.4;
     fi
-  - if [ -z "$COVERALLS" ] 
+  - if [ -z "$COVERALLS" ]; 
     then 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
-    elif [ -z "$SANITIZERS" ]
+    elif [ -z "$SANITIZERS" ];
     then
       CC=ccc-analyzer CXX=c++-analyzer scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
     else
