@@ -1,7 +1,6 @@
 #ifndef __Neighbors_H__
 #define __Neighbors_H__
 
-#define _USE_MATH_DEFINES
 #include <ostream>
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"

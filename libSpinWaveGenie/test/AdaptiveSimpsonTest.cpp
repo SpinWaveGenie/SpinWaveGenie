@@ -1,6 +1,5 @@
 #define BOOST_TEST_MODULE AdaptiveSimpsonTest
 #define BOOST_TEST_MAIN
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
 #include <boost/test/unit_test.hpp>

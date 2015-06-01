@@ -1,6 +1,5 @@
 #define BOOST_TEST_MODULE FormFactorTest
 #define BOOST_TEST_MAIN
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <exception>
 #include <iostream>

@@ -5,7 +5,6 @@
 //  Created by Hahn, Steven E. on 11/20/13.
 //
 //
-#define _USE_MATH_DEFINES
 #include <exception>
 #include <stdexcept>
 #include <numeric>

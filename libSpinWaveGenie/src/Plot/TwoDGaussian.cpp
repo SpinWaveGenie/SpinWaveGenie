@@ -5,7 +5,6 @@
 //  Created by Hahn, Steven E. on 6/23/14.
 //
 //
-#define NOMINMAX
 #include <cmath>
 #include <algorithm>
 #include "SpinWaveGenie/Plot/TwoDGaussian.h"
