@@ -79,7 +79,7 @@ script:
     else
       make;
     fi
-  - if [ -z "$COVERALLS" ];
+  - if [ "$COVERALLS" == "true" ];
     then 
       make coveralls;
     else
