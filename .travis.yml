@@ -49,15 +49,15 @@ before_script:
       export CC=gcc-4.4;
       export CXX=g++-4.4;
     fi
-  - if [ -z "$COVERALLS" ]; 
+  - if [ "$COVERALLS" == "true" ]; 
     then
       echo "CHECKING CODE COVERAGE, $COVERALLS"; 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
-    elif [ -z "$CLANG_STATIC_ANALYZER" ];
+    elif [ "$CLANG_STATIC_ANALYZER" == "true" ];
     then
       echo "RUNNING CLANG STATIC ANALYZER, $CLANG_STATIC_ANALYZER";
       CC=ccc-analyzer CXX=c++-analyzer cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
-    elif [ -z "$CLANG_SANITIZERS" ];
+    elif [ "$CLANG_SANITIZERS" == "true" ];
     then 
       echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
       cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
