@@ -50,19 +50,24 @@ before_script:
       export CXX=g++-4.4;
     fi
   - if [ -z "$COVERALLS" ]; 
-    then 
+    then
+      echo "CHECKING CODE COVERAGE, $COVERALLS"; 
       cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
     elif [ -z "$CLANG_STATIC_ANALYZER" ];
     then
+      echo "RUNNING CLANG STATIC ANALYZER, $CLANG_STATIC_ANALYZER";
       CC=ccc-analyzer CXX=c++-analyzer cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
     elif [ -z "$CLANG_SANITIZERS" ];
     then 
+      echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
       cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
     else
       if [ "$TRAVIS_OS_NAME" == "osx" ];
       then
+        echo "OSX RELEASE BUILD";
         cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
       else
+        echo "LINUX RELEASE BUILD";
         cmake -DBUILD_TESTING=ON .;
       fi
     fi
