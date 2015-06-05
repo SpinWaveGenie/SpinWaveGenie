@@ -26,4 +26,4 @@ build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
-- cmd: ctest -C Release --output-on-failure -T test --no-compress-output
+- cmd: ctest -C Release --output-on-failure
