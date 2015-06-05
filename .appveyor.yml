@@ -27,7 +27,3 @@ build_script:
 
 test_script:
 - cmd: ctest -C Release --output-on-failure -T test --no-compress-output
-
-after_test:
-- ps: $wc = New-Object 'System.Net.WebClient'
-- ps: $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path Testing\**\Test.xml))
