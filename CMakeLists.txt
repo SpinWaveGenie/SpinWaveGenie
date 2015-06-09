@@ -53,6 +53,15 @@ if(WITH_SANITIZERS)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SAN_FLAGS}" )
 endif()
 
+option(WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
+if(WARNINGS_AS_ERRORS)
+  if(MSVC)
+    add_compile_options(/WX)
+  else()
+    add_compile_options(-Werror)
+  endif()
+endif()
+
 find_package(Eigen3 REQUIRED)
 
 if(USE_THREADS)
