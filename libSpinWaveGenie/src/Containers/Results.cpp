@@ -8,6 +8,7 @@
 
 #include <algorithm> // std::sort
 #include <cmath>
+#include "boost/format.hpp"
 #include "SpinWaveGenie/Containers/Results.h"
 
 using std::vector;
@@ -77,5 +78,15 @@ void Results::significantSolutions(double ETS)
     }
   }
   results = VI_signif;
+}
+
+std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Results &n)
+{
+    output << "  frequency  intensity\n";
+    for (auto result = n.cbegin(); result != n.cend(); result++)
+    {
+        output << boost::format("%9.5f %10.5f\n") % result->frequency % result->intensity;
+    }
+    return output;
 }
 }

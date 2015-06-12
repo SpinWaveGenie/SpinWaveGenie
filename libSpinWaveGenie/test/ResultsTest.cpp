@@ -94,3 +94,22 @@ BOOST_AUTO_TEST_CASE( isSignificant )
     }
 }
 
+BOOST_AUTO_TEST_CASE(PrintList)
+{
+    Results results = getResults();
+    std::stringstream teststream;
+    std::string header;
+    
+    teststream << results;
+    std::cout << results << std::endl;
+    std::getline(teststream,header,'\n');
+    BOOST_CHECK_EQUAL("  frequency  intensity",header);
+    for(auto result = results.cbegin(); result != results.cend();++result)
+    {
+        double frequency,intensity;
+        teststream >> frequency >> intensity;
+        BOOST_CHECK_CLOSE(result->frequency,frequency, 1.0e-5);
+        BOOST_CHECK_CLOSE(result->intensity,intensity,1.0e-5);
+    }
+}
+
