@@ -26,8 +26,24 @@ SOURCE_GROUP("Header Files\\Plot" FILES ${PLOT_HDRS})
 set(LIBRARY_SRCS ${EXTERNAL_SRCS} ${EXTERN_SRCS} ${CELL_SRCS} ${CONTAINERS_SRCS} ${GENIE_SRCS} ${INTERACTIONS_SRCS} ${PLOT_SRCS})
 set(LIBRARY_HDRS ${EXTERNAL_HDRS} ${EXTERN_HDRS} ${CELL_HDRS} ${CONTAINERS_HDRS} ${GENIE_HDRS} ${INTERACTIONS_HDRS} ${PLOT_HDRS})
 
-add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+if (COVERALLS)
+    set(COVERAGE_SRCS ${LIBRARY_SRCS} ${LIBRARY_HDRS})
 
+    # Create the coveralls target.
+    coveralls_setup(
+        "${COVERAGE_SRCS}" # The source files.
+        ON                 # If we should upload.
+        )
+endif()
+
+if(WIN32)
+  #include(GenerateExportHeader)
+  #add_compiler_export_flags()
+  add_library(SpinWaveGenie STATIC ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+  #generate_export_header(SpinWaveGenie)
+else()
+  add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+endif()
 #We need need the header files both to build SpinWaveGenie and for the interface.
 target_include_directories( SpinWaveGenie PRIVATE include )               
 set_property( TARGET SpinWaveGenie PROPERTY
@@ -44,10 +60,12 @@ if(BUILD_TESTING)
     add_subdirectory(test)
 endif (BUILD_TESTING)
 
-install(DIRECTORY include/ DESTINATION include)
+include(GNUInstallDirs)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(TARGETS SpinWaveGenie EXPORT SpinWaveGenieTargets 
-                              ARCHIVE DESTINATION lib 
-                              LIBRARY DESTINATION lib)
+                              ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 
 #create package configuration files
@@ -71,7 +89,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0)
     )
 
     #install package configuration files
-    set(ConfigPackageLocation lib/cmake/SpinWaveGenie)
+    set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/SpinWaveGenie)
     install(EXPORT SpinWaveGenieTargets
             FILE SpinWaveGenieTargets.cmake
             DESTINATION ${ConfigPackageLocation}
@@ -84,7 +102,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0)
         DESTINATION ${ConfigPackageLocation}
     )
 
-    string(MD5 md5_PackageLocation "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
-    file( WRITE ${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation} "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation}" DESTINATION "$ENV{HOME}/.cmake/packages/SpinWaveGenie/")
+#    string(MD5 md5_PackageLocation "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
+#    file( WRITE ${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation} "${CMAKE_INSTALL_PREFIX}/${ConfigPackageLocation}/SpinWaveGenieConfig.cmake")
+#    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${md5_PackageLocation}" DESTINATION "$ENV{HOME}/.cmake/packages/SpinWaveGenie/")
 endif()

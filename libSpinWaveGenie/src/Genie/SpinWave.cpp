@@ -17,6 +17,7 @@ namespace SpinWaveGenie
 SpinWave::SpinWave(Cell &cell_in, boost::ptr_vector<Interaction> interactions_in)
     : KXP(0.0), KYP(0.0), KZP(0.0), NU(0), MI(0), IM(0)
 {
+
   cell = cell_in;
   interactions = interactions_in;
   M = cell.size();
@@ -103,7 +104,9 @@ void SpinWave::calculateEigenvalues()
   }
 }
 
-bool IsPositive(results i) { return i.weight > 0; }
+bool isPositive(const results &i) { return i.weight > 0; }
+
+bool greaterThan(const results &a, const results &b) { return a.weight > b.weight; }
 
 void SpinWave::calculateWeights()
 {
@@ -169,7 +172,7 @@ void SpinWave::calculateWeights()
   }
 
   vector<results> AL(N);
-  for (size_t L1 = 0; L1 < N; L1++)
+  for (std::size_t L1 = 0; L1 < N; L1++)
   {
     AL[L1].weight = TEST[L1].real();
     AL[L1].index = L1;
@@ -179,8 +182,12 @@ void SpinWave::calculateWeights()
   //
   // Reorder the XX's by the weights
   //
+  std::partition(AL.begin(), AL.end(), isPositive);
 
-  partition(AL.begin(), AL.end(), IsPositive);
+  // If two eigenvalues are approx. zero, std::partition
+  // may fail to separate positive and negative weights.
+  if (!isPositive(AL[M - 1]) || isPositive(AL[M]))
+    std::sort(AL.begin(), AL.end(), greaterThan);
 
   for (size_t L1 = 0; L1 < N; L1++)
   {
@@ -190,12 +197,12 @@ void SpinWave::calculateWeights()
   // Swap rows to reflect ordering of eigenvalues.
   // The swap moves row L1 to a new position and the index must be
   // updated to reflect this.
-  int old_index(0);
+  std::size_t old_index(0);
   for (size_t L1 = 0; L1 < N; L1++)
   {
     for (size_t L2 = L1; L2 < N; L2++)
     {
-      if (static_cast<int>(L1) == AL[L2].index)
+      if (L1 == AL[L2].index)
       {
         old_index = L2;
         break;
@@ -266,9 +273,12 @@ void SpinWave::calculateIntensities()
     Point pt;
     pt.frequency = abs(WW[i + M]);
     // cout << SXX(i) << " " << SYY(i) << " " << SZZ(i) << endl;
-    pt.intensity =
-        SXX(i) + SYY(i) + SZZ(i) -
-        (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
+    double qSquared = (pow(KX, 2) + pow(KY, 2) + pow(KZ, 2));
+    if (qSquared < std::numeric_limits<double>::epsilon())
+      pt.intensity = std::numeric_limits<double>::quiet_NaN();
+    else
+      pt.intensity =
+          SXX(i) + SYY(i) + SZZ(i) - (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / qSquared;
     VI.insert(pt);
   }
 }

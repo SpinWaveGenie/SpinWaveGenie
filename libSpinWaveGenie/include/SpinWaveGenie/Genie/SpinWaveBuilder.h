@@ -15,7 +15,6 @@ public:
   SpinWaveBuilder();
   SpinWaveBuilder(Cell &cellIn);
   void updateCell(Cell &cellIn);
-  void addInteraction(Interaction *in);
   void addInteraction(std::unique_ptr<Interaction> in);
   void updateInteraction(std::string name, double value);
   double getEnergy();

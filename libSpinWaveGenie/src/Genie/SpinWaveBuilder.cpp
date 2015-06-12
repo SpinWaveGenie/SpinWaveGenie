@@ -20,14 +20,6 @@ void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
   interactions.sort();
 }
 
-void SpinWaveBuilder::addInteraction(Interaction *in)
-{
-  // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
-  // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
-  interactions.push_back(in);
-  interactions.sort();
-}
-
 void SpinWaveBuilder::updateInteraction(string name, double value)
 {
   for (auto it = interactions.begin(); it != interactions.end(); it++)

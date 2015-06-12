@@ -17,7 +17,10 @@ Energies::Energies(double minimum, double maximum, std::size_t numberPoints)
   energies.reserve(numberPoints);
   for (std::size_t bin = 0; bin != numberPoints; bin++)
   {
-    energies.push_back(minimum + (maximum - minimum) * (double)bin / (double)(numberPoints - 1));
+    if (numberPoints == 1)
+      energies.push_back(minimum);
+    else
+      energies.push_back(minimum + (maximum - minimum) * (double)bin / (double)(numberPoints - 1));
   }
 }
 

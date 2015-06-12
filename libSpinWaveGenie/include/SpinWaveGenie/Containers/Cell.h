@@ -2,7 +2,6 @@
 #ifndef __Cell_H__
 #define __Cell_H__
 
-#define _USE_MATH_DEFINES
 #include <vector>
 #include <string>
 #include "SpinWaveGenie/Containers/Sublattice.h"

@@ -64,7 +64,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
   ky = kyIn;
   kz = kzIn;
 
-  int dim = integrationDirections.size();
+  std::size_t dim = integrationDirections.size();
   xmin.clear();
   xmin.reserve(dim);
   xmax.clear();

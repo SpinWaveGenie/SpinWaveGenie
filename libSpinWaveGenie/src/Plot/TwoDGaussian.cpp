@@ -6,6 +6,7 @@
 //
 //
 #include <cmath>
+#include <algorithm>
 #include "SpinWaveGenie/Plot/TwoDGaussian.h"
 
 using namespace std;

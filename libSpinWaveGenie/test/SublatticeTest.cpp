@@ -1,5 +1,6 @@
 #define BOOST_TEST_MODULE SublatticeTest
 #define BOOST_TEST_MAIN
+#include <cmath>
 #include <boost/test/unit_test.hpp>
 #include "SpinWaveGenie/Containers/Sublattice.h"
 #include "SpinWaveGenie/Containers/Cell.h"

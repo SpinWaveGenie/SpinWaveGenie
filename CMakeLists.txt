@@ -7,7 +7,7 @@ set(CMAKE_MACOSX_RPATH FALSE)
 
 set(SPINWAVEGENIE_VERSION_MAJOR "0")
 set(SPINWAVEGENIE_VERSION_MINOR "1")
-set(SPINWAVEGENIE_VERSION_PATCH "0")
+set(SPINWAVEGENIE_VERSION_PATCH "1")
 set(SPINWAVEGENIE_VERSION "${SPINWAVEGENIE_VERSION_MAJOR}.${SPINWAVEGENIE_VERSION_MINOR}.${SPINWAVEGENIE_VERSION_PATCH}")
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -16,11 +16,23 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
+if(BUILD_TESTING)
+    enable_testing()
+endif(BUILD_TESTING)
+
+# We probably don't want this to run on every build.
+option(COVERALLS "Generate coveralls data" OFF)
+
+if (COVERALLS)
+    include(Coveralls)
+    coveralls_turn_on_coverage()
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX)
-    message("compiler detected as: GNU compiler")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -msse4 -Wall -Wextra")
+    message(STATUS "compiler detected as: GNU compiler")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -std=c++0x -Wall -Wextra")
 elseif(APPLE)
-    message("Setting up Xcode for C++11 with libc++.")
+    message(STATUS "Setting up Xcode for C++11 with libc++.")
     if(CMAKE_GENERATOR STREQUAL Xcode)
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
@@ -30,14 +42,44 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libstdc++ -msse4 -Wall -Wextra -Wpedantic")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+option(WITH_SANITIZERS "Enable sanitizers" OFF)
+if(WITH_SANITIZERS)
+  message(STATUS "enabling address & undefined behavior sanitizers")
+  file(WRITE ${PROJECT_BINARY_DIR}/ubsan.txt "fun:*_Ios_Fmtflags*")
+  set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
+  add_compile_options(-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${SAN_FLAGS}" )
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${SAN_FLAGS}" )
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SAN_FLAGS}" )
+endif()
+
+option(WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
+if(WARNINGS_AS_ERRORS)
+  if(MSVC)
+    add_compile_options(/WX)
+  else()
+    add_compile_options(-Werror)
+  endif()
+endif()
+
 find_package(Eigen3 REQUIRED)
-find_package(TBB)
+
+if(USE_THREADS)
+  find_package(TBB)
+endif()
 
 string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
 if (isRHEL6)
     set(Boost_NO_BOOST_CMAKE ON)
 endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
+
+if(WIN32)
+    add_definitions( -DBOOST_ALL_NO_LIB
+                     -DBOOST_ALL_DYN_LINK
+                     -D_USE_MATH_DEFINES
+                     -DNOMINMAX)
+endif()
 
 option(BUILD_EXAMPLES "Build SpinWaveGenie Examples" OFF)
 option(BUILD_TESTING "Build unit tests" OFF)
@@ -95,7 +137,15 @@ set ( CPACK_RPM_PACKAGE_LICENSE "BSD 3-clause License" )
 set ( CPACK_RPM_PACKAGE_RELEASE 1 )
 set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
 set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
-set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake gcc-c++ doxygen boost-test boost-devel" )
+set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake >= 2.8.12 gcc-c++ doxygen boost-test boost-devel" )
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
                  ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
+
+
+add_custom_command( OUTPUT SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
+                    COMMAND git archive --format=tar --prefix=SpinWaveGenie-${CPACK_PACKAGE_VERSION}/ HEAD | gzip -c > ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    )
+add_custom_target( source_tgz
+                    DEPENDS SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz )

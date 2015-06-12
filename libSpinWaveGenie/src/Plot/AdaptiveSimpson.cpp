@@ -1,11 +1,10 @@
-#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
-
-#include <cassert>
 #include <cmath>
+#include <cassert>
 #include <iostream>
 #include <queue>
 #include <algorithm>
 #include <limits>
+#include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
 
 struct helper
 {
@@ -96,7 +95,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
 {
   // element
   element->resetBounds(mostError->lowerlimit, 0.5 * (mostError->lowerlimit + mostError->upperlimit));
-  element->epsilon = std::max(mostError->epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
+  element->epsilon = std::max(mostError->epsilon / M_SQRT2, std::numeric_limits<double>::epsilon());
 
   element->fa = std::move(mostError->fa);
   element->fb = mostError->fc;
@@ -105,7 +104,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
 
   // mostError
   mostError->resetBounds(0.5 * (mostError->lowerlimit + mostError->upperlimit), mostError->upperlimit);
-  mostError->epsilon = std::max(mostError->epsilon * M_SQRT1_2, std::numeric_limits<double>::epsilon());
+  mostError->epsilon = std::max(mostError->epsilon / M_SQRT2, std::numeric_limits<double>::epsilon());
 
   mostError->fa = std::move(mostError->fc);
   mostError->fc = std::move(mostError->fe);
@@ -179,6 +178,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(
 
 std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
 {
+
   std::shared_ptr<helper> first = std::make_shared<helper>();
   first->resetBounds(m_lowerBound, m_upperBound);
   first->epsilon = m_epsilon;
@@ -231,12 +231,15 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
     std::shared_ptr<helper> mostError = myqueue.top();
     if (mostError->error < mostError->epsilon)
       break;
+    myqueue.pop();
     std::shared_ptr<helper> element = std::make_shared<helper>();
     splitElement(mostError, element);
-    myqueue.pop();
     myqueue.push(std::move(mostError));
     myqueue.push(std::move(element));
   }
+
+  // reset the evaluation points;
+  this->m_evaluationPointsOuterDimensions.pop_front();
 
   return sumPieces(myqueue);
 }
@@ -253,8 +256,11 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(const AdaptiveSimpson &other)
 
 AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other)
 {
-  m_p = move(other.m_p);
-  other.m_p = NULL;
+  if (m_p != other.m_p)
+  {
+    m_p = move(other.m_p);
+    other.m_p = NULL;
+  }
 }
 
 AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)
@@ -267,8 +273,8 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)
   return *this;
 }
 
-void
-AdaptiveSimpson::setFunction(const std::function<std::vector<double>(std::deque<double> &evaluationPoints)> &integrand)
+void AdaptiveSimpson::setFunction(
+    const std::function<std::vector<double>(std::deque<double> &evaluationPoints)> &integrand)
 {
   m_p->m_integrand = integrand;
 }

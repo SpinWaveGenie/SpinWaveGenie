@@ -1,0 +1,29 @@
+version: 0.2.{build}
+
+branches:
+  except:
+  - coverity_scan
+
+configuration: Release
+
+environment:
+  PATH: "C:/projects/ThirdPartyVC120/lib;%PATH%"
+
+platform: x64
+
+install:
+- cmd: cd c:\projects
+- cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC120.git
+
+before_build:
+- ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
+- cmd: md build
+- cmd: cd build
+- cmd: cmake --version
+- cmd: cmake -G "Visual Studio 12 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyor.cmake  ..
+
+build_script:
+- cmd: cmake --build . -- /p:Configuration=Release /m:2
+
+test_script:
+- cmd: ctest -C Release --output-on-failure

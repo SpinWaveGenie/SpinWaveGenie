@@ -1,8 +1,7 @@
 #ifndef __Neighbors_H__
 #define __Neighbors_H__
 
-#define _USE_MATH_DEFINES
-#include <iostream>
+#include <ostream>
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 
@@ -33,7 +32,7 @@ public:
   //! \param max Maximum distance considered, in Angstroms
   void findNeighbors(Cell &cell, std::string sl1, std::string sl2, double min, double max);
   //! Get the number of neighbors.
-  double size();
+  std::size_t size();
   //! Get variable \f$ \Gamma = \frac{1}{z_{rs}} \sum_{d} e^{-i \boldmath{k} \cdot \boldmath{d}} \f$
   //! described in J Phys. Condens. Matter 21 216001 (2009)
   //! \param K k vector used in spin wave calculation.
@@ -45,13 +44,14 @@ public:
   //! \return Returns an Iterator pointing to the final element of the neighbor list
   Iterator end();
   //! \return Returns an ConstIterator pointing to the first element of the neighbor list
-  ConstIterator cbegin();
+  ConstIterator cbegin() const;
   //! \return Returns an ConstIterator pointing to the final element of the neighbor list
-  ConstIterator cend();
+  ConstIterator cend() const;
+  friend std::ostream &operator<<(std::ostream &output, const Neighbors &n);
 
 private:
   UniqueThreeVectors<double> neighborList;
-  double numberNeighbors;
+  std::size_t numberNeighbors;
 };
 }
 #endif // __Neighbors_H__

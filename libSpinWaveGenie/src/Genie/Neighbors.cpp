@@ -1,4 +1,5 @@
 #include <iostream>
+#include "boost/format.hpp"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Cell.h"
 
@@ -91,12 +92,26 @@ complex<double> Neighbors::getGamma(Vector3 K)
     gamma_rs += exp(MXI * dot_prod);
     // cout << "gamma_rs = " << gamma_rs << " " << numberNeighbors << endl;
   }
-  return gamma_rs / numberNeighbors;
+  return gamma_rs / static_cast<double>(numberNeighbors);
 }
 
-double Neighbors::size() { return numberNeighbors; }
+std::size_t Neighbors::size() { return numberNeighbors; }
 
 Neighbors::Iterator Neighbors::begin() { return Iterator(neighborList.begin()); }
 
 Neighbors::Iterator Neighbors::end() { return Iterator(neighborList.end()); }
+
+Neighbors::ConstIterator Neighbors::cbegin() const { return ConstIterator(neighborList.cbegin()); }
+
+Neighbors::ConstIterator Neighbors::cend() const { return ConstIterator(neighborList.cend()); }
+
+std::ostream &operator<<(std::ostream &output, const Neighbors &n)
+{
+  output << "  x         y         z\n";
+  for (auto nbr = n.cbegin(); nbr != n.cend(); nbr++)
+  {
+    output << boost::format("%9.5f %9.5f %9.5f\n") % nbr->get<0>() % nbr->get<1>() % nbr->get<2>();
+  }
+  return output;
+}
 }
