@@ -59,10 +59,11 @@ public:
   //! \return Returns an Iterator pointing to the end of the container.
   Iterator end();
   //! \return Returns an ConstIterator pointing to the first element in the container.
-  ConstIterator cbegin();
+  ConstIterator cbegin() const;
   //! \return Returns an ConstIterator pointing to the end of the container.
-  ConstIterator cend();
-
+  ConstIterator cend() const;
+  friend std::ostream &operator<<(std::ostream &output, const Results &n);
+  
 private:
   std::vector<Point> results;
 };
@@ -75,8 +76,8 @@ inline Results::Iterator Results::begin() { return results.begin(); }
 
 inline Results::Iterator Results::end() { return results.end(); }
 
-inline Results::ConstIterator Results::cbegin() { return results.cbegin(); }
+inline Results::ConstIterator Results::cbegin() const { return results.cbegin(); }
 
-inline Results::ConstIterator Results::cend() { return results.cend(); }
+inline Results::ConstIterator Results::cend() const { return results.cend(); }
 }
 #endif /* defined(__spin_wave_genie__Results__) */
