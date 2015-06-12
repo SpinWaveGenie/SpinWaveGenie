@@ -207,13 +207,16 @@ BOOST_AUTO_TEST_CASE(PrintList)
     
     teststream << neighborlist;
     std::getline(teststream,header,'\n');
-    BOOST_CHECK_EQUAL("  x         y         z",header);
+    BOOST_CHECK_EQUAL("  x         y         z         r",header);
   
     for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
     {
-      double x,y,z;
-      teststream >> x >> y >> z;
-      double dist = sqrt(pow(nbr->get<0>()-x,2)+pow(nbr->get<1>()-y,2)+pow(nbr->get<2>()-z,2));
-      BOOST_CHECK_SMALL(dist,1.0e-5);
+      double x,y,z,r;
+      teststream >> x >> y >> z >> r;
+      double diff = sqrt(pow(nbr->get<0>()-x,2)+pow(nbr->get<1>()-y,2)+pow(nbr->get<2>()-z,2));
+      BOOST_CHECK_SMALL(diff,1.0e-5);
+      double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
+      BOOST_CHECK_SMALL(std::abs(dist-r),1.0e-5);
+  
     }
 }
