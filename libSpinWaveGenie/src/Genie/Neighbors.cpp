@@ -108,7 +108,7 @@ Neighbors::ConstIterator Neighbors::cend() const { return ConstIterator(neighbor
 std::ostream &operator<<(std::ostream &output, const Neighbors &n)
 {
   output << "  x         y         z\n";
-  for (auto nbr = n.cbegin(); nbr != n.cend(); nbr++)
+  for (auto nbr = n.cbegin(); nbr != n.cend(); ++nbr)
   {
     output << boost::format("%9.5f %9.5f %9.5f\n") % nbr->get<0>() % nbr->get<1>() % nbr->get<2>();
   }

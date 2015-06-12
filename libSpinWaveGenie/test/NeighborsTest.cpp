@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE(PrintList)
     std::getline(teststream,header,'\n');
     BOOST_CHECK_EQUAL("  x         y         z",header);
   
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();++nbr)
     {
       double x,y,z;
       teststream >> x >> y >> z;

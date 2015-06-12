@@ -83,7 +83,7 @@ void Results::significantSolutions(double ETS)
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Results &n)
 {
     output << "  frequency  intensity\n";
-    for (auto result = n.cbegin(); result != n.cend(); result++)
+    for (auto result = n.cbegin(); result != n.cend(); ++result)
     {
         output << boost::format("%9.5f %10.5f\n") % result->frequency % result->intensity;
     }
