@@ -7,6 +7,7 @@
 //
 
 #include "SpinWaveGenie/Containers/Energies.h"
+#include "boost/format.hpp"
 #include <algorithm>
 
 namespace SpinWaveGenie
@@ -43,4 +44,14 @@ std::size_t Energies::getUpperBound(double energy)
 double *Energies::data() { return energies.data(); }
 
 void Energies::clear() { energies.clear(); }
+    
+std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Energies &n)
+{
+  output << "  frequency\n";
+  for (auto result = n.cbegin(); result != n.cend(); ++result)
+  {
+    output << boost::format("%9.5f\n") % *result;
+  }
+  return output;
+}
 }
