@@ -60,7 +60,23 @@ BOOST_AUTO_TEST_CASE( iteratorTest )
     }
 }
 
-
+BOOST_AUTO_TEST_CASE(PrintList)
+{
+    Energies energies(0.0,10.0,11);
+    std::stringstream teststream;
+    std::string header;
+   
+    teststream << energies;
+    std::cout << energies << std::endl;
+    std::getline(teststream,header,'\n');
+    BOOST_CHECK_EQUAL("  frequency",header);
+    for(auto result = energies.cbegin(); result != energies.cend();++result)
+    {
+        double frequency;
+        teststream >> frequency;
+        BOOST_CHECK_CLOSE(*result,frequency,1.0e-5);
+    }
+}
 
 
 

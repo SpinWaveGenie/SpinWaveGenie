@@ -17,9 +17,7 @@ namespace SpinWaveGenie
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double fwhm, double tol)
 {
-  std::unique_ptr<OneDimensionalGaussian> resinfo(new OneDimensionalGaussian);
-  resinfo->setFWHM(fwhm);
-  resinfo->setTolerance(tol);
+  std::unique_ptr<OneDimensionalGaussian> resinfo(new OneDimensionalGaussian(fwhm, tol));
   return std::move(resinfo);
 }
 
