@@ -74,3 +74,20 @@ BOOST_AUTO_TEST_CASE( LorentzianFunction )
     runTest(move(lorentzian));
 }
 
+BOOST_AUTO_TEST_CASE(UpdatedGaussianFunction)
+{
+  OneDimensionalFactory factory;
+  auto gaussian = factory.getGaussian(20.0, 1.0e-1);
+  gaussian->setFWHM(10.0);
+  gaussian->setTolerance(5.0e-3);
+  runTest(move(gaussian));
+}
+
+BOOST_AUTO_TEST_CASE(UpdatedLorentzianFunction)
+{
+  OneDimensionalFactory factory;
+  auto lorentzian = factory.getLorentzian(20.0, 1.0e-1);
+  lorentzian->setFWHM(10.0);
+  lorentzian->setTolerance(5.0e-3);
+  runTest(move(lorentzian));
+}
