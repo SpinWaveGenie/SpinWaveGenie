@@ -78,8 +78,9 @@ BOOST_AUTO_TEST_CASE(UpdatedGaussianFunction)
 {
   OneDimensionalFactory factory;
   auto gaussian = factory.getGaussian(20.0, 1.0e-1);
-  gaussian->setFWHM(10.0);
-  gaussian->setTolerance(5.0e-3);
+  OneDimensionalGaussian* gaussian_ptr = dynamic_cast<OneDimensionalGaussian*>(gaussian.get()); 
+  gaussian_ptr->setFWHM(10.0);
+  gaussian_ptr->setTolerance(5.0e-3);
   runTest(move(gaussian));
 }
 
@@ -87,7 +88,8 @@ BOOST_AUTO_TEST_CASE(UpdatedLorentzianFunction)
 {
   OneDimensionalFactory factory;
   auto lorentzian = factory.getLorentzian(20.0, 1.0e-1);
-  lorentzian->setFWHM(10.0);
-  lorentzian->setTolerance(5.0e-3);
+  OneDimensionalLorentzian* lorentzian_ptr = dynamic_cast<OneDimensionalLorentzian*>(lorentzian.get());
+  lorentzian_ptr->setFWHM(10.0);
+  lorentzian_ptr->setTolerance(5.0e-3);
   runTest(move(lorentzian));
 }
