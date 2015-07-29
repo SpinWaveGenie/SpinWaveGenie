@@ -19,6 +19,7 @@ namespace SpinWaveGenie
 class OneDimensionalGaussian : public OneDimensionalShapes
 {
 public:
+  OneDimensionalGaussian(double FWHM = 1.0, double Tolerance = 0.01);
   void setFWHM(double InFWHM);
   void setTolerance(double InTolerance);
   double getMinimumEnergy();
@@ -28,8 +29,9 @@ public:
   ~OneDimensionalGaussian(){};
 
 private:
-  double getExponentialFactor();
-  double FWHM, Tolerance;
+  void update();
+  double m_FWHM, m_Tolerance;
+  double m_Diff, m_Factor, m_ma;
 };
 }
 #endif /* defined(__OneDimensionalGaussian__) */
