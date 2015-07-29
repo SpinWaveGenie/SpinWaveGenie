@@ -34,20 +34,20 @@ before_install:
       sudo apt-get install -qq cmake libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
       cmake --version;
     fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "g++" ];
+  - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
-      sudo apt-get install -qq gcc-4.4 g++-4.4 libstdc++6-4.4-dev;
-    fi
+      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
+    fi  
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
     then
-      sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev clang-3.4;
+      sudo apt-get install -qq clang-3.4;
     fi
 
 before_script:
   - if [ "$CXX" == "g++" ]; 
     then
-      export CC=gcc-4.4;
-      export CXX=g++-4.4;
+      export CC=gcc-4.8;
+      export CXX=g++-4.8;
     fi
   - if [ "$COVERALLS" == "true" ]; 
     then
