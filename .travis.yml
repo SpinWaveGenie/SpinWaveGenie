@@ -7,9 +7,11 @@ matrix:
     - os: linux
       compiler: clang
       env: CLANG_STATIC_ANALYZER=true
+      addons: {apt: {packages: [clang-3.4]}}
     - os: linux
       compiler: clang
       env: CLANG_SANITIZERS=true
+      addons: {apt: {packages: [clang-3.4]}}
     - os: osx
       compiler: clang
     - os: osx
@@ -32,10 +34,6 @@ before_install:
       sudo apt-get purge -qq cmake;
       sudo apt-get install -qq cmake;
       cmake --version;
-    fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
-    then
-      sudo apt-get install -qq clang-3.4;
     fi
 
 before_script:
