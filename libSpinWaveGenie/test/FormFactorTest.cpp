@@ -19,7 +19,7 @@ public:
         {
             std::vector<double> F = it->second;
             double test = F[0] + F[2] + F[4] + F[6];
-            if(fabs(test-1.0)>2.4e-3)
+            if(fabs(test-1.0)>5.0e-3)
             {
                 badCoefficients.insert(std::pair<std::string,double>(it->first,test));
             }
