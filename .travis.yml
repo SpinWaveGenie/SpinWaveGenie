@@ -30,7 +30,7 @@ before_install:
       sudo add-apt-repository --yes ppa:smspillaz/cmake-3.0.2;
       sudo apt-get update -qq;
       sudo apt-get purge -qq cmake;
-      sudo apt-get install -qq cmake
+      sudo apt-get install -qq cmake;
       cmake --version;
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ];
