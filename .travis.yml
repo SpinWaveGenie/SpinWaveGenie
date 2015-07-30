@@ -7,11 +7,9 @@ matrix:
     - os: linux
       compiler: clang
       env: CLANG_STATIC_ANALYZER=true
-      addons: {apt: {packages: [clang-3.4]}}
     - os: linux
       compiler: clang
       env: CLANG_SANITIZERS=true
-      addons: {apt: {packages: [clang-3.4]}}
     - os: osx
       compiler: clang
     - os: osx
@@ -88,9 +86,10 @@ addons:
       - libboost-test-dev
       - libeigen3-dev
       - libtbb-dev
-      - gcc-4.8 
-      - g++-4.8 
+      - gcc-4.8
+      - g++-4.8
       - libstdc++-4.8-dev
+      - clang-3.4
 
 notifications:
   email:
