@@ -49,7 +49,7 @@ public:
   };
   std::unique_ptr<CutImpl> clone()
   {
-    std::unique_ptr<CutImpl> newCut(std::make_unique<CutImpl>(cut->clone(), points));
+    std::unique_ptr<CutImpl> newCut(memory::make_unique<CutImpl>(cut->clone(), points));
     newCut->filename = filename;
     newCut->mat = mat;
     return std::move(newCut);
@@ -118,7 +118,7 @@ public:
 #endif
 };
 
-TwoDimensionalCut::TwoDimensionalCut() : m_p(std::make_unique<CutImpl>()){};
+TwoDimensionalCut::TwoDimensionalCut() : m_p(memory::make_unique<CutImpl>()){};
 TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut &other) : m_p(other.m_p->clone()) {}
 TwoDimensionalCut &TwoDimensionalCut::operator=(const TwoDimensionalCut &other)
 {

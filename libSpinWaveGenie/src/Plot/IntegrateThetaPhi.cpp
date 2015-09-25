@@ -17,7 +17,7 @@ namespace SpinWaveGenie
 
 std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
 {
-    return std::make_unique<IntegrateThetaPhi>(*this);
+    return memory::make_unique<IntegrateThetaPhi>(*this);
 }
 
 const Cell &IntegrateThetaPhi::getCell() const { return resolutionFunction->getCell(); }

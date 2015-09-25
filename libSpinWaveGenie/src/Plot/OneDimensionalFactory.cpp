@@ -17,12 +17,12 @@ namespace SpinWaveGenie
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double fwhm, double tol)
 {
-  return std::make_unique<OneDimensionalGaussian>(fwhm, tol);
+  return memory::make_unique<OneDimensionalGaussian>(fwhm, tol);
 }
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getLorentzian(double fwhm, double tol)
 {
-  auto resinfo = std::make_unique<OneDimensionalLorentzian>();
+  auto resinfo = memory::make_unique<OneDimensionalLorentzian>();
   resinfo->setFWHM(fwhm);
   resinfo->setTolerance(tol);
   return std::move(resinfo);
@@ -30,7 +30,7 @@ std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getLorentzian(doubl
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getPseudoVoigt(double eta, double fwhm, double tol)
 {
-  auto resinfo = std::make_unique<OneDimensionalPseudoVoigt>();
+  auto resinfo = memory::make_unique<OneDimensionalPseudoVoigt>();
   resinfo->setEta(eta);
   resinfo->setFWHM(fwhm);
   resinfo->setTolerance(tol);

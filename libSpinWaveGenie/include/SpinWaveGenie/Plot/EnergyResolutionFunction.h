@@ -129,7 +129,7 @@ template <class T> void EnergyResolution<T>::setEnergies(Energies energiesIn) { 
 
 template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone()
 {
-  return std::make_unique<EnergyResolution<T>>(*this);
+  return memory::make_unique<EnergyResolution<T>>(*this);
 }
 }
 

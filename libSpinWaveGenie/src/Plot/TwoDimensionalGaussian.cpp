@@ -38,7 +38,7 @@ TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian &i
 
 std::vector<double> TwoDimensionResolutionFunction::calculateIntegrand(std::deque<double> &x)
 {
-  unique_ptr<TwoDGaussian> resinfo(std::make_unique<TwoDGaussian>());
+  unique_ptr<TwoDGaussian> resinfo(memory::make_unique<TwoDGaussian>());
   resinfo->setTolerance(0.1 * tolerance);
   resinfo->setResolution(a, b, c);
   resinfo->setU(x[0]);
@@ -93,6 +93,6 @@ void TwoDimensionResolutionFunction::setEnergies(Energies energiesIn) { energies
 
 std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone()
 {
-  return std::make_unique<TwoDimensionResolutionFunction>(*this);
+  return memory::make_unique<TwoDimensionResolutionFunction>(*this);
 }
 }

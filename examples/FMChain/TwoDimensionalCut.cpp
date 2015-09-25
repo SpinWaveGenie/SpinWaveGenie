@@ -37,7 +37,7 @@ int main()
     OneDimensionalFactory factory;
     auto gauss = factory.getGaussian(0.25,1.0e-5);
 
-    unique_ptr<SpinWavePlot> res(std::make_unique<EnergyResolutionFunction>(move(gauss), SW, energies));
+    unique_ptr<SpinWavePlot> res(memory::make_unique<EnergyResolutionFunction>(move(gauss), SW, energies));
 
     TwoDimensionalCut twodimcut;
     twodimcut.setFilename("FMcut");

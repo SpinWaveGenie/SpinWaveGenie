@@ -48,6 +48,6 @@ double TwoDGaussian::getFunction(double frequency, double energy)
 
 unique_ptr<OneDimensionalShapes> TwoDGaussian::clone()
 {
-    return std::make_unique<TwoDGaussian>(*this);
+    return memory::make_unique<TwoDGaussian>(*this);
 }
 }
