@@ -18,7 +18,7 @@ namespace SpinWaveGenie
         };
         std::unique_ptr<SpinWavePlot> clone()
         {
-            return std::unique_ptr<SpinWavePlot>(new ConstantFunction(*this));
+            return std::make_unique<ConstantFunction>(*this);
         };
         const Cell& getCell() const
         {
@@ -42,8 +42,9 @@ namespace SpinWaveGenie
 
 BOOST_AUTO_TEST_CASE( ConstantFunctionTest )
 {
-    std::unique_ptr<SpinWaveGenie::SpinWavePlot> res(new SpinWaveGenie::ConstantFunction());
-    std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateThetaPhi(move(res),1.0e-10));
+  std::unique_ptr<SpinWaveGenie::SpinWavePlot> res(std::make_unique<SpinWaveGenie::ConstantFunction>());
+  std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(
+      std::make_unique<SpinWaveGenie::IntegrateThetaPhi>(move(res), 1.0e-10));
     std::vector<double> result = cut->getCut(0.0,0.0,1.0);
     //result from IntegrateThetaPhi is divided by 4*M_PI
     BOOST_CHECK_CLOSE(result[0],1.0,1.0e-5);
@@ -65,7 +66,7 @@ public:
     };
     std::unique_ptr<SpinWavePlot> clone()
     {
-        return std::unique_ptr<SpinWavePlot>(new SphericalHarmonics(*this));
+        return std::make_unique<SphericalHarmonics>(*this);
     };
     const Cell& getCell() const
     {
@@ -102,8 +103,10 @@ BOOST_AUTO_TEST_CASE( SphericalHarmonicsTest )
     {
         for(unsigned n2=0;n2<4;++n2)
         {
-            std::unique_ptr<SpinWaveGenie::SphericalHarmonics> res(new SpinWaveGenie::SphericalHarmonics(n1,n2));
-            std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(new SpinWaveGenie::IntegrateThetaPhi(move(res),1.0e-12));
+          std::unique_ptr<SpinWaveGenie::SphericalHarmonics> res(
+              std::make_unique<SpinWaveGenie::SphericalHarmonics>(n1, n2));
+          std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(
+              std::make_unique<SpinWaveGenie::IntegrateThetaPhi>(move(res), 1.0e-12));
             std::vector<double> result = cut->getCut(0.0,0.0,1.0);
             if (n1 == n2)
             {

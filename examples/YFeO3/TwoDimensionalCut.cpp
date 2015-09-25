@@ -21,15 +21,15 @@ void alongKAxis()
     resinfo.c = 0.48;
     resinfo.tol = 1.0e-1;
     resinfo.direction = Vector3(0.0,1.0,0.0);
-    
-    unique_ptr<SpinWavePlot> res(new TwoDimensionResolutionFunction(resinfo, SW, energies));
-    
+
+    unique_ptr<SpinWavePlot> res(std::make_unique<TwoDimensionResolutionFunction>(resinfo, SW, energies));
+
     HKLDirections direction;
     direction.addDirection(0.0,0.0,1.0,0.2);
     direction.addDirection(1.0,0.0,0.0,0.2);
     //direction.addDirection(0.0,1.0,0.0,0.05);
-    
-    unique_ptr<SpinWavePlot> asdf(new IntegrateAxes(std::move(res),direction,1.0e-1));
+
+    unique_ptr<SpinWavePlot> asdf(std::make_unique<IntegrateAxes>(std::move(res), direction, 1.0e-1));
 
     TwoDimensionalCut twodimcut;
     twodimcut.setFilename("YFeO3_2_K_m3");
@@ -66,15 +66,15 @@ void alongLAxis()
     resinfo.tol = 1.0e-1;
     resinfo.direction = Vector3(0.0,0.0,1.0);
 
-    unique_ptr<SpinWavePlot> res(new TwoDimensionResolutionFunction(resinfo, SW, energies));
+    unique_ptr<SpinWavePlot> res(std::make_unique<TwoDimensionResolutionFunction>(resinfo, SW, energies));
 
     HKLDirections direction;
     direction.addDirection(1.0,0.0,0.0,0.2);
     direction.addDirection(0.0,1.0,0.0,0.2);
     //direction.addDirection(0.0,0.0,1.0,0.05);
-    
-    unique_ptr<SpinWavePlot> asdf(new IntegrateAxes(std::move(res),direction,1.0e-1));
-   
+
+    unique_ptr<SpinWavePlot> asdf(std::make_unique<IntegrateAxes>(std::move(res), direction, 1.0e-1));
+
     TwoDimensionalCut twodimcut;
     twodimcut.setFilename("YFeO3_3_0_L");
     twodimcut.setPlotObject(move(asdf));
