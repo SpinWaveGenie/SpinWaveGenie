@@ -10,7 +10,7 @@
 #define __spin_wave_genie__InteractionFactory__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include <string>
 
 #include "SpinWaveGenie/Containers/Matrices.h"

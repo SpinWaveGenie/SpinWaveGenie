@@ -10,7 +10,7 @@
 #define __EnergyResolutionFunction__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include <algorithm>
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"

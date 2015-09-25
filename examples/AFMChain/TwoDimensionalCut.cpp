@@ -1,6 +1,6 @@
 #include <cmath>
 #include <string>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/SpinWaveGenie.h"
 
 using namespace std;
