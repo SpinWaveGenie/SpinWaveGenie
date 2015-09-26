@@ -24,6 +24,8 @@ endif(BUILD_TESTING)
 option(COVERALLS "Generate coveralls data" OFF)
 
 if (COVERALLS)
+    option(COVERALLS_TRAVISCI "Generate coveralls data for travis-ci" ON)
+    option(COVERALLS_UPLOAD "Automatically upload coveralls data" ON)
     include(Coveralls)
     coveralls_turn_on_coverage()
 endif()

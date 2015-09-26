@@ -43,6 +43,7 @@ def getAllFilesWithExtension(directory,extension):
 
 def getSourcePathFromGcovFile(gcovFilename):
     """Return the source path corresponding to a .gcov file"""
+    print "filename: " +gcovFilename
     gcovPath,gcovFilenameWithExtension = os.path.split(gcovFilename)
     srcFilename = re.sub(".gcov$","",gcovFilenameWithExtension)
     return re.sub("#","/",srcFilename)
