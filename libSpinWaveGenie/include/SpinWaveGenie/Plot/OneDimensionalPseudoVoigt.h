@@ -10,7 +10,7 @@
 #define __OneDimensionalPseudoVoigt__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"

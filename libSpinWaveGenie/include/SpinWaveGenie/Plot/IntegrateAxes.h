@@ -10,7 +10,7 @@
 #define __IntegrateAxes__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include <vector>
 #include <deque>
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"

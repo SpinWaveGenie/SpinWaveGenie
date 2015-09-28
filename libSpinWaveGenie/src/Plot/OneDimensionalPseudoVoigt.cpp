@@ -17,8 +17,8 @@ namespace SpinWaveGenie
 
 OneDimensionalPseudoVoigt::OneDimensionalPseudoVoigt() : eta(0.0), tolerance(0.001)
 {
-  Gaussian.reset(new OneDimensionalGaussian);
-  Lorentzian.reset(new OneDimensionalLorentzian);
+  Gaussian = memory::make_unique<OneDimensionalGaussian>();
+  Lorentzian = memory::make_unique<OneDimensionalLorentzian>();
 }
 
 void OneDimensionalPseudoVoigt::setEta(double InEta) { eta = InEta; }
@@ -48,6 +48,6 @@ double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
 
 unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone()
 {
-  return unique_ptr<OneDimensionalShapes>(new OneDimensionalPseudoVoigt(*this));
+  return memory::make_unique<OneDimensionalPseudoVoigt>(*this);
 }
 }

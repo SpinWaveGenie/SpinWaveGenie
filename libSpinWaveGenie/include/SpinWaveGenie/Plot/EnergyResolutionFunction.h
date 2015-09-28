@@ -10,7 +10,7 @@
 #define __EnergyResolutionFunction__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include <algorithm>
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
@@ -129,7 +129,7 @@ template <class T> void EnergyResolution<T>::setEnergies(Energies energiesIn) { 
 
 template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone()
 {
-  return std::unique_ptr<SpinWavePlot>(new EnergyResolution<T>(*this));
+  return memory::make_unique<EnergyResolution<T>>(*this);
 }
 }
 

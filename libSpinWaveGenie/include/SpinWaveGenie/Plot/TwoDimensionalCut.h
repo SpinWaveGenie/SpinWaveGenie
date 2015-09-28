@@ -9,7 +9,7 @@
 #ifndef __spin_wave_genie__TwoDimensionalCut__
 #define __spin_wave_genie__TwoDimensionalCut__
 
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 

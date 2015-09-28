@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 #include <deque>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 
 class AdaptiveSimpson
 //! Numerical Integration using the Adaptive Simpson's method.

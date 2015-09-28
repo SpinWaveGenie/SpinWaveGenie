@@ -46,7 +46,7 @@ public:
 
 std::unique_ptr<AdaptiveSimpson::SimpsonImpl> AdaptiveSimpson::SimpsonImpl::clone()
 {
-  return std::unique_ptr<AdaptiveSimpson::SimpsonImpl>(new SimpsonImpl(*this));
+  return SpinWaveGenie::memory::make_unique<SimpsonImpl>(*this);
 }
 
 void helper::resetBounds(double lower, double upper)
@@ -244,7 +244,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   return sumPieces(myqueue);
 }
 
-AdaptiveSimpson::AdaptiveSimpson() : m_p{new SimpsonImpl{}} {}
+AdaptiveSimpson::AdaptiveSimpson() : m_p(SpinWaveGenie::memory::make_unique<SimpsonImpl>()) {}
 
 AdaptiveSimpson::AdaptiveSimpson(const AdaptiveSimpson &other) : m_p(other.m_p->clone()) {}
 

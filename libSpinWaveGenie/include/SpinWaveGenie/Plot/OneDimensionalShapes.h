@@ -10,7 +10,7 @@
 #define __OneDimensionalShapes__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 
 namespace SpinWaveGenie
 {
