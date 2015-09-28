@@ -5,6 +5,7 @@
 //  Created by Hahn, Steven E. on 1/16/14.
 //
 //
+#include <atomic>
 #include <fstream>
 #include <Eigen/Dense>
 #include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
@@ -22,13 +23,6 @@
 using namespace tbb;
 #endif
 
-// fix for gcc 4.4 only having cstdatomic
-#ifdef HAVE_ATOMIC_H
-#include <atomic>
-#else
-#include <cstdatomic>
-#endif
-
 using namespace std;
 
 namespace SpinWaveGenie
@@ -37,7 +31,7 @@ class TwoDimensionalCut::CutImpl
 {
 public:
   std::string filename;
-  atomic_size_t counter;
+  std::atomic<std::size_t> counter;
   Eigen::MatrixXd mat;
   unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
   SpinWaveGenie::ThreeVectors<double> points;
