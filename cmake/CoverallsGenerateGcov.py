@@ -137,7 +137,7 @@ def main(argv):
         for line in uncheckedFile:
             if line.strip() == "":
               lineCoverage.append(None)
-            else
+            else:
               lineCoverage.append(0)
         uncheckedFile.close()
         fileCoverage['coverage'] = lineCoverage
