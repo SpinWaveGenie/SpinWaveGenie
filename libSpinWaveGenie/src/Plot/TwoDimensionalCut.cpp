@@ -43,7 +43,7 @@ public:
   SpinWaveGenie::ThreeVectors<double> points;
   CutImpl() { counter = 0; };
   CutImpl(unique_ptr<SpinWaveGenie::SpinWavePlot> inCut, SpinWaveGenie::ThreeVectors<double> inPoints)
-      : cut(move(inCut)), points(inPoints)
+      : cut(move(inCut)), points(std::move(inPoints))
   {
     counter = 0;
   };
@@ -128,14 +128,14 @@ TwoDimensionalCut &TwoDimensionalCut::operator=(const TwoDimensionalCut &other)
 TwoDimensionalCut::TwoDimensionalCut(TwoDimensionalCut &&other)
 {
   m_p = move(other.m_p);
-  other.m_p = NULL;
+  other.m_p = nullptr;
 }
 TwoDimensionalCut &TwoDimensionalCut::operator=(TwoDimensionalCut &&other)
 {
   if (m_p != other.m_p)
   {
     m_p = move(other.m_p);
-    other.m_p = NULL;
+    other.m_p = nullptr;
   }
   return *this;
 }
@@ -178,8 +178,8 @@ void TwoDimensionalCut::save()
   if (file.is_open())
   {
     Energies energies = m_p->cut->getEnergies();
-    for (auto it = energies.begin(); it != energies.end(); ++it)
-      file << (*it) << endl;
+    for (auto & energie : energies)
+      file << (energie) << endl;
   }
   file.close();
 }

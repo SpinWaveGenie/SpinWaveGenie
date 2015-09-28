@@ -35,9 +35,9 @@ std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double> &x)
   assert(x.size() == 1);
 
   Energies newEnergies;
-  for (auto value = centeredEnergies.begin(); value != centeredEnergies.end(); value++)
+  for (auto & elem : centeredEnergies)
   {
-    newEnergies.insert(*value + x[0]);
+    newEnergies.insert(elem + x[0]);
   }
 
   resolutionFunction->setEnergies(newEnergies);

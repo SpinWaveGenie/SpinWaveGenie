@@ -22,21 +22,21 @@ void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 
 void SpinWaveBuilder::updateInteraction(string name, double value)
 {
-  for (auto it = interactions.begin(); it != interactions.end(); it++)
+  for (auto & elem : interactions)
   {
-    if (name.compare(it->getName()) == 0)
-      it->updateValue(value);
+    if (name.compare(elem.getName()) == 0)
+      elem.updateValue(value);
   }
 }
 
 double SpinWaveBuilder::getEnergy()
 {
   double energy = 0.0;
-  for (auto it = interactions.begin(); it != interactions.end(); it++)
+  for (auto & elem : interactions)
   {
     // energy = 0.0;
-    it->calculateEnergy(cell, energy);
-    cout << it->getName() << " " << energy / 4.0 << endl;
+    elem.calculateEnergy(cell, energy);
+    cout << elem.getName() << " " << energy / 4.0 << endl;
   }
   // cout << endl;
   return energy;
@@ -46,7 +46,7 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
 {
   Eigen::VectorXcd firstOrder;
   firstOrder.setZero(2 * cell.size());
-  for (auto iter = interactions.begin(); iter != interactions.end(); iter++)
+  for (auto & elem : interactions)
   {
     /*cout << iter->getName() << " ";
     vector<string> sls = iter->sublattices();
@@ -58,7 +58,7 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
     int M = cell.size();
     firstOrder.setZero(2*M);
     */
-    iter->calculateFirstOrderTerms(this->cell, firstOrder);
+    elem.calculateFirstOrderTerms(this->cell, firstOrder);
     // cout << firstOrder[2] << " " << firstOrder[8] << endl;
     // cout << firstOrder.transpose() << endl;
   }
@@ -68,9 +68,9 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
 SpinWave SpinWaveBuilder::createElement()
 {
   // cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
-  for (auto in = interactions.begin(); in != interactions.end(); in++)
+  for (auto & elem : interactions)
   {
-    in->calcConstantValues(cell);
+    elem.calcConstantValues(cell);
   }
   SpinWave SW(cell, interactions);
   Eigen::VectorXcd firstOrder = getFirstOrderTerms();

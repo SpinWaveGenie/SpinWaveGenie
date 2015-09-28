@@ -70,17 +70,17 @@ void SpinWaveDispersion::save()
 
     if (PrintFrequency)
     {
-      for (Results::Iterator it = pts.begin(); it != pts.end(); it++)
+      for (auto & pt : pts)
       {
-        file << it->frequency << "  ";
+        file << pt.frequency << "  ";
       }
     }
 
     if (PrintIntensity)
     {
-      for (Results::Iterator it = pts.begin(); it != pts.end(); it++)
+      for (auto & pt : pts)
       {
-        file << it->intensity << " ";
+        file << pt.intensity << " ";
       }
     }
 

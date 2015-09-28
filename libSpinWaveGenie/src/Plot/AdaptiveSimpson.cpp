@@ -259,7 +259,7 @@ AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other)
   if (m_p != other.m_p)
   {
     m_p = move(other.m_p);
-    other.m_p = NULL;
+    other.m_p = nullptr;
   }
 }
 
@@ -268,7 +268,7 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)
   if (m_p != other.m_p)
   {
     m_p = move(other.m_p);
-    other.m_p = NULL;
+    other.m_p = nullptr;
   }
   return *this;
 }

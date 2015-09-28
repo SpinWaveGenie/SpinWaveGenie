@@ -233,11 +233,11 @@ void SpinWave::calculateIntensities()
   Intensities.setZero();
   VectorXd SXX, SYY, SZZ;
   long L2 = 0;
-  for (Cell::Iterator sl = cell.begin(); sl != cell.end(); ++sl) // r
+  for (auto & elem : cell) // r
   {
-    V_r = sl->getInverseMatrix();
-    S_r = sl->getMoment();
-    formFactor.setType(sl->getType());
+    V_r = elem.getInverseMatrix();
+    S_r = elem.getMoment();
+    formFactor.setType(elem.getType());
     ff = formFactor.getFormFactor(KX, KY, KZ);
     /*if (sl->getType() == "MN2")
     {

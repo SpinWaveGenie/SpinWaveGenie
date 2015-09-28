@@ -26,11 +26,11 @@ public:
   IntegrateAxes(const IntegrateAxes &other);
   IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01,
                 int maxEval = 100);
-  std::vector<double> getCut(double kx, double ky, double kz);
-  std::unique_ptr<SpinWavePlot> clone();
-  const Cell &getCell() const;
-  const Energies &getEnergies();
-  void setEnergies(Energies energies);
+  std::vector<double> getCut(double kx, double ky, double kz) override;
+  std::unique_ptr<SpinWavePlot> clone() override;
+  const Cell &getCell() const override;
+  const Energies &getEnergies() override;
+  void setEnergies(Energies energies) override;
   ~IntegrateAxes(){};
 
 private:

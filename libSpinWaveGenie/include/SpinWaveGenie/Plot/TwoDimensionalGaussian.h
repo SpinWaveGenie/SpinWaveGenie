@@ -32,12 +32,12 @@ public:
   TwoDimensionResolutionFunction(){};
   TwoDimensionResolutionFunction(TwoDimGaussian &info, const SpinWave &SW, Energies energies);
   TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction & /*other*/) = default;
-  std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
+  std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
   void setTolerance(double tol, int maxEvals = 100000);
-  std::unique_ptr<SpinWavePlot> clone();
-  const Cell &getCell() const;
-  const Energies &getEnergies();
-  void setEnergies(Energies energies);
+  std::unique_ptr<SpinWavePlot> clone() override;
+  const Cell &getCell() const override;
+  const Energies &getEnergies() override;
+  void setEnergies(Energies energies) override;
   ~TwoDimensionResolutionFunction(){};
 
 private:

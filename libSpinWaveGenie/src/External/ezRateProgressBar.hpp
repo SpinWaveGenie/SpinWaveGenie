@@ -86,7 +86,7 @@ public:
     return llPerf.QuadPart * 1000ll / (g_llFrequency.QuadPart / 1000ll);
 #else
     struct timeval stTimeVal;
-    gettimeofday(&stTimeVal, NULL);
+    gettimeofday(&stTimeVal, nullptr);
     return stTimeVal.tv_sec * 1000000ll + stTimeVal.tv_usec;
 #endif
   }

@@ -27,11 +27,11 @@ public:
         Gaussian(other.Gaussian->clone()){};
   void setEta(double InEta);
   void setFWHM(double InFWHM);
-  void setTolerance(double InTolerance);
-  double getMinimumEnergy();
-  double getMaximumEnergy();
-  double getFunction(double frequency, double energy);
-  std::unique_ptr<OneDimensionalShapes> clone();
+  void setTolerance(double InTolerance) override;
+  double getMinimumEnergy() override;
+  double getMaximumEnergy() override;
+  double getFunction(double frequency, double energy) override;
+  std::unique_ptr<OneDimensionalShapes> clone() override;
   ~OneDimensionalPseudoVoigt(){};
 
 private:
