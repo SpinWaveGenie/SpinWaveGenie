@@ -233,7 +233,7 @@ void SpinWave::calculateIntensities()
   Intensities.setZero();
   VectorXd SXX, SYY, SZZ;
   long L2 = 0;
-  for (auto & elem : cell) // r
+  for (const auto & elem : cell) // r
   {
     V_r = elem.getInverseMatrix();
     S_r = elem.getMoment();

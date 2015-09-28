@@ -178,7 +178,7 @@ void TwoDimensionalCut::save()
   if (file.is_open())
   {
     Energies energies = m_p->cut->getEnergies();
-    for (auto & energie : energies)
+    for (const auto & energie : energies)
       file << (energie) << endl;
   }
   file.close();

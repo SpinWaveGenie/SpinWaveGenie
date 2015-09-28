@@ -69,7 +69,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
   xmin.reserve(dim);
   xmax.clear();
   xmax.reserve(dim);
-  for (auto & elem : integrationDirections)
+  for (const auto & elem : integrationDirections)
   {
     // cout << -1.0*it->delta << " " << it->delta << endl;
     xmin.push_back(-1.0 * elem.delta);
@@ -77,7 +77,7 @@ std::vector<double> IntegrateAxes::getCut(double kxIn, double kyIn, double kzIn)
   }
 
   double volume = 1.0;
-  for (auto & elem : integrationDirections)
+  for (const auto & elem : integrationDirections)
   {
     volume *= 2.0 * elem.delta;
   }

@@ -47,7 +47,7 @@ void Results::uniqueSolutions()
     VI_unique[i].intensity = 0.0;
   }
 
-  for (auto & elem : results)
+  for (const auto & elem : results)
   {
     VP_pos = NU; // set position to a nonsense value
     for (int j = 0; j < NU; j++)

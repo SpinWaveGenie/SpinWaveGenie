@@ -70,7 +70,7 @@ void SpinWaveDispersion::save()
 
     if (PrintFrequency)
     {
-      for (auto & pt : pts)
+      for (const auto & pt : pts)
       {
         file << pt.frequency << "  ";
       }
@@ -78,7 +78,7 @@ void SpinWaveDispersion::save()
 
     if (PrintIntensity)
     {
-      for (auto & pt : pts)
+      for (const auto & pt : pts)
       {
         file << pt.intensity << " ";
       }

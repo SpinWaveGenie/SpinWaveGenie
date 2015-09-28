@@ -35,7 +35,7 @@ std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double> &x)
   assert(x.size() == 1);
 
   Energies newEnergies;
-  for (auto & elem : centeredEnergies)
+  for (const auto & elem : centeredEnergies)
   {
     newEnergies.insert(elem + x[0]);
   }
