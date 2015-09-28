@@ -135,7 +135,7 @@ def main(argv):
         lineCoverage =  []
         uncheckedFile = open(uncheckedFilename,'r')
         for line in uncheckedFile:
-            if (line.strip() == "")
+            if line.strip() == "":
               lineCoverage.append(None)
             else
               lineCoverage.append(0)
