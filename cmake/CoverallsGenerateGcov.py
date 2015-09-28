@@ -135,7 +135,10 @@ def main(argv):
         lineCoverage =  []
         uncheckedFile = open(uncheckedFilename,'r')
         for line in uncheckedFile:
-            lineCoverage.append(0)
+            if (line.strip() == "")
+              lineCoverage.append(None)
+            else
+              lineCoverage.append(0)
         uncheckedFile.close()
         fileCoverage['coverage'] = lineCoverage
         coverageList.append(copy.deepcopy(fileCoverage))
