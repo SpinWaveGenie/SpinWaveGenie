@@ -18,7 +18,10 @@ AnisotropyInteraction::AnisotropyInteraction(string name_in, double value_in, Ve
   this->updateInteraction(value_in, unitVectorIn, sl_r_in);
 }
 
-Interaction *AnisotropyInteraction::do_clone() const { return new AnisotropyInteraction(*this); }
+std::unique_ptr<Interaction> AnisotropyInteraction::clone() const
+{
+  return std::make_unique<AnisotropyInteraction>(*this);
+}
 
 void AnisotropyInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
