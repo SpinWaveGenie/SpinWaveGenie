@@ -7,6 +7,7 @@
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Matrices.h"
+#include "SpinWaveGenie/Memory.h"
 
 using namespace Eigen;
 using namespace std;
@@ -14,12 +15,10 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-SpinWave::SpinWave(Cell &cell_in, boost::ptr_vector<Interaction> interactions_in)
-    : KXP(0.0), KYP(0.0), KZP(0.0), NU(0), MI(0), IM(0)
+SpinWave::SpinWave(Cell &cell_in, std::vector<std::unique_ptr<Interaction>> interactions_in)
+    : KXP(0.0), KYP(0.0), KZP(0.0), NU(0), MI(0), IM(0), interactions(std::move(interactions_in))
 {
-
   cell = cell_in;
-  interactions = interactions_in;
   M = cell.size();
   N = 2 * M;
 
@@ -38,6 +37,45 @@ SpinWave::SpinWave(Cell &cell_in, boost::ptr_vector<Interaction> interactions_in
   }
 }
 
+SpinWave::SpinWave(const SpinWave &model)
+    : KXP(model.KXP), KYP(model.KYP), KZP(model.KZP), cell(model.cell), M(model.M), N(model.N), NU(model.NU),
+      MI(model.MI), IM(model.IM), LN(model.LN), SS(model.SS), ces(model.ces), WW(model.WW), VI(model.VI), XY(model.XY),
+      XIN(model.XIN), formFactor(model.formFactor)
+{
+  for (const auto &iter : model.interactions) // r
+  {
+    this->interactions.push_back(iter->clone());
+  }
+}
+
+SpinWave &SpinWave::operator=(const SpinWave &model)
+{
+  this->KXP = model.KXP;
+  this->KYP = model.KYP;
+  this->KZP = model.KZP;
+  this->cell = model.cell;
+  this->M = model.M;
+  this->N = model.N;
+  this->NU = model.NU;
+  this->MI = model.MI;
+  this->IM = model.IM;
+  this->LN = model.LN;
+  this->SS = model.SS;
+  this->ces = model.ces;
+  this->WW = model.WW;
+  this->VI = model.VI;
+  this->XY = model.XY;
+  this->XIN = model.XIN;
+  this->formFactor = model.formFactor;
+
+  for (const auto &iter : model.interactions) // r
+  {
+    this->interactions.push_back(iter->clone());
+  }
+
+  return *this;
+}
+
 void SpinWave::createMatrix(double KX, double KY, double KZ)
 {
   Vector3 K;
@@ -49,8 +87,7 @@ void SpinWave::createMatrix(double KX, double KY, double KZ)
   this->KYP = KY;
   this->KZP = KZ;
   clearMatrix();
-  boost::ptr_vector<Interaction>::iterator iter;
-  for (iter = interactions.begin(); iter != interactions.end(); iter++)
+  for (const auto &iter : interactions) // r
   {
     iter->updateMatrix(K, LN);
   }

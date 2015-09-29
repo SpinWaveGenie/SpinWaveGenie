@@ -30,7 +30,7 @@ public:
   void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;
   void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) override;
   std::vector<std::string> sublattices() const override;
-  virtual Interaction *do_clone() const override;
+  virtual std::unique_ptr<Interaction> clone() const override;
   virtual ~AnisotropyInteraction(){};
 
 private:

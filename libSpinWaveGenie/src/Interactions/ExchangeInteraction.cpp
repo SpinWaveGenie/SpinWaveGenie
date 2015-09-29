@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
+#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 using namespace Eigen;
@@ -16,7 +17,10 @@ ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
-Interaction *ExchangeInteraction::do_clone() const { return new ExchangeInteraction(*this); }
+std::unique_ptr<Interaction> ExchangeInteraction::clone() const
+{
+  return memory::make_unique<ExchangeInteraction>(*this);
+}
 
 void ExchangeInteraction::updateInteraction(double value_in, string sl_r_in, string sl_s_in, double min_in,
                                             double max_in)

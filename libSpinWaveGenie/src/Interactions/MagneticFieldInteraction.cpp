@@ -7,6 +7,7 @@
 //
 
 #include "SpinWaveGenie/Interactions/MagneticFieldInteraction.h"
+#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 
@@ -20,7 +21,10 @@ MagneticFieldInteraction::MagneticFieldInteraction(string name_in, double value_
   this->updateInteraction(value_in, unitVectorIn, sl_r_in);
 }
 
-Interaction *MagneticFieldInteraction::do_clone() const { return new MagneticFieldInteraction(*this); }
+std::unique_ptr<Interaction> MagneticFieldInteraction::clone() const
+{
+  return memory::make_unique<MagneticFieldInteraction>(*this);
+}
 
 void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
 {
