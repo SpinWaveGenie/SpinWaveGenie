@@ -5,6 +5,7 @@
 //  Created by Hahn, Steven E. on 1/16/14.
 //
 //
+#include <atomic>
 #include <fstream>
 #include <Eigen/Dense>
 #include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
@@ -22,13 +23,6 @@
 using namespace tbb;
 #endif
 
-// fix for gcc 4.4 only having cstdatomic
-#ifdef HAVE_ATOMIC_H
-#include <atomic>
-#else
-#include <cstdatomic>
-#endif
-
 using namespace std;
 
 namespace SpinWaveGenie
@@ -37,13 +31,13 @@ class TwoDimensionalCut::CutImpl
 {
 public:
   std::string filename;
-  atomic_size_t counter;
+  std::atomic<std::size_t> counter;
   Eigen::MatrixXd mat;
   unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
   SpinWaveGenie::ThreeVectors<double> points;
   CutImpl() { counter = 0; };
   CutImpl(unique_ptr<SpinWaveGenie::SpinWavePlot> inCut, SpinWaveGenie::ThreeVectors<double> inPoints)
-      : cut(move(inCut)), points(inPoints)
+      : cut(move(inCut)), points(std::move(inPoints))
   {
     counter = 0;
   };
@@ -128,14 +122,14 @@ TwoDimensionalCut &TwoDimensionalCut::operator=(const TwoDimensionalCut &other)
 TwoDimensionalCut::TwoDimensionalCut(TwoDimensionalCut &&other)
 {
   m_p = move(other.m_p);
-  other.m_p = NULL;
+  other.m_p = nullptr;
 }
 TwoDimensionalCut &TwoDimensionalCut::operator=(TwoDimensionalCut &&other)
 {
   if (m_p != other.m_p)
   {
     m_p = move(other.m_p);
-    other.m_p = NULL;
+    other.m_p = nullptr;
   }
   return *this;
 }
@@ -178,8 +172,8 @@ void TwoDimensionalCut::save()
   if (file.is_open())
   {
     Energies energies = m_p->cut->getEnergies();
-    for (auto it = energies.begin(); it != energies.end(); ++it)
-      file << (*it) << endl;
+    for (const auto & energie : energies)
+      file << (energie) << endl;
   }
   file.close();
 }

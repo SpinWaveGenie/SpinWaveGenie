@@ -15,7 +15,7 @@ namespace SpinWaveGenie
 
 MagneticFieldInteraction::MagneticFieldInteraction(string name_in, double value_in, Vector3 unitVectorIn,
                                                    string sl_r_in)
-    : name(name_in), r(0), M(0)
+    : name(std::move(name_in)), r(0), M(0)
 {
   this->updateInteraction(value_in, unitVectorIn, sl_r_in);
 }

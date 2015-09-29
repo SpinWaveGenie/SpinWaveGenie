@@ -14,7 +14,7 @@ namespace SpinWaveGenie
 
 struct CompareSublatticeNames
 {
-  CompareSublatticeNames(const std::string &name) : name(name) {}
+  CompareSublatticeNames(std::string name) : name(std::move(name)) {}
   bool operator()(const Sublattice &arg) { return name.compare(arg.getName()) == 0; }
   std::string name;
 };
