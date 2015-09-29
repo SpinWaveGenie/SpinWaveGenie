@@ -18,12 +18,17 @@ SpinWaveBuilder::SpinWaveBuilder(Cell &cellIn) : cell(cellIn)
 
 void SpinWaveBuilder::updateCell(Cell &cellIn) { cell = cellIn; }
 
+struct lessThanUniquePtr
+{
+  bool operator()(const unique_ptr<Interaction> &a, const unique_ptr<Interaction> &b) { return *a < *b; }
+};
+
 void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 {
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   interactions.push_back(std::move(in));
-  std::sort(interactions.begin(), interactions.end());
+  std::sort(interactions.begin(), interactions.end(), lessThanUniquePtr());
 }
 
 void SpinWaveBuilder::updateInteraction(string name, double value)
