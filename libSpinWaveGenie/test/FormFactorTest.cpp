@@ -15,13 +15,13 @@ public:
     std::map<std::string,double> testCoefficients()
     {
         std::map<std::string,double> badCoefficients;
-        for( auto it = coefficients.begin(); it!=coefficients.end(); it++)
+        for(auto & elem : coefficients)
         {
-            std::vector<double> F = it->second;
+            std::vector<double> F = elem.second;
             double test = F[0] + F[2] + F[4] + F[6];
             if(fabs(test-1.0)>5.0e-3)
             {
-                badCoefficients.insert(std::pair<std::string,double>(it->first,test));
+                badCoefficients.insert(std::pair<std::string,double>(elem.first,test));
             }
         }
         return badCoefficients;

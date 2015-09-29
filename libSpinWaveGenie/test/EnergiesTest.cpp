@@ -53,9 +53,9 @@ BOOST_AUTO_TEST_CASE( iteratorTest )
     Energies energies(0.0,10.0,11);
     
     double value = 0.0;
-    for (auto it = energies.begin();it!=energies.end();it++)
+    for (auto & energie : energies)
     {
-        BOOST_CHECK_CLOSE(*it,value,1.0e-5);
+        BOOST_CHECK_CLOSE(energie,value,1.0e-5);
         value += 1.0;
     }
 }

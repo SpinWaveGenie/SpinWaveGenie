@@ -16,23 +16,23 @@ namespace SpinWaveGenie
             m_Cell.setBasisVectors(1.0,1.0,1.0,90.0,90.0,90.0);
             m_Energies = Energies(0.0,0.0,1);
         };
-        std::unique_ptr<SpinWavePlot> clone()
+        std::unique_ptr<SpinWavePlot> clone() override
         {
             return memory::make_unique<ConstantFunction>(*this);
         };
-        const Cell& getCell() const
+        const Cell& getCell() const override
         {
             return m_Cell;
         };
-        const Energies& getEnergies()
+        const Energies& getEnergies() override
         {
             return m_Energies;
         };
-        void setEnergies(Energies energies)
+        void setEnergies(Energies energies) override
         {
             m_Energies = energies;
         };
-        std::vector<double> getCut(double /*kx*/, double /*ky*/, double /*kz*/) { return std::vector<double>(1, 1.0); };
+        std::vector<double> getCut(double /*kx*/, double /*ky*/, double /*kz*/) override { return std::vector<double>(1, 1.0); };
         ~ConstantFunction(){};
     private:
         SpinWaveGenie::Cell m_Cell;
@@ -65,23 +65,23 @@ public:
         m_Cell.setBasisVectors(1.0,1.0,1.0,90.0,90.0,90.0);
         m_Energies = Energies(0.0,0.0,1);
     };
-    std::unique_ptr<SpinWavePlot> clone()
+    std::unique_ptr<SpinWavePlot> clone() override
     {
         return memory::make_unique<SphericalHarmonics>(*this);
     };
-    const Cell& getCell() const
+    const Cell& getCell() const override
     {
         return m_Cell;
     };
-    const Energies& getEnergies()
+    const Energies& getEnergies() override
     {
         return m_Energies;
     };
-    void setEnergies(Energies energies)
+    void setEnergies(Energies energies) override
     {
         m_Energies = energies;
     };
-    std::vector<double> getCut(double kx, double ky, double kz)
+    std::vector<double> getCut(double kx, double ky, double kz) override
     {
         double r = sqrt(kx*kx+ky*ky+kz*kz);
         double theta = acos(kz/r);
