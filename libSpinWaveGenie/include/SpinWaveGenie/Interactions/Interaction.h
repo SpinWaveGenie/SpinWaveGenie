@@ -1,6 +1,7 @@
 #ifndef __Interaction_H__
 #define __Interaction_H__ 1
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
