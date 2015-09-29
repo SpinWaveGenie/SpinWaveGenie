@@ -1,5 +1,6 @@
 #include "SpinWaveGenie/Interactions/DM_Y_Interaction.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 using namespace Eigen;
@@ -14,7 +15,7 @@ DM_Y_Interaction::DM_Y_Interaction(string name_in, double value_in, string sl_r_
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
-std::unique_ptr<Interaction> DM_Y_Interaction::clone() const { return std::make_unique<DM_Y_Interaction>(*this); }
+std::unique_ptr<Interaction> DM_Y_Interaction::clone() const { return memory::make_unique<DM_Y_Interaction>(*this); }
 
 void DM_Y_Interaction::updateInteraction(double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
 {

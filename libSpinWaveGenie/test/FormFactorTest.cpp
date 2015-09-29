@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE( CheckCoefficients )
     TestCoefficients test;
     std::map<std::string,double> badCoefficients;
     badCoefficients = test.testCoefficients();
-    BOOST_CHECK_EQUAL(badCoefficients.size(), 0);
+    BOOST_CHECK_EQUAL(badCoefficients.size(), std::size_t(0));
 }
 
 BOOST_AUTO_TEST_CASE(DefaultConstructor)

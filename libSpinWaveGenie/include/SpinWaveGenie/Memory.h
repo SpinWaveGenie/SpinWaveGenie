@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <utility>
 
-// implementation of std::make_unique for platforms that don't currently have it.
+// implementation of memory::make_unique for platforms that don't currently have it.
 // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3656.htm
 
 namespace SpinWaveGenie
