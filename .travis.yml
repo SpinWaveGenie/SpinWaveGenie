@@ -2,7 +2,6 @@
 
 language: cpp
 
-<<<<<<< HEAD
 compiler:
   - gcc
 
