@@ -10,7 +10,7 @@
 #define __OneDimensionalFactory__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 
 namespace SpinWaveGenie

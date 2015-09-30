@@ -2,7 +2,8 @@
 #define __SpinWaveBuilder_H__ 1
 
 #include <string>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 
@@ -23,7 +24,7 @@ public:
 
 private:
   Cell cell;
-  boost::ptr_vector<Interaction> interactions;
+  std::vector<std::unique_ptr<Interaction>> interactions;
 };
 }
 #endif

@@ -137,13 +137,13 @@ BOOST_AUTO_TEST_CASE(Iterator)
     bool foundSL1 = false;
     bool foundSL2 = false;
     bool foundBlank = false;
-    for (Cell::Iterator sl=cell.begin(); sl!=cell.end(); ++sl)
+    for (auto & elem : cell)
     {
-        if ( sl->getName() == "SL1")
+        if ( elem.getName() == "SL1")
             foundSL1 = true;
-        if ( sl->getName() == "SL2" )
+        if ( elem.getName() == "SL2" )
             foundSL2 = true;
-        if ( sl->getName() == "" )
+        if ( elem.getName() == "" )
             foundBlank = true;
     }
     BOOST_CHECK(foundSL1);

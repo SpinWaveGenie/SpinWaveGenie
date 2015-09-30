@@ -35,9 +35,9 @@ int main()
     
     OneDimensionalFactory factory;
     auto gauss = factory.getGaussian(0.25,1.0e-2);
-    
-    unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW,energies));
-    unique_ptr<SpinWavePlot> cut(new IntegrateThetaPhi(move(res),2.0e-2));
+
+    unique_ptr<SpinWavePlot> res(memory::make_unique<EnergyResolutionFunction>(move(gauss), SW, energies));
+    unique_ptr<SpinWavePlot> cut(memory::make_unique<IntegrateThetaPhi>(move(res), 2.0e-2));
 
     TwoDimensionalCut twodimcut;
     twodimcut.setFilename("FMPowderAverage");

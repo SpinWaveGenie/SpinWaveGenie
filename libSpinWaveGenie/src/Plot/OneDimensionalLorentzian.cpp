@@ -31,6 +31,6 @@ double OneDimensionalLorentzian::getFunction(double frequency, double energy)
 
 unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone()
 {
-  return unique_ptr<OneDimensionalShapes>(new OneDimensionalLorentzian(*this));
+  return memory::make_unique<OneDimensionalLorentzian>(*this);
 }
 }

@@ -25,11 +25,11 @@ public:
   IntegrateThetaPhi(const IntegrateThetaPhi &other)
       : maximumEvaluations(other.maximumEvaluations), r(0.0), tolerance(other.tolerance),
         resolutionFunction(move(other.resolutionFunction->clone())){};
-  std::unique_ptr<SpinWavePlot> clone();
-  const Cell &getCell() const;
-  const Energies &getEnergies();
-  void setEnergies(Energies energies);
-  std::vector<double> getCut(double kx, double ky, double kz);
+  std::unique_ptr<SpinWavePlot> clone() override;
+  const Cell &getCell() const override;
+  const Energies &getEnergies() override;
+  void setEnergies(Energies energies) override;
+  std::vector<double> getCut(double kx, double ky, double kz) override;
   ~IntegrateThetaPhi(){};
 
 private:

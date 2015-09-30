@@ -17,14 +17,14 @@ public:
   DM_Y_Interaction(std::string name, double value_in, std::string sl_r_in, std::string sl_s_in, double min_in,
                    double max_in);
   void updateInteraction(double value_in, std::string sl_r_in, std::string sl_s_in, double min_in, double max_in);
-  void updateValue(double value_in);
-  const std::string &getName();
-  void calcConstantValues(Cell &cell);
-  void calculateEnergy(Cell &cell, double &energy);
-  void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements);
-  void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN);
-  std::vector<std::string> sublattices() const;
-  virtual Interaction *do_clone() const;
+  void updateValue(double value_in) override;
+  const std::string &getName() override;
+  void calcConstantValues(Cell &cell) override;
+  void calculateEnergy(Cell &cell, double &energy) override;
+  void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;
+  void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) override;
+  std::vector<std::string> sublattices() const override;
+  virtual std::unique_ptr<Interaction> clone() const override;
   virtual ~DM_Y_Interaction(){};
 
 private:

@@ -10,7 +10,7 @@
 #define __EnergyResolutionFunction__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include <algorithm>
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
@@ -29,13 +29,13 @@ public:
   EnergyResolution(const EnergyResolution &other);
   EnergyResolution &operator=(EnergyResolution &other);
   EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn, Energies energies);
-  std::vector<double> getCut(double kxIn, double kyIn, double kzIn);
+  std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
   void setSpinWave(const T &SWIn);
   void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn);
-  const Cell &getCell() const;
-  void setEnergies(Energies energies);
-  const Energies &getEnergies();
-  std::unique_ptr<SpinWavePlot> clone();
+  const Cell &getCell() const override;
+  void setEnergies(Energies energies) override;
+  const Energies &getEnergies() override;
+  std::unique_ptr<SpinWavePlot> clone() override;
   ~EnergyResolution(){};
 
 private:
@@ -100,21 +100,21 @@ template <class T> std::vector<double> EnergyResolution<T>::getCut(double kx, do
 
   // points.significantSolutions();
 
-  for (auto pt = points.begin(); pt != points.end(); pt++)
+  for (auto & point : points)
   {
-    if (std::isnan(pt->frequency) || std::isnan(pt->intensity))
+    if (std::isnan(point.frequency) || std::isnan(point.intensity))
     {
       // cout << "found NaN: " << pt->frequency << " " << pt->intensity << endl;
     }
     else
     {
-      double min = pt->frequency + ResolutionFunction->getMinimumEnergy();
-      double max = pt->frequency + ResolutionFunction->getMaximumEnergy();
+      double min = point.frequency + ResolutionFunction->getMinimumEnergy();
+      double max = point.frequency + ResolutionFunction->getMaximumEnergy();
       size_t UpperBound = energies.getUpperBound(max);
       // std::cout << min << " " << energies.getLowerBound(min) << " " << max << " " << UpperBound << std::endl;
       for (size_t index = energies.getLowerBound(min); index != UpperBound; index++)
       {
-        fval[index] += pt->intensity * ResolutionFunction->getFunction(pt->frequency, energies[index]);
+        fval[index] += point.intensity * ResolutionFunction->getFunction(point.frequency, energies[index]);
       }
     }
   }
@@ -129,7 +129,7 @@ template <class T> void EnergyResolution<T>::setEnergies(Energies energiesIn) { 
 
 template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone()
 {
-  return std::unique_ptr<SpinWavePlot>(new EnergyResolution<T>(*this));
+  return memory::make_unique<EnergyResolution<T>>(*this);
 }
 }
 

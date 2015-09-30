@@ -1,5 +1,6 @@
 #include <cmath>
 #include <string>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/SpinWaveGenie.h"
 
 using namespace std;
@@ -47,9 +48,9 @@ int main()
     
     OneDimensionalFactory factory;
     auto gauss = factory.getGaussian(0.15,1.0e-5);
-    
-    unique_ptr<SpinWavePlot> res(new EnergyResolutionFunction(move(gauss), SW,energies));
-    
+
+    unique_ptr<SpinWavePlot> res(memory::make_unique<EnergyResolutionFunction>(move(gauss), SW, energies));
+
     TwoDimensionalCut twodimcut;
     twodimcut.setFilename("AFMcut");
     twodimcut.setPlotObject(move(res));

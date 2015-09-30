@@ -10,7 +10,7 @@
 #define __spin_wave_genie__TwoDGaussian__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 
 namespace SpinWaveGenie
@@ -22,11 +22,11 @@ public:
   // void setFWHM(double InFWHM){};
   void setResolution(double aIn, double bIn, double cIn);
   void setU(double uIn);
-  void setTolerance(double InTolerance);
-  double getMinimumEnergy();
-  double getMaximumEnergy();
-  double getFunction(double frequency, double energy);
-  std::unique_ptr<OneDimensionalShapes> clone();
+  void setTolerance(double InTolerance) override;
+  double getMinimumEnergy() override;
+  double getMaximumEnergy() override;
+  double getFunction(double frequency, double energy) override;
+  std::unique_ptr<OneDimensionalShapes> clone() override;
   ~TwoDGaussian(){};
 
 private:

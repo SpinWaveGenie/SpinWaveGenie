@@ -47,15 +47,15 @@ void Results::uniqueSolutions()
     VI_unique[i].intensity = 0.0;
   }
 
-  for (std::size_t i = 0; i < results.size(); i++)
+  for (const auto & elem : results)
   {
     VP_pos = NU; // set position to a nonsense value
     for (int j = 0; j < NU; j++)
     {
-      if (std::abs(results[i].frequency - VI_unique[j].frequency) < EPS)
+      if (std::abs(elem.frequency - VI_unique[j].frequency) < EPS)
       {
         VP_pos = j;
-        VI_unique[j].intensity += results[i].intensity;
+        VI_unique[j].intensity += elem.intensity;
         break;
       }
     }

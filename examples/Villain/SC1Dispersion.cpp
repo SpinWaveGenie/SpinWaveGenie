@@ -83,7 +83,7 @@ std::vector<double> findAngles()
     opt.set_ftol_abs(1.0e-13);
     opt.set_maxeval(5000);
     
-    opt.set_min_objective(myfunc,NULL);
+    opt.set_min_objective(myfunc,nullptr);
     opt.optimize(thetaphi,minf);
     
     return thetaphi;

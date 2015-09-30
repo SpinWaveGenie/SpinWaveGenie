@@ -46,10 +46,10 @@ BOOST_AUTO_TEST_CASE( iteratorAccess  )
     double sumFrequencies = 0.0;
     double sumIntensities = 0.0;
 
-    for (auto it = results.begin();it!=results.end();++it)
+    for (auto & result : results)
     {
-        sumFrequencies += it->frequency;
-        sumIntensities += it->intensity;
+        sumFrequencies += result.frequency;
+        sumIntensities += result.intensity;
 
     }
     

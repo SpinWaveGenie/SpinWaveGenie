@@ -10,7 +10,7 @@
 #define __OneDimensionalGaussian__
 
 #include <iostream>
-#include <memory>
+#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 
 namespace SpinWaveGenie
@@ -21,11 +21,11 @@ class OneDimensionalGaussian : public OneDimensionalShapes
 public:
   OneDimensionalGaussian(double FWHM = 1.0, double Tolerance = 0.01);
   void setFWHM(double InFWHM);
-  void setTolerance(double InTolerance);
-  double getMinimumEnergy();
-  double getMaximumEnergy();
-  double getFunction(double frequency, double energy);
-  std::unique_ptr<OneDimensionalShapes> clone();
+  void setTolerance(double InTolerance) override;
+  double getMinimumEnergy() override;
+  double getMaximumEnergy() override;
+  double getFunction(double frequency, double energy) override;
+  std::unique_ptr<OneDimensionalShapes> clone() override;
   ~OneDimensionalGaussian(){};
 
 private:

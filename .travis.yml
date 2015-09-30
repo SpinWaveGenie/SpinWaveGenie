@@ -2,6 +2,7 @@
 
 language: cpp
 
+<<<<<<< HEAD
 compiler:
   - gcc
 
@@ -9,17 +10,11 @@ os:
   - linux
 
 before_install:
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
   - sudo add-apt-repository --yes ppa:smspillaz/cmake-3.0.2;
   - sudo apt-get update -qq;
   - sudo apt-get purge -qq cmake;
   - sudo apt-get install -qq cmake;
   - cmake --version;
-  - sudo apt-get install -qq libboost-dev;
-  - sudo apt-get install -qq libboost-test-dev;
-  - sudo apt-get install -qq libeigen3-dev;
-  - sudo apt-get install -qq libtbb-dev;
-  - sudo apt-get install -qq gcc-4.8 g++-4.8 libstdc++-4.8-dev;
   - export CC=gcc-4.8;
   - export CXX=g++-4.8;
 
@@ -28,7 +23,7 @@ before_script:
 
 script:
   - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
-
+    
 notifications:
   email:
     on_success: change
@@ -41,6 +36,18 @@ env:
    - secure: "iEULeaC9mf9PVTasF8nrCFRepmUGWaGikOqPB9Dbmm1LSBvVT4Z5SurbU9Gh0IljgNp/SJ1388mZ3b2duYxfcGsq8tPNCO/ZySWvK3AIhPKCql3vGCHybD1yMaPkG/ZU5hE9E+uCAZuIQVeOUvMsNQPP4mcjvzstvmuy7aGbIvg="
 
 addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libboost-dev
+      - libboost-test-dev
+      - libeigen3-dev
+      - libtbb-dev
+      - gcc-4.8
+      - g++-4.8
+      - libstdc++-4.8-dev
+      - clang-3.4
   coverity_scan:
     project:
       name: "SpinWaveGenie/SpinWaveGenie"

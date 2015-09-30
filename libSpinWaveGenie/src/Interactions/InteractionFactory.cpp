@@ -21,9 +21,9 @@ std::unique_ptr<Interaction> InteractionFactory::getExchange(std::string name, d
                                                              std::string sl_s, double min, double max)
 {
   if (sl_r.compare(sl_s) == 0)
-    return std::move(std::unique_ptr<Interaction>(new ExchangeInteractionSameSublattice(name, value, sl_r, min, max)));
+    return memory::make_unique<ExchangeInteractionSameSublattice>(name, value, sl_r, min, max);
   else
-    return std::move(std::unique_ptr<Interaction>(new ExchangeInteraction(name, value, sl_r, sl_s, min, max)));
+    return memory::make_unique<ExchangeInteraction>(name, value, sl_r, sl_s, min, max);
 }
 
 std::unique_ptr<Interaction> InteractionFactory::getDzyaloshinskiiMoriya(std::string name, double value,
@@ -37,28 +37,28 @@ std::unique_ptr<Interaction> InteractionFactory::getDzyaloshinskiiMoriya(std::st
 
   if (x < 0.01 && y > 0.99 && z < 0.01)
   {
-    return std::move(std::unique_ptr<Interaction>(new DM_Y_Interaction(name, value, sl_r, sl_s, min, max)));
+    return memory::make_unique<DM_Y_Interaction>(name, value, sl_r, sl_s, min, max);
   }
   else if (x < 0.01 && y < 0.01 && z > 0.99)
   {
-    return std::move(std::unique_ptr<Interaction>(new DM_Z_Interaction(name, value, sl_r, sl_s, min, max)));
+    return memory::make_unique<DM_Z_Interaction>(name, value, sl_r, sl_s, min, max);
   }
   else
   {
     // a general DM interaction has not yet been implemented
-    return std::move(std::unique_ptr<Interaction>(new DM_Z_Interaction(name, value, sl_r, sl_s, min, max)));
+    return memory::make_unique<DM_Z_Interaction>(name, value, sl_r, sl_s, min, max);
   }
 }
 
 std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(std::string name, double value, Vector3 unitVector,
                                                                std::string sl_r)
 {
-  return std::move(std::unique_ptr<Interaction>(new AnisotropyInteraction(name, value, unitVector, sl_r)));
+  return memory::make_unique<AnisotropyInteraction>(name, value, unitVector, sl_r);
 }
 
 std::unique_ptr<Interaction> InteractionFactory::getMagneticField(std::string name, double value, Vector3 unitVector,
                                                                   std::string sl_r)
 {
-  return std::move(std::unique_ptr<Interaction>(new MagneticFieldInteraction(name, value, unitVector, sl_r)));
+  return memory::make_unique<MagneticFieldInteraction>(name, value, unitVector, sl_r);
 }
 }

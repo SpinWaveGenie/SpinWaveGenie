@@ -1,6 +1,7 @@
 #ifndef __Interaction_H__
 #define __Interaction_H__ 1
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
@@ -29,7 +30,7 @@ public:
   virtual const std::string &getName() = 0;
   virtual void updateValue(double value) = 0;
   virtual void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) = 0;
-  virtual Interaction *do_clone() const = 0;
+  virtual std::unique_ptr<Interaction> clone() const = 0;
   Interaction() = default;
   Interaction(const Interaction &) = default;
   // Interaction(Interaction&&) = default;
@@ -40,7 +41,6 @@ public:
 private:
 };
 
-inline Interaction *new_clone(const Interaction &o) { return o.do_clone(); }
 }
 
 #endif // __Interaction_H__

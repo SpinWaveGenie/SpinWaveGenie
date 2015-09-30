@@ -25,9 +25,9 @@
 # Param _COVERAGE_SRCS	A list of source files that coverage should be collected for.
 # Param _COVERALLS_UPLOAD Upload the result to coveralls?
 #
-function(coveralls_setup _COVERAGE_SRCS _COVERALLS_UPLOAD)
+function(coveralls_setup _COVERAGE_SRCS _COVERALLS_UPLOAD _TRAVISCI)
 
-	if (ARGC GREATER 2)
+	if (ARGC GREATER 3)
 		set(_CMAKE_SCRIPT_PATH ${ARGN})
 		message("Coveralls: Using alternate CMake script dir: ${_CMAKE_SCRIPT_PATH}")
 	else()
@@ -38,44 +38,45 @@ function(coveralls_setup _COVERAGE_SRCS _COVERALLS_UPLOAD)
 		message(FATAL_ERROR "Coveralls: Missing ${_CMAKE_SCRIPT_PATH}/CoverallsClear.cmake")
 	endif()
 
-	if (NOT EXISTS "${_CMAKE_SCRIPT_PATH}/CoverallsGenerateGcov.cmake")
-		message(FATAL_ERROR "Coveralls: Missing ${_CMAKE_SCRIPT_PATH}/CoverallsGenerateGcov.cmake")
+	if (NOT EXISTS "${_CMAKE_SCRIPT_PATH}/CoverallsGenerateGcov.py")
+		message(FATAL_ERROR "Coveralls: Missing ${_CMAKE_SCRIPT_PATH}/CoverallsGenerateGcov.py")
 	endif()
 
-	# When passing a CMake list to an external process, the list
-	# will be converted from the format "1;2;3" to "1 2 3".
-	# This means the script we're calling won't see it as a list
-	# of sources, but rather just one long path. We remedy this
-	# by replacing ";" with "*" and then reversing that in the script
-	# that we're calling.
-	# http://cmake.3232098.n2.nabble.com/Passing-a-CMake-list-quot-as-is-quot-to-a-custom-target-td6505681.html
-	set(COVERAGE_SRCS_TMP ${_COVERAGE_SRCS})
-	set(COVERAGE_SRCS "")
-	foreach (COVERAGE_SRC ${COVERAGE_SRCS_TMP})
-		set(COVERAGE_SRCS "${COVERAGE_SRCS}*${COVERAGE_SRC}")
-	endforeach()
+        #pass name to a file instead of a list of every source.
+	set(COVERAGE_SRCS ${_COVERAGE_SRCS})
 
-	#message("Coverage sources: ${COVERAGE_SRCS}")
 	set(COVERALLS_FILE ${PROJECT_BINARY_DIR}/coveralls.json)
 
+        set(TRAVISCI ${_TRAVISCI})
+
+        find_package(Git)
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} rev-parse --show-toplevel
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            OUTPUT_VARIABLE PROJECT_ROOT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+        INCLUDE(FindPythonInterp)
 	add_custom_target(coveralls_generate
 
 		# Zero the coverage counters.
 		COMMAND ${CMAKE_COMMAND}
 				-P "${_CMAKE_SCRIPT_PATH}/CoverallsClear.cmake"
 
-		# Run regress tests.
-		COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+		# Run regression tests. Continue even if tests fail.
+		COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure || true
 
 		# Generate Gcov and translate it into coveralls JSON.
 		# We do this by executing an external CMake script.
 		# (We don't want this to run at CMake generation time, but after compilation and everything has run).
-		COMMAND ${CMAKE_COMMAND}
-				-DCOVERAGE_SRCS="${COVERAGE_SRCS}" # TODO: This is passed like: "a b c", not "a;b;c"
-				-DCOVERALLS_OUTPUT_FILE="${COVERALLS_FILE}"
-				-DCOV_PATH="${PROJECT_BINARY_DIR}"
-				-DPROJECT_ROOT="${PROJECT_SOURCE_DIR}"
-				-P "${_CMAKE_SCRIPT_PATH}/CoverallsGenerateGcov.cmake"
+		COMMAND ${PYTHON_EXECUTABLE} 
+                                ${_CMAKE_SCRIPT_PATH}/CoverallsGenerateGcov.py
+                                --COVERAGE_SRCS_FILE="${COVERAGE_SRCS}"
+                                --COVERALLS_OUTPUT_FILE="${COVERALLS_FILE}"
+                                --COV_PATH="${PROJECT_BINARY_DIR}"
+                                --PROJECT_ROOT="${PROJECT_ROOT}"
+                                --TRAVISCI="${TRAVISCI}"
 
 		WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 		COMMENT "Generating coveralls output..."

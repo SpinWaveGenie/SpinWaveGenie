@@ -35,9 +35,9 @@ std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double> &x)
   assert(x.size() == 1);
 
   Energies newEnergies;
-  for (auto value = centeredEnergies.begin(); value != centeredEnergies.end(); value++)
+  for (const auto & elem : centeredEnergies)
   {
-    newEnergies.insert(*value + x[0]);
+    newEnergies.insert(elem + x[0]);
   }
 
   resolutionFunction->setEnergies(newEnergies);
@@ -68,5 +68,5 @@ const Energies &IntegrateEnergy::getEnergies() { return centeredEnergies; }
 
 void IntegrateEnergy::setEnergies(Energies energiesIn) { centeredEnergies = energiesIn; }
 
-std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() { return unique_ptr<SpinWavePlot>(new IntegrateEnergy(*this)); }
+std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() { return memory::make_unique<IntegrateEnergy>(*this); }
 }
