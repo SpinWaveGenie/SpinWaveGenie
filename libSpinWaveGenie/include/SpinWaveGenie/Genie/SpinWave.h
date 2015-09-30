@@ -41,7 +41,7 @@ public:
   SpinWave &operator=(const SpinWave &other);
   //! Use SpinWaveBuilder to generate SpinWave instance
   friend class SpinWaveBuilder;
-  SpinWave(Cell &cell_in, std::vector<std::unique_ptr<Interaction>> interactions_in);
+  SpinWave(const Cell &cell_in, std::vector<std::unique_ptr<Interaction>> interactions_in);
   void clearMatrix();
   const Cell &getCell() const;
   void createMatrix(double KX, double KY, double KZ);
