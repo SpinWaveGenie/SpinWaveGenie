@@ -237,8 +237,13 @@ void SpinWave::calculateWeights()
                                     {
                                       return L1 == elem.index;
                                     });
-    XX.row(L1).swap(XX.row(AL[L1].index)); // eigenvector
-    oldPosition->index = AL[L1].index;
+    if(oldPosition != AL.end())
+    {
+      XX.row(L1).swap(XX.row(AL[L1].index)); // eigenvector
+      oldPosition->index = AL[L1].index;
+    }
+    else
+      throw std::runtime_error("Error while reordering eigenvectors. ");
   }
 
   //
