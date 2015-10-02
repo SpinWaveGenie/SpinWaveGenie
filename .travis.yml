@@ -23,6 +23,7 @@ before_install:
     then 
       brew update > /dev/null 2>&1;
       brew tap homebrew/science;
+      brew install --quite cmake
       brew install --quiet eigen;
       brew install --quiet tbb --c++11;
       brew install --quiet nlopt;
