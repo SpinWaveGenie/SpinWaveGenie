@@ -57,7 +57,7 @@ before_script:
     elif [ "$CLANG_STATIC_ANALYZER" == "true" ];
     then
       echo "RUNNING CLANG STATIC ANALYZER, $CLANG_STATIC_ANALYZER";
-      scan-build --use-cc=clang --use-c++=clang++ cmake -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
+      scan-build-3.5 --use-cc=clang --use-c++=clang++ cmake -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
     elif [ "$CLANG_SANITIZERS" == "true" ];
     then 
       echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
@@ -76,7 +76,7 @@ before_script:
 script:
   - if [ "$CLANG_STATIC_ANALYZER" == "true" ];
     then
-      scan-build --use-cc=clang --use-c++=clang++ make;
+      scan-build-3.5 --use-cc=clang --use-c++=clang++ make;
     else
       make;
     fi
