@@ -1,5 +1,7 @@
 language: cpp
 
+sudo: required
+
 branches:
   only:
     - master
@@ -8,11 +10,14 @@ branches:
 matrix:
   include:
     - os: linux
+      dist: trusty
       compiler: gcc
     - os: linux
+      dist: trusty
       compiler: clang
       env: CLANG_STATIC_ANALYZER=true
     - os: linux
+      dist: trusty
       compiler: clang
       env: CLANG_SANITIZERS=true
     - os: osx
@@ -35,19 +40,15 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
     then 
-      sudo add-apt-repository --yes ppa:smspillaz/cmake-3.0.2;
+      sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x;
       sudo apt-get update -qq;
       sudo apt-get purge -qq cmake;
       sudo apt-get install -qq cmake;
       cmake --version;
+      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev gcc g++ clang
     fi
 
 before_script:
-  - if [ "$CXX" == "g++" ]; 
-    then
-      export CC=gcc-4.8;
-      export CXX=g++-4.8;
-    fi
   - if [ "$COVERALLS" == "true" ]; 
     then
       echo "CHECKING CODE COVERAGE, $COVERALLS"; 
@@ -85,20 +86,6 @@ script:
       ctest --output-on-failure; 
     fi
     
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - libboost-dev
-      - libboost-test-dev
-      - libeigen3-dev
-      - libtbb-dev
-      - gcc-4.8
-      - g++-4.8
-      - libstdc++-4.8-dev
-      - clang-3.4
-
 notifications:
   email:
     on_success: change
