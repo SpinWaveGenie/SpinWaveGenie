@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-#include <vector>
+#include <array>
 #include <Eigen/Dense>
 #include "SpinWaveGenie/Containers/Cell.h"
 
@@ -17,7 +17,7 @@ class Neighbors;
 class Interaction
 {
 public:
-  virtual std::vector<std::string> sublattices() const = 0;
+  virtual std::array<std::string, 2> sublattices() const = 0;
   bool operator<(const Interaction &other) const;
   bool operator==(const Interaction &other) const;
   virtual void calculateEnergy(Cell &cell, double &energy) = 0;
