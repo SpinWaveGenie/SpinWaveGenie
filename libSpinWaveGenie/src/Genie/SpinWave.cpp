@@ -1,5 +1,7 @@
-
+// suppress scan-build warning from eigen.
+#ifndef __clang_analyzer__
 #include <Eigen/Cholesky>
+#endif
 #include <iomanip>
 #include <cmath>
 #include <random>
