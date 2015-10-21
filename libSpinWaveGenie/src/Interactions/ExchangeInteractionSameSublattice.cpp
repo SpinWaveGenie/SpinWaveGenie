@@ -33,11 +33,7 @@ const string &ExchangeInteractionSameSublattice::getName() { return name; }
 
 void ExchangeInteractionSameSublattice::updateValue(double value_in) { value = value_in; }
 
-vector<string> ExchangeInteractionSameSublattice::sublattices() const
-{
-  vector<string> sl = {sl_r, sl_r};
-  return sl;
-}
+std::array<std::string, 2> ExchangeInteractionSameSublattice::sublattices() const { return {{sl_r, sl_r}}; }
 
 void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
 {

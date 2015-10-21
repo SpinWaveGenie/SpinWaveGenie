@@ -27,13 +27,7 @@ void DM_Z_Interaction::updateInteraction(double value_in, string sl_r_in, string
   max = max_in;
 }
 
-vector<string> DM_Z_Interaction::sublattices() const
-{
-  vector<string> sl;
-  sl.push_back(sl_r);
-  sl.push_back(sl_s);
-  return sl;
-}
+std::array<std::string, 2> DM_Z_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
 const string &DM_Z_Interaction::getName() { return name; }
 

@@ -36,11 +36,7 @@ const string &ExchangeInteraction::getName() { return name; }
 
 void ExchangeInteraction::updateValue(double value_in) { value = value_in; }
 
-vector<string> ExchangeInteraction::sublattices() const
-{
-  vector<string> sl = {sl_r, sl_s};
-  return sl;
-}
+std::array<std::string, 2> ExchangeInteraction::sublattices() const { return {{sl_r, sl_s}}; }
 
 void ExchangeInteraction::calcConstantValues(Cell &cell)
 {

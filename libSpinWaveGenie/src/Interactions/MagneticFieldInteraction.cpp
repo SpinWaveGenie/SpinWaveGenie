@@ -38,12 +38,7 @@ const string &MagneticFieldInteraction::getName() { return name; }
 
 void MagneticFieldInteraction::updateValue(double value_in) { value = value_in; }
 
-vector<string> MagneticFieldInteraction::sublattices() const
-{
-  vector<string> sl;
-  sl.push_back(sl_r);
-  return sl;
-}
+std::array<std::string, 2> MagneticFieldInteraction::sublattices() const { return {{sl_r, sl_r}}; }
 
 void MagneticFieldInteraction::calculateEnergy(Cell &cell, double &energy)
 {
