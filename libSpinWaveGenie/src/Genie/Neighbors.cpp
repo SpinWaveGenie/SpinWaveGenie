@@ -10,7 +10,7 @@ using std::endl;
 
 namespace SpinWaveGenie
 {
-bool Neighbors::empty() { return neighborList.empty(); };
+bool Neighbors::empty() { return neighborList.empty(); }
 
 void Neighbors::findNeighbors(Cell &cell, string sl1, string sl2, double min, double max)
 {

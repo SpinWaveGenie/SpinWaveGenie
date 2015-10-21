@@ -112,7 +112,7 @@ public:
 #endif
 };
 
-TwoDimensionalCut::TwoDimensionalCut() : m_p(memory::make_unique<CutImpl>()){};
+TwoDimensionalCut::TwoDimensionalCut() : m_p(memory::make_unique<CutImpl>()){}
 TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut &other) : m_p(other.m_p->clone()) {}
 TwoDimensionalCut &TwoDimensionalCut::operator=(const TwoDimensionalCut &other)
 {
@@ -134,7 +134,7 @@ TwoDimensionalCut &TwoDimensionalCut::operator=(TwoDimensionalCut &&other)
   return *this;
 }
 
-TwoDimensionalCut::~TwoDimensionalCut(){};
+TwoDimensionalCut::~TwoDimensionalCut(){}
 
 void TwoDimensionalCut::setFilename(string name) { m_p->filename = name; }
 

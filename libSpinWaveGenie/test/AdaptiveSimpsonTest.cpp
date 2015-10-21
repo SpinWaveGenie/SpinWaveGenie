@@ -16,7 +16,7 @@ std::vector<double> constantFunction(std::deque<double> &x)
     result.push_back(static_cast<double>(i) + 1.0);
   }
   return result;
-};
+}
 
 BOOST_AUTO_TEST_CASE(ConstantFunctionTest)
 {
@@ -200,7 +200,7 @@ std::vector<double> complexFunction(std::deque<double> &x)
   for (i = 0; i < dim; i++)
     prod *= pow(x[i], p);
   return std::vector<double>(1, prod);
-};
+}
 
 // also tests copy assignment operator
 BOOST_AUTO_TEST_CASE(ComplexFunctionTest)
