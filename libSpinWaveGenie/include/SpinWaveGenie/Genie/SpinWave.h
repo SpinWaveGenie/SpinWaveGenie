@@ -6,8 +6,6 @@
 #include <memory>
 #include <vector>
 #include <cmath>
-#include <Eigen/Dense>
-#include <Eigen/Eigenvalues>
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Results.h"
