@@ -45,7 +45,7 @@ before_install:
       sudo apt-get purge -qq cmake;
       sudo apt-get install -qq cmake;
       cmake --version;
-      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev gcc g++ clang;
+      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev gcc g++;
     fi
 
 before_script:
