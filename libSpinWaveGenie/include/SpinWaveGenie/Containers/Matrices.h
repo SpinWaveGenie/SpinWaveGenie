@@ -7,9 +7,10 @@
 //
 #ifndef __spin_wave_genie__Matrices__
 #define __spin_wave_genie__Matrices__
-
+// suppress scan-build warning from eigen.
+#ifndef __clang_analyzer__
 #include "Eigen/Core"
-
+#endif
 namespace SpinWaveGenie
 {
 
