@@ -36,7 +36,13 @@ const string &ExchangeInteraction::getName() { return name; }
 
 void ExchangeInteraction::updateValue(double value_in) { value = value_in; }
 
-std::array<std::string, 2> ExchangeInteraction::sublattices() const { return {{sl_r, sl_s}}; }
+std::array<std::string, 2> ExchangeInteraction::sublattices() const
+{
+  if (sl_r < sl_s)
+    return {{sl_r, sl_s}};
+  else
+    return {{sl_s, sl_r}};
+}
 
 void ExchangeInteraction::calcConstantValues(Cell &cell)
 {

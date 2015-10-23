@@ -19,7 +19,6 @@ class Interaction
 public:
   virtual std::array<std::string, 2> sublattices() const = 0;
   bool operator<(const Interaction &other) const;
-  bool operator==(const Interaction &other) const;
   virtual void calculateEnergy(Cell &cell, double &energy) = 0;
   virtual void calcConstantValues(Cell &cell) = 0;
   virtual void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) = 0;
@@ -33,9 +32,9 @@ public:
   virtual std::unique_ptr<Interaction> clone() const = 0;
   Interaction() = default;
   Interaction(const Interaction &) = default;
-  // Interaction(Interaction&&) = default;
-  // Interaction& operator=(const Interaction&) & = default;
-  // Interaction& operator=(Interaction&&) & = default;
+  //Interaction(Interaction &&) = default;
+  //Interaction &operator=(const Interaction &)& = default;
+  //Interaction &operator=(Interaction &&)& = default;
   virtual ~Interaction(){};
 
 private:
