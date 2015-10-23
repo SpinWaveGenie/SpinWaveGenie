@@ -1,4 +1,3 @@
-
 #include <Eigen/Cholesky>
 #include <iomanip>
 #include <cmath>
