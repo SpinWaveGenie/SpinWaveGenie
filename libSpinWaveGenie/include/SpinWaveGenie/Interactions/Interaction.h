@@ -32,9 +32,9 @@ public:
   virtual std::unique_ptr<Interaction> clone() const = 0;
   Interaction() = default;
   Interaction(const Interaction &) = default;
-  Interaction(Interaction &&) = default;
-  Interaction &operator=(const Interaction &)& = default;
-  Interaction &operator=(Interaction &&)& = default;
+  //Interaction(Interaction &&) = default;
+  //Interaction &operator=(const Interaction &)& = default;
+  //Interaction &operator=(Interaction &&)& = default;
   virtual ~Interaction(){};
 
 private:
