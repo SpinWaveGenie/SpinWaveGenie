@@ -18,14 +18,4 @@ bool Interaction::operator<(const Interaction &other) const
   return false;
 }
 
-bool Interaction::operator==(const Interaction &other) const
-{
-  auto sl1 = this->sublattices();
-  auto sl2 = other.sublattices();
-
-  if (sl1[0].compare(sl2[0]) == 0 && sl1[1].compare(sl2[1]) == 0)
-    return true;
-  else
-    return false;
-}
 }
