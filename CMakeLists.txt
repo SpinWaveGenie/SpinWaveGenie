@@ -82,6 +82,7 @@ endif()
 
 find_package(Eigen3 REQUIRED)
 
+find_package(Threads)
 if(USE_THREADS)
   find_package(TBB)
 endif()
