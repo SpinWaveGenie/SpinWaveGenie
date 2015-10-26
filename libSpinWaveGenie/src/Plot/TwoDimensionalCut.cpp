@@ -7,21 +7,23 @@
 //
 #include <atomic>
 #include <fstream>
-#include <Eigen/Dense>
-#include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
-#include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
-#include "SpinWaveGenie/Containers/Energies.h"
-#include "External/ezRateProgressBar.hpp"
 #include <thread>
 #ifdef _WIN32
 #include <Windows.h>
 #else
 #include <unistd.h>
 #endif
+
+#include <Eigen/Dense>
+
 #ifdef USE_THREADS
 #include "tbb/tbb.h"
-using namespace tbb;
 #endif
+
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
+#include "SpinWaveGenie/Containers/Energies.h"
+#include "External/ezRateProgressBar.hpp"
 
 namespace
 {
