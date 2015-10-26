@@ -39,7 +39,6 @@ public:
   const Energies &getEnergies() override;
   void setEnergies(Energies energies) override;
   ~TwoDimensionResolutionFunction(){};
-
 private:
   std::vector<double> calculateIntegrand(std::deque<double> &x);
   Energies energies;
