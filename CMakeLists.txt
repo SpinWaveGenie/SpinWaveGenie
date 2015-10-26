@@ -157,6 +157,12 @@ set ( CPACK_RPM_PACKAGE_RELEASE 1 )
 set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
 set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
 set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake >= 2.8.12 gcc-c++ doxygen boost-test boost-devel" )
+if(USE_THREADS AND TBB_FOUND )
+  set ( CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES} tbb-devel" )
+  set ( CPACK_RPM_USE_THREADS "1" )
+else()
+  set ( CPACK_RPM_USE_THREADS "0" )
+endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
                  ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
