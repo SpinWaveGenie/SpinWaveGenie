@@ -23,157 +23,106 @@
 using namespace tbb;
 #endif
 
-using namespace std;
+namespace
+{
+class progressBar
+  {
+  public:
+    progressBar(std::size_t numberPoints) : m_numberPoints(numberPoints) { m_counter = 0; };
+    void increment() { m_counter++; };
+    void run()
+    {
+      ez::ezRateProgressBar<std::size_t> p(m_numberPoints);
+      p.units = "Q-points";
+      p.start();
+      while (m_counter < m_numberPoints)
+      {
+        p.update(m_counter);
+#ifdef _WIN32
+        Sleep(1);
+#else
+        sleep(1);
+#endif
+      }
+      p.update(m_numberPoints);
+    }
+
+  private:
+    std::atomic<std::size_t> m_counter;
+    std::size_t m_numberPoints;
+  };
+}
 
 namespace SpinWaveGenie
 {
-class TwoDimensionalCut::CutImpl
+
+void TwoDimensionalCut::setFilename(std::string name) { this->filename = name; }
+
+void TwoDimensionalCut::setPlotObject(std::unique_ptr<SpinWavePlot> object) { this->cut = move(object); }
+
+void TwoDimensionalCut::setPoints(ThreeVectors<double> pts) { this->points = std::move(pts); }
+
+void TwoDimensionalCut::setEnergyPoints(double min, double max, std::size_t points)
 {
-public:
-  std::string filename;
-  std::atomic<std::size_t> counter;
-  Eigen::MatrixXd mat;
-  unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
-  SpinWaveGenie::ThreeVectors<double> points;
-  CutImpl() { counter = 0; };
-  CutImpl(unique_ptr<SpinWaveGenie::SpinWavePlot> inCut, SpinWaveGenie::ThreeVectors<double> inPoints)
-      : cut(move(inCut)), points(std::move(inPoints))
-  {
-    counter = 0;
-  };
-  std::unique_ptr<CutImpl> clone()
-  {
-    std::unique_ptr<CutImpl> newCut(memory::make_unique<CutImpl>(cut->clone(), points));
-    newCut->filename = filename;
-    newCut->mat = mat;
-    return std::move(newCut);
-  };
+  this->cut->setEnergies(Energies(min, max, points));
+}
 
-  void progressBar(std::size_t numberPoints)
-  {
-    ez::ezRateProgressBar<std::size_t> p(numberPoints);
-    p.units = "Q-points";
-    p.start();
-    while (counter < numberPoints)
-    {
-      p.update(counter);
-#ifdef _WIN32
-      Sleep(1);
-#else
-      sleep(1);
-#endif
-    }
-    p.update(numberPoints);
-  }
-
-  void partialCut(size_t begin, size_t end)
-  {
-    unique_ptr<SpinWaveGenie::SpinWavePlot> cutclone = cut->clone();
-    for (size_t m = begin; m < end; m++)
-    {
-      auto it = points.begin() + m;
-      vector<double> val = cutclone->getCut(it->get<0>(), it->get<1>(), it->get<2>());
-      for (size_t n = 0; n < val.size(); n++)
-      {
-        mat(n, m) = val[n];
-      }
-      counter++;
-    }
-  }
+Eigen::MatrixXd TwoDimensionalCut::getMatrix()
+{
+  Eigen::MatrixXd mat(cut->getEnergies().size(), points.size());
+  progressBar pbar(points.size());
+  std::thread myThread(&progressBar::run, &pbar);
 #ifdef USE_THREADS
-  Eigen::MatrixXd generateMatrix()
-  {
-    mat.resize(cut->getEnergies().size(), points.size());
-    TbbExecutor tbbExec(this);
-    // thread myThread(bind(&CutImpl::progressBar,this,points.size()));
-    thread myThread(&CutImpl::progressBar, this, points.size());
-    tbb::parallel_for(tbb::blocked_range<size_t>(0, points.size()), tbbExec);
-    myThread.join();
-    return mat;
-  }
-  struct TbbExecutor
-  {
-  public:
-    TbbExecutor(CutImpl *w) : w_(w) {}
-    void operator()(const tbb::blocked_range<size_t> r) const { w_->partialCut(r.begin(), r.end()); }
-
-  private:
-    CutImpl *w_;
-  };
+  tbb::parallel_for(tbb::blocked_range<std::size_t>(0, points.size()),
+                    [this, &pbar, &mat](const tbb::blocked_range<std::size_t> r)
+                    {
+                      std::unique_ptr<SpinWaveGenie::SpinWavePlot> cutclone = cut->clone();
+                      for (std::size_t m = r.begin(); m < r.end(); ++m)
+                      {
+                        Eigen::MatrixXd::ColXpr values = mat.col(m);
+                        auto it = points.begin() + m;
+                        std::vector<double> val = cutclone->getCut(it->get<0>(), it->get<1>(), it->get<2>());
+                        std::copy(val.begin(), val.end(), values.data());
+                        pbar.increment();
+                      }
+                    });
 #else
-  Eigen::MatrixXd generateMatrix()
+  for (std::size_t m = 0; m < points.size(); ++m)
   {
-    mat.resize(cut->getEnergies().size(), points.size());
-    thread pbar(&CutImpl::progressBar, this, points.size());
-    partialCut(0, points.size());
-    pbar.join();
-    return mat;
+    Eigen::MatrixXd::ColXpr values = mat.col(m);
+    auto it = points.begin() + m;
+    std::vector<double> val = cut->getCut(it->get<0>(), it->get<1>(), it->get<2>());
+    std::copy(val.begin(), val.end(), values.data());
+    pbar.increment();
   }
 #endif
-};
-
-TwoDimensionalCut::TwoDimensionalCut() : m_p(memory::make_unique<CutImpl>()){}
-TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut &other) : m_p(other.m_p->clone()) {}
-TwoDimensionalCut &TwoDimensionalCut::operator=(const TwoDimensionalCut &other)
-{
-  m_p = move(other.m_p->clone());
-  return *this;
+  myThread.join();
+  return mat;
 }
-TwoDimensionalCut::TwoDimensionalCut(TwoDimensionalCut &&other)
-{
-  m_p = move(other.m_p);
-  other.m_p = nullptr;
-}
-TwoDimensionalCut &TwoDimensionalCut::operator=(TwoDimensionalCut &&other)
-{
-  if (m_p != other.m_p)
-  {
-    m_p = move(other.m_p);
-    other.m_p = nullptr;
-  }
-  return *this;
-}
-
-TwoDimensionalCut::~TwoDimensionalCut(){}
-
-void TwoDimensionalCut::setFilename(string name) { m_p->filename = name; }
-
-void TwoDimensionalCut::setPlotObject(unique_ptr<SpinWavePlot> object) { m_p->cut = move(object); }
-
-void TwoDimensionalCut::setPoints(ThreeVectors<double> pts) { m_p->points = pts; }
-
-void TwoDimensionalCut::setEnergyPoints(double min, double max, size_t points)
-{
-  m_p->cut->setEnergies(Energies(min, max, points));
-}
-
-Eigen::MatrixXd TwoDimensionalCut::getMatrix() { return m_p->generateMatrix(); }
 
 void TwoDimensionalCut::save()
 {
   Eigen::MatrixXd figure = getMatrix();
-  std::ofstream file(m_p->filename + ".mat");
+  std::ofstream file(this->filename + ".mat");
   if (file.is_open())
   {
-    file << figure << endl;
+    file << figure << std::endl;
   }
   file.close();
 
-  file.open(m_p->filename + ".x");
+  file.open(this->filename + ".x");
   if (file.is_open())
   {
-    ThreeVectors<double> pts = m_p->points;
-    for (auto it = pts.begin(); it != pts.end(); ++it)
-      file << it->get<0>() << "\t" << it->get<1>() << "\t" << it->get<2>() << endl;
+    for (auto it = points.begin(); it != points.end(); ++it)
+      file << it->get<0>() << "\t" << it->get<1>() << "\t" << it->get<2>() << std::endl;
   }
-
   file.close();
-  file.open(m_p->filename + ".y");
+  file.open(this->filename + ".y");
   if (file.is_open())
   {
-    Energies energies = m_p->cut->getEnergies();
+    Energies energies = cut->getEnergies();
     for (const auto & energie : energies)
-      file << (energie) << endl;
+      file << (energie) << std::endl;
   }
   file.close();
 }
