@@ -37,12 +37,7 @@ const string &AnisotropyInteraction::getName() { return name; }
 
 void AnisotropyInteraction::updateValue(double value_in) { value = value_in; }
 
-vector<string> AnisotropyInteraction::sublattices() const
-{
-  vector<string> sl;
-  sl.push_back(sl_r);
-  return sl;
-}
+std::array<std::string, 2> AnisotropyInteraction::sublattices() const { return {{sl_r, sl_r}}; }
 
 void AnisotropyInteraction::calcConstantValues(Cell &cell)
 {

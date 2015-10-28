@@ -30,13 +30,7 @@ const string &DM_Y_Interaction::getName() { return name; }
 
 void DM_Y_Interaction::updateValue(double value_in) { value = value_in; }
 
-vector<string> DM_Y_Interaction::sublattices() const
-{
-  vector<string> sl;
-  sl.push_back(sl_r);
-  sl.push_back(sl_s);
-  return sl;
-}
+std::array<std::string, 2> DM_Y_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
 void DM_Y_Interaction::calcConstantValues(Cell &cell)
 {

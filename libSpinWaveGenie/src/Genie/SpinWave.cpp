@@ -1,4 +1,3 @@
-
 #include <Eigen/Cholesky>
 #include <iomanip>
 #include <cmath>
@@ -138,10 +137,6 @@ void SpinWave::calculateEigenvalues()
   }
 }
 
-bool isPositive(const results &i) { return i.weight > 0; }
-
-bool greaterThan(const results &a, const results &b) { return a.weight > b.weight; }
-
 void SpinWave::calculateWeights()
 {
   MatrixXcdRowMajor XX;
@@ -216,12 +211,18 @@ void SpinWave::calculateWeights()
   //
   // Reorder the XX's by the weights
   //
-  std::partition(AL.begin(), AL.end(), isPositive);
+  std::partition(AL.begin(), AL.end(), [](const results &i)
+                 {
+                   return i.weight > 0;
+                 });
 
   // If two eigenvalues are approx. zero, std::partition
   // may fail to separate positive and negative weights.
-  if (!isPositive(AL[M - 1]) || isPositive(AL[M]))
-    std::sort(AL.begin(), AL.end(), greaterThan);
+  if (AL[M - 1].weight < 0.0 || AL[M].weight > 0.0)
+    std::sort(AL.begin(), AL.end(), [](const results &a, const results &b)
+              {
+                return a.weight > b.weight;
+              });
 
   for (size_t L1 = 0; L1 < N; L1++)
   {

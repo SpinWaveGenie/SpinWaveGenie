@@ -14,6 +14,14 @@ Source0:        %{name}-%{version}.tar.gz
 BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
 Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
 
+Requires: gcc-c++
+Requires: boost-devel
+Requires: eigen3-devel
+Requires: cmake >= 2.8.12
+%if @CPACK_RPM_USE_THREADS@
+Requires: tbb-devel
+%endif
+
 %description
 @CPACK_RPM_PACKAGE_DESCRIPTION@
 

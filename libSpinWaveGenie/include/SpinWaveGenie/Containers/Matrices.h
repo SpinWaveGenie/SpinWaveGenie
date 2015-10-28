@@ -7,7 +7,6 @@
 //
 #ifndef __spin_wave_genie__Matrices__
 #define __spin_wave_genie__Matrices__
-
 #include "Eigen/Core"
 
 namespace SpinWaveGenie

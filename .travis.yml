@@ -1,21 +1,18 @@
 # for coverity, use a single build using the system compiler
 
 language: cpp
-
-compiler:
-  - gcc
-
-os:
-  - linux
+compiler: gcc
+os: linux
+dist: trusty
+sudo: required
 
 before_install:
-  - sudo add-apt-repository --yes ppa:smspillaz/cmake-3.0.2;
+  - sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x;
   - sudo apt-get update -qq;
   - sudo apt-get purge -qq cmake;
   - sudo apt-get install -qq cmake;
   - cmake --version;
-  - export CC=gcc-4.8;
-  - export CXX=g++-4.8;
+  - sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
 
 before_script:
   - cmake -DBUILD_TESTING=ON  . ; 
@@ -35,18 +32,6 @@ env:
    - secure: "iEULeaC9mf9PVTasF8nrCFRepmUGWaGikOqPB9Dbmm1LSBvVT4Z5SurbU9Gh0IljgNp/SJ1388mZ3b2duYxfcGsq8tPNCO/ZySWvK3AIhPKCql3vGCHybD1yMaPkG/ZU5hE9E+uCAZuIQVeOUvMsNQPP4mcjvzstvmuy7aGbIvg="
 
 addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - libboost-dev
-      - libboost-test-dev
-      - libeigen3-dev
-      - libtbb-dev
-      - gcc-4.8
-      - g++-4.8
-      - libstdc++-4.8-dev
-      - clang-3.4
   coverity_scan:
     project:
       name: "SpinWaveGenie/SpinWaveGenie"
@@ -55,3 +40,4 @@ addons:
     build_command_prepend: "make clean"
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
+

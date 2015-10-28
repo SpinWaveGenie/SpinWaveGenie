@@ -100,19 +100,15 @@ template <class T> std::vector<double> EnergyResolution<T>::getCut(double kx, do
 
   // points.significantSolutions();
 
-  for (auto & point : points)
+  for (const auto & point : points)
   {
-    if (std::isnan(point.frequency) || std::isnan(point.intensity))
+    if (std::isfinite(point.frequency) && std::isfinite(point.intensity))
     {
-      // cout << "found NaN: " << pt->frequency << " " << pt->intensity << endl;
-    }
-    else
-    {
-      double min = point.frequency + ResolutionFunction->getMinimumEnergy();
-      double max = point.frequency + ResolutionFunction->getMaximumEnergy();
-      size_t UpperBound = energies.getUpperBound(max);
+      const double min = point.frequency + ResolutionFunction->getMinimumEnergy();
+      const double max = point.frequency + ResolutionFunction->getMaximumEnergy();
+      const std::size_t UpperBound = energies.getUpperBound(max);
       // std::cout << min << " " << energies.getLowerBound(min) << " " << max << " " << UpperBound << std::endl;
-      for (size_t index = energies.getLowerBound(min); index != UpperBound; index++)
+      for (std::size_t index = energies.getLowerBound(min); index != UpperBound; ++index)
       {
         fval[index] += point.intensity * ResolutionFunction->getFunction(point.frequency, energies[index]);
       }
