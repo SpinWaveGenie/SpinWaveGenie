@@ -85,9 +85,9 @@ Eigen::MatrixXd TwoDimensionalCut::getMatrix()
                         auto it = points.begin() + m;
                         std::vector<double> val = cutclone->getCut(it->get<0>(), it->get<1>(), it->get<2>());
 #ifdef _MSC_VER
-						std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
+                        std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
 #else
-						std::copy(val.begin(), val.end(), values.data());
+                        std::copy(val.begin(), val.end(), values.data());
 #endif
                         pbar.increment();
                       }
@@ -99,11 +99,11 @@ Eigen::MatrixXd TwoDimensionalCut::getMatrix()
     auto it = points.begin() + m;
     std::vector<double> val = cut->getCut(it->get<0>(), it->get<1>(), it->get<2>());
 #ifdef _MSC_VER
-	std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
+    std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
 #else
-	std::copy(val.begin(), val.end(), values.data());
+    std::copy(val.begin(), val.end(), values.data());
 #endif
-	pbar.increment();
+    pbar.increment();
   }
 #endif
   myThread.join();
