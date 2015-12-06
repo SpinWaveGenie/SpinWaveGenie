@@ -7,20 +7,20 @@ branches:
 configuration: Release
 
 environment:
-  PATH: "C:/projects/ThirdPartyVC120/lib;%PATH%"
+  PATH: "C:/projects/ThirdPartyVC140/lib;%PATH%"
 
 platform: x64
 
 install:
 - cmd: cd c:\projects
-- cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC120.git
+- cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC140.git
 
 before_build:
 - ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
 - cmd: md build
 - cmd: cd build
 - cmd: cmake --version
-- cmd: cmake -G "Visual Studio 12 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyor.cmake  ..
+- cmd: cmake -G "Visual Studio 14 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyorVC140.cmake  ..
 
 build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
