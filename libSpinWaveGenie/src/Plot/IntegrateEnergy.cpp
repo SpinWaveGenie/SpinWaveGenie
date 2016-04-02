@@ -16,7 +16,7 @@ namespace SpinWaveGenie
 
 IntegrateEnergy::IntegrateEnergy(const IntegrateEnergy &other) : kx(0.0), ky(0.0), kz(0.0)
 {
-  resolutionFunction = move(other.resolutionFunction->clone());
+  resolutionFunction = other.resolutionFunction->clone();
   this->centeredEnergies = other.centeredEnergies;
   this->delta = other.delta;
   this->tolerance = other.tolerance;

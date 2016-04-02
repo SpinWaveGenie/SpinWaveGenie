@@ -24,7 +24,7 @@ public:
       : maximumEvaluations(maxEvals), r(0.0), tolerance(tol), resolutionFunction(std::move(object)){};
   IntegrateThetaPhi(const IntegrateThetaPhi &other)
       : maximumEvaluations(other.maximumEvaluations), r(0.0), tolerance(other.tolerance),
-        resolutionFunction(move(other.resolutionFunction->clone())){};
+        resolutionFunction(other.resolutionFunction->clone()){};
   std::unique_ptr<SpinWavePlot> clone() override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
