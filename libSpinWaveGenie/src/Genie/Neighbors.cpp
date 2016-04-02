@@ -18,19 +18,19 @@ void Neighbors::findNeighbors(Cell &cell, string sl1, string sl2, double min, do
   // all atoms provides a good check that all atoms have the same number of neighbors in the same relative
   // positions
 
-  for (Sublattice::Iterator atom1 = cell.getSublattice(sl1).begin(); atom1 != cell.getSublattice(sl1).end(); ++atom1)
-  // auto atom1 = cell.getSublattice(sl1).begin();
+  bool firstTime = true;
+  for (const auto &atom1 : cell.getSublattice(sl1))
+  // const auto &atom1 = *(cell.getSublattice(sl1).begin());
   {
     //  A 5x5x5 supercell should good enough for any physical interaction.
     UniqueThreeVectors<double> Neighbors;
     for (long supercellSize = 5; supercellSize <= 5; supercellSize++)
     {
       // cout << supercellSize << endl;
-      for (Sublattice::Iterator atom2 = cell.getSublattice(sl2).begin(); atom2 != cell.getSublattice(sl2).end();
-           ++atom2)
+      for (const auto &atom2 : cell.getSublattice(sl2))
       {
-        Vector3 atomdistance(atom2->get<0>() - atom1->get<0>(), atom2->get<1>() - atom1->get<1>(),
-                             atom2->get<2>() - atom1->get<2>());
+        Vector3 atomdistance(atom2.get<0>() - atom1.get<0>(), atom2.get<1>() - atom1.get<1>(),
+                             atom2.get<2>() - atom1.get<2>());
         // cout << "atom2:  " << atom2->get<0>() << " " << atom2->get<1>() << " " << atom2->get<2>() << endl;
         // cout << "atom1:  " << atom1->get<0>() << " " << atom1->get<1>() << " " << atom1->get<2>() << endl;
         // cout << atomdistance.transpose() << endl;
@@ -56,8 +56,9 @@ void Neighbors::findNeighbors(Cell &cell, string sl1, string sl2, double min, do
         }
       }
     }
-    if (atom1 == cell.getSublattice(sl1).begin())
+    if (firstTime)
     {
+      firstTime = false;
       numberNeighbors = Neighbors.size();
       neighborList = Neighbors;
     }
@@ -65,30 +66,32 @@ void Neighbors::findNeighbors(Cell &cell, string sl1, string sl2, double min, do
     {
       if (!(Neighbors == neighborList))
       {
-        cout << "Old number of neighbors:" << numberNeighbors << endl;
-        cout << "Old positions:" << endl;
-        for (auto MyPosition = neighborList.begin(); MyPosition != neighborList.end(); MyPosition++)
+        cout << "Old number of neighbors:" << numberNeighbors << "\n";
+        cout << "Old positions:\n";
+
+        for (const auto &MyPosition : neighborList)
         {
-          cout << "\t" << MyPosition->get<0>() << " " << MyPosition->get<1>() << " " << MyPosition->get<2>() << endl;
+          cout << "\t" << MyPosition.get<0>() << " " << MyPosition.get<1>() << " " << MyPosition.get<2>() << "\n";
         }
-        cout << "New number of neighbors:" << Neighbors.size() << endl;
-        for (auto MyPosition = Neighbors.begin(); MyPosition != Neighbors.end(); MyPosition++)
+
+        cout << "New number of neighbors:" << Neighbors.size() << "\n";
+        for (const auto &MyPosition : Neighbors)
         {
-          cout << "\t" << MyPosition->get<0>() << " " << MyPosition->get<1>() << " " << MyPosition->get<2>() << endl;
+          cout << "\t" << MyPosition.get<0>() << " " << MyPosition.get<1>() << " " << MyPosition.get<2>() << "\n";
         }
       }
     }
   }
 }
 
-complex<double> Neighbors::getGamma(Vector3 K)
+complex<double> Neighbors::getGamma(const Vector3 &K)
 {
   complex<double> MXI(0.0, -1.0);
   complex<double> gamma_rs = complex<double>(0.0, 0.0);
-  for (Iterator nbr = this->begin(); nbr != this->end(); ++nbr)
+  for (const auto &nbr : neighborList)
   {
     // cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
-    double dot_prod = K[0] * nbr->get<0>() + K[1] * nbr->get<1>() + K[2] * nbr->get<2>();
+    double dot_prod = K[0] * nbr.get<0>() + K[1] * nbr.get<1>() + K[2] * nbr.get<2>();
     gamma_rs += exp(MXI * dot_prod);
     // cout << "gamma_rs = " << gamma_rs << " " << numberNeighbors << endl;
   }
@@ -97,21 +100,25 @@ complex<double> Neighbors::getGamma(Vector3 K)
 
 std::size_t Neighbors::size() { return numberNeighbors; }
 
-Neighbors::Iterator Neighbors::begin() { return Iterator(neighborList.begin()); }
+Neighbors::Iterator Neighbors::begin() { return neighborList.begin(); }
 
-Neighbors::Iterator Neighbors::end() { return Iterator(neighborList.end()); }
+Neighbors::Iterator Neighbors::end() { return neighborList.end(); }
 
-Neighbors::ConstIterator Neighbors::cbegin() const { return ConstIterator(neighborList.cbegin()); }
+Neighbors::ConstIterator Neighbors::begin() const { return neighborList.cbegin(); }
 
-Neighbors::ConstIterator Neighbors::cend() const { return ConstIterator(neighborList.cend()); }
+Neighbors::ConstIterator Neighbors::end() const { return neighborList.cend(); }
+
+Neighbors::ConstIterator Neighbors::cbegin() const { return neighborList.cbegin(); }
+
+Neighbors::ConstIterator Neighbors::cend() const { return neighborList.cend(); }
 
 std::ostream &operator<<(std::ostream &output, const Neighbors &n)
 {
   output << "  x         y         z         r\n";
-  for(auto nbr = n.cbegin(); nbr != n.cend(); ++nbr)
+  for (const auto &nbr : n)
   {
-    double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-    output << boost::format("%9.5f %9.5f %9.5f %9.5f\n") % nbr->get<0>() % nbr->get<1>() % nbr->get<2>() % dist;
+    double dist = sqrt(pow(nbr.get<0>(), 2) + pow(nbr.get<1>(), 2) + pow(nbr.get<2>(), 2));
+    output << boost::format("%9.5f %9.5f %9.5f %9.5f\n") % nbr.get<0>() % nbr.get<1>() % nbr.get<2>() % dist;
   }
   return output;
 }

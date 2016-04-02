@@ -20,7 +20,6 @@ class Cell;
 class Neighbors
 {
 public:
-  Neighbors() : numberNeighbors(0){};
   //! Returns whether of not neighbors have been calculated previously;
   //! \param
   bool empty();
@@ -36,13 +35,17 @@ public:
   //! Get variable \f$ \Gamma = \frac{1}{z_{rs}} \sum_{d} e^{-i \boldmath{k} \cdot \boldmath{d}} \f$
   //! described in J Phys. Condens. Matter 21 216001 (2009)
   //! \param K k vector used in spin wave calculation.
-  std::complex<double> getGamma(Vector3 K);
+  std::complex<double> getGamma(const Vector3 &K);
   typedef UniqueThreeVectors<double>::Iterator Iterator;
   typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
   //! \return Returns an Iterator pointing to the first element of the neighbor list
   Iterator begin();
   //! \return Returns an Iterator pointing to the final element of the neighbor list
   Iterator end();
+  //! \return Returns an Iterator pointing to the first element of the neighbor list
+  ConstIterator begin() const;
+  //! \return Returns an Iterator pointing to the final element of the neighbor list
+  ConstIterator end() const;
   //! \return Returns an ConstIterator pointing to the first element of the neighbor list
   ConstIterator cbegin() const;
   //! \return Returns an ConstIterator pointing to the final element of the neighbor list
@@ -51,7 +54,7 @@ public:
 
 private:
   UniqueThreeVectors<double> neighborList;
-  std::size_t numberNeighbors;
+  std::size_t numberNeighbors{0};
 };
 }
 #endif // __Neighbors_H__
