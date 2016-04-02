@@ -43,13 +43,10 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
     then 
-      sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x;
       sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
       sudo apt-get update -qq;
-      sudo apt-get purge -qq cmake;
-      sudo apt-get install -qq cmake;
+      sudo apt-get install -qq cmake libboost-dev libboost-test-dev libeigen3-dev libtbb-dev libstdc++-4.9-dev clang-3.6;
       cmake --version;
-      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev libstdc++-4.9-dev clang-3.6;
     fi
 
 before_script:
