@@ -1,8 +1,8 @@
 version: 0.2.{build}
 
 branches:
-  except:
-  - coverity_scan
+  only:
+  - master
 
 configuration: Release
 
