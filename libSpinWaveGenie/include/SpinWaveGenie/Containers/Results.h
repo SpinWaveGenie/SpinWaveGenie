@@ -59,7 +59,7 @@ public:
   //! \return Returns an Iterator pointing to the end of the container.
   Iterator end() { return results.end(); }
   //! \return Returns an ConstIterator pointing to the first element in the container.
-  ConstIterator begin() const { return results.cend(); }
+  ConstIterator begin() const { return results.cbegin(); }
   //! \return Returns an ConstIterator pointing to the end of the container.
   ConstIterator end() const { return results.cend(); }
   //! \return Returns an ConstIterator pointing to the first element in the container.

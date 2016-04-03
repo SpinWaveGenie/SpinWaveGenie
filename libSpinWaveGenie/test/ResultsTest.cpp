@@ -95,7 +95,6 @@ BOOST_AUTO_TEST_CASE(PrintList)
     Results results = getResults();
     std::stringstream teststream;
     std::string header;
-    
     teststream << results;
     std::getline(teststream,header,'\n');
     BOOST_CHECK_EQUAL("  frequency  intensity",header);
