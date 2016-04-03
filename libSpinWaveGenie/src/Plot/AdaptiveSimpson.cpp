@@ -250,7 +250,7 @@ AdaptiveSimpson::AdaptiveSimpson(const AdaptiveSimpson &other) : m_p(other.m_p->
 
 AdaptiveSimpson &AdaptiveSimpson::operator=(const AdaptiveSimpson &other)
 {
-  m_p = move(other.m_p->clone());
+  m_p = other.m_p->clone();
   return *this;
 }
 

@@ -15,7 +15,7 @@ namespace SpinWaveGenie
 
 IntegrateAxes::IntegrateAxes(const IntegrateAxes &other) : kx(0.0), ky(0.0), kz(0.0)
 {
-  resolutionFunction = move(other.resolutionFunction->clone());
+  resolutionFunction = other.resolutionFunction->clone();
   this->maximumEvaluations = other.maximumEvaluations;
   this->tolerance = other.tolerance;
   this->integrationDirections = other.integrationDirections;
