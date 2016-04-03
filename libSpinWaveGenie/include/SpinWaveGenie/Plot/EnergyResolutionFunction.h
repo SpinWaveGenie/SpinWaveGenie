@@ -25,7 +25,7 @@ namespace SpinWaveGenie
 template <class T> class EnergyResolution : public SpinWavePlot
 {
 public:
-  EnergyResolution(){};
+  EnergyResolution() = default;
   EnergyResolution(const EnergyResolution &other);
   EnergyResolution &operator=(EnergyResolution &other);
   EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn, Energies energies);

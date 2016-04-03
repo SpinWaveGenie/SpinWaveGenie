@@ -23,8 +23,8 @@ IntegrateEnergy::IntegrateEnergy(const IntegrateEnergy &other) : kx(0.0), ky(0.0
   this->maximumEvaluations = other.maximumEvaluations;
 }
 
-IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol,
-                                 int maxEvals)
+IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, const Energies &energies, double delta,
+                                 double tol, int maxEvals)
     : resolutionFunction(std::move(resFunction)), maximumEvaluations(maxEvals), tolerance(tol), delta(delta), kx(0.0),
       ky(0.0), kz(0.0), centeredEnergies(energies)
 {

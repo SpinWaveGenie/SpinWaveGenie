@@ -11,11 +11,7 @@ using namespace SpinWaveGenie;
 bool areEqual(Point first, Point second)
 {
     double eps = 1.0e-5;
-    if (std::abs(first.frequency - second.frequency) < eps &&
-        std::abs(first.intensity - second.intensity) < eps )
-        return true;
-    else
-        return false;
+    return std::abs(first.frequency - second.frequency) < eps && std::abs(first.intensity - second.intensity) < eps;
 }
 
 Results getResults()
@@ -25,8 +21,8 @@ Results getResults()
     for (auto i = 0;i!=10;i++)
     {
         Point pt;
-        pt.frequency = (double)i;
-        pt.intensity = (double)i;
+        pt.frequency = static_cast<double>(i);
+        pt.intensity = static_cast<double>(i);
         results.insert(pt);
 
         pt.frequency = static_cast<double>(i * 2);

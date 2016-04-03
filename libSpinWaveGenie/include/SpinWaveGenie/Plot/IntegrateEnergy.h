@@ -23,7 +23,7 @@ class IntegrateEnergy : public SpinWavePlot
 {
 public:
   IntegrateEnergy(const IntegrateEnergy &other);
-  IntegrateEnergy(std::unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol = 0.01,
+  IntegrateEnergy(std::unique_ptr<SpinWavePlot> resFunction, const Energies &energies, double delta, double tol = 0.01,
                   int maxEval = 100000);
   std::vector<double> getCut(double kx, double ky, double kz) override;
   std::unique_ptr<SpinWavePlot> clone() override;
