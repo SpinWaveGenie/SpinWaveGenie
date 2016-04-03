@@ -17,15 +17,14 @@ class ExchangeInteractionSameSublattice : public Interaction
 public:
   ExchangeInteractionSameSublattice(std::string name, double value, std::string sl_r, double min, double max);
   void updateInteraction(double value, std::string sl_r, double min, double max);
-  virtual void updateValue(double value_in) override;
-  virtual const std::string &getName() override;
+  void updateValue(double value_in) override;
+  const std::string &getName() override;
   void calcConstantValues(Cell &cell) override;
   void calculateEnergy(Cell &cell, double &energy) override;
   void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;
   void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) override;
   std::array<std::string, 2> sublattices() const override;
-  virtual std::unique_ptr<Interaction> clone() const override;
-  virtual ~ExchangeInteractionSameSublattice(){};
+  std::unique_ptr<Interaction> clone() const override;
 
 private:
   Neighbors neighbors;

@@ -24,8 +24,7 @@ public:
   void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;
   void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) override;
   std::array<std::string, 2> sublattices() const override;
-  virtual std::unique_ptr<Interaction> clone() const override;
-  virtual ~DM_Z_Interaction(){};
+  std::unique_ptr<Interaction> clone() const override;
 
 private:
   Neighbors neighbors;

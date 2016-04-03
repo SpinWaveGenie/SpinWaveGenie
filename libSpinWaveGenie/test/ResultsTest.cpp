@@ -28,9 +28,9 @@ Results getResults()
         pt.frequency = (double)i;
         pt.intensity = (double)i;
         results.insert(pt);
-        
-        pt.frequency = (double)(i*2);
-        pt.intensity = (double)(std::max(i*2-10,0));
+
+        pt.frequency = static_cast<double>(i * 2);
+        pt.intensity = static_cast<double>(std::max(i * 2 - 10, 0));
         results.insert(pt);
     }
     return results;

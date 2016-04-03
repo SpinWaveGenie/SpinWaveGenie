@@ -304,4 +304,4 @@ void AdaptiveSimpson::setAdditionalEvaluationPoints(const std::deque<double> &ev
   m_p->m_evaluationPointsOuterDimensions = evaluationPoints;
 }
 
-AdaptiveSimpson::~AdaptiveSimpson(){}
+AdaptiveSimpson::~AdaptiveSimpson() = default;

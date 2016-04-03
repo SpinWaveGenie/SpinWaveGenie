@@ -36,7 +36,6 @@ public:
   void setEnergies(Energies energies) override;
   const Energies &getEnergies() override;
   std::unique_ptr<SpinWavePlot> clone() override;
-  ~EnergyResolution(){};
 
 private:
   Energies energies;

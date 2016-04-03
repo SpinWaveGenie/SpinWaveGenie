@@ -90,7 +90,6 @@ public:
         double tmp2 = boost::math::spherical_harmonic_r(m_n2, 0, theta,phi);
         return std::vector<double>(1,tmp1*tmp2);
     };
-    ~SphericalHarmonics(){};
 private:
     SpinWaveGenie::Cell m_Cell;
     Energies m_Energies;

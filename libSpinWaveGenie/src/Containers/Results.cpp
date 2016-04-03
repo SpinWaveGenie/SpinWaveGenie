@@ -39,7 +39,7 @@ void Results::uniqueSolutions()
   std::sort(VI_unique.begin(), VI_unique.end());
   VI_unique.erase(unique(VI_unique.begin(), VI_unique.end(), evalues_equal), VI_unique.end());
 
-  int NU = (int)VI_unique.size();
+  int NU = static_cast<int>(VI_unique.size());
   VI_unique.resize(NU);
 
   for (int i = 0; i < NU; i++)
@@ -83,9 +83,9 @@ void Results::significantSolutions(double ETS)
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Results &n)
 {
     output << "  frequency  intensity\n";
-    for (auto result = n.cbegin(); result != n.cend(); ++result)
+    for (const auto &result : n)
     {
-        output << boost::format("%9.5f %10.5f\n") % result->frequency % result->intensity;
+      output << boost::format("%9.5f %10.5f\n") % result.frequency % result.intensity;
     }
     return output;
 }

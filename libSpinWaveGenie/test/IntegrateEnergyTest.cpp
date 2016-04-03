@@ -46,7 +46,6 @@ namespace SpinWaveGenie
             }
             return results;
         };
-        ~IntegrateNormalDistribution(){};
     private:
         SpinWaveGenie::Cell m_Cell;
         Energies m_Energies;

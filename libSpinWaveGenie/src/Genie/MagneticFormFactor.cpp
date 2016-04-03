@@ -32,11 +32,6 @@ MagneticFormFactor::MagneticFormFactor(std::string type)
   this->setType(type);
 }
 
-MagneticFormFactor::MagneticFormFactor(const MagneticFormFactor &other)
-    : coefficients(other.coefficients), Farray(other.Farray), NormalizedWeights(other.NormalizedWeights)
-{
-}
-
 void MagneticFormFactor::initializeMap()
 {
   coefficients =

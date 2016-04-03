@@ -38,7 +38,6 @@ public:
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
   void setEnergies(Energies energies) override;
-  ~TwoDimensionResolutionFunction(){};
 private:
   std::vector<double> calculateIntegrand(std::deque<double> &x);
   Energies energies;

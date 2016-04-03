@@ -21,7 +21,8 @@ Energies::Energies(double minimum, double maximum, std::size_t numberPoints)
     if (numberPoints == 1)
       energies.push_back(minimum);
     else
-      energies.push_back(minimum + (maximum - minimum) * (double)bin / (double)(numberPoints - 1));
+      energies.push_back(minimum +
+                         (maximum - minimum) * static_cast<double>(bin) / static_cast<double>(numberPoints - 1));
   }
 }
 
@@ -48,9 +49,9 @@ void Energies::clear() { energies.clear(); }
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Energies &n)
 {
   output << "  frequency\n";
-  for (auto result = n.cbegin(); result != n.cend(); ++result)
+  for (const auto &result : n)
   {
-    output << boost::format("%9.5f\n") % *result;
+    output << boost::format("%9.5f\n") % result;
   }
   return output;
 }

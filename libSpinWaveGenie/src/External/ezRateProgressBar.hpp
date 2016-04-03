@@ -65,7 +65,7 @@ public:
     std::ostringstream stm;
     if (v >= 1)
     {
-      stm << (long long)v;
+      stm << static_cast<long long>(v);
       str = stm.str();
       for (int64_t i = str.size() - 3; i > 0; i -= 3)
         str.insert(i, 1, ',');
@@ -163,7 +163,7 @@ public:
     // if (dt < 1) return; // Was meant to avoid division by zero when time was in whole numbers.
     cur = newvalue;
     std::stringstream pctstr;
-    double Pct = ((double)cur) / n;
+    double Pct = static_cast<double>(cur) / n;
     pctstr << boost::format("%3d%%") % static_cast<int>(100 * Pct);
     std::string out;
     out.reserve(80);
@@ -171,7 +171,7 @@ public:
     // Seconds.
     std::string tstr;
     out.append(" | ");
-    secondsToString((unsigned int)dt, tstr);
+    secondsToString(static_cast<unsigned int>(dt), tstr);
     out.append(tstr);
     int64_t pad, newwidth;
     if (Pct >= 1.0)
@@ -192,7 +192,7 @@ public:
       out.append("0 ");
       out.append(units);
       out.append(" | ");
-      commaNumber((unsigned int)(n / dt), tstr);
+      commaNumber(static_cast<unsigned int>(n / dt), tstr);
       out.append(tstr);
       out.append(" ");
       out.append(units);
@@ -217,7 +217,7 @@ public:
         eta = dt * (1.0 - Pct) / Pct;
       }
       out.append(" |  ");
-      secondsToString((unsigned int)eta, tstr);
+      secondsToString(static_cast<unsigned int>(eta), tstr);
       out.append(tstr);
       out.append(" | ");
       commaNumber(cur, tstr);
@@ -238,7 +238,7 @@ public:
       out.append(" | ");
       eta = cur / dt;
       if (eta > 1.0)
-        commaNumber((unsigned int)eta, tstr);
+        commaNumber(static_cast<unsigned int>(eta), tstr);
       else
       {
         std::ostringstream stm;
