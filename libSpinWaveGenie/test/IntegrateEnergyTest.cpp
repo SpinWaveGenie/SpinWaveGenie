@@ -17,7 +17,7 @@ namespace SpinWaveGenie
         };
         std::unique_ptr<SpinWavePlot> clone() override
         {
-          return std::unique_ptr<SpinWavePlot>(memory::make_unique<IntegrateNormalDistribution>(*this));
+          return memory::make_unique<IntegrateNormalDistribution>(*this);
         };
         const Cell& getCell() const override
         {
@@ -54,15 +54,14 @@ namespace SpinWaveGenie
 
 BOOST_AUTO_TEST_CASE( NormalDistributionTest )
 {
-  std::unique_ptr<SpinWaveGenie::SpinWavePlot> res(
-      SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateNormalDistribution>());
+  auto res = SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateNormalDistribution>();
 
-    SpinWaveGenie::Energies centeredEnergies(10.0,10.0,2);
-    std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(
-        SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateEnergy>(move(res), centeredEnergies, 3.0, 0.000001));
-    std::vector<double> result = cut->getCut(0.0,0.0,1.0);
-    BOOST_CHECK_CLOSE(result[0],1.0,1.0e-5);
-    BOOST_CHECK_CLOSE(result[1],1.0,1.0e-5);
+  SpinWaveGenie::Energies centeredEnergies(10.0, 10.0, 2);
+  auto cut =
+      SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateEnergy>(move(res), centeredEnergies, 3.0, 0.000001);
+  std::vector<double> result = cut->getCut(0.0, 0.0, 1.0);
+  BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-5);
+  BOOST_CHECK_CLOSE(result[1], 1.0, 1.0e-5);
 }
 
 

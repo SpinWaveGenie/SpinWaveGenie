@@ -41,16 +41,14 @@ namespace SpinWaveGenie
 
 BOOST_AUTO_TEST_CASE( ConstantFunctionTest )
 {
-  std::unique_ptr<SpinWaveGenie::SpinWavePlot> res(
-      SpinWaveGenie::memory::make_unique<SpinWaveGenie::ConstantFunction>());
-  std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(
-      SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateThetaPhi>(move(res), 1.0e-10));
-    std::vector<double> result = cut->getCut(0.0,0.0,1.0);
-    //result from IntegrateThetaPhi is divided by 4*M_PI
-    BOOST_CHECK_CLOSE(result[0],1.0,1.0e-5);
-    //check another radius.
-    result = cut->getCut(0.0,0.0,2.0);
-    BOOST_CHECK_CLOSE(result[0],1.0,1.0e-5);
+  auto res = SpinWaveGenie::memory::make_unique<SpinWaveGenie::ConstantFunction>();
+  auto cut = SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateThetaPhi>(move(res), 1.0e-10);
+  std::vector<double> result = cut->getCut(0.0, 0.0, 1.0);
+  // result from IntegrateThetaPhi is divided by 4*M_PI
+  BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-5);
+  // check another radius.
+  result = cut->getCut(0.0, 0.0, 2.0);
+  BOOST_CHECK_CLOSE(result[0], 1.0, 1.0e-5);
 }
 
 namespace SpinWaveGenie
@@ -102,15 +100,13 @@ BOOST_AUTO_TEST_CASE( SphericalHarmonicsTest )
     {
         for(unsigned n2=0;n2<4;++n2)
         {
-          std::unique_ptr<SpinWaveGenie::SphericalHarmonics> res(
-              SpinWaveGenie::memory::make_unique<SpinWaveGenie::SphericalHarmonics>(n1, n2));
-          std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut(
-              SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateThetaPhi>(move(res), 1.0e-12));
-            std::vector<double> result = cut->getCut(0.0,0.0,1.0);
-            if (n1 == n2)
-            {
-                //result from IntegrateThetaPhi is divided by 4*M_PI
-                BOOST_CHECK_CLOSE(result[0]*4.0*M_PI,1.0,5.0e-3);
+          auto res = SpinWaveGenie::memory::make_unique<SpinWaveGenie::SphericalHarmonics>(n1, n2);
+          auto cut = SpinWaveGenie::memory::make_unique<SpinWaveGenie::IntegrateThetaPhi>(move(res), 1.0e-12);
+          std::vector<double> result = cut->getCut(0.0, 0.0, 1.0);
+          if (n1 == n2)
+          {
+            // result from IntegrateThetaPhi is divided by 4*M_PI
+            BOOST_CHECK_CLOSE(result[0] * 4.0 * M_PI, 1.0, 5.0e-3);
             }
             else
             {
