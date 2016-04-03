@@ -79,7 +79,7 @@ script:
   - if [ "$CLANG_STATIC_ANALYZER" == "true" ];
     then
       SOURCE_FILES=`find . \( -name '*.cpp' \) -path './*'`;
-      CHECKS="modernize-*,readability-simplify-boolean-expr,google-readability-casting";
+      CHECKS="clang-analyzer-*,modernize-*,-modernize-pass-by-value,performance-*,readability-*,misc-*,google-readability-casting";
       for file in $SOURCE_FILES; do
         echo Filename:$file;
         clang-tidy-3.8 -checks=$CHECKS -p . -header-filter='./*' $file;
