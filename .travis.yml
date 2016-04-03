@@ -59,7 +59,7 @@ before_script:
     elif [ "$CLANG_STATIC_ANALYZER" == "true" ];
     then
       echo "RUNNING CLANG STATIC ANALYZER, $CLANG_STATIC_ANALYZER";
-      scan-build-3.8 --use-cc=clang-3.8 --use-c++=clang++-3.8 cmake -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
+      cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
     elif [ "$CLANG_SANITIZERS" == "true" ];
     then 
       echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
@@ -78,7 +78,12 @@ before_script:
 script:
   - if [ "$CLANG_STATIC_ANALYZER" == "true" ];
     then
-      scan-build-3.8 --use-cc=clang --use-c++=clang++ make;
+      SOURCE_FILES=`find . \( -name '*.cpp' \) -path './*'`;
+      CHECKS="*";
+      for file in $SOURCE_FILES; do
+        echo Filename:$file;
+        clang-tidy-3.8 -checks=$CHECKS -p . -header-filter='./*' $file;
+      done
     else
       make -j 2;
     fi
