@@ -12,13 +12,7 @@ using namespace SpinWaveGenie;
 
 bool areEqual(Axis first, Axis second)
 {
-    if (first.v0 == second.v0 &&
-        first.v1 == second.v1 &&
-        first.v2 == second.v2 &&
-        first.delta == second.delta)
-        return true;
-    else
-        return false;
+  return first.v0 == second.v0 && first.v1 == second.v1 && first.v2 == second.v2 && first.delta == second.delta;
 }
 
 HKLDirections getDirections()

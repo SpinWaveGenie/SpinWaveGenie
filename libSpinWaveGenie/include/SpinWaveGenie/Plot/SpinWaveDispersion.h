@@ -16,8 +16,8 @@ public:
     PrintIntensity
   };
   void setOptions(Options PrintOptions, bool Value);
-  void setFilename(std::string name);
-  void setPoints(SpinWaveGenie::ThreeVectors<double> pos);
+  void setFilename(const std::string &name);
+  void setPoints(const SpinWaveGenie::ThreeVectors<double> &pos);
   void setGenie(const SpinWaveGenie::SpinWave &SW);
   void save();
 

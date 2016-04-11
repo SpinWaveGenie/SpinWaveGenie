@@ -38,7 +38,6 @@ public:
   //! Construct Magnetic Form Factor object of a given type.
   //! \param type Name of ion from the ILL Neutron Data Booklet (in CAPS)
   MagneticFormFactor(std::string type);
-  MagneticFormFactor(const MagneticFormFactor &other);
   //! \Sets the type of ion.
   //! \param type Name of ion from ILL Neutron Data Booklet (in CAPS)
   void setType(std::string type);

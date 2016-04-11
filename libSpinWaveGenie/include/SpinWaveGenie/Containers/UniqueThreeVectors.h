@@ -49,10 +49,7 @@ template <typename T> struct isEqual
     T x = FirstVector.template get<0>() - SecondVector.template get<0>();
     T y = FirstVector.template get<1>() - SecondVector.template get<1>();
     T z = FirstVector.template get<2>() - SecondVector.template get<2>();
-    if (std::abs(x) < epsilon && std::abs(y) < epsilon && std::abs(z) < epsilon)
-      return true;
-    else
-      return false;
+    return std::abs(x) < epsilon && std::abs(y) < epsilon && std::abs(z) < epsilon;
   };
 };
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */

@@ -20,8 +20,6 @@ class Sublattice
 public:
   //! Default constructor
   Sublattice();
-  //! Destructor
-  ~Sublattice(){};
   //! set name to describe sublattice
   //! \param nameInput a std::string argument unique to each sublattice
   void setName(std::string nameInput);

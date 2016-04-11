@@ -26,7 +26,7 @@ class Energies
 {
 public:
   //! Default constructor
-  Energies(){};
+  Energies() = default;
   //! Constructs numberPoints evenly spaced energies between minimum and maximum.
   //! \param minimum Minimum energy in range, inclusive.
   //! \param maximum Maximum energy in range, inclusive.
@@ -45,7 +45,7 @@ public:
   std::size_t getUpperBound(double energy);
   //! Get the number of values stored in this container.
   //! \return size of container.
-  std::size_t size() const;
+  std::size_t size() const { return energies.size(); }
   //! Clear all energy values currently stored in this container. this->size() should be zero.
   void clear();
   //! Get C-style pointer to first element in container.
@@ -54,35 +54,26 @@ public:
   //! Permit access via the subscript operator.
   //! \param position Index of energy value.
   //! \return Energy value.
-  const double &operator[](std::size_t position);
+  const double &operator[](std::size_t bin) { return energies[bin]; }
   typedef std::vector<double>::iterator Iterator;
   typedef std::vector<double>::const_iterator ConstIterator;
   //! \return Returns an Iterator pointing to the first element of the container.
-  Iterator begin();
+  Iterator begin() { return energies.begin(); }
   //! \return Returns an Iterator pointing to the end of the container.
-  Iterator end();
+  Iterator end() { return energies.end(); }
   //! \return Returns a ConstIterator pointing to the first element of the container.
-  ConstIterator cbegin() const;
+  ConstIterator begin() const { return energies.cbegin(); }
   //! \return Returns a ConstIterator pointing to the end of the container.
-  ConstIterator cend() const;
-  //! Destructor
-  ~Energies(){};
+  ConstIterator end() const { return energies.cend(); }
+  //! \return Returns a ConstIterator pointing to the first element of the container.
+  ConstIterator cbegin() const { return energies.cbegin(); }
+  //! \return Returns a ConstIterator pointing to the end of the container.
+  ConstIterator cend() const { return energies.cend(); }
   friend std::ostream &operator<<(std::ostream &output, const Energies &n);
   
 private:
   std::vector<double> energies;
 };
 
-inline std::size_t Energies::size() const { return energies.size(); }
-
-inline const double &Energies::operator[](std::size_t bin) { return energies[bin]; }
-
-inline Energies::Iterator Energies::begin() { return energies.begin(); }
-
-inline Energies::Iterator Energies::end() { return energies.end(); }
-
-inline Energies::ConstIterator Energies::cbegin() const { return energies.cbegin(); }
-
-inline Energies::ConstIterator Energies::cend() const { return energies.cend(); }
 }
 #endif /* defined(__spin_wave_genie__Energies__) */
