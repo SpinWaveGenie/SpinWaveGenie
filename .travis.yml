@@ -90,7 +90,8 @@ script:
   - if [ "$COVERALLS" == "true" ];
     then 
       make coveralls -j 2;
-    else
+    elif [ "$CLANG_STATIC_ANALYZER" != "true" ];
+    then
       ctest --output-on-failure -j 2;
     fi
     
