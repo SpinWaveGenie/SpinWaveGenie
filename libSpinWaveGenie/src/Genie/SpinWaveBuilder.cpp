@@ -76,10 +76,6 @@ SpinWave SpinWaveBuilder::createElement()
   // cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
 
   InteractionsContainer interactions_copy = interactions;
-  for (const auto &iter : interactions) // r
-  {
-    interactions_copy.insert(iter.clone());
-  }
 
   for (auto &elem : interactions_copy)
   {
