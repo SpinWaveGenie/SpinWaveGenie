@@ -1,11 +1,12 @@
 #ifndef __SpinWaveBuilder_H__
 #define __SpinWaveBuilder_H__ 1
 
-#include <string>
-#include <vector>
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include "SpinWaveGenie/Interactions/InteractionsContainer.h"
+#include "SpinWaveGenie/Memory.h"
+#include <string>
+#include <vector>
 
 namespace SpinWaveGenie
 {
@@ -24,7 +25,7 @@ public:
 
 private:
   Cell cell;
-  std::vector<std::unique_ptr<Interaction>> interactions;
+  InteractionsContainer interactions;
 };
 }
 #endif

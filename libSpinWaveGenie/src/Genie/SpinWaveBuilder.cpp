@@ -12,7 +12,7 @@ SpinWaveBuilder::SpinWaveBuilder(Cell &cellIn) : cell(cellIn)
 {
   for (const auto &iter : interactions) // r
   {
-    interactions.push_back(iter->clone());
+    interactions.insert(iter->clone());
   }
 }
 
@@ -22,7 +22,7 @@ void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 {
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
-  interactions.push_back(std::move(in));
+  interactions.insert(std::move(in));
   std::sort(interactions.begin(), interactions.end(),
             [](const std::unique_ptr<Interaction> &a, const std::unique_ptr<Interaction> &b)
             {
@@ -79,10 +79,10 @@ SpinWave SpinWaveBuilder::createElement()
 {
   // cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
 
-  std::vector<std::unique_ptr<Interaction>> interactions_copy;
+  InteractionsContainer interactions_copy = interactions;
   for (const auto &iter : interactions) // r
   {
-    interactions_copy.push_back(iter->clone());
+    interactions_copy.insert(iter->clone());
   }
 
   for (auto &elem : interactions_copy)
@@ -90,7 +90,7 @@ SpinWave SpinWaveBuilder::createElement()
     elem->calcConstantValues(cell);
   }
 
-  SpinWave SW(cell, std::move(interactions_copy));
+  SpinWave SW(cell, interactions_copy);
   Eigen::VectorXcd firstOrder = getFirstOrderTerms();
   if (firstOrder.norm() > 0.1)
   {
