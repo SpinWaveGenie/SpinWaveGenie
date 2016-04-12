@@ -63,10 +63,10 @@ void DM_Z_Interaction::calcConstantValues(Cell &cell)
 
 void DM_Z_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
+void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
 
   LN(r, r) -= z_rs * tmp0;
   LN(r, s) -= z_rs * conj(gamma_rs) * (tmp1 - XI * tmp2 - XI * tmp3 - tmp4);

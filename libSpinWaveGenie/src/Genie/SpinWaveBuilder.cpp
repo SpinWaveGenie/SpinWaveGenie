@@ -12,7 +12,7 @@ SpinWaveBuilder::SpinWaveBuilder(Cell &cellIn) : cell(cellIn)
 {
   for (const auto &iter : interactions) // r
   {
-    interactions.insert(iter->clone());
+    interactions.insert(iter.clone());
   }
 }
 
@@ -23,19 +23,15 @@ void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   interactions.insert(std::move(in));
-  std::sort(interactions.begin(), interactions.end(),
-            [](const std::unique_ptr<Interaction> &a, const std::unique_ptr<Interaction> &b)
-            {
-              return *a < *b;
-            });
+  interactions.sort();
 }
 
 void SpinWaveBuilder::updateInteraction(string name, double value)
 {
   for (auto & elem : interactions)
   {
-    if (name.compare(elem->getName()) == 0)
-      elem->updateValue(value);
+    if (name.compare(elem.getName()) == 0)
+      elem.updateValue(value);
   }
 }
 
@@ -45,7 +41,7 @@ double SpinWaveBuilder::getEnergy()
   for (auto & elem : interactions)
   {
     // energy = 0.0;
-    elem->calculateEnergy(cell, energy);
+    elem.calculateEnergy(cell, energy);
     //cout << elem->getName() << " " << energy / 4.0 << endl;
   }
   // cout << endl;
@@ -68,7 +64,7 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
     int M = cell.size();
     firstOrder.setZero(2*M);
     */
-    elem->calculateFirstOrderTerms(this->cell, firstOrder);
+    elem.calculateFirstOrderTerms(this->cell, firstOrder);
     // cout << firstOrder[2] << " " << firstOrder[8] << endl;
     // cout << firstOrder.transpose() << endl;
   }
@@ -82,12 +78,12 @@ SpinWave SpinWaveBuilder::createElement()
   InteractionsContainer interactions_copy = interactions;
   for (const auto &iter : interactions) // r
   {
-    interactions_copy.insert(iter->clone());
+    interactions_copy.insert(iter.clone());
   }
 
   for (auto &elem : interactions_copy)
   {
-    elem->calcConstantValues(cell);
+    elem.calcConstantValues(cell);
   }
 
   SpinWave SW(cell, interactions_copy);

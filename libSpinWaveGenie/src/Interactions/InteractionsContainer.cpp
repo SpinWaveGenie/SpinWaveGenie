@@ -30,6 +30,11 @@ void InteractionsContainer::clear() { container.clear(); }
 
 void InteractionsContainer::insert(std::unique_ptr<Interaction> value) { container.push_back(std::move(value)); }
 
+void InteractionsContainer::sort()
+{
+  std::sort(container.begin(), container.end(),
+            [](const std::unique_ptr<Interaction> &a, const std::unique_ptr<Interaction> &b) { return *a < *b; });
+}
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::InteractionsContainer &n)
 {
   /*output << "  frequency  intensity\n";

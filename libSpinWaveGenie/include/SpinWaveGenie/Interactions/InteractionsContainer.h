@@ -3,6 +3,8 @@
 
 #include "SpinWaveGenie/Interactions/Interaction.h"
 
+#include <boost/iterator/indirect_iterator.hpp>
+
 #include <iostream>
 #include <vector>
 
@@ -27,9 +29,12 @@ public:
   std::size_t size() const { return container.size(); }
   //! Clearcontainer so that the size is zero.
   void clear();
-  const std::unique_ptr<Interaction> &operator[](std::size_t bin) { return container[bin]; }
-  typedef std::vector<std::unique_ptr<Interaction>>::iterator Iterator;
-  typedef std::vector<std::unique_ptr<Interaction>>::const_iterator ConstIterator;
+  void sort();
+  const Interaction &operator[](std::size_t bin) { return *container[bin]; }
+  typedef boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::iterator> Iterator;
+  typedef boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::const_iterator> ConstIterator;
+  // typedef std::vector<std::unique_ptr<Interaction>>::iterator Iterator;
+  // typedef std::vector<std::unique_ptr<Interaction>>::const_iterator ConstIterator;
   //! \return Returns an Iterator pointing to the first element in the container.
   Iterator begin() { return container.begin(); }
   //! \return Returns an Iterator pointing to the end of the container.

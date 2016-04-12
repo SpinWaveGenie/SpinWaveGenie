@@ -45,7 +45,7 @@ void SpinWave::createMatrix(double KX, double KY, double KZ)
   clearMatrix();
   for (const auto &iter : interactions) // r
   {
-    iter->updateMatrix(K, LN);
+    iter.updateMatrix(K, LN);
   }
 }
 

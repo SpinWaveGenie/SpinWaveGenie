@@ -123,9 +123,9 @@ void ExchangeInteraction::calculateFirstOrderTerms(Cell &cell, VectorXcd &elemen
   elements[s + M] += conj(LNs);
 }
 
-void ExchangeInteraction::updateMatrix(Vector3d K, MatrixXcd &LN)
+void ExchangeInteraction::updateMatrix(Vector3d K, MatrixXcd &LN) const
 {
-  gamma_rs = neighbors.getGamma(K);
+  std::complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << sl_r << " " << sl_s << " " << gamma_rs << endl;
 
   LN(r, r) += LNrr;
