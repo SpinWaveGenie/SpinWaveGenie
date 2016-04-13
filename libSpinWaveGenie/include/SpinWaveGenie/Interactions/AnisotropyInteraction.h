@@ -25,10 +25,10 @@ public:
   //!
   void updateValue(double value_in) override;
   const std::string &getName() const override;
-  void calcConstantValues(Cell &cell) override;
-  void calculateEnergy(Cell &cell, double &energy) override;
-  void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;
-  void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) const override;
+  void calcConstantValues(const Cell &cell) override;
+  void calculateEnergy(const Cell &cell, double &energy) override;
+  void calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements) override;
+  void updateMatrix(const Eigen::Vector3d &K, Eigen::MatrixXcd &LN) const override;
   std::array<std::string, 2> sublattices() const override;
   std::unique_ptr<Interaction> clone() const override;
 

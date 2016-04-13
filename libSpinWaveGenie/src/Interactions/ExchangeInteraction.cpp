@@ -22,8 +22,8 @@ std::unique_ptr<Interaction> ExchangeInteraction::clone() const
   return memory::make_unique<ExchangeInteraction>(*this);
 }
 
-void ExchangeInteraction::updateInteraction(double value_in, string sl_r_in, string sl_s_in, double min_in,
-                                            double max_in)
+void ExchangeInteraction::updateInteraction(double value_in, const string &sl_r_in, const string &sl_s_in,
+                                            double min_in, double max_in)
 {
   value = value_in;
   sl_r = sl_r_in;
@@ -44,7 +44,7 @@ std::array<std::string, 2> ExchangeInteraction::sublattices() const
     return {{sl_s, sl_r}};
 }
 
-void ExchangeInteraction::calcConstantValues(Cell &cell)
+void ExchangeInteraction::calcConstantValues(const Cell &cell)
 {
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
@@ -73,7 +73,7 @@ void ExchangeInteraction::calcConstantValues(Cell &cell)
   // cout << LNrr << " "<< LNss << " " << LNrs << " " << LNrsM << endl;
 }
 
-void ExchangeInteraction::calculateEnergy(Cell &cell, double &energy)
+void ExchangeInteraction::calculateEnergy(const Cell &cell, double &energy)
 {
   if (neighbors.empty())
   {
@@ -93,7 +93,7 @@ void ExchangeInteraction::calculateEnergy(Cell &cell, double &energy)
   energy -= 0.5 * value * z_rs * Sr * Ss * (Frs(2, 2) + Fsr(2, 2));
 }
 
-void ExchangeInteraction::calculateFirstOrderTerms(Cell &cell, VectorXcd &elements)
+void ExchangeInteraction::calculateFirstOrderTerms(const Cell &cell, VectorXcd &elements)
 {
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
@@ -123,7 +123,7 @@ void ExchangeInteraction::calculateFirstOrderTerms(Cell &cell, VectorXcd &elemen
   elements[s + M] += conj(LNs);
 }
 
-void ExchangeInteraction::updateMatrix(Vector3d K, MatrixXcd &LN) const
+void ExchangeInteraction::updateMatrix(const Vector3d &K, MatrixXcd &LN) const
 {
   std::complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << sl_r << " " << sl_s << " " << gamma_rs << endl;

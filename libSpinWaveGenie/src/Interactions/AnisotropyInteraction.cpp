@@ -39,7 +39,7 @@ void AnisotropyInteraction::updateValue(double value_in) { value = value_in; }
 
 std::array<std::string, 2> AnisotropyInteraction::sublattices() const { return {{sl_r, sl_r}}; }
 
-void AnisotropyInteraction::calcConstantValues(Cell &cell)
+void AnisotropyInteraction::calcConstantValues(const Cell &cell)
 {
   complex<double> XI(0.0, 1.0);
   // find location of r
@@ -73,7 +73,7 @@ void AnisotropyInteraction::calcConstantValues(Cell &cell)
   // cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << LNrMrM << endl;
 }
 
-void AnisotropyInteraction::calculateEnergy(Cell &cell, double &energy)
+void AnisotropyInteraction::calculateEnergy(const Cell &cell, double &energy)
 {
   r = cell.getPosition(sl_r);
   double S = cell[r].getMoment();
@@ -92,7 +92,7 @@ void AnisotropyInteraction::calculateEnergy(Cell &cell, double &energy)
   }
 }
 
-void AnisotropyInteraction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements)
+void AnisotropyInteraction::calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements)
 {
   complex<double> XI(0.0, 1.0);
   double S = cell.getSublattice(sl_r).getMoment();
@@ -118,7 +118,7 @@ void AnisotropyInteraction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXc
   }
 }
 
-void AnisotropyInteraction::updateMatrix(Vector3 /*K*/, Eigen::MatrixXcd &LN) const
+void AnisotropyInteraction::updateMatrix(const Vector3 & /*K*/, Eigen::MatrixXcd &LN) const
 {
   LN(r, r) += LNrr;
   LN(r, r + M) += LNrrM;

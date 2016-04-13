@@ -29,7 +29,7 @@ public:
   //! \param sl2 Name of second sublattice
   //! \param min Minimum distance considered, in Angstroms
   //! \param max Maximum distance considered, in Angstroms
-  void findNeighbors(Cell &cell, std::string sl1, std::string sl2, double min, double max);
+  void findNeighbors(const Cell &cell, const std::string &sl1, const std::string &sl2, double min, double max);
   //! Get the number of neighbors.
   std::size_t size();
   //! Get variable \f$ \Gamma = \frac{1}{z_{rs}} \sum_{d} e^{-i \boldmath{k} \cdot \boldmath{d}} \f$

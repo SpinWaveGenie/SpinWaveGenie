@@ -19,16 +19,16 @@ class Interaction
 public:
   virtual std::array<std::string, 2> sublattices() const = 0;
   bool operator<(const Interaction &other) const;
-  virtual void calculateEnergy(Cell &cell, double &energy) = 0;
-  virtual void calcConstantValues(Cell &cell) = 0;
-  virtual void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) = 0;
+  virtual void calculateEnergy(const Cell &cell, double &energy) = 0;
+  virtual void calcConstantValues(const Cell &cell) = 0;
+  virtual void calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements) = 0;
   //! virtual method for adding terms to the matrix LN
   //! \param K reciprocal lattice point currently being simulated.
   //! \param cell pointer to Cell object containing magnetic ground state information
   //! \param LN matrix used to calculate spin wave frequencies and intensities
   virtual const std::string &getName() const = 0;
   virtual void updateValue(double value) = 0;
-  virtual void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) const = 0;
+  virtual void updateMatrix(const Eigen::Vector3d &K, Eigen::MatrixXcd &LN) const = 0;
   virtual std::unique_ptr<Interaction> clone() const = 0;
   virtual ~Interaction() = default;
 

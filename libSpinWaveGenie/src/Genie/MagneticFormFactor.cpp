@@ -134,7 +134,7 @@ void MagneticFormFactor::initializeMap()
        {"ZR1", vector<double>{0.453200, 59.594799, 0.783400, 21.435699, -0.245100, 9.036000, 0.009800}}};
 }
 
-void MagneticFormFactor::setType(std::string type)
+void MagneticFormFactor::setType(const std::string &type)
 {
   Farray.clear();
   NormalizedWeights.clear();
@@ -155,7 +155,7 @@ void MagneticFormFactor::setType(std::string type, double weight)
   }
 }
 
-void MagneticFormFactor::setType(std::vector<std::string> types, std::vector<double> weights)
+void MagneticFormFactor::setType(const std::vector<std::string> &types, const std::vector<double> &weights)
 {
 
   if (types.size() != weights.size())

@@ -47,17 +47,18 @@ public:
   //! Returns sublattice "name"
   //! \param name used to describe sublattice
   //! \return sublattice
-  Sublattice &getSublattice(std::string name);
-  Sublattice &operator[](std::size_t position);
+  Sublattice &getSublattice(const std::string &name);
+  const Sublattice &getSublattice(const std::string &name) const;
+  const Sublattice &operator[](std::size_t position) const;
   //! Add atom to sublattice name at position pos
   //! \param name Sublattice atom belongs to
   //! \param x x coordinate of atom in fraction of the basis vectors.
   //! \param y y coordinate of atom in fraction of the basis vectors.
   //! \param z z coordinate of of atom in fraction of the basis vectors.
-  void addAtom(std::string name, double x, double y, double z);
+  void addAtom(const std::string &name, double x, double y, double z);
   //! Returns the position where sublattice name is stored.
   //! \param name name of sublattice.
-  std::size_t getPosition(std::string name);
+  std::size_t getPosition(const std::string &name) const;
   //! Returns the number of sublattices in the cell
   //! \return number of sublattices
   size_t size() const;

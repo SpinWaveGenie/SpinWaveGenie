@@ -16,11 +16,11 @@ Sublattice::Sublattice()
   this->setMoment(0.0, 0.0, 0.0);
 }
 
-void Sublattice::setName(string nameInput) { name = nameInput; }
+void Sublattice::setName(const string &nameInput) { name = nameInput; }
 
 string Sublattice::getName() const { return name; }
 
-void Sublattice::setType(string typeInput)
+void Sublattice::setType(const string &typeInput)
 {
   // cout << typeInput << endl;
   type = typeInput;
@@ -78,9 +78,13 @@ const Matrix3 &Sublattice::getInverseMatrix() const { return inverseMatrix; }
 
 void Sublattice::addAtom(double x, double y, double z) { positions.insert(x, y, z); }
 
-Sublattice::ConstIterator Sublattice::cbegin() { return positions.cbegin(); }
+Sublattice::ConstIterator Sublattice::cbegin() const { return positions.cbegin(); }
 
-Sublattice::ConstIterator Sublattice::cend() { return positions.cend(); }
+Sublattice::ConstIterator Sublattice::cend() const { return positions.cend(); }
+
+Sublattice::ConstIterator Sublattice::begin() const { return positions.cbegin(); }
+
+Sublattice::ConstIterator Sublattice::end() const { return positions.cend(); }
 
 Sublattice::Iterator Sublattice::begin() { return positions.begin(); }
 

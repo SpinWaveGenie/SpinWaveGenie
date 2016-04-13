@@ -21,7 +21,8 @@ std::unique_ptr<Interaction> ExchangeInteractionSameSublattice::clone() const
   return memory::make_unique<ExchangeInteractionSameSublattice>(*this);
 }
 
-void ExchangeInteractionSameSublattice::updateInteraction(double value_in, string sl_r_in, double min_in, double max_in)
+void ExchangeInteractionSameSublattice::updateInteraction(double value_in, const string &sl_r_in, double min_in,
+                                                          double max_in)
 {
   value = value_in;
   sl_r = sl_r_in;
@@ -35,7 +36,7 @@ void ExchangeInteractionSameSublattice::updateValue(double value_in) { value = v
 
 std::array<std::string, 2> ExchangeInteractionSameSublattice::sublattices() const { return {{sl_r, sl_r}}; }
 
-void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
+void ExchangeInteractionSameSublattice::calcConstantValues(const Cell &cell)
 {
   // cout << "cell check(calcConstantValues): " << cell.begin()->getName() << endl;
   r = cell.getPosition(sl_r);
@@ -57,7 +58,7 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
   // cout << LNrr << " " << LNrs << endl;
 }
 
-void ExchangeInteractionSameSublattice::calculateEnergy(Cell &cell, double &energy)
+void ExchangeInteractionSameSublattice::calculateEnergy(const Cell &cell, double &energy)
 {
   r = cell.getPosition(sl_r);
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
@@ -67,12 +68,12 @@ void ExchangeInteractionSameSublattice::calculateEnergy(Cell &cell, double &ener
   energy -= value * z_rs * Sr * Sr;
 }
 
-void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell & /*cell*/, VectorXcd & /*elements*/)
+void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(const Cell & /*cell*/, VectorXcd & /*elements*/)
 {
   // first order terms are 0.0
 }
 
-void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN) const
+void ExchangeInteractionSameSublattice::updateMatrix(const Vector3d &K, MatrixXcd &LN) const
 {
   complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;

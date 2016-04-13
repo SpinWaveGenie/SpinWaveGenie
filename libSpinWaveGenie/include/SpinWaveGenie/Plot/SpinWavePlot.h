@@ -2,7 +2,6 @@
 #define __SpinWavePlot__
 
 #include <iostream>
-#include <string>
 #include <vector>
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"

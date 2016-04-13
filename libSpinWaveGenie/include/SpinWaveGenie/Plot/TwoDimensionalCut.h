@@ -21,8 +21,8 @@ class SpinWavePlot;
 class TwoDimensionalCut
 {
 public:
-  void setFilename(std::string name);
-  void setPoints(ThreeVectors<double> pos);
+  void setFilename(const std::string &name);
+  void setPoints(const ThreeVectors<double> &pos);
   void setEnergyPoints(double min, double max, size_t numberpoints);
   void setPlotObject(std::unique_ptr<SpinWavePlot> object);
   Eigen::MatrixXd getMatrix();
