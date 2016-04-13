@@ -24,7 +24,7 @@ public:
   void updateInteraction(double value_in, Vector3 direction, std::string sl_r_in);
   //!
   void updateValue(double value_in) override;
-  const std::string &getName() override;
+  const std::string &getName() const override;
   void calcConstantValues(Cell &cell) override;
   void calculateEnergy(Cell &cell, double &energy) override;
   void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;

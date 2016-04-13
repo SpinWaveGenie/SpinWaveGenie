@@ -75,14 +75,12 @@ SpinWave SpinWaveBuilder::createElement()
 {
   // cout << "cell check(Create_Element): " << cell.begin()->getName() << endl;
 
-  InteractionsContainer interactions_copy = interactions;
-
-  for (auto &elem : interactions_copy)
+  for (auto &elem : interactions)
   {
     elem.calcConstantValues(cell);
   }
 
-  SpinWave SW(cell, interactions_copy);
+  SpinWave SW(cell, interactions);
   Eigen::VectorXcd firstOrder = getFirstOrderTerms();
   if (firstOrder.norm() > 0.1)
   {

@@ -29,7 +29,7 @@ void ExchangeInteractionSameSublattice::updateInteraction(double value_in, strin
   max = max_in;
 }
 
-const string &ExchangeInteractionSameSublattice::getName() { return name; }
+const string &ExchangeInteractionSameSublattice::getName() const { return name; }
 
 void ExchangeInteractionSameSublattice::updateValue(double value_in) { value = value_in; }
 

@@ -23,12 +23,14 @@ public:
   InteractionsContainer() = default;
   InteractionsContainer(const InteractionsContainer &other);
   InteractionsContainer &operator=(const InteractionsContainer &other);
-  //! Insert Point struct into container.
-  void insert(std::unique_ptr<Interaction> value);
+  InteractionsContainer(InteractionsContainer &&) = default;
+  InteractionsContainer &operator=(InteractionsContainer &&) = default;
   //! \return size of InteractionsContainer container.
   std::size_t size() const { return container.size(); }
-  //! Clearcontainer so that the size is zero.
-  void clear();
+  //! Clear container so that the size is zero.
+  void clear() { container.clear(); }
+  //! Insert Point struct into container.
+  void insert(std::unique_ptr<Interaction> value) { container.push_back(std::move(value)); }
   void sort();
   const Interaction &operator[](std::size_t bin) { return *container[bin]; }
   typedef boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::iterator> Iterator;

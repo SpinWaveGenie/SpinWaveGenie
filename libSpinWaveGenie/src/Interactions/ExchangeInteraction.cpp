@@ -32,7 +32,7 @@ void ExchangeInteraction::updateInteraction(double value_in, string sl_r_in, str
   max = max_in;
 }
 
-const string &ExchangeInteraction::getName() { return name; }
+const string &ExchangeInteraction::getName() const { return name; }
 
 void ExchangeInteraction::updateValue(double value_in) { value = value_in; }
 

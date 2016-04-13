@@ -18,7 +18,7 @@ public:
   ExchangeInteractionSameSublattice(std::string name, double value, std::string sl_r, double min, double max);
   void updateInteraction(double value, std::string sl_r, double min, double max);
   void updateValue(double value_in) override;
-  const std::string &getName() override;
+  const std::string &getName() const override;
   void calcConstantValues(Cell &cell) override;
   void calculateEnergy(Cell &cell, double &energy) override;
   void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;

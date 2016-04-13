@@ -34,7 +34,7 @@ void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVe
   sl_r = sl_r_in;
 }
 
-const string &MagneticFieldInteraction::getName() { return name; }
+const string &MagneticFieldInteraction::getName() const { return name; }
 
 void MagneticFieldInteraction::updateValue(double value_in) { value = value_in; }
 

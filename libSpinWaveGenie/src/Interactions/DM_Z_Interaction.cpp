@@ -29,7 +29,7 @@ void DM_Z_Interaction::updateInteraction(double value_in, string sl_r_in, string
 
 std::array<std::string, 2> DM_Z_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
-const string &DM_Z_Interaction::getName() { return name; }
+const string &DM_Z_Interaction::getName() const { return name; }
 
 void DM_Z_Interaction::updateValue(double value_in) { value = value_in; }
 

@@ -18,7 +18,7 @@ public:
                    double max_in);
   void updateInteraction(double value_in, std::string sl_r_in, std::string sl_s_in, double min_in, double max_in);
   void updateValue(double value_in) override;
-  const std::string &getName() override;
+  const std::string &getName() const override;
   void calcConstantValues(Cell &cell) override;
   void calculateEnergy(Cell &cell, double &energy) override;
   void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;

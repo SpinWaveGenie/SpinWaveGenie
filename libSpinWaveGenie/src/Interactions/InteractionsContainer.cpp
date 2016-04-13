@@ -26,9 +26,7 @@ InteractionsContainer &InteractionsContainer::operator=(const InteractionsContai
   return *this;
 }
 
-void InteractionsContainer::clear() { container.clear(); }
 
-void InteractionsContainer::insert(std::unique_ptr<Interaction> value) { container.push_back(std::move(value)); }
 
 void InteractionsContainer::sort()
 {
@@ -37,11 +35,12 @@ void InteractionsContainer::sort()
 }
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::InteractionsContainer &n)
 {
-  /*output << "  frequency  intensity\n";
+  output << "  Name  sl1   sl2\n";
   for (const auto &result : n)
   {
-      output << boost::format("%9.5f %10.5f\n") % result.frequency % result.intensity;
-  }*/
+    const auto sublattices = result.sublattices();
+    output << result.getName() << " " << sublattices[0] << " " << sublattices[1] << "\n";
+  }
   return output;
 }
 }
