@@ -29,7 +29,7 @@ void ExchangeInteractionSameSublattice::updateInteraction(double value_in, strin
   max = max_in;
 }
 
-const string &ExchangeInteractionSameSublattice::getName() { return name; }
+const string &ExchangeInteractionSameSublattice::getName() const { return name; }
 
 void ExchangeInteractionSameSublattice::updateValue(double value_in) { value = value_in; }
 
@@ -72,9 +72,9 @@ void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell & /*cell*/
   // first order terms are 0.0
 }
 
-void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN)
+void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN) const
 {
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;
 
   // cout << "number of neighbors: " << neighbors.size() << endl;

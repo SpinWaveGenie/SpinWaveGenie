@@ -1,18 +1,19 @@
 #ifndef __SpinWave_H__
 #define __SpinWave_H__
 
-#include <iostream>
-#include <utility>
-#include <memory>
-#include <vector>
-#include <cmath>
 #include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Containers/Results.h"
-#include "SpinWaveGenie/Interactions/Interaction.h"
-#include "SpinWaveGenie/Genie/MagneticFormFactor.h"
-#include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Matrices.h"
+#include "SpinWaveGenie/Containers/Results.h"
+#include "SpinWaveGenie/Containers/Results.h"
+#include "SpinWaveGenie/Genie/MagneticFormFactor.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Interactions/Interaction.h"
+#include "SpinWaveGenie/Interactions/InteractionsContainer.h"
+#include <cmath>
+#include <iostream>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace SpinWaveGenie
 {
@@ -35,11 +36,9 @@ class SpinWave
 {
 public:
   SpinWave() : KXP(0.0), KYP(0.0), KZP(0.0), M(0), N(0), NU(0), MI(0), IM(0), interactions{} {};
-  SpinWave(const SpinWave &model);
-  SpinWave &operator=(const SpinWave &other);
   //! Use SpinWaveBuilder to generate SpinWave instance
   friend class SpinWaveBuilder;
-  SpinWave(const Cell &cell_in, std::vector<std::unique_ptr<Interaction>> interactions_in);
+  SpinWave(const Cell &cell_in, const InteractionsContainer &interactions_in);
   void clearMatrix();
   const Cell &getCell() const;
   void createMatrix(double KX, double KY, double KZ);
@@ -60,7 +59,7 @@ private:
   Eigen::VectorXd WW; // want to get rid of this
   Results VI;
   Eigen::MatrixXcd XY, XIN;
-  std::vector<std::unique_ptr<Interaction>> interactions;
+  InteractionsContainer interactions;
   MagneticFormFactor formFactor;
 };
 }

@@ -26,7 +26,7 @@ void DM_Y_Interaction::updateInteraction(double value_in, string sl_r_in, string
   max = max_in;
 }
 
-const string &DM_Y_Interaction::getName() { return name; }
+const string &DM_Y_Interaction::getName() const { return name; }
 
 void DM_Y_Interaction::updateValue(double value_in) { value = value_in; }
 
@@ -62,10 +62,10 @@ void DM_Y_Interaction::calculateEnergy(Cell & /*cell*/, double & /*energy*/) {}
 
 void DM_Y_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Y_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
+void DM_Y_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
   // cout << z_rs << " " << endl;
   LN(r, r) += z_rs * value0;

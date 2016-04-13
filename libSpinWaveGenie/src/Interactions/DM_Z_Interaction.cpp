@@ -29,7 +29,7 @@ void DM_Z_Interaction::updateInteraction(double value_in, string sl_r_in, string
 
 std::array<std::string, 2> DM_Z_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
-const string &DM_Z_Interaction::getName() { return name; }
+const string &DM_Z_Interaction::getName() const { return name; }
 
 void DM_Z_Interaction::updateValue(double value_in) { value = value_in; }
 
@@ -63,10 +63,10 @@ void DM_Z_Interaction::calcConstantValues(Cell &cell)
 
 void DM_Z_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
+void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
 
   LN(r, r) -= z_rs * tmp0;
   LN(r, s) -= z_rs * conj(gamma_rs) * (tmp1 - XI * tmp2 - XI * tmp3 - tmp4);

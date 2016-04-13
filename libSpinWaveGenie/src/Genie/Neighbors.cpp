@@ -84,7 +84,7 @@ void Neighbors::findNeighbors(Cell &cell, string sl1, string sl2, double min, do
   }
 }
 
-complex<double> Neighbors::getGamma(const Vector3 &K)
+complex<double> Neighbors::getGamma(const Vector3 &K) const
 {
   complex<double> MXI(0.0, -1.0);
   complex<double> gamma_rs = complex<double>(0.0, 0.0);

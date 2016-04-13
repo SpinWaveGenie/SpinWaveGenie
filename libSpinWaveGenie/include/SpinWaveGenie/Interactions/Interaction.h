@@ -26,9 +26,9 @@ public:
   //! \param K reciprocal lattice point currently being simulated.
   //! \param cell pointer to Cell object containing magnetic ground state information
   //! \param LN matrix used to calculate spin wave frequencies and intensities
-  virtual const std::string &getName() = 0;
+  virtual const std::string &getName() const = 0;
   virtual void updateValue(double value) = 0;
-  virtual void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) = 0;
+  virtual void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) const = 0;
   virtual std::unique_ptr<Interaction> clone() const = 0;
   virtual ~Interaction() = default;
 

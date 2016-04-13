@@ -35,7 +35,7 @@ public:
   //! Get variable \f$ \Gamma = \frac{1}{z_{rs}} \sum_{d} e^{-i \boldmath{k} \cdot \boldmath{d}} \f$
   //! described in J Phys. Condens. Matter 21 216001 (2009)
   //! \param K k vector used in spin wave calculation.
-  std::complex<double> getGamma(const Vector3 &K);
+  std::complex<double> getGamma(const Vector3 &K) const;
   typedef UniqueThreeVectors<double>::Iterator Iterator;
   typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
   //! \return Returns an Iterator pointing to the first element of the neighbor list

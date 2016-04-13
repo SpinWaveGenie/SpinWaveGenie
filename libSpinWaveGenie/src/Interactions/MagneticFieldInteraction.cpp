@@ -34,7 +34,7 @@ void MagneticFieldInteraction::updateInteraction(double value_in, Vector3 unitVe
   sl_r = sl_r_in;
 }
 
-const string &MagneticFieldInteraction::getName() { return name; }
+const string &MagneticFieldInteraction::getName() const { return name; }
 
 void MagneticFieldInteraction::updateValue(double value_in) { value = value_in; }
 
@@ -99,7 +99,7 @@ void MagneticFieldInteraction::calcConstantValues(Cell &cell)
   // cout << LNrr << endl;
 }
 
-void MagneticFieldInteraction::updateMatrix(Vector3 /*K*/, Eigen::MatrixXcd &LN)
+void MagneticFieldInteraction::updateMatrix(Vector3 /*K*/, Eigen::MatrixXcd &LN) const
 {
   LN(r, r) += LNrr;
   LN(r + M, r + M) += LNrr;

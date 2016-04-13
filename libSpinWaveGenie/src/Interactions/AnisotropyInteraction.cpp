@@ -33,7 +33,7 @@ void AnisotropyInteraction::updateInteraction(double value_in, Vector3 unitVecto
   sl_r = sl_r_in;
 }
 
-const string &AnisotropyInteraction::getName() { return name; }
+const string &AnisotropyInteraction::getName() const { return name; }
 
 void AnisotropyInteraction::updateValue(double value_in) { value = value_in; }
 
@@ -118,7 +118,7 @@ void AnisotropyInteraction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXc
   }
 }
 
-void AnisotropyInteraction::updateMatrix(Vector3 /*K*/, Eigen::MatrixXcd &LN)
+void AnisotropyInteraction::updateMatrix(Vector3 /*K*/, Eigen::MatrixXcd &LN) const
 {
   LN(r, r) += LNrr;
   LN(r, r + M) += LNrrM;

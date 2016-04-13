@@ -14,9 +14,9 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-SpinWave::SpinWave(const Cell &cell_in, std::vector<std::unique_ptr<Interaction>> interactions_in)
+SpinWave::SpinWave(const Cell &cell_in, const InteractionsContainer &interactions_in)
     : KXP(0.0), KYP(0.0), KZP(0.0), cell(cell_in), M(cell.size()), N(2 * M), NU(0), MI(0), IM(0),
-      interactions(std::move(interactions_in))
+      interactions(interactions_in)
 {
 
   LN.setZero(N, N);
@@ -33,45 +33,6 @@ SpinWave::SpinWave(const Cell &cell_in, std::vector<std::unique_ptr<Interaction>
   }
 }
 
-SpinWave::SpinWave(const SpinWave &model)
-    : KXP(model.KXP), KYP(model.KYP), KZP(model.KZP), cell(model.cell), M(model.M), N(model.N), NU(model.NU),
-      MI(model.MI), IM(model.IM), LN(model.LN), SS(model.SS), ces(model.ces), WW(model.WW), VI(model.VI), XY(model.XY),
-      XIN(model.XIN), formFactor(model.formFactor)
-{
-  for (const auto &iter : model.interactions) // r
-  {
-    this->interactions.push_back(iter->clone());
-  }
-}
-
-SpinWave &SpinWave::operator=(const SpinWave &model)
-{
-  this->KXP = model.KXP;
-  this->KYP = model.KYP;
-  this->KZP = model.KZP;
-  this->cell = model.cell;
-  this->M = model.M;
-  this->N = model.N;
-  this->NU = model.NU;
-  this->MI = model.MI;
-  this->IM = model.IM;
-  this->LN = model.LN;
-  this->SS = model.SS;
-  this->ces = model.ces;
-  this->WW = model.WW;
-  this->VI = model.VI;
-  this->XY = model.XY;
-  this->XIN = model.XIN;
-  this->formFactor = model.formFactor;
-
-  for (const auto &iter : model.interactions) // r
-  {
-    this->interactions.push_back(iter->clone());
-  }
-
-  return *this;
-}
-
 void SpinWave::createMatrix(double KX, double KY, double KZ)
 {
   const Matrix3 &recip = cell.getReciprocalVectors();
@@ -84,7 +45,7 @@ void SpinWave::createMatrix(double KX, double KY, double KZ)
   clearMatrix();
   for (const auto &iter : interactions) // r
   {
-    iter->updateMatrix(K, LN);
+    iter.updateMatrix(K, LN);
   }
 }
 
