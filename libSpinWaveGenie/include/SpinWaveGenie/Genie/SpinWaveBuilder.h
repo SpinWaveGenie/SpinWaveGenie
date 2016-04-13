@@ -15,10 +15,10 @@ class SpinWaveBuilder
 {
 public:
   SpinWaveBuilder();
-  SpinWaveBuilder(Cell &cellIn);
-  void updateCell(Cell &cellIn);
+  SpinWaveBuilder(const Cell &cellIn);
+  void updateCell(const Cell &cellIn);
   void addInteraction(std::unique_ptr<Interaction> in);
-  void updateInteraction(std::string name, double value);
+  void updateInteraction(const std::string &name, double value);
   double getEnergy();
   Eigen::VectorXcd getFirstOrderTerms();
   SpinWave createElement();

@@ -8,15 +8,9 @@ namespace SpinWaveGenie
 
 SpinWaveBuilder::SpinWaveBuilder() {}
 
-SpinWaveBuilder::SpinWaveBuilder(Cell &cellIn) : cell(cellIn)
-{
-  for (const auto &iter : interactions) // r
-  {
-    interactions.insert(iter.clone());
-  }
-}
+SpinWaveBuilder::SpinWaveBuilder(const Cell &cellIn) : cell(cellIn) {}
 
-void SpinWaveBuilder::updateCell(Cell &cellIn) { cell = cellIn; }
+void SpinWaveBuilder::updateCell(const Cell &cellIn) { cell = cellIn; }
 
 void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
 {
@@ -26,7 +20,7 @@ void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
   interactions.sort();
 }
 
-void SpinWaveBuilder::updateInteraction(string name, double value)
+void SpinWaveBuilder::updateInteraction(const string &name, double value)
 {
   for (auto & elem : interactions)
   {

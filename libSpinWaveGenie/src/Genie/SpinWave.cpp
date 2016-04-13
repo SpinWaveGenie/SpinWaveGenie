@@ -59,7 +59,7 @@ const Cell &SpinWave::getCell() const { return cell; }
 
 void SpinWave::calculateEigenvalues()
 {
-  cout << LN << endl;
+  // cout << LN << endl;
 
   LN.block(0, M, M, M) *= -1.0;
   LN.block(M, M, M, M) *= -1.0;

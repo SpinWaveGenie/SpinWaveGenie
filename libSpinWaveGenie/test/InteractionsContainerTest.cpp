@@ -29,6 +29,27 @@ BOOST_AUTO_TEST_CASE(iteratorAccess)
   BOOST_CHECK_EQUAL(interactions.size(), 3);
 }
 
+BOOST_AUTO_TEST_CASE(CopyAssignmentOperator)
+{
+  InteractionsContainer interactions = getInteractions();
+  interactions.sort();
+  auto copy = interactions;
+
+  BOOST_CHECK_EQUAL(copy.size(), 3);
+
+  auto first = copy[0].sublattices();
+  BOOST_CHECK_EQUAL(first[0], "sl0");
+  BOOST_CHECK_EQUAL(first[1], "sl0");
+
+  auto second = copy[1].sublattices();
+  BOOST_CHECK_EQUAL(second[0], "sl0");
+  BOOST_CHECK_EQUAL(second[1], "sl1");
+
+  auto third = copy[2].sublattices();
+  BOOST_CHECK_EQUAL(third[0], "sl1");
+  BOOST_CHECK_EQUAL(third[1], "sl1");
+}
+
 BOOST_AUTO_TEST_CASE(isSorted)
 {
   InteractionsContainer interactions = getInteractions();
@@ -57,13 +78,13 @@ BOOST_AUTO_TEST_CASE(PrintList)
   teststream << interactions;
   std::getline(teststream, header, '\n');
   BOOST_CHECK_EQUAL("  Name  sl1   sl2", header);
-  for (auto result = interactions.cbegin(); result != interactions.cend(); ++result)
+  for (const auto &result : interactions)
   {
     std::string name, sl1, sl2;
     teststream >> name >> sl1 >> sl2;
-    auto sl = result->sublattices();
+    auto sl = result.sublattices();
 
-    BOOST_CHECK_EQUAL(result->getName(), name);
+    BOOST_CHECK_EQUAL(result.getName(), name);
     BOOST_CHECK_EQUAL(sl[0], sl1);
     BOOST_CHECK_EQUAL(sl[1], sl2);
   }

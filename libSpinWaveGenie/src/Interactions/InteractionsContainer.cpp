@@ -26,8 +26,6 @@ InteractionsContainer &InteractionsContainer::operator=(const InteractionsContai
   return *this;
 }
 
-
-
 void InteractionsContainer::sort()
 {
   std::sort(container.begin(), container.end(),
