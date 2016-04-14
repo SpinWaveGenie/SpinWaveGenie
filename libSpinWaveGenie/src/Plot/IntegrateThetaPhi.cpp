@@ -24,7 +24,7 @@ const Cell &IntegrateThetaPhi::getCell() const { return resolutionFunction->getC
 
 const Energies &IntegrateThetaPhi::getEnergies() { return resolutionFunction->getEnergies(); }
 
-void IntegrateThetaPhi::setEnergies(Energies energiesIn) { resolutionFunction->setEnergies(energiesIn); }
+void IntegrateThetaPhi::setEnergies(const Energies &energiesIn) { resolutionFunction->setEnergies(energiesIn); }
 
 std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
 {

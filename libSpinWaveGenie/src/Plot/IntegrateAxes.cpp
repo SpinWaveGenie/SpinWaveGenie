@@ -99,7 +99,7 @@ const Cell &IntegrateAxes::getCell() const { return resolutionFunction->getCell(
 
 const Energies &IntegrateAxes::getEnergies() { return resolutionFunction->getEnergies(); }
 
-void IntegrateAxes::setEnergies(Energies energiesIn) { resolutionFunction->setEnergies(energiesIn); }
+void IntegrateAxes::setEnergies(const Energies &energiesIn) { resolutionFunction->setEnergies(energiesIn); }
 
 std::unique_ptr<SpinWavePlot> IntegrateAxes::clone() { return memory::make_unique<IntegrateAxes>(*this); }
 }

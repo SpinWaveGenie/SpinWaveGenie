@@ -28,7 +28,7 @@ public:
   std::unique_ptr<SpinWavePlot> clone() override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
-  void setEnergies(Energies energies) override;
+  void setEnergies(const Energies &energies) override;
   std::vector<double> getCut(double kx, double ky, double kz) override;
 
 private:

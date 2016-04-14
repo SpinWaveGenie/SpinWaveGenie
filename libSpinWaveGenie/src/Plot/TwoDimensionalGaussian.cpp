@@ -20,15 +20,15 @@ using namespace std;
 
 namespace SpinWaveGenie
 {
-TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian &info, const SpinWave &SW,
-                                                               Energies energiesIn)
+TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(const TwoDimGaussian &info, const SpinWave &SW,
+                                                               const Energies &energiesIn)
     : kx(0.0), ky(0.0), kz(0.0)
 {
   a = info.a;
   b = info.b;
   c = info.c;
-  info.direction.normalize();
   direction = info.direction;
+  direction.normalize();
   tolerance = info.tol;
   maximumEvaluations = 100;
   energies = energiesIn;
@@ -89,7 +89,7 @@ void TwoDimensionResolutionFunction::setTolerance(double toleranceIn, int maxEva
   maximumEvaluations = maxEvals;
 }
 
-void TwoDimensionResolutionFunction::setEnergies(Energies energiesIn) { energies = energiesIn; }
+void TwoDimensionResolutionFunction::setEnergies(const Energies &energiesIn) { energies = energiesIn; }
 
 std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone()
 {

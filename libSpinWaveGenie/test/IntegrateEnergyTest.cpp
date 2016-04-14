@@ -27,10 +27,7 @@ namespace SpinWaveGenie
         {
             return m_Energies;
         };
-        void setEnergies(Energies energies) override
-        {
-            m_Energies = energies;
-        };
+        void setEnergies(const Energies &energies) override { m_Energies = energies; };
         std::vector<double> getCut(double /*kx*/, double /*ky*/, double /*kz*/) override
         {
             double frequency = 10.0;
