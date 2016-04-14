@@ -66,7 +66,7 @@ const Cell &IntegrateEnergy::getCell() const { return resolutionFunction->getCel
 
 const Energies &IntegrateEnergy::getEnergies() { return centeredEnergies; }
 
-void IntegrateEnergy::setEnergies(Energies energiesIn) { centeredEnergies = energiesIn; }
+void IntegrateEnergy::setEnergies(const Energies &energiesIn) { centeredEnergies = energiesIn; }
 
 std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() { return memory::make_unique<IntegrateEnergy>(*this); }
 }

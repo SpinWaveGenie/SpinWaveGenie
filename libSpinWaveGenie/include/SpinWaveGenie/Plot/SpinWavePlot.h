@@ -18,7 +18,7 @@ public:
   virtual std::unique_ptr<SpinWavePlot> clone() = 0;
   virtual const Cell &getCell() const = 0;
   virtual const Energies &getEnergies() = 0;
-  virtual void setEnergies(Energies energies) = 0;
+  virtual void setEnergies(const Energies &energies) = 0;
   virtual std::vector<double> getCut(double kx, double ky, double kz) = 0; // returns constant-Q cut
   virtual ~SpinWavePlot() = default;
 };
