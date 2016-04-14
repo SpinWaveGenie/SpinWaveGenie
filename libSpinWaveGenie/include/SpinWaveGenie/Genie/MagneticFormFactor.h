@@ -40,11 +40,11 @@ public:
   MagneticFormFactor(std::string type);
   //! \Sets the type of ion.
   //! \param type Name of ion from ILL Neutron Data Booklet (in CAPS)
-  void setType(std::string type);
+  void setType(const std::string &type);
   //! \Sets ions with multiple types.
   //! \param types Names of ions from the ILL Neutron Data Booklet (in CAPS).
   //! \param weights Weights associaed with each ion. The sum of all weights will be renormalized to 1.0.
-  void setType(std::vector<std::string> types, std::vector<double> weights);
+  void setType(const std::vector<std::string> &types, const std::vector<double> &weights);
   //! Get the magnetic form factor at a specific Q-point.
   //! \param kx x-component of Q-point, in Angstroms.
   //! \param ky y-component of Q-point, in Angstroms.

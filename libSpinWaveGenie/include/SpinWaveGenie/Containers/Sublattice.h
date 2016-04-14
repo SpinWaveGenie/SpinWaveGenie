@@ -22,13 +22,13 @@ public:
   Sublattice();
   //! set name to describe sublattice
   //! \param nameInput a std::string argument unique to each sublattice
-  void setName(std::string nameInput);
+  void setName(const std::string &nameInput);
   //! returns name of a given sublattice
   //! \return name of sublattice
   std::string getName() const;
   //! set type to describe magnetic form factor used in the calculation of intensities;
   //! \param typeInput a std::string argument
-  void setType(std::string typeInput);
+  void setType(const std::string &typeInput);
   //! returns name of a given sublattice
   //! \return name of sublattice
   std::string getType() const;
@@ -61,10 +61,14 @@ public:
   Iterator begin();
   //! returns an Iterator to the end of the vector;
   Iterator end();
+  //! returns an Iterator to the first atomic position;
+  ConstIterator begin() const;
+  //! returns an Iterator to the end of the vector;
+  ConstIterator end() const;
   //! returns a ConstIterator to the first atomic position;
-  ConstIterator cbegin();
+  ConstIterator cbegin() const;
   //! returns a ConstIterator to the end of the vector;
-  ConstIterator cend();
+  ConstIterator cend() const;
 
 private:
   std::string name, type;

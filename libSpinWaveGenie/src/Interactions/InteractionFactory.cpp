@@ -17,8 +17,9 @@
 namespace SpinWaveGenie
 {
 
-std::unique_ptr<Interaction> InteractionFactory::getExchange(std::string name, double value, std::string sl_r,
-                                                             std::string sl_s, double min, double max)
+std::unique_ptr<Interaction> InteractionFactory::getExchange(const std::string &name, double value,
+                                                             const std::string &sl_r, const std::string &sl_s,
+                                                             double min, double max)
 {
   if (sl_r.compare(sl_s) == 0)
     return memory::make_unique<ExchangeInteractionSameSublattice>(name, value, sl_r, min, max);
@@ -26,9 +27,9 @@ std::unique_ptr<Interaction> InteractionFactory::getExchange(std::string name, d
     return memory::make_unique<ExchangeInteraction>(name, value, sl_r, sl_s, min, max);
 }
 
-std::unique_ptr<Interaction> InteractionFactory::getDzyaloshinskiiMoriya(std::string name, double value,
-                                                                         Vector3 unitVector, std::string sl_r,
-                                                                         std::string sl_s, double min, double max)
+std::unique_ptr<Interaction>
+InteractionFactory::getDzyaloshinskiiMoriya(const std::string &name, double value, const Vector3 &unitVector,
+                                            const std::string &sl_r, const std::string &sl_s, double min, double max)
 {
   double x, y, z;
   x = unitVector[0];
@@ -50,14 +51,14 @@ std::unique_ptr<Interaction> InteractionFactory::getDzyaloshinskiiMoriya(std::st
   }
 }
 
-std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(std::string name, double value, Vector3 unitVector,
-                                                               std::string sl_r)
+std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(const std::string &name, double value,
+                                                               const Vector3 &unitVector, const std::string &sl_r)
 {
   return memory::make_unique<AnisotropyInteraction>(name, value, unitVector, sl_r);
 }
 
-std::unique_ptr<Interaction> InteractionFactory::getMagneticField(std::string name, double value, Vector3 unitVector,
-                                                                  std::string sl_r)
+std::unique_ptr<Interaction> InteractionFactory::getMagneticField(const std::string &name, double value,
+                                                                  const Vector3 &unitVector, const std::string &sl_r)
 {
   return memory::make_unique<MagneticFieldInteraction>(name, value, unitVector, sl_r);
 }

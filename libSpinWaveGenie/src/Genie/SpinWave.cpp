@@ -36,8 +36,7 @@ SpinWave::SpinWave(const Cell &cell_in, const InteractionsContainer &interaction
 void SpinWave::createMatrix(double KX, double KY, double KZ)
 {
   const Matrix3 &recip = cell.getReciprocalVectors();
-  Vector3 K;
-  K << KX, KY, KZ;
+  Vector3 K(KX, KY, KZ);
   K = K.transpose() * recip;
   this->KXP = KX;
   this->KYP = KY;

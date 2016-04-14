@@ -47,13 +47,13 @@ void Cell::setBasisVectors(double a, double b, double c, double alpha_deg, doubl
   // cout << "recip vectors equal" <<reciprocalVectors << endl;
 }
 
-void Cell::setBasisVectors(double scale, Matrix3 basis) { basisVectors = scale * basis; }
+void Cell::setBasisVectors(double scale, const Matrix3 &basis) { basisVectors = scale * basis; }
 
 const Matrix3 &Cell::getBasisVectors() const { return basisVectors; }
 
 const Matrix3 &Cell::getReciprocalVectors() const { return reciprocalVectors; }
 
-void Cell::addSublattice(Sublattice &sl)
+void Cell::addSublattice(const Sublattice &sl)
 {
   std::string name = sl.getName();
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
@@ -67,7 +67,7 @@ void Cell::addSublattice(Sublattice &sl)
   }
 }
 
-Sublattice &Cell::getSublattice(string name)
+Sublattice &Cell::getSublattice(const string &name)
 {
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it == sublatticeInfo.end())
@@ -77,9 +77,19 @@ Sublattice &Cell::getSublattice(string name)
   return *it;
 }
 
-Sublattice &Cell::operator[](std::size_t position) { return sublatticeInfo[position]; }
+const Sublattice &Cell::getSublattice(const string &name) const
+{
+  auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
+  if (it == sublatticeInfo.end())
+  {
+    throw std::invalid_argument("sublattice not found");
+  }
+  return *it;
+}
 
-std::size_t Cell::getPosition(std::string name)
+const Sublattice &Cell::operator[](std::size_t position) const { return sublatticeInfo[position]; }
+
+std::size_t Cell::getPosition(const std::string &name) const
 {
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it == sublatticeInfo.end())
@@ -89,7 +99,7 @@ std::size_t Cell::getPosition(std::string name)
   return std::distance(sublatticeInfo.begin(), it);
 }
 
-void Cell::addAtom(std::string name, double x, double y, double z)
+void Cell::addAtom(const std::string &name, double x, double y, double z)
 {
   Vector3 scaled_position(x, y, z);
 

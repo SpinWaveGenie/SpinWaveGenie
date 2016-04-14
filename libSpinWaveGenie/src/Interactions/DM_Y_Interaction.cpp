@@ -17,7 +17,8 @@ DM_Y_Interaction::DM_Y_Interaction(string name_in, double value_in, string sl_r_
 
 std::unique_ptr<Interaction> DM_Y_Interaction::clone() const { return memory::make_unique<DM_Y_Interaction>(*this); }
 
-void DM_Y_Interaction::updateInteraction(double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
+void DM_Y_Interaction::updateInteraction(double value_in, const string &sl_r_in, const string &sl_s_in, double min_in,
+                                         double max_in)
 {
   value = value_in;
   sl_r = sl_r_in;
@@ -32,7 +33,7 @@ void DM_Y_Interaction::updateValue(double value_in) { value = value_in; }
 
 std::array<std::string, 2> DM_Y_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
-void DM_Y_Interaction::calcConstantValues(Cell &cell)
+void DM_Y_Interaction::calcConstantValues(const Cell &cell)
 {
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
@@ -58,11 +59,11 @@ void DM_Y_Interaction::calcConstantValues(Cell &cell)
   // cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
 }
 
-void DM_Y_Interaction::calculateEnergy(Cell & /*cell*/, double & /*energy*/) {}
+void DM_Y_Interaction::calculateEnergy(const Cell & /*cell*/, double & /*energy*/) {}
 
-void DM_Y_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
+void DM_Y_Interaction::calculateFirstOrderTerms(const Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Y_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN) const
+void DM_Y_Interaction::updateMatrix(const Vector3d &K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
   complex<double> gamma_rs = neighbors.getGamma(K);
