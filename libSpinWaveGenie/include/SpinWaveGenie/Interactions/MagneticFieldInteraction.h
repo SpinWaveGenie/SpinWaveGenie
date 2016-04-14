@@ -19,7 +19,7 @@ class MagneticFieldInteraction : public Interaction
 {
 public:
   //!
-  MagneticFieldInteraction(std::string name_in, double value_in, Vector3 direction, std::string sl_r_in);
+  MagneticFieldInteraction(std::string name_in, double value_in, const Vector3 &direction, const std::string &sl_r_in);
   //!
   void updateInteraction(double value_in, const Vector3 &direction, const std::string &sl_r_in);
   //!

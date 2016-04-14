@@ -33,7 +33,7 @@ public:
   //! Set basis vectors as Eigen::Matrix3d object. Vectors are stored as rows.
   //! \param scale Double used to scale basis vectors
   //! \param basis Basis vectors as rows in an Eigen::Matrix3d object
-  void setBasisVectors(double scale, Matrix3 basis);
+  void setBasisVectors(double scale, const Matrix3 &basis);
   //! get basis vectors as an Eigen::Matrix3d object
   //! \return basis vectors as rows in an Eigen::Matrix3d object
   const Matrix3 &getBasisVectors() const;
@@ -43,7 +43,7 @@ public:
   //! Add sublattice to cell
   //! \param sl Sublattice object
   //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
-  void addSublattice(Sublattice &sl);
+  void addSublattice(const Sublattice &sl);
   //! Returns sublattice "name"
   //! \param name used to describe sublattice
   //! \return sublattice

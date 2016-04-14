@@ -47,13 +47,13 @@ void Cell::setBasisVectors(double a, double b, double c, double alpha_deg, doubl
   // cout << "recip vectors equal" <<reciprocalVectors << endl;
 }
 
-void Cell::setBasisVectors(double scale, Matrix3 basis) { basisVectors = scale * basis; }
+void Cell::setBasisVectors(double scale, const Matrix3 &basis) { basisVectors = scale * basis; }
 
 const Matrix3 &Cell::getBasisVectors() const { return basisVectors; }
 
 const Matrix3 &Cell::getReciprocalVectors() const { return reciprocalVectors; }
 
-void Cell::addSublattice(Sublattice &sl)
+void Cell::addSublattice(const Sublattice &sl)
 {
   std::string name = sl.getName();
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
