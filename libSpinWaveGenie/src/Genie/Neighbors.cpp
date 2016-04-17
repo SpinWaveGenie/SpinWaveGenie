@@ -98,20 +98,6 @@ complex<double> Neighbors::getGamma(const Vector3 &K) const
   return gamma_rs / static_cast<double>(numberNeighbors);
 }
 
-std::size_t Neighbors::size() { return numberNeighbors; }
-
-Neighbors::Iterator Neighbors::begin() { return neighborList.begin(); }
-
-Neighbors::Iterator Neighbors::end() { return neighborList.end(); }
-
-Neighbors::ConstIterator Neighbors::begin() const { return neighborList.cbegin(); }
-
-Neighbors::ConstIterator Neighbors::end() const { return neighborList.cend(); }
-
-Neighbors::ConstIterator Neighbors::cbegin() const { return neighborList.cbegin(); }
-
-Neighbors::ConstIterator Neighbors::cend() const { return neighborList.cend(); }
-
 std::ostream &operator<<(std::ostream &output, const Neighbors &n)
 {
   output << "  x         y         z         r\n";

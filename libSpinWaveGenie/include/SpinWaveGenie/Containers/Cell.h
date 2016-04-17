@@ -61,17 +61,21 @@ public:
   std::size_t getPosition(const std::string &name) const;
   //! Returns the number of sublattices in the cell
   //! \return number of sublattices
-  size_t size() const;
+  size_t size() const { return sublatticeInfo.size(); }
   typedef std::vector<Sublattice>::iterator Iterator;
   typedef std::vector<Sublattice>::const_iterator ConstIterator;
   //! \return Returns an Iterator pointing to the first Sublattice element
-  Iterator begin();
+  Iterator begin() { return sublatticeInfo.begin(); }
   //! \return Returns an Iterator pointing to the end of the vector
-  Iterator end();
+  Iterator end() { return sublatticeInfo.end(); }
   //! \return Returns a ConstIterator pointing to the first Sublattice element
-  ConstIterator cbegin();
+  ConstIterator begin() const { return sublatticeInfo.cbegin(); }
   //! \return Returns a ConstIterator pointing to the end of the vector
-  ConstIterator cend();
+  ConstIterator end() const { return sublatticeInfo.cend(); }
+  //! \return Returns a ConstIterator pointing to the first Sublattice element
+  ConstIterator cbegin() const { return sublatticeInfo.cbegin(); }
+  //! \return Returns a ConstIterator pointing to the end of the vector
+  ConstIterator cend() const { return sublatticeInfo.cend(); }
 
 private:
   Matrix3 basisVectors;

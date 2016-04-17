@@ -66,27 +66,6 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
   inverseMatrix = rotationMatrix.inverse();
 }
 
-double Sublattice::getMoment() const { return spin; }
-
-double Sublattice::getTheta() const { return theta; }
-
-double Sublattice::getPhi() const { return phi; }
-
-const Matrix3 &Sublattice::getRotationMatrix() const { return rotationMatrix; }
-
-const Matrix3 &Sublattice::getInverseMatrix() const { return inverseMatrix; }
-
 void Sublattice::addAtom(double x, double y, double z) { positions.insert(x, y, z); }
 
-Sublattice::ConstIterator Sublattice::cbegin() const { return positions.cbegin(); }
-
-Sublattice::ConstIterator Sublattice::cend() const { return positions.cend(); }
-
-Sublattice::ConstIterator Sublattice::begin() const { return positions.cbegin(); }
-
-Sublattice::ConstIterator Sublattice::end() const { return positions.cend(); }
-
-Sublattice::Iterator Sublattice::begin() { return positions.begin(); }
-
-Sublattice::Iterator Sublattice::end() { return positions.end(); }
 }

@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_CASE(Iterator)
     bool foundSL1 = false;
     bool foundSL2 = false;
     bool foundBlank = false;
-    for (auto & elem : cell)
+    for (const auto &elem : cell)
     {
         if ( elem.getName() == "SL1")
             foundSL1 = true;

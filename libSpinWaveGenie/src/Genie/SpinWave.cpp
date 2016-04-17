@@ -18,19 +18,11 @@ SpinWave::SpinWave(const Cell &cell_in, const InteractionsContainer &interaction
     : KXP(0.0), KYP(0.0), KZP(0.0), cell(cell_in), M(cell.size()), N(2 * M), NU(0), MI(0), IM(0),
       interactions(interactions_in)
 {
-
   LN.setZero(N, N);
 
-  SS.setZero(N);
-  for (size_t j = 0; j < M; j++)
-  {
-    SS(j) = 1.0;
-  }
-
-  for (size_t j = M; j < N; j++)
-  {
-    SS(j) = -1.0;
-  }
+  SS.resize(N);
+  std::fill_n(SS.data(), M, 1.0);
+  std::fill_n(std::next(SS.data(), M), M, -1.0);
 }
 
 void SpinWave::createMatrix(double KX, double KY, double KZ)
@@ -272,5 +264,4 @@ void SpinWave::calculate()
   this->calculateIntensities();
 }
 
-Results SpinWave::getPoints() { return VI; }
 }
