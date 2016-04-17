@@ -114,13 +114,4 @@ void Cell::addAtom(const std::string &name, double x, double y, double z)
   getSublattice(name).addAtom(pos[0], pos[1], pos[2]);
 }
 
-size_t Cell::size() const { return sublatticeInfo.size(); }
-
-Cell::Iterator Cell::begin() { return sublatticeInfo.begin(); }
-
-Cell::Iterator Cell::end() { return sublatticeInfo.end(); }
-
-Cell::ConstIterator Cell::cbegin() { return sublatticeInfo.cbegin(); }
-
-Cell::ConstIterator Cell::cend() { return sublatticeInfo.cend(); }
 }

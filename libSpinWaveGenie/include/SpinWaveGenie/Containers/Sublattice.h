@@ -39,17 +39,17 @@ public:
    */
   void setMoment(double spinInput, double thetaInput, double phiInput);
   //! \return coordinate \f$ r  \f$ of \f$ \left( r,\theta,\phi \right) \f$, unitless
-  double getMoment() const;
+  double getMoment() const { return spin; }
   //! \return coordinates \f$\theta\f$ of \f$ \left( r,\theta,\phi \right) \f$, in radians
-  double getTheta() const;
+  double getTheta() const { return theta; }
   //! \return coordinates \f$ \phi \f$ of \f$ \left( r,\theta,\phi \right) \f$, in radians
-  double getPhi() const;
+  double getPhi() const { return phi; }
   //! returns rotation matrix as an Eigen::Matrix3d object
   //! \return rotation matrix
-  const Matrix3 &getRotationMatrix() const;
+  const Matrix3 &getRotationMatrix() const { return rotationMatrix; }
   //! returns inverse rotation matrix as an Eigen::Matrix3d object
   //! \return inverse rotation matrix
-  const Matrix3 &getInverseMatrix() const;
+  const Matrix3 &getInverseMatrix() const { return inverseMatrix; }
   //! add atom to the sublattice
   //! \param x x component of atomic position in Angstroms
   //! \param y y component of atomic position in Angstroms
@@ -58,17 +58,17 @@ public:
   typedef UniqueThreeVectors<double>::Iterator Iterator;
   typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
   //! returns an Iterator to the first atomic position;
-  Iterator begin();
+  Iterator begin() { return positions.begin(); }
   //! returns an Iterator to the end of the vector;
-  Iterator end();
+  Iterator end() { return positions.end(); }
   //! returns an Iterator to the first atomic position;
-  ConstIterator begin() const;
+  ConstIterator begin() const { return positions.cbegin(); }
   //! returns an Iterator to the end of the vector;
-  ConstIterator end() const;
+  ConstIterator end() const { return positions.cend(); }
   //! returns a ConstIterator to the first atomic position;
-  ConstIterator cbegin() const;
+  ConstIterator cbegin() const { return positions.cbegin(); }
   //! returns a ConstIterator to the end of the vector;
-  ConstIterator cend() const;
+  ConstIterator cend() const { return positions.cend(); }
 
 private:
   std::string name, type;
