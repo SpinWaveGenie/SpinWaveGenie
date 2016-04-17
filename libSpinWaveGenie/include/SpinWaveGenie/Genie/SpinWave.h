@@ -43,7 +43,7 @@ public:
   const Cell &getCell() const;
   void createMatrix(double KX, double KY, double KZ);
   void calculate();
-  const Results &getPoints() const;
+  const Results &getPoints() const { return VI; };
 
 private:
   double KXP, KYP, KZP;

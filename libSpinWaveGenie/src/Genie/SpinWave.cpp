@@ -264,5 +264,4 @@ void SpinWave::calculate()
   this->calculateIntensities();
 }
 
-const Results &SpinWave::getPoints() const { return VI; }
 }
