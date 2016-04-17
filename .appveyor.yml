@@ -20,7 +20,7 @@ before_build:
 - cmd: md build
 - cmd: cd build
 - cmd: cmake --version
-- cmd: cmake -G "Visual Studio 14 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyorVC140.cmake  ..
+- cmd: cmake -G "Visual Studio 14 Win64" -T v140_clang_3_7 -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyorVC140.cmake  ..
 
 build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
