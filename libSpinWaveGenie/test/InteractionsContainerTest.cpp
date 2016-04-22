@@ -75,7 +75,6 @@ BOOST_AUTO_TEST_CASE(PrintList)
   InteractionsContainer interactions = getInteractions();
   std::stringstream teststream;
   std::string header;
-  std::cout << interactions;
   teststream << interactions;
   std::getline(teststream, header, '\n');
   BOOST_CHECK_EQUAL("  Name  sl1   sl2", header);
