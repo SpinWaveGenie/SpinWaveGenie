@@ -64,8 +64,8 @@ void ExchangeInteractionSameSublattice::calculateEnergy(const Cell &cell, double
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
   double z_rs = static_cast<double>(neighbors.size());
   double Sr = cell[r].getMoment();
-
-  energy -= value * z_rs * Sr * Sr;
+  size_t numberOfAtoms = cell[r].size();
+  energy -= value * z_rs * numberOfAtoms * Sr * Sr;
 }
 
 void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(const Cell & /*cell*/, VectorXcd & /*elements*/)
