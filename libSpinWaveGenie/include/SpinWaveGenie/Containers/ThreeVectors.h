@@ -1,10 +1,11 @@
 #ifndef __ThreeVectors__
 #define __ThreeVectors__
 
-#include <vector>
 #include <boost/iterator/zip_iterator.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <cassert>
 #include <iostream>
+#include <vector>
 
 //! Structure of Arrays used for storing vectors with three components.
 /*!

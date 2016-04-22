@@ -15,8 +15,8 @@ namespace SpinWaveGenie
 class ExchangeInteraction : public Interaction
 {
 public:
-  ExchangeInteraction(std::string name, double value, const std::string &sl_r, const std::string &sl_s, double min,
-                      double max);
+  ExchangeInteraction(const std::string &name, double value, const std::string &sl_r, const std::string &sl_s,
+                      double min, double max);
   void updateInteraction(double value, const std::string &sl_r, const std::string &sl_s, double min, double max);
   void updateValue(double value_in) override;
   const std::string &getName() const override;

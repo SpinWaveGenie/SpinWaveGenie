@@ -1,7 +1,9 @@
-#include <iostream>
-#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Memory.h"
+
+#include <cassert>
+#include <iostream>
 
 using namespace std;
 using namespace Eigen;
@@ -9,9 +11,9 @@ using namespace Eigen;
 namespace SpinWaveGenie
 {
 
-ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, const string &sl_r_in, const string &sl_s_in,
-                                         double min_in, double max_in)
-    : name(std::move(name_in)), r(0), s(0), M(0)
+ExchangeInteraction::ExchangeInteraction(const string &name_in, double value_in, const string &sl_r_in,
+                                         const string &sl_s_in, double min_in, double max_in)
+    : name(name_in), r(0), s(0), M(0)
 {
   name = name_in;
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
