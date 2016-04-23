@@ -45,14 +45,17 @@ void MagneticFieldInteraction::calculateEnergy(const Cell &cell, double &energy)
   r = cell.getPosition(sl_r);
   double S = cell[r].getMoment();
   const Matrix3 &inv = cell[r].getInverseMatrix();
+  size_t numberOfAtoms = cell[r].size();
 
+  double temp{0.0};
   for (int i = 0; i < 3; i++)
   {
     if (std::abs(directions(i)) > 1.0e-10)
     {
-      energy -= value * S * directions(i) * inv(i, 2);
+      temp -= directions(i) * inv(i, 2);
     }
   }
+  energy += value * S * numberOfAtoms * temp;
 }
 
 void MagneticFieldInteraction::calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements)

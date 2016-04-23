@@ -1,7 +1,8 @@
-#include <iostream>
 #include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Memory.h"
+#include <cassert>
+#include <iostream>
 
 using namespace std;
 using namespace Eigen;
@@ -9,9 +10,10 @@ using namespace Eigen;
 namespace SpinWaveGenie
 {
 
-ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(string name_in, double value_in, string sl_r_in,
-                                                                     double min_in, double max_in)
-    : name(std::move(name_in)), r(0), s(0), M(0)
+ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(const string &name_in, double value_in,
+                                                                     const string &sl_r_in, double min_in,
+                                                                     double max_in)
+    : name(name_in), r(0), s(0), M(0)
 {
   this->updateInteraction(value_in, sl_r_in, min_in, max_in);
 }
@@ -64,8 +66,8 @@ void ExchangeInteractionSameSublattice::calculateEnergy(const Cell &cell, double
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
   double z_rs = static_cast<double>(neighbors.size());
   double Sr = cell[r].getMoment();
-
-  energy -= value * z_rs * Sr * Sr;
+  size_t numberOfAtoms = cell[r].size();
+  energy -= value * z_rs * numberOfAtoms * Sr * Sr;
 }
 
 void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(const Cell & /*cell*/, VectorXcd & /*elements*/)

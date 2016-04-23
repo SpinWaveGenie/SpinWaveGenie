@@ -1,7 +1,9 @@
-#include <iostream>
-#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Memory.h"
+
+#include <cassert>
+#include <iostream>
 
 using namespace std;
 using namespace Eigen;
@@ -9,8 +11,8 @@ using namespace Eigen;
 namespace SpinWaveGenie
 {
 
-ExchangeInteraction::ExchangeInteraction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in,
-                                         double max_in)
+ExchangeInteraction::ExchangeInteraction(const string &name_in, double value_in, const string &sl_r_in,
+                                         const string &sl_s_in, double min_in, double max_in)
     : name(name_in), r(0), s(0), M(0)
 {
   name = name_in;
@@ -86,11 +88,14 @@ void ExchangeInteraction::calculateEnergy(const Cell &cell, double &energy)
   double Sr = cell[r].getMoment();
   double Ss = cell[s].getMoment();
 
+  size_t numberOfAtoms = cell[r].size();
+  assert(numberOfAtoms == cell[s].size());
+
   Matrix3 Frs = cell[r].getRotationMatrix() * cell[s].getInverseMatrix();
 
   Matrix3 Fsr = cell[s].getRotationMatrix() * cell[r].getInverseMatrix();
 
-  energy -= 0.5 * value * z_rs * Sr * Ss * (Frs(2, 2) + Fsr(2, 2));
+  energy -= 0.5 * value * z_rs * Sr * Ss * numberOfAtoms * (Frs(2, 2) + Fsr(2, 2));
 }
 
 void ExchangeInteraction::calculateFirstOrderTerms(const Cell &cell, VectorXcd &elements)

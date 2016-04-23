@@ -55,19 +55,22 @@ public:
   //! \param y y component of atomic position in Angstroms
   //! \param z z component of atomic position in Angstroms
   void addAtom(double x, double y, double z);
+  //! returns the number of atoms in this sublattice
+  //! \return number of atoms
+  std::size_t size() const { return positions.size(); }
   typedef UniqueThreeVectors<double>::Iterator Iterator;
   typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
-  //! returns an Iterator to the first atomic position;
+  //! returns an Iterator to the first atomic position
   Iterator begin() { return positions.begin(); }
-  //! returns an Iterator to the end of the vector;
+  //! returns an Iterator to the end of the vector
   Iterator end() { return positions.end(); }
-  //! returns an Iterator to the first atomic position;
+  //! returns an Iterator to the first atomic position
   ConstIterator begin() const { return positions.cbegin(); }
-  //! returns an Iterator to the end of the vector;
+  //! returns an Iterator to the end of the vector
   ConstIterator end() const { return positions.cend(); }
-  //! returns a ConstIterator to the first atomic position;
+  //! returns a ConstIterator to the first atomic position
   ConstIterator cbegin() const { return positions.cbegin(); }
-  //! returns a ConstIterator to the end of the vector;
+  //! returns a ConstIterator to the end of the vector
   ConstIterator cend() const { return positions.cend(); }
 
 private:

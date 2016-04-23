@@ -80,7 +80,9 @@ void AnisotropyInteraction::calculateEnergy(const Cell &cell, double &energy)
   r = cell.getPosition(sl_r);
   double S = cell[r].getMoment();
   const Matrix3 &inv = cell[r].getInverseMatrix();
+  size_t numberOfAtoms = cell[r].size();
 
+  double temp{0.0};
   for (int i = 0; i < 3; i++)
   {
     for (int j = 0; j < 3; j++)
@@ -88,10 +90,11 @@ void AnisotropyInteraction::calculateEnergy(const Cell &cell, double &energy)
       // cout << i << " " << j << " " << directions(i,j) << endl;
       if (abs(directions(i, j)) > 1.0e-10)
       {
-        energy += value * directions(i, j) * S * S * inv(i, 2) * inv(j, 2);
+        temp += directions(i, j) * inv(i, 2) * inv(j, 2);
       }
     }
   }
+  energy += value * S * S * numberOfAtoms * temp;
 }
 
 void AnisotropyInteraction::calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements)

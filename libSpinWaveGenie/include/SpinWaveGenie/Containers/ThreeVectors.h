@@ -1,10 +1,11 @@
 #ifndef __ThreeVectors__
 #define __ThreeVectors__
 
-#include <vector>
 #include <boost/iterator/zip_iterator.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <cassert>
 #include <iostream>
+#include <vector>
 
 //! Structure of Arrays used for storing vectors with three components.
 /*!
@@ -23,7 +24,7 @@ protected:
   typedef typename std::vector<T>::const_iterator ConstValueIterator;
 
 public:
-  bool empty();
+  bool empty() const;
   //! insert three elements x,y,z
   //! \param x zeroth element of type T
   //! \param y first element of type T
@@ -32,7 +33,7 @@ public:
   typedef boost::zip_iterator<boost::tuple<ValueIterator, ValueIterator, ValueIterator>> Iterator;
   typedef boost::zip_iterator<boost::tuple<ConstValueIterator, ConstValueIterator, ConstValueIterator>> ConstIterator;
   //! \return number of elements in the ThreeVector
-  size_t size();
+  size_t size() const;
   //! Clears all data stored in the ThreeVector.
   void clear();
   //! \return Returns an Iterator pointing to the first element
@@ -54,7 +55,7 @@ protected:
   std::vector<T> valuesZ;
 };
 
-template <typename T> bool ThreeVectors<T>::empty() { return valuesX.empty(); }
+template <typename T> bool ThreeVectors<T>::empty() const { return valuesX.empty(); }
 
 template <typename T> void ThreeVectors<T>::insert(T x, T y, T z)
 {
@@ -63,10 +64,10 @@ template <typename T> void ThreeVectors<T>::insert(T x, T y, T z)
   valuesZ.push_back(z);
 }
 
-template <typename T>
-
-size_t ThreeVectors<T>::size()
+template <typename T> size_t ThreeVectors<T>::size() const
 {
+  assert(valuesX.size() == valuesY.size());
+  assert(valuesX.size() == valuesZ.size());
   return valuesX.size();
 }
 
