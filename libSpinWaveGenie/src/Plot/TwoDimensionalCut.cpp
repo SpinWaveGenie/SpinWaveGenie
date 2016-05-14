@@ -83,7 +83,7 @@ Eigen::MatrixXd TwoDimensionalCut::getMatrix()
                       {
                         Eigen::MatrixXd::ColXpr values = mat.col(m);
                         auto it = points.begin() + m;
-                        std::vector<double> val = cutclone->getCut(it->get<0>(), it->get<1>(), it->get<2>());
+                        std::vector<double> val = cutclone->getCut((*it)[0], (*it)[1], (*it)[2]);
 #ifdef _MSC_VER
                         std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
 #else
@@ -123,8 +123,8 @@ void TwoDimensionalCut::save()
   file.open(this->filename + ".x");
   if (file.is_open())
   {
-    for (auto it = points.begin(); it != points.end(); ++it)
-      file << it->get<0>() << "\t" << it->get<1>() << "\t" << it->get<2>() << std::endl;
+    for (const auto &point : points)
+      file << point[0] << "\t" << point[1] << "\t" << point[2] << std::endl;
   }
   file.close();
   file.open(this->filename + ".y");

@@ -40,7 +40,7 @@ void SpinWaveDispersion::setPoints(const ThreeVectors<double> &points)
 {
   for (const auto &pt : points)
   {
-    Kpoints.insert(pt.get<0>(), pt.get<1>(), pt.get<2>());
+    Kpoints.insert(pt[0], pt[1], pt[2]);
   }
 }
 
@@ -52,9 +52,9 @@ void SpinWaveDispersion::save()
   p.start();
   for (const auto &kpt : Kpoints)
   {
-    double x = kpt.get<0>();
-    double y = kpt.get<1>();
-    double z = kpt.get<2>();
+    double x = kpt[0];
+    double y = kpt[1];
+    double z = kpt[2];
     // cout << x << " " << y << " " << z << endl;
 
     if (PrintPosition)

@@ -26,7 +26,7 @@ public:
   //! returns name of a given sublattice
   //! \return name of sublattice
   std::string getName() const;
-  //! set type to describe magnetic form factor used in the calculation of intensities;
+  //! set type to describe magnetic form factor used in the calculation of intensities
   //! \param typeInput a std::string argument
   void setType(const std::string &typeInput);
   //! returns name of a given sublattice
