@@ -11,7 +11,9 @@ ExternalProject_Get_Property(pybind11 source_dir)
 
 add_library( PySpinWaveGenie SHARED src/SpinWaveGenie.cpp)
 
-target_include_directories( PySpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include/pybind11 )
+target_include_directories( PySpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include )
 target_link_libraries ( PySpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
 set_target_properties( PySpinWaveGenie PROPERTIES PREFIX "")
 set_target_properties( PySpinWaveGenie PROPERTIES SUFFIX ".so")
+
+add_subdirectory(test)
