@@ -1,6 +1,5 @@
 import unittest
 import PySpinWaveGenie as SWG
-from math import pi
 import numpy as np
 
 class TestSublatticeClass(unittest.TestCase):
@@ -15,10 +14,10 @@ class TestSublatticeClass(unittest.TestCase):
 
     def test_moment(self):
         test = SWG.Sublattice()
-        test.setMoment(2.0,pi/2.0,pi)
+        test.setMoment(2.0,np.pi/2.0,np.pi)
         self.assertAlmostEqual(test.getMoment(),2.0)
-        self.assertAlmostEqual(test.getTheta(),pi/2.0)
-        self.assertAlmostEqual(test.getPhi(),pi)
+        self.assertAlmostEqual(test.getTheta(),np.pi/2.0)
+        self.assertAlmostEqual(test.getPhi(),np.pi)
 
     def test_rotation_matrices(self):
         test = SWG.Sublattice()
@@ -38,8 +37,6 @@ class TestSublatticeClass(unittest.TestCase):
         atom1 = np.array([0.25,0.25,0.25])
         FoundAtom1 = False
         for point in test:
-            #test0 = atom0[0] - point[0], atom0[1] - point[1], atom0[2] - point[2]]
-            #test1 = [atom1[0] - point[0], atom1[1] - point[1], atom1[2] - point[2]]
             test0 = point - atom0
             test1 = point - atom1
             if np.linalg.norm(test0) < 0.01:

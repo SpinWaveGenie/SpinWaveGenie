@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE( SeventhNeighbors )
     for (const auto &nbr : neighborlist)
     {
       double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
-      BOOST_CHECK_SMALL(dist - 8.02237, eps);
+      BOOST_CHECK_SMALL(dist - 8.022375, eps);
     }
 }
 

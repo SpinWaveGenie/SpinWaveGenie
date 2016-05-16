@@ -32,7 +32,7 @@ PYBIND11_PLUGIN(PySpinWaveGenie)
       .def("__len__", &Sublattice::size, "returns the number of atoms in this sublattice");
 
   py::class_<Cell>(m, "Cell")
-      .def(py::init<Cell>())
+      .def(py::init<>())
       .def("setBasisVectors",
            static_cast<void (Cell::*)(double, double, double, double, double, double)>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
@@ -55,7 +55,7 @@ PYBIND11_PLUGIN(PySpinWaveGenie)
       .def("__iter__", [](const Cell &s) { return py::make_iterator(s.begin(), s.end()); }, py::keep_alive<0, 1>());
 
   py::class_<Neighbors>(m, "Neighbors")
-      .def(py::init<Neighbors>())
+      .def(py::init<>())
       .def("empty", &Neighbors::empty, "Returns whether of not neighbors have been calculated previously")
       .def("findNeighbors", &Neighbors::findNeighbors,
            "Finds neighbors of two sublattices between distances min and max.")
