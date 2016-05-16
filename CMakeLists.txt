@@ -1,4 +1,4 @@
-project(spin_wave_genie)
+project(SpinWaveGenie)
 
 cmake_minimum_required (VERSION 2.8.12)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -131,6 +131,8 @@ if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
 
 add_subdirectory(libSpinWaveGenie)
+
+add_subdirectory(pythonapi)
 
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)

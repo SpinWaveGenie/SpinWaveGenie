@@ -25,12 +25,12 @@ BOOST_AUTO_TEST_CASE( ElevenPoints )
     BOOST_CHECK(test.size() == 11);
     
     double value = 0.0;
-    for(auto it = test.begin(); it!= test.end(); ++it)
+    for (const auto &point : test)
     {
-        BOOST_CHECK_CLOSE(value,it->get<0>(),eps);
-        BOOST_CHECK_CLOSE(value,it->get<1>(),eps);
-        BOOST_CHECK_CLOSE(value,it->get<2>(),eps);
-        value = value + 0.1;
+      BOOST_CHECK_CLOSE(value, point[0], eps);
+      BOOST_CHECK_CLOSE(value, point[1], eps);
+      BOOST_CHECK_CLOSE(value, point[2], eps);
+      value = value + 0.1;
     }
 }
 
@@ -41,10 +41,10 @@ BOOST_AUTO_TEST_CASE( OnePoint )
     BOOST_CHECK(test.size() == 1);
     
     double value = 0.0;
-    for(auto it = test.begin(); it!= test.end(); ++it)
+    for (const auto &point : test)
     {
-        BOOST_CHECK_CLOSE(value,it->get<0>(),eps);
-        BOOST_CHECK_CLOSE(value,it->get<1>(),eps);
-        BOOST_CHECK_CLOSE(value,it->get<2>(),eps);
+      BOOST_CHECK_CLOSE(value, point[0], eps);
+      BOOST_CHECK_CLOSE(value, point[1], eps);
+      BOOST_CHECK_CLOSE(value, point[2], eps);
     }
 }

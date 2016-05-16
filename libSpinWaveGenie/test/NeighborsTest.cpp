@@ -39,11 +39,11 @@ BOOST_AUTO_TEST_CASE( FirstNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 3.0, 3.1);
     
     BOOST_CHECK(neighborlist.size() == 2);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist-3.05515,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 3.05515, eps);
     }
 }
 
@@ -55,11 +55,11 @@ BOOST_AUTO_TEST_CASE( SecondNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 4.2, 4.3);
     
     BOOST_CHECK(neighborlist.size() == 6);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 4.2827,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 4.2827, eps);
     }
 }
 
@@ -71,11 +71,11 @@ BOOST_AUTO_TEST_CASE( ThirdNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 5.2, 5.3);
     
     BOOST_CHECK(neighborlist.size() == 12);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 5.260747,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 5.260747, eps);
     }
 
 }
@@ -88,11 +88,11 @@ BOOST_AUTO_TEST_CASE( FourthNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 6.0, 6.2);
     
     BOOST_CHECK(neighborlist.size() == 2);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 6.1103,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 6.1103, eps);
     }
 
 }
@@ -105,11 +105,11 @@ BOOST_AUTO_TEST_CASE( FifthNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 7.40, 7.43);
     
     BOOST_CHECK(neighborlist.size() == 6);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 7.41785399,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 7.41785399, eps);
     }
     
 }
@@ -122,11 +122,11 @@ BOOST_AUTO_TEST_CASE( SixthNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 7.44, 7.49);
     
     BOOST_CHECK(neighborlist.size() == 12);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 7.46172134,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 7.46172134, eps);
     }
     
 }
@@ -139,11 +139,11 @@ BOOST_AUTO_TEST_CASE( SeventhNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 7.9, 8.1);
     
     BOOST_CHECK(neighborlist.size() == 12);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 8.02237,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 8.02237, eps);
     }
 }
 
@@ -155,11 +155,11 @@ BOOST_AUTO_TEST_CASE( EigthNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 8.45, 8.65);
     
     BOOST_CHECK(neighborlist.size() == 6);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 8.5654,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 8.5654, eps);
     }
 
 }
@@ -172,11 +172,11 @@ BOOST_AUTO_TEST_CASE( NinethNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 9.0, 9.1);
     
     BOOST_CHECK(neighborlist.size() == 12);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 9.093955,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 9.093955, eps);
     }
 
 }
@@ -189,11 +189,11 @@ BOOST_AUTO_TEST_CASE( TenthNeighbors )
     neighborlist.findNeighbors(cell,"Spin0", "Spin0", 9.1, 9.2);
     
     BOOST_CHECK(neighborlist.size() == 2);
-    
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();nbr++)
+
+    for (const auto &nbr : neighborlist)
     {
-        double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
-        BOOST_CHECK_SMALL(dist - 9.16545,eps);
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+      BOOST_CHECK_SMALL(dist - 9.16545, eps);
     }
 }
 
@@ -208,15 +208,14 @@ BOOST_AUTO_TEST_CASE(PrintList)
     teststream << neighborlist;
     std::getline(teststream,header,'\n');
     BOOST_CHECK_EQUAL("  x         y         z         r",header);
-  
-    for(auto nbr=neighborlist.begin();nbr!=neighborlist.end();++nbr)
+
+    for (const auto &nbr : neighborlist)
     {
       double x,y,z,r;
       teststream >> x >> y >> z >> r;
-      double diff = sqrt(pow(nbr->get<0>()-x,2)+pow(nbr->get<1>()-y,2)+pow(nbr->get<2>()-z,2));
+      double diff = std::sqrt(pow(nbr[0] - x, 2) + pow(nbr[1] - y, 2) + pow(nbr[2] - z, 2));
       BOOST_CHECK_SMALL(diff,1.0e-5);
-      double dist = sqrt(pow(nbr->get<0>(),2)+pow(nbr->get<1>(),2)+pow(nbr->get<2>(),2));
+      double dist = std::sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
       BOOST_CHECK_SMALL(std::abs(dist-r),1.0e-5);
-  
     }
 }

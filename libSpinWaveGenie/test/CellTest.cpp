@@ -105,14 +105,14 @@ BOOST_AUTO_TEST_CASE( AddAtom )
     
     bool foundAtom1 = false;
     bool foundAtom2 = false;
-    for (Sublattice::Iterator atom=cell.getSublattice("SL1").begin(); atom!=cell.getSublattice("SL1").end(); ++atom)
+    for (const auto &atom : cell.getSublattice("SL1"))
     {
-        Vector3 atomdistance1(atom->get<0>()-0.0,atom->get<1>()-0.0,atom->get<2>()-0.0);
-        Vector3 atomdistance2(atom->get<0>()-1.0,atom->get<1>()-1.0,atom->get<2>()-1.0);
-        if (atomdistance1.norm() <0.01)
-            foundAtom1 = true;
-        if (atomdistance2.norm() <0.01)
-            foundAtom2 = true;
+      Vector3 atomdistance1(atom[0] - 0.0, atom[1] - 0.0, atom[2] - 0.0);
+      Vector3 atomdistance2(atom[0] - 1.0, atom[1] - 1.0, atom[2] - 1.0);
+      if (atomdistance1.norm() < 0.01)
+        foundAtom1 = true;
+      if (atomdistance2.norm() < 0.01)
+        foundAtom2 = true;
     }
     BOOST_CHECK(foundAtom1);
     BOOST_CHECK(foundAtom2);

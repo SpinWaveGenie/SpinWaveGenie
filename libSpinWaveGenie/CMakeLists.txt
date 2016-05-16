@@ -52,8 +52,6 @@ target_include_directories( SpinWaveGenie PRIVATE src)
 target_include_directories( SpinWaveGenie SYSTEM PRIVATE ${TBB_INCLUDE_DIRS})
 target_link_libraries( SpinWaveGenie PRIVATE ${TBB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
-add_subdirectory(pythonapi)
-
 if(BUILD_TESTING)
     add_subdirectory(test)
 endif (BUILD_TESTING)
