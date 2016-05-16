@@ -5,10 +5,13 @@ set( PYTHON_INCLUDE_DIR "${PYTHON_PREFIX}/include/python2.7" CACHE PATH "PYTHON_
 
 find_package ( PythonLibs REQUIRED )
 
-add_library( PySpinWaveGenie SHARED SpinWaveGenie.cpp)
+include(ExternalProject)
+ExternalProject_Add(pybind11 GIT_REPOSITORY https://github.com/pybind/pybind11.git GIT_TAG v1.7 PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pybind11 BUILD_COMMAND "" INSTALL_COMMAND "")
+ExternalProject_Get_Property(pybind11 source_dir)
 
-target_include_directories( PySpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} /usr/local/include )
+add_library( PySpinWaveGenie SHARED src/SpinWaveGenie.cpp)
+
+target_include_directories( PySpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include/pybind11 )
 target_link_libraries ( PySpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
 set_target_properties( PySpinWaveGenie PROPERTIES PREFIX "")
 set_target_properties( PySpinWaveGenie PROPERTIES SUFFIX ".so")
-
