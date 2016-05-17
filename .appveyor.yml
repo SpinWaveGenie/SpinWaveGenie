@@ -17,19 +17,19 @@ environment:
 platform: x64
 
 install:
-- cmd: cd c:\projects
-- cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC140.git
+  - cd c:\projects
+  - git clone https://github.com/SpinWaveGenie/ThirdPartyVC140.git
   - %PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:
-- ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
-- cmd: md build
-- cmd: cd build
-- cmd: cmake --version
+  - cd "${env:APPVEYOR_BUILD_FOLDER}"
+  - md build
+  - cd build
+  - cmake --version
   - cmake -G "Visual Studio 14 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
 
 build_script:
-- cmd: cmake --build . -- /p:Configuration=Release /m:2
+  - cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
-- cmd: ctest -C Release --output-on-failure
+  - ctest -C Release --output-on-failure
