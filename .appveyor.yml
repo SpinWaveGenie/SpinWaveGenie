@@ -10,7 +10,7 @@ environment:
   PATH: "C:/projects/ThirdPartyVC140/lib;%PATH%"
   matrix:
     - PYTHON_DIR: "Python27-x64"
-      CACHE_FILENAME: "AppveyorPython27-x64.cmake" 
+      CACHE_FILENAME: "AppveyorPython27-x64.cmake"
     - PYTHON_DIR: "Python35-x64"
       CACHE_FILENAME: "AppveyorPython35-x64.cmake"
 
@@ -22,6 +22,7 @@ install:
   - C:\%PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:
+  - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
   - cd %APPVEYOR_BUILD_FOLDER%
   - md build
   - cd build

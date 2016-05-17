@@ -24,10 +24,15 @@ matrix:
       osx_image: xcode7.2
       compiler: clang
       env: PYTHON_VERSION=3.5
-    
+    - os: osx
+      osx_image: xcode7.3
+      compiler: clang
+      env: PYTHON_VERSION=2.7
+      env: COVERALLS=true
+
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; 
-    then 
+  - if [ "$TRAVIS_OS_NAME" == "osx" ];
+    then
       brew update > /dev/null 2>&1;
       brew tap homebrew/science;
       brew install --quite cmake;
@@ -39,13 +44,13 @@ before_install:
         brew install --quiet python3;
       fi
     fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
+  - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
       wget -q https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz --no-check-certificate;
       tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz;
       sudo ln -f -s ./cmake-3.5.2-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
       sudo apt-get update -qq;
-      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev; 
+      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
       if [ "$PYTHON_VERSION" == "3.4" ];
       then
         sudo apt-get install -qq python3-dev python3-numpy;
@@ -53,10 +58,14 @@ before_install:
         sudo apt-get install -qq python-dev python-numpy;
       fi
     fi
+
 before_script:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ];  
-    then 
-      if [ "$PYTHON_VERSION" == "3.5" ];
+  - if [ "$TRAVIS_OS_NAME" == "osx" ];
+    then
+      if [ "$COVERALLS" == "true" ];
+        echo "CHECKING CODE COVERAGE, $COVERALLS";
+        cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
+      elif [ "$PYTHON_VERSION" == "3.5" ];
       then
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Versions/3.5/include -DPYTHON_EXECUTABLE=/usr/local/bin/python3;
       else
@@ -72,10 +81,16 @@ before_script:
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_EXECUTABLE=/usr/bin/python2;
       fi
     fi
+
 script:
   - make -j 2;
-  - ctest --output-on-failure -j 2;
-    
+  - if [ "$COVERALLS" == "true" ];
+    then
+      make coveralls -j 2;
+    else
+      ctest --output-on-failure -j 2;
+    fi
+
 notifications:
   email:
     on_success: change
