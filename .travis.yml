@@ -42,7 +42,11 @@ before_install:
       brew install --quiet nlopt;
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
-    then 
+    then
+      wget -q https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz --no-check-certificate;
+      tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz;
+      pwd;
+      export PATH=$PATH:cmake-3.5.2-Linux-x86_64; 
       sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
       wget -O llvm.key http://llvm.org/apt/llvm-snapshot.gpg.key && sudo apt-key add llvm.key;
       sudo add-apt-repository -y 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main';
@@ -71,7 +75,7 @@ before_script:
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
       else
         echo "LINUX RELEASE BUILD";
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/opt/python/3.4.3/lib/libpython3.4m.so -DPYTHON_INCLUDE_DIR=/opt/python/3.4.3/include .;
+        ./cmake-3.5.2-Linux-x86_64/bin/cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/opt/python/3.4.3/lib/libpython3.4m.so -DPYTHON_INCLUDE_DIR=/opt/python/3.4.3/include .;
       fi
     fi
 
