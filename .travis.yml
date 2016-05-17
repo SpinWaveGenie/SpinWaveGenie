@@ -20,7 +20,7 @@ before_install:
   - sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev python3-dev;
 
 before_script:
-  - ./cmake-3.5.2-Linux-x86_64/bin/cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.4m.so -DPYTHON_INCLUDE_DIR=/usr/include/python3.4/include .;
+  - ./cmake-3.5.2-Linux-x86_64/bin/cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.4m.so -DPYTHON_INCLUDE_DIR=/usr/include/python3.4 .;
 
 script:
   - make -j 2;
