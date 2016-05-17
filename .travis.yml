@@ -63,7 +63,7 @@ before_script:
     elif [ "$CLANG_SANITIZERS" == "true" ];
     then 
       echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
-      cmake -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
+      cmake -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON -DPYTHON_LIBRARY=/opt/python/3.4.3/lib/libpython3.4m.dylib -DPYTHON_INCLUDE_DIR=/opt/python/3.4.3/include/python3.4m .;
     else
       if [ "$TRAVIS_OS_NAME" == "osx" ];
       then
@@ -71,7 +71,7 @@ before_script:
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
       else
         echo "LINUX RELEASE BUILD";
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON .;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/opt/python/3.4.3/lib/libpython3.4m.dylib -DPYTHON_INCLUDE_DIR=/opt/python/3.4.3/include/python3.4m .;
       fi
     fi
 
