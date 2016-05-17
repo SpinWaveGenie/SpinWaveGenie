@@ -63,6 +63,7 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
       if [ "$COVERALLS" == "true" ];
+      then
         echo "CHECKING CODE COVERAGE, $COVERALLS";
         cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
       elif [ "$PYTHON_VERSION" == "3.5" ];
