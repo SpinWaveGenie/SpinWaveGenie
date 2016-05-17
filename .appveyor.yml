@@ -8,20 +8,25 @@ configuration: Release
 
 environment:
   PATH: "C:/projects/ThirdPartyVC140/lib;%PATH%"
+  matrix:
+    - PYTHON_DIR: "C:\\Python27-x64"
+      CACHE_FILENAME: "AppveyorPython27-x64.cmake" 
+    - PYTHON_DIR: "C:\\Python35-x64"
+      CACHE_FILENAME: "AppveyorPython35-x64.cmake"
 
 platform: x64
 
 install:
 - cmd: cd c:\projects
 - cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC140.git
-- cmd: C:\Python34-x64\Scripts\pip3.exe install numpy
+- cmd: %PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:
 - ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
 - cmd: md build
 - cmd: cd build
 - cmd: cmake --version
-- cmd: cmake -G "Visual Studio 14 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyorVC140.cmake  ..
+- cmd: cmake -G "Visual Studio 14 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
 
 build_script:
 - cmd: cmake --build . -- /p:Configuration=Release /m:2
