@@ -39,7 +39,7 @@ before_install:
       brew install --quiet eigen;
       brew install --quiet tbb --c++11;
       brew install --quiet nlopt;
-      if [ "$PYTHON_VERSION" == "3.4" ];
+      if [ "$PYTHON_VERSION" == "3.5" ];
       then
         brew install --quiet python3;
       fi
