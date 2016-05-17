@@ -1,7 +1,10 @@
 import unittest
 import PySpinWaveGenie as SWG
 import numpy as np
-from itertools import izip
+try:
+    import itertools.izip as zip
+except ImportError:
+    pass
 
 class TestSublatticeClass(unittest.TestCase):
 
@@ -13,9 +16,9 @@ class TestSublatticeClass(unittest.TestCase):
         test.setBasisVectors(2.0,2.0,2.0,90.0,90.0,90.0)
         CalculatedBasisVectors = test.getBasisVectors()
 
-        for actual,calc in izip(ActualBasisVectors.flatten(),test.getBasisVectors().flatten()):
+        for actual,calc in zip(ActualBasisVectors.flatten(),test.getBasisVectors().flatten()):
             self.assertAlmostEquals(calc,actual)
-        for actual,calc in izip(ActualReciprocalVectors.flatten(),test.getReciprocalVectors().flatten()):
+        for actual,calc in zip(ActualReciprocalVectors.flatten(),test.getReciprocalVectors().flatten()):
             self.assertAlmostEquals(calc,actual)
 
     def test_hexagonal_basis_vectors(self):
@@ -25,9 +28,9 @@ class TestSublatticeClass(unittest.TestCase):
         test = SWG.Cell()
         test.setBasisVectors(1.0,1.0,1.0,90.0,90.0,120.0)
 
-        for actual,calc in izip(ActualBasisVectors.flatten(),test.getBasisVectors().flatten()):
+        for actual,calc in zip(ActualBasisVectors.flatten(),test.getBasisVectors().flatten()):
             self.assertAlmostEquals(calc,actual)
-        for actual,calc in izip(ActualReciprocalVectors.flatten(),test.getReciprocalVectors().flatten()):
+        for actual,calc in zip(ActualReciprocalVectors.flatten(),test.getReciprocalVectors().flatten()):
             self.assertAlmostEquals(calc,actual)
 
     def test_add_sublattice(self):
