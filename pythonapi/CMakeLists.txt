@@ -3,6 +3,7 @@
 #set( PYTHON_LIBRARY "${PYTHON_PREFIX}/lib/libpython2.7.dylib" CACHE FILEPATH "PYTHON_LIBRARY")
 #set( PYTHON_INCLUDE_DIR "${PYTHON_PREFIX}/include/python2.7" CACHE PATH "PYTHON_INCLUDE_DIR")
 
+find_package(PythonInterp REQUIRED)
 find_package ( PythonLibs REQUIRED )
 
 include(ExternalProject)
