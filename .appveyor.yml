@@ -22,7 +22,7 @@ install:
   - C:\%PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:
-  - cd "${env:APPVEYOR_BUILD_FOLDER}"
+  - cd $APPVEYOR_BUILD_FOLDER
   - md build
   - cd build
   - cmake --version
