@@ -7,7 +7,11 @@ find_package(PythonInterp REQUIRED)
 find_package ( PythonLibs REQUIRED )
 
 include(ExternalProject)
-ExternalProject_Add(pybind11 GIT_REPOSITORY https://github.com/pybind/pybind11.git GIT_TAG master PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pybind11 BUILD_COMMAND "" INSTALL_COMMAND "")
+ExternalProject_Add(pybind11 GIT_REPOSITORY https://github.com/pybind/pybind11.git GIT_TAG master 
+                             PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pybind11 
+                             CONFIGURE_COMMAND "" 
+                             BUILD_COMMAND "" 
+                             INSTALL_COMMAND "" )
 ExternalProject_Get_Property(pybind11 source_dir)
 
 add_library( PySpinWaveGenie SHARED src/SpinWaveGenie.cpp)
