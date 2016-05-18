@@ -35,6 +35,7 @@ before_install:
     then
       brew update > /dev/null 2>&1;
       brew tap homebrew/science;
+      brew tap homebrew/python;
       brew install --quite cmake;
       brew install --quiet eigen;
       brew install --quiet tbb --c++11;
@@ -42,6 +43,7 @@ before_install:
       if [ "$PYTHON_VERSION" == "3.5" ];
       then
         brew install --quiet python3;
+        brew install --quiet numpy --with-python3 --without-python;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
