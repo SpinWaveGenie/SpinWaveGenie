@@ -1,1 +1,2 @@
-from python_SpinWaveGenie import *
+from .python_SpinWaveGenie import *
+
