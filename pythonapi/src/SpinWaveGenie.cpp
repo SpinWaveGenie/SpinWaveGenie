@@ -8,9 +8,9 @@
 namespace py = pybind11;
 using namespace SpinWaveGenie;
 
-PYBIND11_PLUGIN(PySpinWaveGenie)
+PYBIND11_PLUGIN(python_SpinWaveGenie)
 {
-  py::module m("PySpinWaveGenie", "Python Bindings for the SpinWaveGenie Library");
+  py::module m("python_SpinWaveGenie", "Python Bindings for the SpinWaveGenie Library");
 
   py::class_<Sublattice>(m, "Sublattice")
       .def(py::init<>())

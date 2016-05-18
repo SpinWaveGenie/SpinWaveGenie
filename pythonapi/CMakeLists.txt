@@ -1,10 +1,12 @@
-#execute_process(COMMAND python-config --prefix OUTPUT_VARIABLE PYTHON_PREFIX)
-#string(STRIP ${PYTHON_PREFIX} PYTHON_PREFIX)
-#set( PYTHON_LIBRARY "${PYTHON_PREFIX}/lib/libpython2.7.dylib" CACHE FILEPATH "PYTHON_LIBRARY")
-#set( PYTHON_INCLUDE_DIR "${PYTHON_PREFIX}/include/python2.7" CACHE PATH "PYTHON_INCLUDE_DIR")
-
 find_package(PythonInterp REQUIRED)
-find_package ( PythonLibs REQUIRED )
+find_package(PythonLibs REQUIRED)
+
+if(NOT PYTHON_SITE_PACKAGES_DIR)
+  execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set( PYTHON_SITE_PACKAGES_DIR ${PYTHON_SITE_PACKAGES} CACHE FILEPATH "site-packages directory for python bindings")
+endif()
+
+message(STATUS "PYTHON_SITE_PACKAGES = ${PYTHON_SITE_PACKAGES_DIR}")
 
 include(ExternalProject)
 ExternalProject_Add(pybind11 GIT_REPOSITORY https://github.com/pybind/pybind11.git GIT_TAG master 
@@ -14,16 +16,24 @@ ExternalProject_Add(pybind11 GIT_REPOSITORY https://github.com/pybind/pybind11.g
                              INSTALL_COMMAND "" )
 ExternalProject_Get_Property(pybind11 source_dir)
 
-add_library( PySpinWaveGenie SHARED src/SpinWaveGenie.cpp)
-
-target_include_directories( PySpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include )
-target_link_libraries ( PySpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
+add_library( python_SpinWaveGenie SHARED src/SpinWaveGenie.cpp)
+target_include_directories( python_SpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include )
+target_link_libraries ( python_SpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
+file(MAKE_DIRECTORY SpinWaveGenie)
+set_target_properties ( python_SpinWaveGenie PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
+message(STATUS "CMAKE_INSTALL_LIBDIR : ${CMAKE_INSTALL_LIBDIR}")
+set_target_properties ( python_SpinWaveGenie PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie)
 
 if(WIN32)
-  set_target_properties( PySpinWaveGenie PROPERTIES SUFFIX ".pyd")
+  set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".pyd")
 else()
-  set_target_properties( PySpinWaveGenie PROPERTIES PREFIX "")
-  set_target_properties( PySpinWaveGenie PROPERTIES SUFFIX ".so")
+  set_target_properties( python_SpinWaveGenie PROPERTIES PREFIX "")
+  set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".so")
 endif()
 
 add_subdirectory(test)
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${PYTHON_SITE_PACKAGES_DIR}/SpinWaveGenie)
+install(TARGETS python_SpinWaveGenie DESTINATION ${PYTHON_SITE_PACKAGES_DIR}/SpinWaveGenie)
+

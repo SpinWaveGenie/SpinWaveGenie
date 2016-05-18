@@ -2,7 +2,7 @@ project(SpinWaveGenie)
 
 cmake_minimum_required (VERSION 3.1)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_MACOSX_RPATH FALSE)
+set(CMAKE_MACOSX_RPATH TRUE)
 
 set(SPINWAVEGENIE_VERSION_MAJOR "0")
 set(SPINWAVEGENIE_VERSION_MINOR "2")
@@ -97,17 +97,20 @@ endif()
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target(doc
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen" VERBATIM
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc
+  ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif()
 
 add_subdirectory(libSpinWaveGenie)
 
-add_subdirectory(pythonapi)
+option( PYTHON_API "Build Python bindings for SpinWaveGenie" ON)
+if(PYTHON_API)
+  add_subdirectory(pythonapi)
+endif()
 
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)

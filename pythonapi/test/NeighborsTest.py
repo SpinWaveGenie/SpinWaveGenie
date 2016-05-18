@@ -1,12 +1,12 @@
 import unittest
-import PySpinWaveGenie as SWG
+import SpinWaveGenie as swg
 import numpy as np
 
 def createMnBiCell():
-    cell = SWG.Cell()
+    cell = swg.Cell()
     cell.setBasisVectors(4.2827,4.2827,6.1103,90.0,90.0,120.0)
 
-    Spin0 = SWG.Sublattice()
+    Spin0 = swg.Sublattice()
     Spin0.setName("Spin0")
     Spin0.setType("MN2")
     Spin0.setMoment(2.0,np.pi/2.0,0.0)
@@ -19,7 +19,7 @@ def createMnBiCell():
 class TestNeighborsClass(unittest.TestCase):
     def test_first_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 3.0, 3.1)
         self.assertEqual(len(neighborList),2)
         for pt in neighborList:
@@ -27,7 +27,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_second_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 4.2, 4.3)
         self.assertEqual(len(neighborList),6)
         for pt in neighborList:
@@ -35,7 +35,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_third_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 5.2, 5.3)
         self.assertEqual(len(neighborList),12)
         for pt in neighborList:
@@ -43,7 +43,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_fourth_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 6.0, 6.2)
         self.assertEqual(len(neighborList),2)
         for pt in neighborList:
@@ -51,7 +51,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_fifth_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 7.40, 7.42)
         self.assertEqual(len(neighborList),6)
         for pt in neighborList:
@@ -59,7 +59,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_sixth_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 7.44, 7.49)
         self.assertEqual(len(neighborList),12)
         for pt in neighborList:
@@ -67,7 +67,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_seventh_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 7.9, 8.1)
         self.assertEqual(len(neighborList),12)
         for pt in neighborList:
@@ -75,7 +75,7 @@ class TestNeighborsClass(unittest.TestCase):
                 
     def test_eight_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 8.45, 8.65)
         self.assertEqual(len(neighborList),6)
         for pt in neighborList:
@@ -83,7 +83,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_nineth_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 9.0, 9.1)
         self.assertEqual(len(neighborList),12)
         for pt in neighborList:
@@ -91,7 +91,7 @@ class TestNeighborsClass(unittest.TestCase):
 
     def test_tenth_neighbors(self):
         cell = createMnBiCell()
-        neighborList = SWG.Neighbors()
+        neighborList = swg.Neighbors()
         neighborList.findNeighbors(cell,"Spin0", "Spin0", 9.1, 9.2)
         self.assertEqual(len(neighborList),2)
         for pt in neighborList:

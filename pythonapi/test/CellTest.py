@@ -1,5 +1,5 @@
 import unittest
-import PySpinWaveGenie as SWG
+import SpinWaveGenie as swg
 import numpy as np
 try:
     import itertools.izip as zip
@@ -12,7 +12,7 @@ class TestSublatticeClass(unittest.TestCase):
         ActualBasisVectors = 2.0*np.identity(3)
         ActualReciprocalVectors = np.pi*np.identity(3)
 
-        test = SWG.Cell()
+        test = swg.Cell()
         test.setBasisVectors(2.0,2.0,2.0,90.0,90.0,90.0)
         CalculatedBasisVectors = test.getBasisVectors()
 
@@ -25,7 +25,7 @@ class TestSublatticeClass(unittest.TestCase):
         ActualBasisVectors = np.array([[1.0,0.0,0.0],[-0.5,0.5*np.sqrt(3.0),0.0],[0.0,0.0,1.0]])
         ActualReciprocalVectors = np.array([[2.0*np.pi,2.0*np.pi/np.sqrt(3.0),0.0],[0.0,4.0*np.pi/np.sqrt(3.0),0.0],[0.0,0.0,2.0*np.pi]])
 
-        test = SWG.Cell()
+        test = swg.Cell()
         test.setBasisVectors(1.0,1.0,1.0,90.0,90.0,120.0)
 
         for actual,calc in zip(ActualBasisVectors.flatten(),test.getBasisVectors().flatten()):
@@ -34,38 +34,38 @@ class TestSublatticeClass(unittest.TestCase):
             self.assertAlmostEquals(calc,actual)
 
     def test_add_sublattice(self):
-        test = SWG.Sublattice()
+        test = swg.Sublattice()
         test.setMoment(2.0,np.pi/2.0,np.pi)
         test.setName("SL1")
         test.setType("Fe3")
 
-        SLtest = SWG.Cell()
+        SLtest = swg.Cell()
         SLtest.addSublattice(test)
         
         self.assertEqual(len(SLtest),1)
         #self.assertRaises(ValueError,SLtest.addSublattice(test))
 
     def test_sublattice_position(self):
-        test = SWG.Sublattice()
+        test = swg.Sublattice()
         test.setMoment(2.0,np.pi/2.0,np.pi)
         test.setName("SL1")
         test.setType("Fe3")
 
-        test2 = SWG.Sublattice()
+        test2 = swg.Sublattice()
         test2.setMoment(2.0,np.pi/2.0,np.pi)
         test2.setName("SL2")
         test2.setType("Fe3")
 
-        SLtest = SWG.Cell()
+        SLtest = swg.Cell()
         SLtest.addSublattice(test)
         SLtest.addSublattice(test2)
         self.assertEqual(SLtest.getPosition("SL1"),0)
         self.assertEqual(SLtest.getPosition("SL2"),1)
 
     def test_add_atom(self):
-        cell = SWG.Cell()
+        cell = swg.Cell()
         cell.setBasisVectors(2.0,2.0,2.0,90.0,90.0,90.0)
-        test = SWG.Sublattice()
+        test = swg.Sublattice()
         test.setMoment(2.0,np.pi/2.0,np.pi)
         test.setName("SL1")
         test.setType("Fe3")
@@ -90,13 +90,13 @@ class TestSublatticeClass(unittest.TestCase):
         self.assertTrue(FoundAtom1)
 
     def test_iterator(self):
-        cell = SWG.Cell()
-        test = SWG.Sublattice()
+        cell = swg.Cell()
+        test = swg.Sublattice()
         test.setMoment(2.0,np.pi/2.0,np.pi)
         test.setName("SL1")
         test.setType("Fe3")
 
-        test2 = SWG.Sublattice()
+        test2 = swg.Sublattice()
         test2.setMoment(2.0,np.pi/2.0,np.pi)
         test2.setName("SL2")
         test2.setType("Fe3")
