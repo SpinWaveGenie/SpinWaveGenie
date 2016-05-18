@@ -68,7 +68,7 @@ before_script:
         cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
       elif [ "$PYTHON_VERSION" == "3.5" ];
       then
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Versions/3.5/include -DPYTHON_EXECUTABLE=/usr/local/bin/python3;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Versions/3.5/include/python3.5m -DPYTHON_EXECUTABLE=/usr/local/bin/python3;
       else
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
       fi
