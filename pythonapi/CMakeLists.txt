@@ -28,7 +28,7 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${CMAKE_CURRENT_BI
 
 if(WIN32)
   set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".pyd")
-  # Horrible hack so that python library is found."
+  # Horrible hack so that the python library is found.
   set_target_properties ( python_SpinWaveGenie PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
                                                           RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
 else()
