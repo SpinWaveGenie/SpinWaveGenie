@@ -11,8 +11,6 @@
 
 #include <complex>
 #include <iostream>
-#include <boost/foreach.hpp>
-#include <boost/range/iterator_range.hpp>
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
 
 namespace SpinWaveGenie
