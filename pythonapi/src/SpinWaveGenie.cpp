@@ -1,6 +1,8 @@
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Interactions/Interaction.h"
+#include "SpinWaveGenie/Interactions/InteractionFactory.h"
 #include "pybind11/pybind11.h"
 #include <pybind11/stl.h>
 #include <pybind11/eigen.h>
@@ -63,6 +65,18 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("getGamma", &Neighbors::getGamma, "Get variable")
       .def("__iter__", [](const Neighbors &s) { return py::make_iterator(s.begin(), s.end()); },
            py::keep_alive<0, 1>());
+
+  py::class_<Interaction>(m, "Interaction")
+      .def("sublattices",&Interaction::sublattices,"get Sublattices associated with this Interaction.")
+      .def("getName",&Interaction::getName,"get Name associated with this Interaction.")
+      .def("updateValue",&Interaction::updateValue,"update Values associated with this Interaction.");
+
+  py::class_<InteractionFactory>(m, "InteractionFactory")
+      .def(py::init<>())
+      .def("getExchange",&InteractionFactory::getExchange,"Construct exchange interaction term.")
+      .def("getDzyaloshinskiiMoriya",&InteractionFactory::getDzyaloshinskiiMoriya,"Construct Dzyaloshinskii-Moriya interaction term")
+      .def("getAnisotropy",&InteractionFactory::getAnisotropy,"Construct single-ion anisotropy term.")
+      .def("getMagneticField",&InteractionFactory::getMagneticField,"Construct magnetic field term.");
 
   return m.ptr();
 }
