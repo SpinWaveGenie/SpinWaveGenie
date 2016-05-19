@@ -1,100 +1,99 @@
-language: cpp
+language: generic
 
 sudo: required
 
 branches:
   only:
     - master
-    - coverity_scan
 
 matrix:
   include:
     - os: linux
       dist: trusty
       compiler: gcc
+      env: PYTHON_VERSION=2.7
     - os: linux
       dist: trusty
-      compiler: clang-3.8
-      env: CLANG_STATIC_ANALYZER=true
-    - os: linux
-      dist: trusty
-      compiler: clang-3.8
-      env: CLANG_SANITIZERS=true
+      compiler: gcc
+      env: PYTHON_VERSION=3.4
     - os: osx
       osx_image: xcode7.3
       compiler: clang
+      env: PYTHON_VERSION=3.5
     - os: osx
       osx_image: xcode7.2
       compiler: clang
+      env: PYTHON_VERSION=2.7
     - os: osx
-      osx_image: xcode7.2
+      osx_image: xcode7.3
       compiler: clang
+      env: PYTHON_VERSION=2.7
       env: COVERALLS=true
-    
+
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; 
-    then 
+  - if [ "$TRAVIS_OS_NAME" == "osx" ];
+    then
       brew update > /dev/null 2>&1;
       brew tap homebrew/science;
+      brew tap homebrew/python;
       brew install --quite cmake;
       brew install --quiet eigen;
       brew install --quiet tbb --c++11;
       brew install --quiet nlopt;
+      if [ "$PYTHON_VERSION" == "3.5" ];
+      then
+        brew install --quiet python3;
+        brew install --quiet numpy --with-python3 --without-python;
+      fi
     fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
-    then 
-      sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test;
-      wget -O llvm.key http://llvm.org/apt/llvm-snapshot.gpg.key && sudo apt-key add llvm.key;
-      sudo add-apt-repository -y 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main';
+  - if [ "$TRAVIS_OS_NAME" == "linux" ];
+    then
+      wget -q https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz --no-check-certificate;
+      tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz;
+      sudo ln -f -s ./cmake-3.5.2-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
       sudo apt-get update -qq;
-      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev libstdc++-4.9-dev clang-3.8 clang-tidy-3.8;
-      cmake --version;
+      sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
+      if [ "$PYTHON_VERSION" == "3.4" ];
+      then
+        sudo apt-get install -qq python3-dev python3-numpy;
+      else
+        sudo apt-get install -qq python-dev python-numpy;
+      fi
     fi
 
 before_script:
-  - if [ "$COVERALLS" == "true" ]; 
+  - if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
-      echo "CHECKING CODE COVERAGE, $COVERALLS"; 
-      cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
-    elif [ "$CLANG_STATIC_ANALYZER" == "true" ];
-    then
-      echo "RUNNING CLANG STATIC ANALYZER, $CLANG_STATIC_ANALYZER";
-      cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DUSE_THREADS=OFF .;
-    elif [ "$CLANG_SANITIZERS" == "true" ];
-    then 
-      echo "RUNNING CLANG ADDRESS and UNDEFINED BEHAVIOR SANITIZERS, $CLANG_SANITIZERS";
-      cmake -DWARNINGS_AS_ERRORS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON -DUSE_THREADS=OFF -DWITH_SANITIZERS=ON .;
-    else
-      if [ "$TRAVIS_OS_NAME" == "osx" ];
+      if [ "$COVERALLS" == "true" ];
       then
-        echo "OSX RELEASE BUILD";
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON .; 
+        echo "CHECKING CODE COVERAGE, $COVERALLS";
+        cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
+      elif [ "$PYTHON_VERSION" == "3.5" ];
+      then
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Versions/3.5/include/python3.5m -DPYTHON_EXECUTABLE=/usr/local/bin/python3;
       else
-        echo "LINUX RELEASE BUILD";
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON .;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
+      fi
+    fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ];
+    then
+      if [ "$PYTHON_VERSION" == "3.4" ];
+      then
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.4m.so -DPYTHON_INCLUDE_DIR=/usr/include/python3.4 -DPYTHON_EXECUTABLE=/usr/bin/python3;
+      else
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_EXECUTABLE=/usr/bin/python2;
       fi
     fi
 
 script:
-  - if [ "$CLANG_STATIC_ANALYZER" == "true" ];
-    then
-      SOURCE_FILES=`find . \( -name '*.cpp' \) -path './*'`;
-      CHECKS="clang-analyzer-*,-clang-analyzer-alpha.core.CastToStruct,modernize-*,-modernize-pass-by-value,performance-*,google-readability-casting";
-      for file in $SOURCE_FILES; do
-        echo Filename:$file;
-        clang-tidy-3.8 -checks=$CHECKS -p . -header-filter='./libSpinWaveGenie/*' $file;
-      done
-    else
-      make -j 2;
-    fi
+  - make -j 2;
   - if [ "$COVERALLS" == "true" ];
-    then 
-      make coveralls -j 2;
-    elif [ "$CLANG_STATIC_ANALYZER" != "true" ];
     then
+      make coveralls -j 2;
+    else
       ctest --output-on-failure -j 2;
     fi
-    
+
 notifications:
   email:
     on_success: change

@@ -19,6 +19,7 @@ class Interaction
 public:
   virtual std::array<std::string, 2> sublattices() const = 0;
   bool operator<(const Interaction &other) const;
+  //! Calculate the classical energy associated with a given Cell.
   virtual void calculateEnergy(const Cell &cell, double &energy) = 0;
   virtual void calcConstantValues(const Cell &cell) = 0;
   virtual void calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements) = 0;

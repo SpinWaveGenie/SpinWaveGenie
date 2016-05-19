@@ -29,8 +29,7 @@ void Neighbors::findNeighbors(const Cell &cell, const string &sl1, const string 
       // cout << supercellSize << endl;
       for (const auto &atom2 : cell.getSublattice(sl2))
       {
-        Vector3 atomdistance(atom2.get<0>() - atom1.get<0>(), atom2.get<1>() - atom1.get<1>(),
-                             atom2.get<2>() - atom1.get<2>());
+        Vector3 atomdistance(atom2[0] - atom1[0], atom2[1] - atom1[1], atom2[2] - atom1[2]);
         // cout << "atom2:  " << atom2->get<0>() << " " << atom2->get<1>() << " " << atom2->get<2>() << endl;
         // cout << "atom1:  " << atom1->get<0>() << " " << atom1->get<1>() << " " << atom1->get<2>() << endl;
         // cout << atomdistance.transpose() << endl;
@@ -71,13 +70,13 @@ void Neighbors::findNeighbors(const Cell &cell, const string &sl1, const string 
 
         for (const auto &MyPosition : neighborList)
         {
-          cout << "\t" << MyPosition.get<0>() << " " << MyPosition.get<1>() << " " << MyPosition.get<2>() << "\n";
+          cout << "\t" << MyPosition[0] << " " << MyPosition[1] << " " << MyPosition[2] << "\n";
         }
 
         cout << "New number of neighbors:" << Neighbors.size() << "\n";
         for (const auto &MyPosition : Neighbors)
         {
-          cout << "\t" << MyPosition.get<0>() << " " << MyPosition.get<1>() << " " << MyPosition.get<2>() << "\n";
+          cout << "\t" << MyPosition[0] << " " << MyPosition[1] << " " << MyPosition[2] << "\n";
         }
       }
     }
@@ -91,7 +90,7 @@ complex<double> Neighbors::getGamma(const Vector3 &K) const
   for (const auto &nbr : neighborList)
   {
     // cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;
-    double dot_prod = K[0] * nbr.get<0>() + K[1] * nbr.get<1>() + K[2] * nbr.get<2>();
+    double dot_prod = K[0] * nbr[0] + K[1] * nbr[1] + K[2] * nbr[2];
     gamma_rs += exp(MXI * dot_prod);
     // cout << "gamma_rs = " << gamma_rs << " " << numberNeighbors << endl;
   }
@@ -103,8 +102,8 @@ std::ostream &operator<<(std::ostream &output, const Neighbors &n)
   output << "  x         y         z         r\n";
   for (const auto &nbr : n)
   {
-    double dist = sqrt(pow(nbr.get<0>(), 2) + pow(nbr.get<1>(), 2) + pow(nbr.get<2>(), 2));
-    output << boost::format("%9.5f %9.5f %9.5f %9.5f\n") % nbr.get<0>() % nbr.get<1>() % nbr.get<2>() % dist;
+    double dist = sqrt(pow(nbr[0], 2) + pow(nbr[1], 2) + pow(nbr[2], 2));
+    output << boost::format("%9.5f %9.5f %9.5f %9.5f\n") % nbr[0] % nbr[1] % nbr[2] % dist;
   }
   return output;
 }

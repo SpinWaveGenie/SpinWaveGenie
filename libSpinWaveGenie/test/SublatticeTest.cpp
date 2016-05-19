@@ -55,14 +55,14 @@ BOOST_AUTO_TEST_CASE( AtomsTest )
     bool FoundAtom0 = false;
     Vector3 atom1(0.25,0.25,0.25);
     bool FoundAtom1 = false;
-    for (Sublattice::Iterator it = test.begin();it !=test.end();it++)
+    for (const auto &point : test)
     {
-        Vector3 test0(atom0[0]-it->get<0>(),atom0[1]-it->get<1>(),atom0[2]-it->get<2>());
-        Vector3 test1(atom1[0]-it->get<0>(),atom1[1]-it->get<1>(),atom1[2]-it->get<2>());
-        if(test0.norm()<0.01)
-            FoundAtom0 = true;
-        if(test1.norm()<0.01)
-            FoundAtom1 = true;
+      Vector3 test0(atom0[0] - point[0], atom0[1] - point[1], atom0[2] - point[2]);
+      Vector3 test1(atom1[0] - point[0], atom1[1] - point[1], atom1[2] - point[2]);
+      if (test0.norm() < 0.01)
+        FoundAtom0 = true;
+      if (test1.norm() < 0.01)
+        FoundAtom1 = true;
     }
     BOOST_CHECK(FoundAtom0);
     BOOST_CHECK(!FoundAtom1);

@@ -1,9 +1,8 @@
-project(spin_wave_genie)
+project(SpinWaveGenie)
 
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.1)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_MACOSX_RPATH FALSE)
-#set(CMAKE_SKIP_RPATH TRUE)
+set(CMAKE_MACOSX_RPATH TRUE)
 
 set(SPINWAVEGENIE_VERSION_MAJOR "0")
 set(SPINWAVEGENIE_VERSION_MINOR "2")
@@ -30,22 +29,8 @@ if (COVERALLS)
     coveralls_turn_on_coverage()
 endif()
 
-
-if(${CMAKE_VERSION} VERSION_GREATER 3.1.0 OR ${CMAKE_VERSION} VERSION_EQUAL 3.1.0)
-  set(CMAKE_CXX_STANDARD 14)
-  set(CXX_STANDARD_REQUIRED 11)
-else()
-  if(NOT "${CMAKE_CXX_FLAGS}" MATCHES "c\\+\\+[01][xyz147]")
-    include(CheckCXXCompilerFlag)
-    CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-    if(COMPILER_SUPPORTS_CXX14)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-    elseif(COMPILER_SUPPORTS_CXX11)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    endif()
-  endif()
-endif()
+set(CMAKE_CXX_STANDARD 14)
+set(CXX_STANDARD_REQUIRED 11)
 # XCode isn't picking up the standard set above.
 if(CMAKE_GENERATOR STREQUAL Xcode)
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
@@ -53,7 +38,7 @@ if(CMAKE_GENERATOR STREQUAL Xcode)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -Wall -Wextra -Wpedantic")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -Wall -Wextra")
 endif()
 
 if(CMAKE_GENERATOR STREQUAL Xcode)
@@ -87,10 +72,6 @@ if(USE_THREADS)
   find_package(TBB)
 endif()
 
-string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
-if (isRHEL6)
-    set(Boost_NO_BOOST_CMAKE ON)
-endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
 if(WIN32)
@@ -110,27 +91,26 @@ if(BUILD_TESTING)
 endif(BUILD_TESTING)
 
 if(USE_THREADS AND TBB_FOUND )
-add_definitions(-DUSE_THREADS)
-endif()
-
-INCLUDE (CheckIncludeFileCXX)
-CHECK_INCLUDE_FILE_CXX( atomic HAVE_ATOMIC)
-if(HAVE_ATOMIC)
-    add_definitions(-DHAVE_ATOMIC_H)
+    add_definitions(-DUSE_THREADS)
 endif()
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target(doc
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen" VERBATIM
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc
+  ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
-endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
+endif()
 
 add_subdirectory(libSpinWaveGenie)
+
+option( PYTHON_API "Build Python bindings for SpinWaveGenie" ON)
+if(PYTHON_API)
+  add_subdirectory(pythonapi)
+endif()
 
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
@@ -165,8 +145,7 @@ else()
 endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
-
+                ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
 
 add_custom_command( OUTPUT SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
                     COMMAND git archive --format=tar --prefix=SpinWaveGenie-${CPACK_PACKAGE_VERSION}/ HEAD | gzip -c > ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
