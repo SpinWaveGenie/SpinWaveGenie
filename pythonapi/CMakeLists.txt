@@ -21,16 +21,26 @@ target_include_directories( python_SpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} $
 target_link_libraries ( python_SpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
 file(MAKE_DIRECTORY SpinWaveGenie)
 set_target_properties ( python_SpinWaveGenie PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
-
-message(STATUS "CMAKE_INSTALL_LIBDIR : ${CMAKE_INSTALL_LIBDIR}")
 set_target_properties ( python_SpinWaveGenie PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie)
 
-if(WIN32)
-  set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".pyd")
+if(CMAKE_GENERATOR MATCHES "Visual Studio")
   # Horrible hack so that the python library is found.
   set_target_properties ( python_SpinWaveGenie PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
+                                                          RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
+                                                          RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
                                                           RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
+
+elseif(CMAKE_GENERATOR MATCHES "Xcode")
+  # Horrible hack so that the python library is found.
+  set_target_properties ( python_SpinWaveGenie PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
+                                                          LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
+                                                          LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie
+                                                          LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
+endif()
+
+if(WIN32)
+  set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".pyd")
 else()
   set_target_properties( python_SpinWaveGenie PROPERTIES PREFIX "")
   set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".so")
