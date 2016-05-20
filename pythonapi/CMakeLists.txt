@@ -2,7 +2,8 @@ find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
 
 if(NOT PYTHON_SITE_PACKAGES_DIR)
-  execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+                    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
   set( PYTHON_SITE_PACKAGES_DIR ${PYTHON_SITE_PACKAGES} CACHE FILEPATH "site-packages directory for python bindings")
 endif()
 
@@ -18,7 +19,7 @@ ExternalProject_Get_Property(pybind11 source_dir)
 
 add_library( python_SpinWaveGenie SHARED src/SpinWaveGenie.cpp)
 target_include_directories( python_SpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include )
-target_link_libraries ( python_SpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
+target_link_libraries( python_SpinWaveGenie SpinWaveGenie )
 file(MAKE_DIRECTORY SpinWaveGenie)
 set_target_properties ( python_SpinWaveGenie PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
 set_target_properties ( python_SpinWaveGenie PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
@@ -40,10 +41,15 @@ elseif(CMAKE_GENERATOR MATCHES "Xcode")
 endif()
 
 if(WIN32)
+  target_link_libraries( python_SpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
   set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".pyd")
 else()
   set_target_properties( python_SpinWaveGenie PROPERTIES PREFIX "")
   set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".so")
+endif()
+
+if(APPLE)
+  set_target_properties(python_SpinWaveGenie PROPERTIES LINK_FLAGS "-undefined dynamic_lookup ")
 endif()
 
 add_subdirectory(test)
