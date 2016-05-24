@@ -15,7 +15,7 @@ class TestInteractionFactoryClass(unittest.TestCase):
     def test_getDzyaloshinskiiMoriya(self):
         factory = swg.InteractionFactory()
         dm = factory.getDzyaloshinskiiMoriya("D",1.0,[1.0,0.0,0.0],"SA","SB",2.0,2.1)
-        self.assertEqual(exchange.getName(),"J")
+        self.assertEqual(dm.getName(),"D")
         sl = dm.sublattices()
         self.assertEqual(sl[0],"SA")
         self.assertEqual(sl[1],"SB")
@@ -30,8 +30,12 @@ class TestInteractionFactoryClass(unittest.TestCase):
 
     def test_getMagneticField(self):
         factory = swg.InteractionFactory()
-        magnetic_field = factory.getMagneticField("K",1.0,[0.0,0.0,1.0],"SA")
-        self.assertEqual(magnetic_field.getName(),"K")
-        sl = magnetic_fieldgit .sublattices()
+        magnetic_field = factory.getMagneticField("B",1.0,[0.0,0.0,1.0],"SA")
+        self.assertEqual(magnetic_field.getName(),"B")
+        sl = magnetic_field.sublattices()
         self.assertEqual(sl[0],"SA")
         self.assertEqual(sl[1],"SA")
+
+if __name__ == '__main__':
+    unittest.main()
+                    

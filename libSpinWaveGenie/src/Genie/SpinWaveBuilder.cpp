@@ -12,11 +12,19 @@ SpinWaveBuilder::SpinWaveBuilder(const Cell &cellIn) : cell(cellIn) {}
 
 void SpinWaveBuilder::updateCell(const Cell &cellIn) { cell = cellIn; }
 
-void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> in)
+void SpinWaveBuilder::addInteraction(std::unique_ptr<Interaction> &&in)
 {
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
   interactions.insert(std::move(in));
+  interactions.sort();
+}
+
+void SpinWaveBuilder::addInteraction(const Interaction &in)
+{
+  // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
+  // cout << "cell check(Add_Interaction): " << cell.begin()->getName() << endl;
+  interactions.insert(in.clone());
   interactions.sort();
 }
 

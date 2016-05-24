@@ -17,7 +17,8 @@ public:
   SpinWaveBuilder();
   SpinWaveBuilder(const Cell &cellIn);
   void updateCell(const Cell &cellIn);
-  void addInteraction(std::unique_ptr<Interaction> in);
+  void addInteraction(std::unique_ptr<Interaction> &&in);
+  void addInteraction(const Interaction &in);
   void updateInteraction(const std::string &name, double value);
   double getEnergy();
   Eigen::VectorXcd getFirstOrderTerms();
