@@ -115,7 +115,7 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("getCell", &SpinWave::getCell, "Access the cell used in this calculation.")
       .def("createMatrix", &SpinWave::createMatrix, "Set the location to calculate in reciprocal space.")
       .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
-      .def("getPoints", &SpinWave::getPoints, " Get calculated frequencies and intensities.");
+      .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
   return m.ptr();
 }
