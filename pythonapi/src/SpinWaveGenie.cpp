@@ -1,11 +1,14 @@
 #include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Genie/SpinWave.h"
+#include "SpinWaveGenie/Genie/SpinWaveBuilder.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
+#include "pybind11/eigen.h"
 #include "pybind11/pybind11.h"
-#include <pybind11/stl.h>
-#include <pybind11/eigen.h>
+#include "pybind11/stl.h"
 
 namespace py = pybind11;
 using namespace SpinWaveGenie;
@@ -77,6 +80,42 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("getDzyaloshinskiiMoriya",&InteractionFactory::getDzyaloshinskiiMoriya,"Construct Dzyaloshinskii-Moriya interaction term")
       .def("getAnisotropy",&InteractionFactory::getAnisotropy,"Construct single-ion anisotropy term.")
       .def("getMagneticField",&InteractionFactory::getMagneticField,"Construct magnetic field term.");
+
+  py::class_<Point>(m, "Point")
+      .def_readonly("frequency", &Point::frequency, "Frequency associated with a given excitation (in meV).")
+      .def_readonly("intensity", &Point::intensity, " Measurable intensity of a given excitation (arb. units).");
+
+  py::class_<Results>(m, "Results")
+      .def("insert", &Results::insert, "Insert Point struct into container.")
+      .def("__len__", &Results::size, " size of Results container.")
+      .def("__iter__", [](const Results &s) { return py::make_iterator(s.begin(), s.end()); }, py::keep_alive<0, 1>())
+      .def("sort", &Results::sort, "Sort Results by frequency.")
+      .def("clear", &Results::clear, "Clear results container so that the size is zero.")
+      .def("uniqueSolutions", &Results::uniqueSolutions, "Filter Points by combining those with identical frequencies.")
+      .def("significantSolutions", &Results::significantSolutions,
+           "Filter Points by removing those without significant intensity.");
+
+  py::class_<SpinWaveBuilder>(m, "SpinWaveBuilder")
+      .def(py::init<>())
+      .def(py::init<const Cell &>())
+      .def("updateCell", &SpinWaveBuilder::updateCell, "")
+      .def("addInteraction",
+           static_cast<void (SpinWaveBuilder::*)(const Interaction &)>(&SpinWaveBuilder::addInteraction),
+           "Add a magnetic interaction to the model.")
+      .def("updateInteraction", &SpinWaveBuilder::updateInteraction, "Update interaction parameter.")
+      .def("getEnergy", &SpinWaveBuilder::getEnergy, "Get the classical energy associated with the model.")
+      .def("getFirstOrderTerms", &SpinWaveBuilder::getFirstOrderTerms,
+           "Get coefficients associated with linear terms. For a ground state, each must be zero.")
+      .def("createElement", &SpinWaveBuilder::createElement,
+           "Constructs a SpinWave object to calculate the spin-wave dispersion.");
+
+  py::class_<SpinWave>(m, "SpinWave")
+      .def("clearMatrix", &SpinWave::clearMatrix,
+           "Clear dynamical matrix and any previously calculated frequencies and intensities.")
+      .def("getCell", &SpinWave::getCell, "Access the cell used in this calculation.")
+      .def("createMatrix", &SpinWave::createMatrix, "Set the location to calculate in reciprocal space.")
+      .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
+      .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
   return m.ptr();
 }
