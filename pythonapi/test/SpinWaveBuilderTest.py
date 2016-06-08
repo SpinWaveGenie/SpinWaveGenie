@@ -7,7 +7,7 @@ class TestSpinWaveBuilderClass(unittest.TestCase):
     def test_(self):
         cell = swg.Cell()
         cell.setBasisVectors(1.0,10.0,10.0,90.0,90.0,90.0)
-    
+
         spin = swg.Sublattice()
         name = "Spin0";
         spin.setName(name);
@@ -18,10 +18,10 @@ class TestSpinWaveBuilderClass(unittest.TestCase):
 
         factory = swg.InteractionFactory()
         exchange = factory.getExchange("J",1.0,name,name,0.9,1.1)
-     
+
         builder = swg.SpinWaveBuilder(cell)
         builder.addInteraction(exchange)
-        genie = builder.createElement()  
+        genie = builder.createElement()
 
         genie.createMatrix(0.0, 0.0, 0.0);
         genie.calculate();
@@ -29,7 +29,7 @@ class TestSpinWaveBuilderClass(unittest.TestCase):
         print len(pts)
 
         for pt in pts:
-           print pt.frequency, pt.intensity 
+           print pt.frequency, pt.intensity
 
 if __name__ == '__main__':
     unittest.main()
