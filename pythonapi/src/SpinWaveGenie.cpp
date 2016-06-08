@@ -82,8 +82,8 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("getMagneticField",&InteractionFactory::getMagneticField,"Construct magnetic field term.");
 
   py::class_<Point>(m, "Point")
-      .def_readonly("frequency", &Point::frequency, "")
-      .def_readonly("intensity", &Point::intensity, "");
+      .def_readonly("frequency", &Point::frequency, "Frequency associated with a given excitation (in meV).")
+      .def_readonly("intensity", &Point::intensity, " Measurable intensity of a given excitation (arb. units).");
 
   py::class_<Results>(m, "Results")
       .def("insert", &Results::insert, "Insert Point struct into container.")
@@ -100,18 +100,22 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def(py::init<const Cell &>())
       .def("updateCell", &SpinWaveBuilder::updateCell, "")
       .def("addInteraction",
-           static_cast<void (SpinWaveBuilder::*)(const Interaction &)>(&SpinWaveBuilder::addInteraction), "")
-      .def("updateInteraction", &SpinWaveBuilder::updateInteraction, "")
-      .def("getEnergy", &SpinWaveBuilder::getEnergy, "")
-      .def("getFirstOrderTerms", &SpinWaveBuilder::getFirstOrderTerms, "")
-      .def("createElement", &SpinWaveBuilder::createElement, "");
+           static_cast<void (SpinWaveBuilder::*)(const Interaction &)>(&SpinWaveBuilder::addInteraction),
+           "Add a magnetic interaction to the model.")
+      .def("updateInteraction", &SpinWaveBuilder::updateInteraction, "Update interaction parameter.")
+      .def("getEnergy", &SpinWaveBuilder::getEnergy, "Get the classical energy associated with the model.")
+      .def("getFirstOrderTerms", &SpinWaveBuilder::getFirstOrderTerms,
+           "Get coefficients associated with linear terms. For a ground state, each must be zero.")
+      .def("createElement", &SpinWaveBuilder::createElement,
+           "Constructs a SpinWave object to calculate the spin-wave dispersion.");
 
   py::class_<SpinWave>(m, "SpinWave")
-      .def("clearMatrix", &SpinWave::clearMatrix, "")
-      .def("getCell", &SpinWave::getCell, "")
-      .def("createMatrix", &SpinWave::createMatrix, "")
-      .def("calculate", &SpinWave::calculate, "")
-      .def("getPoints", &SpinWave::getPoints, "");
+      .def("clearMatrix", &SpinWave::clearMatrix,
+           "Clear dynamical matrix and any previously calculated frequencies and intensities.")
+      .def("getCell", &SpinWave::getCell, "Access the cell used in this calculation.")
+      .def("createMatrix", &SpinWave::createMatrix, "Set the location to calculate in reciprocal space.")
+      .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
+      .def("getPoints", &SpinWave::getPoints, " Get calculated frequencies and intensities.");
 
   return m.ptr();
 }

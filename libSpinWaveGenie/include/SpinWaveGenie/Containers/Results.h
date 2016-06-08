@@ -22,7 +22,9 @@ namespace SpinWaveGenie
  */
 struct Point
 {
+  //! Frequency associated with a given excitation (in meV).
   double frequency;
+  //! Measurable intensity of a given excitation (arb. units).
   double intensity;
   //! \return Whether this Point has lower frequency than Point val.
   bool operator<(const Point &val) const { return frequency < val.frequency; }
