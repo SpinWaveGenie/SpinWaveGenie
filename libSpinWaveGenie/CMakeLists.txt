@@ -32,21 +32,20 @@ if (COVERALLS)
         )
 endif()
 
-if(WIN32)
-  #include(GenerateExportHeader)
-  #add_compiler_export_flags()
-  add_library(SpinWaveGenie STATIC ${LIBRARY_SRCS} ${LIBRARY_HDRS})
-  #generate_export_header(SpinWaveGenie)
-else()
-  add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
-endif()
+include(GenerateExportHeader)
+add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+generate_export_header(SpinWaveGenie EXPORT_FILE_NAME SpinWaveGenie/Export.h)
+
 #We need need the header files both to build SpinWaveGenie and for the interface.
-target_include_directories( SpinWaveGenie PRIVATE include )               
+target_include_directories( SpinWaveGenie PRIVATE include ${CMAKE_CURRENT_BINARY_DIR})               
 set_property( TARGET SpinWaveGenie PROPERTY
               INTERFACE_INCLUDE_DIRECTORIES
-              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include;${CMAKE_CURRENT_BINARY_DIR}>"
               "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
 )
+set_property( TARGET SpinWaveGenie PROPERTY CXX_VISIBILITY_PRESET hidden)
+set_property( TARGET SpinWaveGenie PROPERTY VISIBILITY_INLINES_HIDDEN 1)
+
 target_include_directories( SpinWaveGenie SYSTEM INTERFACE PUBLIC ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
 target_include_directories( SpinWaveGenie PRIVATE src)
 target_include_directories( SpinWaveGenie SYSTEM PRIVATE ${TBB_INCLUDE_DIRS})
@@ -59,6 +58,7 @@ endif (BUILD_TESTING)
 include(GNUInstallDirs)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie/Export.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SpinWaveGenie )
 install(TARGETS SpinWaveGenie EXPORT SpinWaveGenieTargets 
                               ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                               LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

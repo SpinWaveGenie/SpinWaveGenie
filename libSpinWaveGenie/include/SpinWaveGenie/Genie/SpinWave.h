@@ -5,6 +5,7 @@
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Results.h"
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Genie/MagneticFormFactor.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
@@ -32,7 +33,7 @@ struct results
 The SpinWave Class stores the "L" matrix and calculates
 the spin wave frequencies and intensities.
 */
-class SpinWave
+class SPINWAVEGENIE_EXPORT SpinWave
 {
 public:
   //! Use SpinWaveBuilder to generate SpinWave instance

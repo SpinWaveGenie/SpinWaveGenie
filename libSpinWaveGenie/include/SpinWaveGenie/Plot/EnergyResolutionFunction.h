@@ -9,15 +9,15 @@
 #ifndef __EnergyResolutionFunction__
 #define __EnergyResolutionFunction__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <algorithm>
-#include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Containers/Results.h"
+#include "SpinWaveGenie/Genie/SpinWave.h"
+#include "SpinWaveGenie/Memory.h"
+#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <algorithm>
+#include <iostream>
 
 namespace SpinWaveGenie
 {

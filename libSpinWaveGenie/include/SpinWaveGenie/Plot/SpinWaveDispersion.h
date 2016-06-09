@@ -5,7 +5,7 @@
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 
-class SpinWaveDispersion
+class SPINWAVEGENIE_EXPORT SpinWaveDispersion
 {
 public:
   SpinWaveDispersion();

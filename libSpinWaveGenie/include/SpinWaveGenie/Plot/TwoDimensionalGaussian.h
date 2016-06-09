@@ -9,13 +9,14 @@
 #ifndef __spin_wave_genie__TwoDimensionalGaussian__
 #define __spin_wave_genie__TwoDimensionalGaussian__
 
+#include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Genie/SpinWave.h"
+#include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <deque>
 #include <iostream>
 #include <vector>
-#include <deque>
-#include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
-#include "SpinWaveGenie/Containers/Energies.h"
-#include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
 
 namespace SpinWaveGenie
 {
@@ -26,7 +27,7 @@ struct TwoDimGaussian
   Vector3 direction;
 };
 
-class TwoDimensionResolutionFunction : public SpinWavePlot
+class SPINWAVEGENIE_EXPORT TwoDimensionResolutionFunction : public SpinWavePlot
 {
 public:
   TwoDimensionResolutionFunction(){};

@@ -9,17 +9,18 @@
 #ifndef __spin_wave_genie__IntegrateEnergy__
 #define __spin_wave_genie__IntegrateEnergy__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <vector>
-#include <deque>
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Memory.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <deque>
+#include <iostream>
+#include <vector>
 
 namespace SpinWaveGenie
 {
 
-class IntegrateEnergy : public SpinWavePlot
+class SPINWAVEGENIE_EXPORT IntegrateEnergy : public SpinWavePlot
 {
 public:
   IntegrateEnergy(const IntegrateEnergy &other);

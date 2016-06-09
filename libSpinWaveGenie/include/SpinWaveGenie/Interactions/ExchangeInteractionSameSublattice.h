@@ -1,18 +1,19 @@
 #ifndef __ExchangeInteractionSameSublattice_H__
 #define __ExchangeInteractionSameSublattice_H__
 
+#include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Containers/Matrices.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Interactions/Interaction.h"
+#include <Eigen/Dense>
 #include <string>
 #include <vector>
-#include <Eigen/Dense>
-#include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Interactions/Interaction.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
-#include "SpinWaveGenie/Genie/Neighbors.h"
 
 namespace SpinWaveGenie
 {
 
-class ExchangeInteractionSameSublattice : public Interaction
+class SPINWAVEGENIE_EXPORT ExchangeInteractionSameSublattice : public Interaction
 {
 public:
   ExchangeInteractionSameSublattice(const std::string &name, double value, const std::string &sl_r, double min,

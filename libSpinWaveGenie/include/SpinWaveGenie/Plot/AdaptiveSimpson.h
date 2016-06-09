@@ -1,12 +1,13 @@
 #ifndef __AdaptiveSimpson__
 #define __AdaptiveSimpson__
 
-#include <vector>
-#include <functional>
-#include <deque>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
+#include <deque>
+#include <functional>
+#include <vector>
 
-class AdaptiveSimpson
+class SPINWAVEGENIE_EXPORT AdaptiveSimpson
 //! Numerical Integration using the Adaptive Simpson's method.
 /*!
  This class vector quantities multiple dimensions.

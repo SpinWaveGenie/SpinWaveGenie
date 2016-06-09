@@ -74,6 +74,10 @@ endif()
 
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
+if(MSVC)
+  add_compile_options(/wd4251)
+endif()
+
 if(WIN32)
     add_definitions( -DBOOST_ALL_NO_LIB
                      -DBOOST_ALL_DYN_LINK

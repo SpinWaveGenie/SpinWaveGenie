@@ -9,16 +9,17 @@
 #ifndef __OneDimensionalPseudoVoigt__
 #define __OneDimensionalPseudoVoigt__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
-#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
-#include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
+#include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
+#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class OneDimensionalPseudoVoigt : public OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT OneDimensionalPseudoVoigt : public OneDimensionalShapes
 {
 public:
   OneDimensionalPseudoVoigt();

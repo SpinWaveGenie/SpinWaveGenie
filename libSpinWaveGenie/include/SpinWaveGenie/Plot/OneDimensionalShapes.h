@@ -9,14 +9,15 @@
 #ifndef __OneDimensionalShapes__
 #define __OneDimensionalShapes__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
 /* Abstract base class */
-class OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT OneDimensionalShapes
 {
 public:
   virtual void setTolerance(double InTolerance) = 0;

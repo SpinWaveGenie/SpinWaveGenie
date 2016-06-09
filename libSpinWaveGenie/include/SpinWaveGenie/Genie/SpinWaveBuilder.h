@@ -1,6 +1,7 @@
 #ifndef __SpinWaveBuilder_H__
 #define __SpinWaveBuilder_H__ 1
 
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionsContainer.h"
@@ -11,7 +12,7 @@
 namespace SpinWaveGenie
 {
 
-class SpinWaveBuilder
+class SPINWAVEGENIE_EXPORT SpinWaveBuilder
 {
 public:
   //! Default Constructor

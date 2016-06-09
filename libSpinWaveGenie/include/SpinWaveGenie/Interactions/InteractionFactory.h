@@ -9,17 +9,17 @@
 #ifndef __spin_wave_genie__InteractionFactory__
 #define __spin_wave_genie__InteractionFactory__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <string>
-
 #include "SpinWaveGenie/Containers/Matrices.h"
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include "SpinWaveGenie/Memory.h"
+#include <iostream>
+#include <string>
 
 namespace SpinWaveGenie
 {
 
-class InteractionFactory
+class SPINWAVEGENIE_EXPORT InteractionFactory
 {
 public:
   std::unique_ptr<Interaction> getExchange(const std::string &name, double value, const std::string &sl_r,

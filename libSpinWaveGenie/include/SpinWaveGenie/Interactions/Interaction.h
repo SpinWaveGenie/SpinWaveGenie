@@ -1,11 +1,12 @@
 #ifndef __Interaction_H__
 #define __Interaction_H__ 1
 
+#include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Export.h"
+#include <Eigen/Dense>
+#include <array>
 #include <memory>
 #include <string>
-#include <array>
-#include <Eigen/Dense>
-#include "SpinWaveGenie/Containers/Cell.h"
 
 //! Base class for all classes describing magnetic interactions
 
@@ -14,7 +15,7 @@ namespace SpinWaveGenie
 
 class Neighbors;
 
-class Interaction
+class SPINWAVEGENIE_EXPORT Interaction
 {
 public:
   virtual std::array<std::string, 2> sublattices() const = 0;

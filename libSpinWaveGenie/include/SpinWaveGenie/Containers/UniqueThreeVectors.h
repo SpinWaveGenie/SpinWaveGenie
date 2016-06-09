@@ -9,9 +9,9 @@
 #ifndef __positions__UniqueThreeVectors__
 #define __positions__UniqueThreeVectors__
 
+#include "SpinWaveGenie/Containers/ThreeVectors.h"
 #include <complex>
 #include <iostream>
-#include "SpinWaveGenie/Containers/ThreeVectors.h"
 
 namespace SpinWaveGenie
 {

@@ -9,6 +9,7 @@
 #ifndef __spin_wave_genie__HKLDirection__
 #define __spin_wave_genie__HKLDirection__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <vector>
 
@@ -39,7 +40,7 @@ struct Axis
  Axes DO NOT need to be orthogonal.
  */
 
-class HKLDirections
+class SPINWAVEGENIE_EXPORT HKLDirections
 {
 public:
   //! Add integration direction to container.
