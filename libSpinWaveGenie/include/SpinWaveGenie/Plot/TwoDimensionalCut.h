@@ -10,6 +10,7 @@
 #define __spin_wave_genie__TwoDimensionalCut__
 
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
 
 #include <memory>
 
@@ -18,7 +19,7 @@ namespace SpinWaveGenie
 
 class SpinWavePlot;
 
-class TwoDimensionalCut
+class SPINWAVEGENIE_EXPORT TwoDimensionalCut
 {
 public:
   void setFilename(const std::string &name);

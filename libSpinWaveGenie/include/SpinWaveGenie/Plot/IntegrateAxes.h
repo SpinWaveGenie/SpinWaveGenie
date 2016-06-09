@@ -9,18 +9,19 @@
 #ifndef __IntegrateAxes__
 #define __IntegrateAxes__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <vector>
-#include <deque>
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
-#include "SpinWaveGenie/Containers/HKLDirections.h"
 #include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Containers/HKLDirections.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Memory.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <deque>
+#include <iostream>
+#include <vector>
 
 namespace SpinWaveGenie
 {
 
-class IntegrateAxes : public SpinWavePlot
+class SPINWAVEGENIE_EXPORT IntegrateAxes : public SpinWavePlot
 {
 public:
   IntegrateAxes(const IntegrateAxes &other);

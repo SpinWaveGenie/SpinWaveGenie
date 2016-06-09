@@ -1,6 +1,7 @@
 #ifndef __ThreeVectors__
 #define __ThreeVectors__
 
+#include "SpinWaveGenie/Export.h"
 #include <array>
 #include <cassert>
 #include <iostream>
@@ -16,7 +17,7 @@
 namespace SpinWaveGenie
 {
 
-template <typename T> class ThreeVectors
+template <typename T> class SPINWAVEGENIE_EXPORT ThreeVectors
 {
 
 public:

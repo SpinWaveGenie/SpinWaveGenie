@@ -1,8 +1,8 @@
 #ifndef __SpinWaveGenie__InteractionsContainer__
 #define __SpinWaveGenie__InteractionsContainer__
 
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
-
 #include <boost/iterator/indirect_iterator.hpp>
 
 #include <iostream>
@@ -17,7 +17,7 @@ namespace SpinWaveGenie
  objects must be constructed on the heap and stored as pointers. This class
  is designed to hide many of these complications from other classes.
  */
-class InteractionsContainer
+class SPINWAVEGENIE_EXPORT InteractionsContainer
 {
 public:
   InteractionsContainer() = default;
@@ -50,7 +50,7 @@ public:
   //! \return Returns a ConstIterator pointing to the end of the container.
   ConstIterator cend() const { return container.cend(); }
   //! Helper function for printing the contents of an InteractionsContainer.
-  friend std::ostream &operator<<(std::ostream &output, const InteractionsContainer &n);
+  friend SPINWAVEGENIE_EXPORT std::ostream &operator<<(std::ostream &output, const InteractionsContainer &n);
 
 private:
   std::vector<std::unique_ptr<Interaction>> container;

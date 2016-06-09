@@ -9,14 +9,15 @@
 #ifndef __OneDimensionalGaussian__
 #define __OneDimensionalGaussian__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class OneDimensionalGaussian : public OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT OneDimensionalGaussian : public OneDimensionalShapes
 {
 public:
   OneDimensionalGaussian(double FWHM = 1.0, double Tolerance = 0.01);

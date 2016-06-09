@@ -9,13 +9,14 @@
 #ifndef __spin_wave_genie__AnisotropyInteraction__
 #define __spin_wave_genie__AnisotropyInteraction__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class AnisotropyInteraction : public Interaction
+class SPINWAVEGENIE_EXPORT AnisotropyInteraction : public Interaction
 {
 public:
   //!

@@ -9,14 +9,15 @@
 #ifndef __spin_wave_genie__TwoDGaussian__
 #define __spin_wave_genie__TwoDGaussian__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class TwoDGaussian : public OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT TwoDGaussian : public OneDimensionalShapes
 {
 public:
   // void setFWHM(double InFWHM){};

@@ -9,20 +9,21 @@
 #ifndef __EnergyResolutionFunction__
 #define __EnergyResolutionFunction__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <algorithm>
-#include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Containers/Results.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Genie/SpinWave.h"
+#include "SpinWaveGenie/Memory.h"
+#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <algorithm>
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-template <class T> class EnergyResolution : public SpinWavePlot
+template <class T> class SPINWAVEGENIE_EXPORT EnergyResolution : public SpinWavePlot
 {
 public:
   EnergyResolution() = default;

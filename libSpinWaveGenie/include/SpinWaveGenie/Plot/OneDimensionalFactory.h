@@ -9,14 +9,15 @@
 #ifndef __OneDimensionalFactory__
 #define __OneDimensionalFactory__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class OneDimensionalFactory
+class SPINWAVEGENIE_EXPORT OneDimensionalFactory
 {
 public:
   std::unique_ptr<OneDimensionalShapes> getGaussian(double fwhm, double tol);

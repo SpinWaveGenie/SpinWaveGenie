@@ -9,6 +9,7 @@
 #ifndef __spin_wave_genie__Results__
 #define __spin_wave_genie__Results__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <vector>
 
@@ -38,7 +39,7 @@ struct Point
  significant intensity are discarded.
  */
 
-class Results
+class SPINWAVEGENIE_EXPORT Results
 {
 public:
   //! Insert Point struct into container.
@@ -68,8 +69,8 @@ public:
   ConstIterator cbegin() const { return results.cbegin(); }
   //! \return Returns an ConstIterator pointing to the end of the container.
   ConstIterator cend() const { return results.cend(); }
-  friend std::ostream &operator<<(std::ostream &output, const Results &n);
-  
+  friend SPINWAVEGENIE_EXPORT std::ostream &operator<<(std::ostream &output, const Results &n);
+
 private:
   std::vector<Point> results;
 };

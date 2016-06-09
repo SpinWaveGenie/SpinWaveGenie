@@ -9,6 +9,7 @@
 #ifndef __MagneticFormFactor__
 #define __MagneticFormFactor__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -30,7 +31,7 @@ href="http://www.ill.eu/index.php?eID=tx_nawsecuredl&u=0&file=fileadmin/users_fi
 ILL Neutron Data Booklet </a>
  */
 
-class MagneticFormFactor
+class SPINWAVEGENIE_EXPORT MagneticFormFactor
 {
 public:
   //! Default Constructor.

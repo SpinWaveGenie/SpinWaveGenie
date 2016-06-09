@@ -2,9 +2,10 @@
 #ifndef __Cell_H__
 #define __Cell_H__
 
-#include <vector>
-#include <string>
 #include "SpinWaveGenie/Containers/Sublattice.h"
+#include "SpinWaveGenie/Export.h"
+#include <string>
+#include <vector>
 
 namespace Eigen
 {
@@ -19,7 +20,7 @@ namespace SpinWaveGenie
 The Cell class stores the basis vectors and all sublattices in the unit cell.
 Atomic positions are inserted as a fraction of the basis vectors and converted to Angstroms.
 */
-class Cell
+class SPINWAVEGENIE_EXPORT Cell
 {
 public:
   //! Set basis vectors from parameters a, b, c, \f$\alpha,\: \beta,\: \gamma \f$.

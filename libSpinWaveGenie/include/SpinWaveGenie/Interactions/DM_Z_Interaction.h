@@ -1,17 +1,18 @@
 #ifndef __DMZ_Interaction_H__
 #define __DMZ_Interaction_H__ 1
 
+#include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Interactions/Interaction.h"
+#include <Eigen/Dense>
 #include <string>
 #include <vector>
-#include <Eigen/Dense>
-#include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Interactions/Interaction.h"
-#include "SpinWaveGenie/Genie/Neighbors.h"
 
 namespace SpinWaveGenie
 {
 
-class DM_Z_Interaction : public Interaction
+class SPINWAVEGENIE_EXPORT DM_Z_Interaction : public Interaction
 {
 public:
   DM_Z_Interaction(std::string name, double value_in, std::string sl_r_in, std::string sl_s_in, double min_in,

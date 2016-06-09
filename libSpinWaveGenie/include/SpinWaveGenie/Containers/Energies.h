@@ -9,6 +9,7 @@
 #ifndef __spin_wave_genie__Energies__
 #define __spin_wave_genie__Energies__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <vector>
 
@@ -22,7 +23,7 @@ namespace SpinWaveGenie
     and upper bound of the index.
  */
 
-class Energies
+class SPINWAVEGENIE_EXPORT Energies
 {
 public:
   //! Default constructor
@@ -69,8 +70,8 @@ public:
   ConstIterator cbegin() const { return energies.cbegin(); }
   //! \return Returns a ConstIterator pointing to the end of the container.
   ConstIterator cend() const { return energies.cend(); }
-  friend std::ostream &operator<<(std::ostream &output, const Energies &n);
-  
+  friend SPINWAVEGENIE_EXPORT std::ostream &operator<<(std::ostream &output, const Energies &n);
+
 private:
   std::vector<double> energies;
 };

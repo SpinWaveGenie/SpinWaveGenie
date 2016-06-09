@@ -9,9 +9,10 @@
 #ifndef __positions__UniqueThreeVectors__
 #define __positions__UniqueThreeVectors__
 
+#include "SpinWaveGenie/Containers/ThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
 #include <complex>
 #include <iostream>
-#include "SpinWaveGenie/Containers/ThreeVectors.h"
 
 namespace SpinWaveGenie
 {
@@ -24,7 +25,7 @@ namespace SpinWaveGenie
  unique vectors are stored.
  */
 
-template <typename T> class UniqueThreeVectors : public ThreeVectors<T>
+template <typename T> class SPINWAVEGENIE_EXPORT UniqueThreeVectors : public ThreeVectors<T>
 {
 public:
   //!

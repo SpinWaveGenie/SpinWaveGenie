@@ -1,10 +1,11 @@
 #ifndef __Sublattice_H__
 #define __Sublattice_H__
 
-#include <vector>
-#include <string>
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
+#include <string>
+#include <vector>
 
 namespace SpinWaveGenie
 {
@@ -15,7 +16,7 @@ namespace SpinWaveGenie
  the atomic positions of a particular sublattice. In addition, it calculates rotation
  and inverse rotation matrices.
  */
-class Sublattice
+class SPINWAVEGENIE_EXPORT Sublattice
 {
 public:
   //! Default constructor

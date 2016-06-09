@@ -1,8 +1,9 @@
 #ifndef __PointsAlongLine__
 #define __PointsAlongLine__
 
-#include <iostream>
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
@@ -13,7 +14,7 @@ namespace SpinWaveGenie
  The result is stored in a ThreeVectors<double> container.
  */
 
-class PointsAlongLine
+class SPINWAVEGENIE_EXPORT PointsAlongLine
 {
 public:
   //! Set starting point of line. (inclusive)

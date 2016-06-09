@@ -9,14 +9,15 @@
 #ifndef __OneDimensionalLorentzian__
 #define __OneDimensionalLorentzian__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class OneDimensionalLorentzian : public OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT OneDimensionalLorentzian : public OneDimensionalShapes
 {
 public:
   void setFWHM(double InFWHM);

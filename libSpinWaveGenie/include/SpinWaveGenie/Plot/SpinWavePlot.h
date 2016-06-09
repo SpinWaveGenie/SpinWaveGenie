@@ -1,18 +1,19 @@
 #ifndef __SpinWavePlot__
 #define __SpinWavePlot__
 
-#include <iostream>
-#include <vector>
 #include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
-#include "SpinWaveGenie/Containers/Energies.h"
+#include <iostream>
+#include <vector>
 
 namespace SpinWaveGenie
 {
 
 /* Abstract base class */
-class SpinWavePlot
+class SPINWAVEGENIE_EXPORT SpinWavePlot
 {
 public:
   virtual std::unique_ptr<SpinWavePlot> clone() = 0;

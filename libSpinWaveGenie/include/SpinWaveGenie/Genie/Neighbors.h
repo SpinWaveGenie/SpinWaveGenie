@@ -1,9 +1,10 @@
 #ifndef __Neighbors_H__
 #define __Neighbors_H__
 
-#include <ostream>
 #include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
+#include <ostream>
 
 namespace SpinWaveGenie
 {
@@ -17,7 +18,7 @@ class Cell;
  sublattices they belong to and the minimum and maximum distance they are separated by.
  */
 
-class Neighbors
+class SPINWAVEGENIE_EXPORT Neighbors
 {
 public:
   //! Returns whether of not neighbors have been calculated previously;
@@ -50,7 +51,7 @@ public:
   ConstIterator cbegin() const { return neighborList.cbegin(); }
   //! \return Returns an ConstIterator pointing to the final element of the neighbor list
   ConstIterator cend() const { return neighborList.cend(); }
-  friend std::ostream &operator<<(std::ostream &output, const Neighbors &n);
+  friend SPINWAVEGENIE_EXPORT std::ostream &operator<<(std::ostream &output, const Neighbors &n);
 
 private:
   UniqueThreeVectors<double> neighborList;

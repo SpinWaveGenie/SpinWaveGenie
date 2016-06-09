@@ -1,18 +1,19 @@
 #ifndef __ExchangeInteraction_H__
 #define __ExchangeInteraction_H__
 
+#include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Containers/Matrices.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Interactions/Interaction.h"
+#include <Eigen/Dense>
 #include <string>
 #include <vector>
-#include <Eigen/Dense>
-#include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Interactions/Interaction.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
-#include "SpinWaveGenie/Genie/Neighbors.h"
 
 namespace SpinWaveGenie
 {
 
-class ExchangeInteraction : public Interaction
+class SPINWAVEGENIE_EXPORT ExchangeInteraction : public Interaction
 {
 public:
   ExchangeInteraction(const std::string &name, double value, const std::string &sl_r, const std::string &sl_s,

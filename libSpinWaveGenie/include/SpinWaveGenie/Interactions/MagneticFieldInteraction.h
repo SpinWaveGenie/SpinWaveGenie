@@ -9,13 +9,14 @@
 #ifndef __spin_wave_genie__MagneticFieldInteraction__
 #define __spin_wave_genie__MagneticFieldInteraction__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class MagneticFieldInteraction : public Interaction
+class SPINWAVEGENIE_EXPORT MagneticFieldInteraction : public Interaction
 {
 public:
   //!
