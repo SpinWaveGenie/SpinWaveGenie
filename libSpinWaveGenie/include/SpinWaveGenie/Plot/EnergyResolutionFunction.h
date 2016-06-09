@@ -12,7 +12,6 @@
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Containers/Results.h"
-#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
@@ -23,7 +22,7 @@
 namespace SpinWaveGenie
 {
 
-template <class T> class SPINWAVEGENIE_EXPORT EnergyResolution : public SpinWavePlot
+template <class T> class EnergyResolution : public SpinWavePlot
 {
 public:
   EnergyResolution() = default;
