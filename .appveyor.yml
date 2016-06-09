@@ -7,7 +7,7 @@ branches:
 configuration: Release
 
 environment:
-  PATH: "C:/projects/ThirdPartyVC140/lib;%PATH%"
+  PATH: "C:/projects/ThirdPartyVC140/lib;C:\projects\spinwavegenie\build\libSpinWaveGenie\Release\;%PATH%"
   matrix:
     - PYTHON_DIR: "Python27-x64"
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
