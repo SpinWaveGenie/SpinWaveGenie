@@ -89,6 +89,12 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("insert", &Results::insert, "Insert Point struct into container.")
       .def("__len__", &Results::size, " size of Results container.")
       .def("__iter__", [](const Results &s) { return py::make_iterator(s.begin(), s.end()); }, py::keep_alive<0, 1>())
+      .def("__getitem__",
+           [](const Results &s, size_t i) {
+             if (i >= s.size())
+               throw py::index_error();
+             return s[i];
+           })
       .def("sort", &Results::sort, "Sort Results by frequency.")
       .def("clear", &Results::clear, "Clear results container so that the size is zero.")
       .def("uniqueSolutions", &Results::uniqueSolutions, "Filter Points by combining those with identical frequencies.")

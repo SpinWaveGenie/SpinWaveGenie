@@ -33,11 +33,10 @@ class TestSpinWaveBuilderClass(unittest.TestCase):
             #analytical solution for frequency and intensity
             frequency = 2.0 * J * S * (1.0 - np.cos(2.0 * np.pi * k))
             intensity = S / 4.0
-            for pt in pts:
-                self.assertAlmostEqual(pt.frequency, frequency)
-                if np.abs(pt.frequency) > 1.0e-5:
-                    self.assertAlmostEqual(pt.intensity, intensity)
-
+            self.assertEqual(len(pts),1)
+            self.assertAlmostEqual(pts[0].frequency, frequency)
+            if np.abs(pts[0].frequency) > 1.0e-5:
+                self.assertAlmostEqual(pts[0].intensity, intensity)
 
 if __name__ == '__main__':
     unittest.main()
