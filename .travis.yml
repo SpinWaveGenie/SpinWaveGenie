@@ -17,7 +17,7 @@ matrix:
       compiler: gcc
       env: PYTHON_VERSION=3.4
     - os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8
       compiler: clang
       env: PYTHON_VERSION=3.5
     - os: osx
@@ -70,7 +70,7 @@ before_script:
         cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
       elif [ "$PYTHON_VERSION" == "3.5" ];
       then
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib -DPYTHON_INCLUDE_DIR=/usr/local/Frameworks/Python.framework/Versions/3.5/include/python3.5m -DPYTHON_EXECUTABLE=/usr/local/bin/python3;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib;
       else
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
       fi
@@ -79,9 +79,9 @@ before_script:
     then
       if [ "$PYTHON_VERSION" == "3.4" ];
       then
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.4m.so -DPYTHON_INCLUDE_DIR=/usr/include/python3.4 -DPYTHON_EXECUTABLE=/usr/bin/python3;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/bin/python3;
       else
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_EXECUTABLE=/usr/bin/python2;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
       fi
     fi
 
