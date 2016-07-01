@@ -2,7 +2,7 @@ find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
 
 if(NOT PYTHON_SITE_PACKAGES_DIR)
-  execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+  execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(True))"
                     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
   set( PYTHON_SITE_PACKAGES_DIR ${PYTHON_SITE_PACKAGES} CACHE FILEPATH "site-packages directory for python bindings")
 endif()
