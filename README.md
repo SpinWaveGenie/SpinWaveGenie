@@ -1,5 +1,4 @@
 
-[![license](https://img.shields.io/github/license/SpinWaveGenie/SpinWaveGenie.svg?maxAge=2592000)](LICENSE)
 [![Build Status](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie.svg?branch=master)](https://travis-ci.org/SpinWaveGenie/SpinWaveGenie) 
 [![Build status](https://ci.appveyor.com/api/projects/status/2m7m8u685l1vqk4u?svg=true)](https://ci.appveyor.com/project/quantumsteve/spinwavegenie)
 <a href="https://scan.coverity.com/projects/4034">
