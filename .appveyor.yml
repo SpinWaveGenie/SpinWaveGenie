@@ -13,6 +13,8 @@ environment:
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
     - PYTHON_DIR: "Python35-x64"
       CACHE_FILENAME: "AppveyorPython35-x64.cmake"
+    - PYTHON_DIR: "Python36-x64"
+      CACHE_FILENAME: "AppveyorPython36-x64.cmake"
 
 platform: x64
 
