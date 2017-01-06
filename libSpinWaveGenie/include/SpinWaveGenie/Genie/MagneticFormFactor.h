@@ -38,7 +38,7 @@ public:
   MagneticFormFactor();
   //! Construct Magnetic Form Factor object of a given type.
   //! \param type Name of ion from the ILL Neutron Data Booklet (in CAPS)
-  MagneticFormFactor(std::string type);
+  MagneticFormFactor(const std::string &type);
   //! \Sets the type of ion.
   //! \param type Name of ion from ILL Neutron Data Booklet (in CAPS)
   void setType(const std::string &type);
@@ -56,7 +56,7 @@ protected:
   std::unordered_map<std::string, std::vector<double>> coefficients;
 
 private:
-  void setType(std::string type, double weight);
+  void setType(const std::string &type, double weight);
   void initializeMap();
   std::vector<std::vector<double>> Farray;
   std::vector<double> NormalizedWeights;

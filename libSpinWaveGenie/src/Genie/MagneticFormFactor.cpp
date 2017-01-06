@@ -26,7 +26,7 @@ namespace SpinWaveGenie
 
 MagneticFormFactor::MagneticFormFactor() { this->initializeMap(); }
 
-MagneticFormFactor::MagneticFormFactor(std::string type)
+MagneticFormFactor::MagneticFormFactor(const std::string &type)
 {
   this->initializeMap();
   this->setType(type);
@@ -141,7 +141,7 @@ void MagneticFormFactor::setType(const std::string &type)
   setType(type, 1.0);
 }
 
-void MagneticFormFactor::setType(std::string type, double weight)
+void MagneticFormFactor::setType(const std::string &type, double weight)
 {
 
   if (coefficients.find(type) != coefficients.end())
