@@ -26,8 +26,8 @@ public:
   //! \param y first element of type T
   //! \param z second element of type T
   void insert(T x, T y, T z);
-  typedef typename std::vector<std::array<T, 3>>::iterator Iterator;
-  typedef typename std::vector<std::array<T, 3>>::const_iterator ConstIterator;
+  using Iterator = typename std::vector<std::array<T, 3>>::iterator;
+  using ConstIterator = typename std::vector<std::array<T, 3>>::const_iterator;
   //! \return number of elements in the ThreeVector
   size_t size() const;
   //! Clears all data stored in the ThreeVector.

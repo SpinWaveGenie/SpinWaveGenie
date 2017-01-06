@@ -43,7 +43,7 @@ private:
   T SW;
 };
 
-typedef EnergyResolution<SpinWave> EnergyResolutionFunction;
+using EnergyResolutionFunction = EnergyResolution<SpinWaveGenie::SpinWave>;
 
 template class EnergyResolution<SpinWave>;
 

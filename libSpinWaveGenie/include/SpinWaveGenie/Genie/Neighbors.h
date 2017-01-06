@@ -37,8 +37,8 @@ public:
   //! described in J Phys. Condens. Matter 21 216001 (2009)
   //! \param K k vector used in spin wave calculation.
   std::complex<double> getGamma(const Vector3 &K) const;
-  typedef UniqueThreeVectors<double>::Iterator Iterator;
-  typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
+  using Iterator = UniqueThreeVectors<double>::Iterator;
+  using ConstIterator = UniqueThreeVectors<double>::ConstIterator;
   //! \return Returns an Iterator pointing to the first element of the neighbor list
   Iterator begin() { return neighborList.begin(); }
   //! \return Returns an Iterator pointing to the final element of the neighbor list

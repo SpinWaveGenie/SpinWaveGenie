@@ -9,8 +9,8 @@
 
 namespace Eigen
 {
-typedef Matrix<double, 3, 1> Vector3;
-typedef Matrix<double, 3, 3> Matrix3;
+using Vector3 = Matrix<double, 3, 1>;
+using Matrix3 = Matrix<double, 3, 3>;
 }
 
 namespace SpinWaveGenie
@@ -63,8 +63,8 @@ public:
   //! Returns the number of sublattices in the cell
   //! \return number of sublattices
   size_t size() const { return sublatticeInfo.size(); }
-  typedef std::vector<Sublattice>::iterator Iterator;
-  typedef std::vector<Sublattice>::const_iterator ConstIterator;
+  using Iterator = std::vector<Sublattice>::iterator;
+  using ConstIterator = std::vector<Sublattice>::const_iterator;
   //! \return Returns an Iterator pointing to the first Sublattice element
   Iterator begin() { return sublatticeInfo.begin(); }
   //! \return Returns an Iterator pointing to the end of the vector

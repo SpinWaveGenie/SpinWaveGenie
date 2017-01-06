@@ -56,8 +56,8 @@ public:
   //! \param position Index of energy value.
   //! \return Energy value.
   const double &operator[](std::size_t bin) { return energies[bin]; }
-  typedef std::vector<double>::iterator Iterator;
-  typedef std::vector<double>::const_iterator ConstIterator;
+  using Iterator = std::vector<double>::iterator;
+  using ConstIterator = std::vector<double>::const_iterator;
   //! \return Returns an Iterator pointing to the first element of the container.
   Iterator begin() { return energies.begin(); }
   //! \return Returns an Iterator pointing to the end of the container.

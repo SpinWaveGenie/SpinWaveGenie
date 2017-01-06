@@ -59,8 +59,8 @@ public:
   //! \param position of Axis in container.
   //! \return reference to Axis object.
   const Axis &operator[](std::size_t position) const { return integrationDirections[position]; }
-  typedef std::vector<Axis>::iterator Iterator;
-  typedef std::vector<Axis>::const_iterator ConstIterator;
+  using Iterator = std::vector<Axis>::iterator;
+  using ConstIterator = std::vector<Axis>::const_iterator;
   //! \return Iterator pointing to the first Axis element
   Iterator begin() { return integrationDirections.begin(); }
   //! \return Iterator pointing to the end of the container.

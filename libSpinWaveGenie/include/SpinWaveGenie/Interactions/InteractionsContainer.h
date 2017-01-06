@@ -35,8 +35,8 @@ public:
   void sort();
   const Interaction &operator[](std::size_t pos) const { return *container[pos]; }
   // use boost indirect_iterator
-  typedef boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::iterator> Iterator;
-  typedef boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::const_iterator> ConstIterator;
+  using Iterator = boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::iterator>;
+  using ConstIterator = boost::indirect_iterator<std::vector<std::unique_ptr<Interaction>>::const_iterator>;
   //! \return Returns an Iterator pointing to the first element in the container.
   Iterator begin() { return container.begin(); }
   //! \return Returns an Iterator pointing to the end of the container.

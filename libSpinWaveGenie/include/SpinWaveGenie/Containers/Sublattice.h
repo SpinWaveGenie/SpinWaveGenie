@@ -59,8 +59,8 @@ public:
   //! returns the number of atoms in this sublattice
   //! \return number of atoms
   std::size_t size() const { return positions.size(); }
-  typedef UniqueThreeVectors<double>::Iterator Iterator;
-  typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
+  using Iterator = UniqueThreeVectors<double>::Iterator;
+  using ConstIterator = UniqueThreeVectors<double>::ConstIterator;
   //! returns an Iterator to the first atomic position
   Iterator begin() { return positions.begin(); }
   //! returns an Iterator to the end of the vector

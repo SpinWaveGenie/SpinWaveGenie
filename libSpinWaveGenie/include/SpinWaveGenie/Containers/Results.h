@@ -55,8 +55,8 @@ public:
   //! Filter Points by removing those without significant intensity.
   void significantSolutions(double ETS = 1.0e-10);
   const Point &operator[](std::size_t bin) const { return results[bin]; }
-  typedef std::vector<Point>::iterator Iterator;
-  typedef std::vector<Point>::const_iterator ConstIterator;
+  using Iterator = std::vector<Point>::iterator;
+  using ConstIterator = std::vector<Point>::const_iterator;
   //! \return Returns an Iterator pointing to the first element in the container.
   Iterator begin() { return results.begin(); }
   //! \return Returns an Iterator pointing to the end of the container.
