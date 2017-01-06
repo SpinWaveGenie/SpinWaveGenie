@@ -15,7 +15,7 @@ namespace SpinWaveGenie
 class SPINWAVEGENIE_EXPORT DM_Z_Interaction : public Interaction
 {
 public:
-  DM_Z_Interaction(const std::string &name, double value_in, const std::string &sl_r_in, const std::string &sl_s_in,
+  DM_Z_Interaction(const std::string &name_in, double value_in, const std::string &sl_r_in, const std::string &sl_s_in,
                    double min_in, double max_in);
   void updateInteraction(double value_in, const std::string &sl_r_in, const std::string &sl_s_in, double min_in,
                          double max_in);

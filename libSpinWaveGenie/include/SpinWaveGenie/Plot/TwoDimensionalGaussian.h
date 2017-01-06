@@ -31,7 +31,7 @@ class SPINWAVEGENIE_EXPORT TwoDimensionResolutionFunction : public SpinWavePlot
 {
 public:
   TwoDimensionResolutionFunction(){};
-  TwoDimensionResolutionFunction(const TwoDimGaussian &info, const SpinWave &SW, const Energies &energies);
+  TwoDimensionResolutionFunction(const TwoDimGaussian &info, const SpinWave &SW, const Energies &energiesIn);
   TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction & /*other*/) = default;
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
   void setTolerance(double toleranceIn, int maxEvals = 100000);

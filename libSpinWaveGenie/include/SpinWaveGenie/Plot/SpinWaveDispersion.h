@@ -17,7 +17,7 @@ public:
   };
   void setOptions(Options PrintOptions, bool Value);
   void setFilename(const std::string &name);
-  void setPoints(const SpinWaveGenie::ThreeVectors<double> &pos);
+  void setPoints(const SpinWaveGenie::ThreeVectors<double> &points);
   void setGenie(const SpinWaveGenie::SpinWave &SW);
   void save();
 

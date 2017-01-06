@@ -27,10 +27,10 @@ public:
   std::unique_ptr<Interaction> getDzyaloshinskiiMoriya(const std::string &name, double value, const Vector3 &direction,
                                                        const std::string &sl_r, const std::string &sl_s, double min,
                                                        double max);
-  std::unique_ptr<Interaction> getAnisotropy(const std::string &name, double value, const Vector3 &unitVector,
+  std::unique_ptr<Interaction> getAnisotropy(const std::string &name, double value, const Vector3 &direction,
                                              const std::string &sl_r);
-  std::unique_ptr<Interaction> getMagneticField(const std::string &name_in, double value_in, const Vector3 &direction,
-                                                const std::string &sl_r_in);
+  std::unique_ptr<Interaction> getMagneticField(const std::string &name, double value, const Vector3 &direction,
+                                                const std::string &sl_r);
 
 private:
 };

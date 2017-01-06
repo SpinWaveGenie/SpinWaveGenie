@@ -16,9 +16,9 @@ namespace SpinWaveGenie
 class SPINWAVEGENIE_EXPORT ExchangeInteractionSameSublattice : public Interaction
 {
 public:
-  ExchangeInteractionSameSublattice(const std::string &name_in, double value, const std::string &sl_r_in, double min_in,
-                                    double max_in);
-  void updateInteraction(double value, const std::string &sl_r, double min, double max);
+  ExchangeInteractionSameSublattice(const std::string &name_in, double value_in, const std::string &sl_r_in,
+                                    double min_in, double max_in);
+  void updateInteraction(double value_in, const std::string &sl_r_in, double min_in, double max_in);
   void updateValue(double value_in) override;
   const std::string &getName() const override;
   void calcConstantValues(const Cell &cell) override;

@@ -23,8 +23,8 @@ class SPINWAVEGENIE_EXPORT TwoDimensionalCut
 {
 public:
   void setFilename(const std::string &name);
-  void setPoints(const ThreeVectors<double> &pos);
-  void setEnergyPoints(double min, double max, size_t numberpoints);
+  void setPoints(const ThreeVectors<double> &pts);
+  void setEnergyPoints(double min, double max, size_t points);
   void setPlotObject(std::unique_ptr<SpinWavePlot> object);
   Eigen::MatrixXd getMatrix();
   void save();
