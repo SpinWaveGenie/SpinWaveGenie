@@ -201,7 +201,7 @@ private:
 
 double MagneticFormFactor::getFormFactor(double x, double y, double z)
 {
-  if (Farray.size() == 0)
+  if (Farray.empty())
   {
     throw std::runtime_error("Magnetic Form Factor Not Set");
   }

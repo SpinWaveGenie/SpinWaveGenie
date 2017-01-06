@@ -110,7 +110,7 @@ void AdaptiveSimpson::SimpsonImpl::createElement(const std::shared_ptr<helper> &
   mostError->fc = std::move(mostError->fe);
   mostError->S = std::move(mostError->Sright);
 
-  if (m_lowerBoundsInnerDimensions.size() > 0)
+  if (!m_lowerBoundsInnerDimensions.empty())
   {
     // both
     AdaptiveSimpson test;
@@ -163,7 +163,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::sumPieces(
   std::size_t size = pieces.top()->Sleft.size();
   std::vector<double> sum(size);
   double prefactor = 1.0 / 15.0;
-  while (pieces.size() > 0)
+  while (!pieces.empty())
   {
     const auto &element = pieces.top();
     for (std::size_t i = 0; i < size; i++)
@@ -183,7 +183,7 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   first->resetBounds(m_lowerBound, m_upperBound);
   first->epsilon = m_epsilon;
 
-  if (m_lowerBoundsInnerDimensions.size() > 0)
+  if (!m_lowerBoundsInnerDimensions.empty())
   {
     AdaptiveSimpson test;
     test.setFunction(m_integrand);
