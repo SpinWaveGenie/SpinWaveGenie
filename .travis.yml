@@ -17,11 +17,11 @@ matrix:
       compiler: gcc
       env: PYTHON_VERSION=3.4
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode8.2
       compiler: clang
-      env: PYTHON_VERSION=3.5
+      env: PYTHON_VERSION=3.6
     - os: osx
-      osx_image: xcode7.2
+      osx_image: xcode7.3
       compiler: clang
       env: PYTHON_VERSION=2.7
     - os: osx
@@ -36,21 +36,23 @@ before_install:
       brew update > /dev/null 2>&1;
       brew tap homebrew/science;
       brew tap homebrew/python;
-      brew install --quite cmake;
-      brew install --quiet eigen;
-      brew install --quiet tbb --c++11;
-      brew install --quiet nlopt;
-      if [ "$PYTHON_VERSION" == "3.5" ];
+      brew outdated cmake || brew upgrade cmake;
+      brew install eigen;
+      brew install tbb --c++11;
+      brew install nlopt;
+      if [ "$PYTHON_VERSION" == "3.6" ];
       then
-        brew install --quiet python3;
-        brew install --quiet numpy --with-python3 --without-python;
+        brew install python3;
+        brew install gcc;
+        brew link --overwrite gcc;
+        brew install numpy --with-python3 --without-python;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
-      wget -q https://cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz --no-check-certificate;
-      tar -xzf cmake-3.5.2-Linux-x86_64.tar.gz;
-      sudo ln -f -s ./cmake-3.5.2-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
+      wget -q https://cmake.org/files/v3.7/cmake-3.7.1-Linux-x86_64.tar.gz --no-check-certificate;
+      tar -xzf cmake-3.7.1-Linux-x86_64.tar.gz;
+      sudo ln -f -s ./cmake-3.7.1-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
       sudo apt-get update -qq;
       sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
       if [ "$PYTHON_VERSION" == "3.4" ];
@@ -68,9 +70,9 @@ before_script:
       then
         echo "CHECKING CODE COVERAGE, $COVERALLS";
         cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
-      elif [ "$PYTHON_VERSION" == "3.5" ];
+      elif [ "$PYTHON_VERSION" == "3.6" ];
       then
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.5/lib/libpython3.5m.dylib;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.6/lib/libpython3.6m.dylib;
       else
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
       fi
