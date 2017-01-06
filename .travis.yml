@@ -37,7 +37,6 @@ before_install:
       brew tap homebrew/science;
       brew tap homebrew/python;
       brew outdated cmake || brew upgrade cmake;
-      brew install cmake;
       brew install eigen;
       brew install tbb --c++11;
       brew install nlopt;
@@ -45,7 +44,7 @@ before_install:
       then
         brew install python3;
         brew install gcc;
-        brew link --overwrite gcc; #workaround error linking gcc
+        brew link --overwrite gcc;
         brew install numpy --with-python3 --without-python;
       fi
     fi
