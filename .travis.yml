@@ -36,6 +36,7 @@ before_install:
       brew update > /dev/null 2>&1;
       brew tap homebrew/science;
       brew tap homebrew/python;
+      brew outdated cmake || brew upgrade cmake
       brew install cmake;
       brew install eigen;
       brew install tbb --c++11;
@@ -43,6 +44,9 @@ before_install:
       if [ "$PYTHON_VERSION" == "3.6" ];
       then
         brew install python3;
+        #workaround error linking gcc
+        brew install gcc
+        brew link --overwrite gcc
         brew install numpy --with-python3 --without-python;
       fi
     fi
