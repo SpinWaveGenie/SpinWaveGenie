@@ -51,7 +51,9 @@ template <typename T> bool UniqueThreeVectors<T>::operator==(const UniqueThreeVe
   for (const auto &value : *this)
   {
     if (std::find(other.cbegin(), other.cend(), value) == other.cend())
+    {
       return false;
+    }
   }
   return true;
 }

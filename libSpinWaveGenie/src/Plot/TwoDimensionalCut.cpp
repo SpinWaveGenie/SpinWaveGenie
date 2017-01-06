@@ -124,7 +124,9 @@ void TwoDimensionalCut::save()
   if (file.is_open())
   {
     for (const auto &point : points)
+    {
       file << point[0] << "\t" << point[1] << "\t" << point[2] << std::endl;
+    }
   }
   file.close();
   file.open(this->filename + ".y");
@@ -132,7 +134,9 @@ void TwoDimensionalCut::save()
   {
     Energies energies = cut->getEnergies();
     for (const auto &energy : energies)
+    {
       file << (energy) << std::endl;
+    }
   }
   file.close();
 }

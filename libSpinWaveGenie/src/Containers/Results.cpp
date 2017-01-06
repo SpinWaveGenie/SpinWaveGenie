@@ -60,7 +60,9 @@ void Results::uniqueSolutions()
       }
     }
     if (VP_pos == NU)
+    {
       std::cout << "error finding unique value" << std::endl;
+    }
   }
 
   results = VI_unique;

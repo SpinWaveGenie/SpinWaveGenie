@@ -22,9 +22,13 @@ std::unique_ptr<Interaction> InteractionFactory::getExchange(const std::string &
                                                              double min, double max)
 {
   if (sl_r.compare(sl_s) == 0)
+  {
     return memory::make_unique<ExchangeInteractionSameSublattice>(name, value, sl_r, min, max);
+  }
   else
+  {
     return memory::make_unique<ExchangeInteraction>(name, value, sl_r, sl_s, min, max);
+}
 }
 
 std::unique_ptr<Interaction>

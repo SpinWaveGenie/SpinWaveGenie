@@ -230,7 +230,9 @@ std::vector<double> AdaptiveSimpson::SimpsonImpl::integrate()
   {
     std::shared_ptr<helper> mostError = myqueue.top();
     if (mostError->error < mostError->epsilon)
+    {
       break;
+    }
     myqueue.pop();
     std::shared_ptr<helper> element = std::make_shared<helper>();
     splitElement(mostError, element);

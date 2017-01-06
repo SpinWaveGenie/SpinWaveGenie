@@ -56,6 +56,7 @@ void AnisotropyInteraction::calcConstantValues(const Cell &cell)
   LNrrM = complex<double>(0.0, 0.0);
 
   for (std::size_t i = 0; i < 3; i++)
+  {
     for (std::size_t j = 0; j < 3; j++)
     {
       // cout << i << " " << j << " " << directions(i,j) << endl;
@@ -71,6 +72,7 @@ void AnisotropyInteraction::calcConstantValues(const Cell &cell)
         LNrrM += X * zeta;
       }
     }
+  }
   // cout << "new implementation" << endl;
   // cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << LNrMrM << endl;
 }

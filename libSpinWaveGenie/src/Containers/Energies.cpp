@@ -19,10 +19,14 @@ Energies::Energies(double minimum, double maximum, std::size_t numberPoints)
   for (std::size_t bin = 0; bin != numberPoints; bin++)
   {
     if (numberPoints == 1)
+    {
       energies.push_back(minimum);
+    }
     else
+    {
       energies.push_back(minimum +
                          (maximum - minimum) * static_cast<double>(bin) / static_cast<double>(numberPoints - 1));
+    }
   }
 }
 

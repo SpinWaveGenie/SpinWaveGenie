@@ -66,7 +66,9 @@ template <class T> EnergyResolution<T>::EnergyResolution(const EnergyResolution<
   // cout << "Energy Points??? " << EnergyPoints << endl;
   SW = other.SW;
   if (other.ResolutionFunction)
+  {
     ResolutionFunction = std::move(other.ResolutionFunction->clone());
+}
 }
 
 template <class T> EnergyResolution<T> &EnergyResolution<T>::operator=(const EnergyResolution &other)

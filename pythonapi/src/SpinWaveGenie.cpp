@@ -51,7 +51,9 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("__getitem__",
            [](const Cell &s, size_t i) {
              if (i >= s.size())
+             {
                throw py::index_error();
+             }
              return s[i];
            })
       .def("addAtom", &Cell::addAtom, "Add atom to sublattice name at a given position")
@@ -92,7 +94,9 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("__getitem__",
            [](const Results &s, size_t i) {
              if (i >= s.size())
+             {
                throw py::index_error();
+             }
              return s[i];
            })
       .def("sort", &Results::sort, "Sort Results by frequency.")

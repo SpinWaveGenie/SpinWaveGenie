@@ -73,7 +73,9 @@ void SpinWave::calculateEigenvalues()
 
   ces.compute(LN);
   if (ces.info() != Success)
+  {
     cout << ces.info() << endl;
+  }
 
   for (size_t i = 0; i < N; i++)
   {
@@ -171,10 +173,12 @@ void SpinWave::calculateWeights()
   // If two eigenvalues are approx. zero, std::partition
   // may fail to separate positive and negative weights.
   if (AL[M - 1].weight < 0.0 || AL[M].weight > 0.0)
+  {
     std::sort(AL.begin(), AL.end(), [](const results &a, const results &b)
               {
                 return a.weight > b.weight;
               });
+  }
 
   for (size_t L1 = 0; L1 < N; L1++)
   {
@@ -196,7 +200,9 @@ void SpinWave::calculateWeights()
       oldPosition->index = AL[L1].index;
     }
     else
+    {
       throw std::runtime_error("Error while reordering eigenvectors. ");
+    }
   }
 
   //
@@ -249,10 +255,14 @@ void SpinWave::calculateIntensities()
     pt.frequency = abs(WW[i + M]);
     double qSquared = pow(KX, 2) + pow(KY, 2) + pow(KZ, 2);
     if (qSquared < std::numeric_limits<double>::epsilon())
+    {
       pt.intensity = std::numeric_limits<double>::quiet_NaN();
+    }
     else
+    {
       pt.intensity =
           SXX(i) + SYY(i) + SZZ(i) - (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / qSquared;
+    }
     VI.insert(pt);
   }
 }
