@@ -14,11 +14,11 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-AnisotropyInteraction::AnisotropyInteraction(const string &name_in, double value_in, const Vector3 &unitVectorIn,
+AnisotropyInteraction::AnisotropyInteraction(const string &name_in, double value_in, const Vector3 &direction_in,
                                              const string &sl_r_in)
     : name(name_in), r(0), M(0)
 {
-  this->updateInteraction(value_in, unitVectorIn, sl_r_in);
+  this->updateInteraction(value_in, direction_in, sl_r_in);
 }
 
 std::unique_ptr<Interaction> AnisotropyInteraction::clone() const
@@ -26,10 +26,10 @@ std::unique_ptr<Interaction> AnisotropyInteraction::clone() const
   return memory::make_unique<AnisotropyInteraction>(*this);
 }
 
-void AnisotropyInteraction::updateInteraction(double value_in, const Vector3 &unitVectorIn, const string &sl_r_in)
+void AnisotropyInteraction::updateInteraction(double value_in, const Vector3 &direction_in, const string &sl_r_in)
 {
   value = value_in;
-  auto unitVector = unitVectorIn;
+  auto unitVector = direction_in;
   unitVector.normalize();
   directions = unitVector * unitVector.transpose();
   sl_r = sl_r_in;

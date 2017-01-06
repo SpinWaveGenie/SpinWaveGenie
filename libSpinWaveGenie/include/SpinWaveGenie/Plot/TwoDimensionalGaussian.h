@@ -34,11 +34,11 @@ public:
   TwoDimensionResolutionFunction(const TwoDimGaussian &info, const SpinWave &SW, const Energies &energies);
   TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction & /*other*/) = default;
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
-  void setTolerance(double tol, int maxEvals = 100000);
+  void setTolerance(double toleranceIn, int maxEvals = 100000);
   std::unique_ptr<SpinWavePlot> clone() override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
-  void setEnergies(const Energies &energies) override;
+  void setEnergies(const Energies &energiesIn) override;
 
 private:
   std::vector<double> calculateIntegrand(std::deque<double> &x);

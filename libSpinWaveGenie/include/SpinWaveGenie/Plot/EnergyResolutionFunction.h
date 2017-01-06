@@ -28,12 +28,13 @@ public:
   EnergyResolution() = default;
   EnergyResolution(const EnergyResolution &other);
   EnergyResolution &operator=(const EnergyResolution &other);
-  EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn, const Energies &energies);
-  std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
+  EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn,
+                   const Energies &energiesIn);
+  std::vector<double> getCut(double kx, double ky, double kz) override;
   void setSpinWave(const T &SWIn);
-  void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn);
+  void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> resolutionFunctionIn);
   const Cell &getCell() const override;
-  void setEnergies(const Energies &energies) override;
+  void setEnergies(const Energies &energiesIn) override;
   const Energies &getEnergies() override;
   std::unique_ptr<SpinWavePlot> clone() override;
 

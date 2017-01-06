@@ -20,7 +20,7 @@ class SPINWAVEGENIE_EXPORT AnisotropyInteraction : public Interaction
 {
 public:
   //!
-  AnisotropyInteraction(const std::string &name_in, double value_in, const Vector3 &direction,
+  AnisotropyInteraction(const std::string &name_in, double value_in, const Vector3 &direction_in,
                         const std::string &sl_r_in);
   //!
   void updateInteraction(double value_in, const Vector3 &direction, const std::string &sl_r_in);

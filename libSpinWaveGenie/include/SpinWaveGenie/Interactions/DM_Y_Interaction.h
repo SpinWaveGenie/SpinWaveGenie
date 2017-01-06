@@ -15,8 +15,8 @@ namespace SpinWaveGenie
 class SPINWAVEGENIE_EXPORT DM_Y_Interaction : public Interaction
 {
 public:
-  DM_Y_Interaction(std::string name, double value_in, std::string sl_r_in, std::string sl_s_in, double min_in,
-                   double max_in);
+  DM_Y_Interaction(const std::string &name_in, double value_in, const std::string &sl_r_in, const std::string &sl_s_in,
+                   double min_in, double max_in);
   void updateInteraction(double value_in, const std::string &sl_r_in, const std::string &sl_s_in, double min_in,
                          double max_in);
   void updateValue(double value_in) override;

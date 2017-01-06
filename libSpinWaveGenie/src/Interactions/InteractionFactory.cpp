@@ -32,13 +32,13 @@ std::unique_ptr<Interaction> InteractionFactory::getExchange(const std::string &
 }
 
 std::unique_ptr<Interaction>
-InteractionFactory::getDzyaloshinskiiMoriya(const std::string &name, double value, const Vector3 &unitVector,
+InteractionFactory::getDzyaloshinskiiMoriya(const std::string &name, double value, const Vector3 &direction,
                                             const std::string &sl_r, const std::string &sl_s, double min, double max)
 {
   double x, y, z;
-  x = unitVector[0];
-  y = unitVector[1];
-  z = unitVector[2];
+  x = direction[0];
+  y = direction[1];
+  z = direction[2];
 
   if (x < 0.01 && y > 0.99 && z < 0.01)
   {
@@ -56,14 +56,14 @@ InteractionFactory::getDzyaloshinskiiMoriya(const std::string &name, double valu
 }
 
 std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(const std::string &name, double value,
-                                                               const Vector3 &unitVector, const std::string &sl_r)
+                                                               const Vector3 &direction, const std::string &sl_r)
 {
-  return memory::make_unique<AnisotropyInteraction>(name, value, unitVector, sl_r);
+  return memory::make_unique<AnisotropyInteraction>(name, value, direction, sl_r);
 }
 
 std::unique_ptr<Interaction> InteractionFactory::getMagneticField(const std::string &name, double value,
-                                                                  const Vector3 &unitVector, const std::string &sl_r)
+                                                                  const Vector3 &direction, const std::string &sl_r)
 {
-  return memory::make_unique<MagneticFieldInteraction>(name, value, unitVector, sl_r);
+  return memory::make_unique<MagneticFieldInteraction>(name, value, direction, sl_r);
 }
 }

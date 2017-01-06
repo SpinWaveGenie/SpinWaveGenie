@@ -184,9 +184,9 @@ void MagneticFormFactor::setType(const std::vector<std::string> &types, const st
 class calculateFormFactor
 {
 public:
-  calculateFormFactor(double x, double y, double z)
+  calculateFormFactor(double kx, double ky, double kz)
   {
-    ms2 = -1.0 * (pow(x, 2) + pow(y, 2) + pow(z, 2)) / (16.0 * M_PI * M_PI);
+    ms2 = -1.0 * (pow(kx, 2) + pow(ky, 2) + pow(kz, 2)) / (16.0 * M_PI * M_PI);
   }
   double operator()(double result, const boost::tuple<vector<double>, double> &element)
   {

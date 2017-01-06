@@ -24,7 +24,7 @@ class SPINWAVEGENIE_EXPORT InteractionFactory
 public:
   std::unique_ptr<Interaction> getExchange(const std::string &name, double value, const std::string &sl_r,
                                            const std::string &sl_s, double min, double max);
-  std::unique_ptr<Interaction> getDzyaloshinskiiMoriya(const std::string &name, double value, const Vector3 &unitVector,
+  std::unique_ptr<Interaction> getDzyaloshinskiiMoriya(const std::string &name, double value, const Vector3 &direction,
                                                        const std::string &sl_r, const std::string &sl_s, double min,
                                                        double max);
   std::unique_ptr<Interaction> getAnisotropy(const std::string &name, double value, const Vector3 &unitVector,

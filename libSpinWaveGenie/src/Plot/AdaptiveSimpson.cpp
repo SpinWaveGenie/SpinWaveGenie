@@ -14,7 +14,7 @@ struct helper
   std::vector<double> S, Sleft, Sright;
   double epsilon;
   double error;
-  void resetBounds(double lowerlimit, double upperlimit);
+  void resetBounds(double lower, double upper);
   void initializeError();
   void updateError();
 };
@@ -33,8 +33,8 @@ public:
   SimpsonImpl() : m_lowerBound(0.0), m_upperBound(0.0), m_epsilon(1.0e-5), m_maximumDivisions(1000){};
   std::vector<double> sumPieces(
       std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> &pieces);
-  void createElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element1);
-  void splitElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element1);
+  void createElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element);
+  void splitElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element);
   std::vector<double> integrate();
   std::function<std::vector<double>(std::deque<double> &evaluationPoints)> m_integrand;
   double m_lowerBound, m_upperBound, m_epsilon;

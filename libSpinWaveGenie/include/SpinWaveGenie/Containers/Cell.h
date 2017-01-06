@@ -27,10 +27,10 @@ public:
   //! \param a     Distance a in Angstroms
   //! \param b     Distance b in Angstroms
   //! \param c     Distance c in Angstroms
-  //! \param alpha Angle \f$ \alpha \f$ in radians
-  //! \param beta  Angle \f$ \beta \f$ in radians
-  //! \param gamma Angle \f$ \gamma \f$ in radians
-  void setBasisVectors(double a, double b, double c, double alpha, double beta, double gamma);
+  //! \param alpha Angle \f$ \alpha \f$ in degrees
+  //! \param beta  Angle \f$ \beta \f$ in degrees
+  //! \param gamma Angle \f$ \gamma \f$ in degrees
+  void setBasisVectors(double a, double b, double c, double alpha_deg, double beta_deg, double gamma_deg);
   //! Set basis vectors as Eigen::Matrix3d object. Vectors are stored as rows.
   //! \param scale Double used to scale basis vectors
   //! \param basis Basis vectors as rows in an Eigen::Matrix3d object
