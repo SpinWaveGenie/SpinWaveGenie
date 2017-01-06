@@ -3,8 +3,6 @@
 #include <algorithm> // std::sort
 #include <cmath>
 
-using std::vector;
-
 namespace SpinWaveGenie
 {
 InteractionsContainer::InteractionsContainer(const InteractionsContainer &other)

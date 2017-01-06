@@ -26,13 +26,13 @@ public:
   void setName(const std::string &nameInput);
   //! returns name of a given sublattice
   //! \return name of sublattice
-  std::string getName() const;
+  const std::string &getName() const;
   //! set type to describe magnetic form factor used in the calculation of intensities
   //! \param typeInput a std::string argument
   void setType(const std::string &typeInput);
   //! returns name of a given sublattice
   //! \return name of sublattice
-  std::string getType() const;
+  const std::string &getType() const;
   //! set moment in spherical coordinates r,theta,phi
   /*! \param spinInput magnitude of spin moment
    \param thetaInput angle \f$ 0 \leq \theta \leq  \pi \f$

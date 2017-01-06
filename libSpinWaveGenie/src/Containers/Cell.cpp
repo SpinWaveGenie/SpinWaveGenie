@@ -4,11 +4,6 @@
 #include <string>
 #include <stdexcept>
 
-using std::pair;
-using std::string;
-using std::cout;
-using std::endl;
-
 namespace SpinWaveGenie
 {
 
@@ -67,7 +62,7 @@ void Cell::addSublattice(const Sublattice &sl)
   }
 }
 
-Sublattice &Cell::getSublattice(const string &name)
+Sublattice &Cell::getSublattice(const std::string &name)
 {
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it == sublatticeInfo.end())
@@ -77,7 +72,7 @@ Sublattice &Cell::getSublattice(const string &name)
   return *it;
 }
 
-const Sublattice &Cell::getSublattice(const string &name) const
+const Sublattice &Cell::getSublattice(const std::string &name) const
 {
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it == sublatticeInfo.end())

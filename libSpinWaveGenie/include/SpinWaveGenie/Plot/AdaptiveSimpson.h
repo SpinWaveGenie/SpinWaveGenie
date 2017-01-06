@@ -27,8 +27,8 @@ public:
   AdaptiveSimpson();
   AdaptiveSimpson(const AdaptiveSimpson &other);
   AdaptiveSimpson &operator=(const AdaptiveSimpson &other);
-  AdaptiveSimpson(AdaptiveSimpson &&other);
-  AdaptiveSimpson &operator=(AdaptiveSimpson &&other);
+  AdaptiveSimpson(AdaptiveSimpson &&other) noexcept;
+  AdaptiveSimpson &operator=(AdaptiveSimpson &&other) noexcept;
   //! set function calculating the integrand.
   //! \param integrand function object must be of this type.
   void setFunction(const std::function<std::vector<double>(std::deque<double> &evaluationPoints)> &integrand);

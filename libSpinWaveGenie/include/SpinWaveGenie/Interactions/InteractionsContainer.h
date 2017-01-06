@@ -23,8 +23,8 @@ public:
   InteractionsContainer() = default;
   InteractionsContainer(const InteractionsContainer &other);
   InteractionsContainer &operator=(const InteractionsContainer &other);
-  InteractionsContainer(InteractionsContainer &&) = default;
-  InteractionsContainer &operator=(InteractionsContainer &&) = default;
+  InteractionsContainer(InteractionsContainer &&) noexcept = default;
+  InteractionsContainer &operator=(InteractionsContainer &&) noexcept = default;
   //! \return size of the container.
   std::size_t size() const { return container.size(); }
   //! Clear container so that the size is zero.

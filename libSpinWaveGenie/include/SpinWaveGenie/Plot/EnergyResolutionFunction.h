@@ -27,7 +27,7 @@ template <class T> class EnergyResolution : public SpinWavePlot
 public:
   EnergyResolution() = default;
   EnergyResolution(const EnergyResolution &other);
-  EnergyResolution &operator=(EnergyResolution &other);
+  EnergyResolution &operator=(const EnergyResolution &other);
   EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn, const Energies &energies);
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
   void setSpinWave(const T &SWIn);
@@ -69,7 +69,7 @@ template <class T> EnergyResolution<T>::EnergyResolution(const EnergyResolution<
     ResolutionFunction = std::move(other.ResolutionFunction->clone());
 }
 
-template <class T> EnergyResolution<T> &EnergyResolution<T>::operator=(EnergyResolution &other)
+template <class T> EnergyResolution<T> &EnergyResolution<T>::operator=(const EnergyResolution &other)
 {
   std::cout << "Copying Energy Resolution Function" << std::endl;
   energies = other.energies;

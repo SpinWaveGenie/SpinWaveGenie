@@ -254,7 +254,7 @@ AdaptiveSimpson &AdaptiveSimpson::operator=(const AdaptiveSimpson &other)
   return *this;
 }
 
-AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other)
+AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other) noexcept
 {
   if (m_p != other.m_p)
   {
@@ -263,7 +263,7 @@ AdaptiveSimpson::AdaptiveSimpson(AdaptiveSimpson &&other)
   }
 }
 
-AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other)
+AdaptiveSimpson &AdaptiveSimpson::operator=(AdaptiveSimpson &&other) noexcept
 {
   if (m_p != other.m_p)
   {

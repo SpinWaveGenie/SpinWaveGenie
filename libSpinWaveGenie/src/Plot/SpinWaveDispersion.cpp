@@ -3,10 +3,6 @@
 #include "SpinWaveGenie/Containers/Results.h"
 #include "External/ezRateProgressBar.hpp"
 
-using std::string;
-using std::vector;
-using std::cout;
-using std::endl;
 using namespace SpinWaveGenie;
 
 SpinWaveDispersion::SpinWaveDispersion()

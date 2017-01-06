@@ -3,16 +3,11 @@
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Cell.h"
 
-using std::string;
-using std::complex;
-using std::cout;
-using std::endl;
-
 namespace SpinWaveGenie
 {
 bool Neighbors::empty() { return neighborList.empty(); }
 
-void Neighbors::findNeighbors(const Cell &cell, const string &sl1, const string &sl2, double min, double max)
+void Neighbors::findNeighbors(const Cell &cell, const std::string &sl1, const std::string &sl2, double min, double max)
 {
   // In principle, we only need to iterate over one atom in the first sublattice. However, iterating over
   // all atoms provides a good check that all atoms have the same number of neighbors in the same relative
@@ -65,28 +60,28 @@ void Neighbors::findNeighbors(const Cell &cell, const string &sl1, const string 
     {
       if (!(Neighbors == neighborList))
       {
-        cout << "Old number of neighbors:" << numberNeighbors << "\n";
-        cout << "Old positions:\n";
+        std::cout << "Old number of neighbors:" << numberNeighbors << "\n";
+        std::cout << "Old positions:\n";
 
         for (const auto &MyPosition : neighborList)
         {
-          cout << "\t" << MyPosition[0] << " " << MyPosition[1] << " " << MyPosition[2] << "\n";
+          std::cout << "\t" << MyPosition[0] << " " << MyPosition[1] << " " << MyPosition[2] << "\n";
         }
 
-        cout << "New number of neighbors:" << Neighbors.size() << "\n";
+        std::cout << "New number of neighbors:" << Neighbors.size() << "\n";
         for (const auto &MyPosition : Neighbors)
         {
-          cout << "\t" << MyPosition[0] << " " << MyPosition[1] << " " << MyPosition[2] << "\n";
+          std::cout << "\t" << MyPosition[0] << " " << MyPosition[1] << " " << MyPosition[2] << "\n";
         }
       }
     }
   }
 }
 
-complex<double> Neighbors::getGamma(const Vector3 &K) const
+std::complex<double> Neighbors::getGamma(const Vector3 &K) const
 {
-  complex<double> MXI(0.0, -1.0);
-  complex<double> gamma_rs = complex<double>(0.0, 0.0);
+  std::complex<double> MXI(0.0, -1.0);
+  std::complex<double> gamma_rs = std::complex<double>(0.0, 0.0);
   for (const auto &nbr : neighborList)
   {
     // cout << nbr->get<0>() << " " << nbr->get<1>() << " " << nbr->get<2>() << endl;

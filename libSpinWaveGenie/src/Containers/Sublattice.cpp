@@ -2,10 +2,6 @@
 #include <Eigen/Dense>
 #include "SpinWaveGenie/Containers/Sublattice.h"
 
-using std::string;
-using std::cout;
-using std::endl;
-
 namespace SpinWaveGenie
 {
 
@@ -16,17 +12,17 @@ Sublattice::Sublattice()
   this->setMoment(0.0, 0.0, 0.0);
 }
 
-void Sublattice::setName(const string &nameInput) { name = nameInput; }
+void Sublattice::setName(const std::string &nameInput) { name = nameInput; }
 
-string Sublattice::getName() const { return name; }
+const std::string &Sublattice::getName() const { return name; }
 
-void Sublattice::setType(const string &typeInput)
+void Sublattice::setType(const std::string &typeInput)
 {
   // cout << typeInput << endl;
   type = typeInput;
 }
 
-string Sublattice::getType() const
+const std::string &Sublattice::getType() const
 {
   // cout << type << endl;
   return type;
