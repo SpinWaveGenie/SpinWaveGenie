@@ -9,7 +9,7 @@ configuration: Release
 image: Visual Studio 2017
 
 environment:
-  PATH: "C:/projects/ThirdPartyVC140/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
+  PATH: "C:/projects/ThirdPartyVC141/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
   matrix:
     - PYTHON_DIR: "Python27-x64"
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
