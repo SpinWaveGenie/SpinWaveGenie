@@ -6,8 +6,10 @@ branches:
 
 configuration: Release
 
+image: Visual Studio 2017
+
 environment:
-  PATH: "C:/projects/ThirdPartyVC140/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
+  PATH: "C:/projects/ThirdPartyVC141/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
   matrix:
     - PYTHON_DIR: "Python27-x64"
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
@@ -20,16 +22,15 @@ platform: x64
 
 install:
   - cd c:\projects
-  - git clone https://github.com/SpinWaveGenie/ThirdPartyVC140.git
+  - git clone https://github.com/SpinWaveGenie/ThirdPartyVC141.git
   - C:\%PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:
-  - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
   - cd %APPVEYOR_BUILD_FOLDER%
   - md build
   - cd build
   - cmake --version
-  - cmake -G "Visual Studio 14 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
+  - cmake -G "Visual Studio 15 2017 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
 
 build_script:
   - cmake --build . -- /p:Configuration=Release /m:2
