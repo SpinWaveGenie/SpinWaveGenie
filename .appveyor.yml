@@ -38,7 +38,7 @@ before_build:
   - md build
   - cd build
   - cmake --version
-  - cmake -G "%CMAKE_GENERATOR%" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
+  - cmake -G %CMAKE_GENERATOR% -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
 
 build_script:
   - cmake --build . -- /p:Configuration=Release /m:2
