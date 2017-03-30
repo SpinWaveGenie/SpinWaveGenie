@@ -11,22 +11,23 @@ environment:
   matrix:
     - PYTHON_DIR: "Python27-x64"
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
-      CMAKE_GENERATOR: Visual Studio 15 2017 Win64
       image: Visual Studio 2017
     - PYTHON_DIR: "Python36-x64"
       CACHE_FILENAME: "AppveyorPython36-x64.cmake"
-      CMAKE_GENERATOR: Visual Studio 15 2017 Win64
       image: Visual Studio 2017
     - PYTHON_DIR: "Python27-x64"
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
-      CMAKE_GENERATOR: Visual Studio 14 2015 Win64
       image: Visual Studio 2015
     - PYTHON_DIR: "Python36-x64"
       CACHE_FILENAME: "AppveyorPython36-x64.cmake"
-      CMAKE_GENERATOR: Visual Studio 14 2015 Win64
       image: Visual Studio 2015
 
 platform: x64
+
+init:
+- echo %APPVEYOR_BUILD_WORKER_IMAGE%
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" ( set CMAKE_GENERATOR="Visual Studio 15 2017 Win64" )
+- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" ( set CMAKE_GENERATOR="Visual Studio 14 2015 Win64" )
 
 install:
   - cd c:\projects
@@ -38,7 +39,7 @@ before_build:
   - md build
   - cd build
   - cmake --version
-  - cmake -G "%CMAKE_GENERATOR%" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
+  - cmake -G %CMAKE_GENERATOR% -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
 
 build_script:
   - cmake --build . -- /p:Configuration=Release /m:2
