@@ -1,6 +1,6 @@
 # - Try to find Eigen3 lib
 #
-# This module supports requiring a minimum version, e.g. you can do/Users/svh/Desktop/tmp/spin_wave_genie/cmake/FindEigen3.cmake
+# This module supports requiring a minimum version, e.g. you can do
 #   find_package(Eigen3 3.1.2)
 # to require version 3.1.2 or newer of Eigen3.
 #
@@ -63,7 +63,6 @@ else (EIGEN3_INCLUDE_DIR)
 
   find_path(EIGEN3_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library
       PATHS
-      /SNS/users/svh/software/forSWG/include
       ${CMAKE_INSTALL_PREFIX}/include
       ${KDE4_INCLUDE_DIR}
       PATH_SUFFIXES eigen3 eigen
