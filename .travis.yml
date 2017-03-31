@@ -71,6 +71,7 @@ before_install:
     fi
 
 before_script:
+  - cd $TRAVIS_BUILD_DIR
   - if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
       if [ "$COVERALLS" == "true" ];
