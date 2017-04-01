@@ -65,7 +65,7 @@ if(WARNINGS_AS_ERRORS)
   endif()
 endif()
 
-find_package(Eigen3 REQUIRED)
+find_package(Eigen3 3.2.7 REQUIRED)
 
 find_package(Threads)
 if(USE_THREADS)
@@ -81,6 +81,7 @@ endif()
 if(WIN32)
     add_definitions( -DBOOST_ALL_NO_LIB
                      -DBOOST_ALL_DYN_LINK
+                     -D_CRT_SECURE_NO_WARNINGS
                      -D_USE_MATH_DEFINES
                      -DNOMINMAX)
 endif()
