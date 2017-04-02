@@ -2,7 +2,6 @@
 #define __SpinWave_H__
 
 #include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Export.h"

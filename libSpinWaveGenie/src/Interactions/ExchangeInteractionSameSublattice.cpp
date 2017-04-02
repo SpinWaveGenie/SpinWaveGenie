@@ -75,7 +75,7 @@ void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(const Cell & /*
   // first order terms are 0.0
 }
 
-void ExchangeInteractionSameSublattice::updateMatrix(const Vector3d &K, MatrixXcd &LN) const
+void ExchangeInteractionSameSublattice::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) const
 {
   complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;
