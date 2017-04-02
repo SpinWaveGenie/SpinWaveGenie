@@ -2,16 +2,11 @@
 #ifndef __Cell_H__
 #define __Cell_H__
 
+#include "Eigen/Core"
 #include "SpinWaveGenie/Containers/Sublattice.h"
 #include "SpinWaveGenie/Export.h"
 #include <string>
 #include <vector>
-
-namespace Eigen
-{
-using Vector3 = Matrix<double, 3, 1>;
-using Matrix3 = Matrix<double, 3, 3>;
-}
 
 namespace SpinWaveGenie
 {
@@ -34,13 +29,13 @@ public:
   //! Set basis vectors as Eigen::Matrix3d object. Vectors are stored as rows.
   //! \param scale Double used to scale basis vectors
   //! \param basis Basis vectors as rows in an Eigen::Matrix3d object
-  void setBasisVectors(double scale, const Matrix3 &basis);
+  void setBasisVectors(double scale, const Eigen::Matrix3d &basis);
   //! get basis vectors as an Eigen::Matrix3d object
   //! \return basis vectors as rows in an Eigen::Matrix3d object
-  const Matrix3 &getBasisVectors() const;
+  const Eigen::Matrix3d &getBasisVectors() const;
   //! get basis vectors as an Eigen::Matrix3d object
   //! \return basis vectors as rows in an Eigen::Matrix3d object
-  const Matrix3 &getReciprocalVectors() const;
+  const Eigen::Matrix3d &getReciprocalVectors() const;
   //! Add sublattice to cell
   //! \param sl Sublattice object
   //! \return reciprocal lattice vectors as rows in an Eigen::Matrix3d object
@@ -79,8 +74,8 @@ public:
   ConstIterator cend() const { return sublatticeInfo.cend(); }
 
 private:
-  Matrix3 basisVectors;
-  Matrix3 reciprocalVectors;
+  Eigen::Matrix3d basisVectors;
+  Eigen::Matrix3d reciprocalVectors;
   std::vector<Sublattice> sublatticeInfo;
 };
 }

@@ -1,7 +1,7 @@
 #ifndef __Sublattice_H__
 #define __Sublattice_H__
 
-#include "SpinWaveGenie/Containers/Matrices.h"
+#include "Eigen/Core"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 #include "SpinWaveGenie/Export.h"
 #include <string>
@@ -47,10 +47,10 @@ public:
   double getPhi() const { return phi; }
   //! returns rotation matrix as an Eigen::Matrix3d object
   //! \return rotation matrix
-  const Matrix3 &getRotationMatrix() const { return rotationMatrix; }
+  const Eigen::Matrix3d &getRotationMatrix() const { return rotationMatrix; }
   //! returns inverse rotation matrix as an Eigen::Matrix3d object
   //! \return inverse rotation matrix
-  const Matrix3 &getInverseMatrix() const { return inverseMatrix; }
+  const Eigen::Matrix3d &getInverseMatrix() const { return inverseMatrix; }
   //! add atom to the sublattice
   //! \param x x component of atomic position in Angstroms
   //! \param y y component of atomic position in Angstroms
@@ -77,7 +77,7 @@ public:
 private:
   std::string name, type;
   double spin, theta, phi;
-  Matrix3 rotationMatrix, inverseMatrix;
+  Eigen::Matrix3d rotationMatrix, inverseMatrix;
   UniqueThreeVectors<double> positions;
 };
 }

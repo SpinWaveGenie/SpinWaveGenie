@@ -14,7 +14,7 @@ InteractionsContainer getInteractions()
   InteractionFactory interactions;
   InteractionsContainer result;
 
-  Vector3 xhat(1.0, 0.0, 0.0);
+  Eigen::Vector3d xhat(1.0, 0.0, 0.0);
   result.insert(interactions.getExchange("J", -1.0, "sl0", "sl1", 0.4, 0.6));
   result.insert(interactions.getAnisotropy("D", 0.1, xhat, "sl1"));
   result.insert(interactions.getAnisotropy("D", 0.1, xhat, "sl0"));

@@ -59,9 +59,9 @@ void ExchangeInteraction::calcConstantValues(const Cell &cell)
   double Sr = cell.getSublattice(sl_r).getMoment();
   double Ss = cell.getSublattice(sl_s).getMoment();
 
-  Matrix3 Frs = cell.getSublattice(sl_r).getRotationMatrix() * cell.getSublattice(sl_s).getInverseMatrix();
+  Eigen::Matrix3d Frs = cell.getSublattice(sl_r).getRotationMatrix() * cell.getSublattice(sl_s).getInverseMatrix();
 
-  Matrix3 Fsr = cell.getSublattice(sl_s).getRotationMatrix() * cell.getSublattice(sl_r).getInverseMatrix();
+  Eigen::Matrix3d Fsr = cell.getSublattice(sl_s).getRotationMatrix() * cell.getSublattice(sl_r).getInverseMatrix();
 
   neighbors.findNeighbors(cell, sl_r, sl_s, min, max);
   auto z_rs = static_cast<double>(neighbors.size());
@@ -95,9 +95,9 @@ void ExchangeInteraction::calculateEnergy(const Cell &cell, double &energy)
   size_t numberOfAtoms = cell[r].size();
   assert(numberOfAtoms == cell[s].size());
 
-  Matrix3 Frs = cell[r].getRotationMatrix() * cell[s].getInverseMatrix();
+  Eigen::Matrix3d Frs = cell[r].getRotationMatrix() * cell[s].getInverseMatrix();
 
-  Matrix3 Fsr = cell[s].getRotationMatrix() * cell[r].getInverseMatrix();
+  Eigen::Matrix3d Fsr = cell[s].getRotationMatrix() * cell[r].getInverseMatrix();
 
   energy -= 0.5 * value * z_rs * Sr * Ss * numberOfAtoms * (Frs(2, 2) + Fsr(2, 2));
 }
@@ -114,9 +114,9 @@ void ExchangeInteraction::calculateFirstOrderTerms(const Cell &cell, VectorXcd &
   neighbors.findNeighbors(cell, sl_r, sl_s, min, max);
   auto z_rs = static_cast<double>(neighbors.size());
 
-  Matrix3 Frs = cell[r].getRotationMatrix() * cell[s].getInverseMatrix();
+  Eigen::Matrix3d Frs = cell[r].getRotationMatrix() * cell[s].getInverseMatrix();
 
-  Matrix3 Fsr = cell[s].getRotationMatrix() * cell[r].getInverseMatrix();
+  Eigen::Matrix3d Fsr = cell[s].getRotationMatrix() * cell[r].getInverseMatrix();
 
   complex<double> F1rs(Frs(0, 2), Frs(1, 2));
   complex<double> F2rs(Frs(2, 0), Frs(2, 1));
@@ -132,7 +132,7 @@ void ExchangeInteraction::calculateFirstOrderTerms(const Cell &cell, VectorXcd &
   elements[s + M] += conj(LNs);
 }
 
-void ExchangeInteraction::updateMatrix(const Vector3d &K, MatrixXcd &LN) const
+void ExchangeInteraction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) const
 {
   std::complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << sl_r << " " << sl_s << " " << gamma_rs << endl;

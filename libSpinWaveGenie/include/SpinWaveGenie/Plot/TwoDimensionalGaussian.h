@@ -24,7 +24,7 @@ namespace SpinWaveGenie
 struct TwoDimGaussian
 {
   double a, b, c, tol;
-  Vector3 direction;
+  Eigen::Vector3d direction;
 };
 
 class SPINWAVEGENIE_EXPORT TwoDimensionResolutionFunction : public SpinWavePlot
@@ -47,7 +47,7 @@ private:
   double tolerance;
   double a, b, c;
   double kx{0.0}, ky{0.0}, kz{0.0};
-  Vector3 direction;
+  Eigen::Vector3d direction;
   EnergyResolutionFunction res;
 };
 }

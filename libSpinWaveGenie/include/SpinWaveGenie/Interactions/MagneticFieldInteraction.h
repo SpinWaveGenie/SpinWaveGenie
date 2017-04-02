@@ -20,10 +20,10 @@ class SPINWAVEGENIE_EXPORT MagneticFieldInteraction : public Interaction
 {
 public:
   //!
-  MagneticFieldInteraction(std::string name_in, double value_in, const Vector3 &unitVectorIn,
+  MagneticFieldInteraction(std::string name_in, double value_in, const Eigen::Vector3d &unitVectorIn,
                            const std::string &sl_r_in);
   //!
-  void updateInteraction(double value_in, const Vector3 &unitVectorIn, const std::string &sl_r_in);
+  void updateInteraction(double value_in, const Eigen::Vector3d &unitVectorIn, const std::string &sl_r_in);
   //!
   void updateValue(double value_in) override;
   const std::string &getName() const override;
@@ -36,7 +36,7 @@ public:
 
 private:
   std::string name, sl_r;
-  Vector3 directions;
+  Eigen::Vector3d directions;
   double value;
   std::size_t r, M;
   std::complex<double> LNrr;

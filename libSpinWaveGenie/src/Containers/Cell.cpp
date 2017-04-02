@@ -42,11 +42,11 @@ void Cell::setBasisVectors(double a, double b, double c, double alpha_deg, doubl
   // cout << "recip vectors equal" <<reciprocalVectors << endl;
 }
 
-void Cell::setBasisVectors(double scale, const Matrix3 &basis) { basisVectors = scale * basis; }
+void Cell::setBasisVectors(double scale, const Eigen::Matrix3d &basis) { basisVectors = scale * basis; }
 
-const Matrix3 &Cell::getBasisVectors() const { return basisVectors; }
+const Eigen::Matrix3d &Cell::getBasisVectors() const { return basisVectors; }
 
-const Matrix3 &Cell::getReciprocalVectors() const { return reciprocalVectors; }
+const Eigen::Matrix3d &Cell::getReciprocalVectors() const { return reciprocalVectors; }
 
 void Cell::addSublattice(const Sublattice &sl)
 {
@@ -96,12 +96,12 @@ std::size_t Cell::getPosition(const std::string &name) const
 
 void Cell::addAtom(const std::string &name, double x, double y, double z)
 {
-  Vector3 scaled_position(x, y, z);
+  Eigen::Vector3d scaled_position(x, y, z);
 
   // cout << "scaled= " << scaled_position.transpose() << endl;
   // cout << basisVectors << endl;
 
-  Vector3 pos = scaled_position.transpose() * basisVectors;
+  Eigen::Vector3d pos = scaled_position.transpose() * basisVectors;
 
   // cout << "unscaled= " << pos.transpose() << endl;
   // cout << " " <<endl;

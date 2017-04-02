@@ -28,7 +28,7 @@ void IntegrateThetaPhi::setEnergies(const Energies &energiesIn) { resolutionFunc
 
 std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
 {
-  Vector3 tmp, k;
+  Eigen::Vector3d tmp, k;
   double theta = x[0];
   double phi = x[1];
 
@@ -40,7 +40,7 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
   tmp[1] = r * sin(theta) * sin(phi);
   tmp[2] = r * cos(theta);
 
-  Matrix3 basisVectors = resolutionFunction->getCell().getBasisVectors();
+  Eigen::Matrix3d basisVectors = resolutionFunction->getCell().getBasisVectors();
 
   k = tmp.transpose() * basisVectors / (2.0 * M_PI);
   // cout << tmp.norm() << endl;

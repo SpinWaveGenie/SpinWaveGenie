@@ -41,7 +41,7 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("setBasisVectors",
            static_cast<void (Cell::*)(double, double, double, double, double, double)>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
-      .def("setBasisVectors", static_cast<void (Cell::*)(double, const Matrix3 &)>(&Cell::setBasisVectors),
+      .def("setBasisVectors", static_cast<void (Cell::*)(double, const Eigen::Matrix3d &)>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
       .def("getBasisVectors", &Cell::getBasisVectors, "get basis vectors")
       .def("getReciprocalVectors", &Cell::getReciprocalVectors, "get basis vectors")

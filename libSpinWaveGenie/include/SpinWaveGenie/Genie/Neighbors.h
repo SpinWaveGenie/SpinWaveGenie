@@ -1,7 +1,7 @@
 #ifndef __Neighbors_H__
 #define __Neighbors_H__
 
-#include "SpinWaveGenie/Containers/Matrices.h"
+#include "Eigen/Core"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 #include "SpinWaveGenie/Export.h"
 #include <ostream>
@@ -36,7 +36,7 @@ public:
   //! Get variable \f$ \Gamma = \frac{1}{z_{rs}} \sum_{d} e^{-i \boldmath{k} \cdot \boldmath{d}} \f$
   //! described in J Phys. Condens. Matter 21 216001 (2009)
   //! \param K k vector used in spin wave calculation.
-  std::complex<double> getGamma(const Vector3 &K) const;
+  std::complex<double> getGamma(const Eigen::Vector3d &K) const;
   using Iterator = UniqueThreeVectors<double>::Iterator;
   using ConstIterator = UniqueThreeVectors<double>::ConstIterator;
   //! \return Returns an Iterator pointing to the first element of the neighbor list

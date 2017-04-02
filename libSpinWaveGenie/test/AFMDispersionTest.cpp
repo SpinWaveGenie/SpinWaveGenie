@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(DispersionTest)
 
   InteractionFactory interactions;
 
-  Vector3 xhat(1.0, 0.0, 0.0);
+  Eigen::Vector3d xhat(1.0, 0.0, 0.0);
   builder.addInteraction(interactions.getExchange("J", -1.0 * J, name0, name1, 0.4, 0.6));
   builder.addInteraction(interactions.getAnisotropy("D", D, xhat, name0));
   builder.addInteraction(interactions.getAnisotropy("D", D, xhat, name1));

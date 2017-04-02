@@ -24,7 +24,7 @@ void Neighbors::findNeighbors(const Cell &cell, const std::string &sl1, const st
       // cout << supercellSize << endl;
       for (const auto &atom2 : cell.getSublattice(sl2))
       {
-        Vector3 atomdistance(atom2[0] - atom1[0], atom2[1] - atom1[1], atom2[2] - atom1[2]);
+        Eigen::Vector3d atomdistance(atom2[0] - atom1[0], atom2[1] - atom1[1], atom2[2] - atom1[2]);
         // cout << "atom2:  " << atom2->get<0>() << " " << atom2->get<1>() << " " << atom2->get<2>() << endl;
         // cout << "atom1:  " << atom1->get<0>() << " " << atom1->get<1>() << " " << atom1->get<2>() << endl;
         // cout << atomdistance.transpose() << endl;
@@ -35,9 +35,9 @@ void Neighbors::findNeighbors(const Cell &cell, const std::string &sl1, const st
             for (long n3 = -supercellSize; n3 <= supercellSize; n3++)
             {
               // find distance between supercells
-              Vector3 dispRLU(n1, n2, n3);
-              Vector3 dispAng = dispRLU.transpose() * cell.getBasisVectors();
-              Vector3 relativeDistance = atomdistance + dispAng;
+              Eigen::Vector3d dispRLU(n1, n2, n3);
+              Eigen::Vector3d dispAng = dispRLU.transpose() * cell.getBasisVectors();
+              Eigen::Vector3d relativeDistance = atomdistance + dispAng;
               double norm = relativeDistance.norm();
               // check if norm is between min and max
               if (norm < max && norm > min)
@@ -78,7 +78,7 @@ void Neighbors::findNeighbors(const Cell &cell, const std::string &sl1, const st
   }
 }
 
-std::complex<double> Neighbors::getGamma(const Vector3 &K) const
+std::complex<double> Neighbors::getGamma(const Eigen::Vector3d &K) const
 {
   std::complex<double> MXI(0.0, -1.0);
   std::complex<double> gamma_rs = std::complex<double>(0.0, 0.0);

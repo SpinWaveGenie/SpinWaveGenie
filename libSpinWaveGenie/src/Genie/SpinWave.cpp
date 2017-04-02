@@ -5,7 +5,6 @@
 
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Memory.h"
 
 using namespace Eigen;
@@ -25,8 +24,8 @@ SpinWave::SpinWave(const Cell &cell_in, const InteractionsContainer &interaction
 
 void SpinWave::createMatrix(double KX, double KY, double KZ)
 {
-  const Matrix3 &recip = cell.getReciprocalVectors();
-  Vector3 K(KX, KY, KZ);
+  const Eigen::Matrix3d &recip = cell.getReciprocalVectors();
+  Eigen::Vector3d K(KX, KY, KZ);
   K = K.transpose() * recip;
   this->KXP = KX;
   this->KYP = KY;
@@ -91,6 +90,7 @@ void SpinWave::calculateEigenvalues()
 
 void SpinWave::calculateWeights()
 {
+  using MatrixXcdRowMajor = Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   MatrixXcdRowMajor XX;
   WW.resize(N);
   XX = ces.eigenvectors().adjoint();
@@ -224,7 +224,7 @@ void SpinWave::calculateIntensities()
   long L2 = 0;
   for (const auto & elem : cell) // r
   {
-    const Matrix3 &V_r = elem.getInverseMatrix();
+    const Eigen::Matrix3d &V_r = elem.getInverseMatrix();
     double S_r = elem.getMoment();
     formFactor.setType(elem.getType());
     double ff = formFactor.getFormFactor(KX, KY, KZ);

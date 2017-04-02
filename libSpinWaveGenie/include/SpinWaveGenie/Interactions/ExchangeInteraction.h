@@ -2,7 +2,6 @@
 #define __ExchangeInteraction_H__
 
 #include "SpinWaveGenie/Containers/Cell.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
 #include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"

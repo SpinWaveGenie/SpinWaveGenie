@@ -63,7 +63,7 @@ void DM_Y_Interaction::calculateEnergy(const Cell & /*cell*/, double & /*energy*
 
 void DM_Y_Interaction::calculateFirstOrderTerms(const Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Y_Interaction::updateMatrix(const Vector3d &K, MatrixXcd &LN) const
+void DM_Y_Interaction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
   complex<double> gamma_rs = neighbors.getGamma(K);
