@@ -64,7 +64,7 @@ void ExchangeInteraction::calcConstantValues(const Cell &cell)
   Matrix3 Fsr = cell.getSublattice(sl_s).getRotationMatrix() * cell.getSublattice(sl_r).getInverseMatrix();
 
   neighbors.findNeighbors(cell, sl_r, sl_s, min, max);
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
 
   complex<double> G1rs = -0.5 * complex<double>(Frs(0, 0) + Frs(1, 1), Frs(1, 0) - Frs(0, 1));
   complex<double> G2rs = -0.5 * complex<double>(Frs(0, 0) - Frs(1, 1), -Frs(1, 0) - Frs(0, 1));
@@ -87,7 +87,7 @@ void ExchangeInteraction::calculateEnergy(const Cell &cell, double &energy)
     r = cell.getPosition(sl_r);
     s = cell.getPosition(sl_s);
   }
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
 
   double Sr = cell[r].getMoment();
   double Ss = cell[s].getMoment();
@@ -112,7 +112,7 @@ void ExchangeInteraction::calculateFirstOrderTerms(const Cell &cell, VectorXcd &
   double Ss = cell[s].getMoment();
 
   neighbors.findNeighbors(cell, sl_r, sl_s, min, max);
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
 
   Matrix3 Frs = cell[r].getRotationMatrix() * cell[s].getInverseMatrix();
 

@@ -15,11 +15,9 @@ namespace SpinWaveGenie
 {
 
 SpinWave::SpinWave(const Cell &cell_in, const InteractionsContainer &interactions_in)
-    : KXP(0.0), KYP(0.0), KZP(0.0), cell(cell_in), M(cell.size()), N(2 * M), NU(0), MI(0), IM(0),
-      interactions(interactions_in)
+    : cell(cell_in), M(cell.size()), N(2 * M), interactions(interactions_in)
 {
   LN.setZero(N, N);
-
   SS.resize(N);
   std::fill_n(SS.data(), M, 1.0);
   std::fill_n(std::next(SS.data(), M), M, -1.0);

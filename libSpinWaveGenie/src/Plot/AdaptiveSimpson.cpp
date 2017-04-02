@@ -8,12 +8,11 @@
 
 struct helper
 {
-  helper() : lowerlimit(0.0), upperlimit(0.0), c(0.0), d(0.0), e(0.0), epsilon(1.0e-5), error(0.0){};
-  double lowerlimit, upperlimit, c, d, e;
+  double lowerlimit{0.0}, upperlimit{0.0}, c{0.0}, d{0.0}, e{0.0};
   std::vector<double> fa, fb, fc, fd, fe;
   std::vector<double> S, Sleft, Sright;
-  double epsilon;
-  double error;
+  double epsilon{1.0e-5};
+  double error{0.0};
   void resetBounds(double lower, double upper);
   void initializeError();
   void updateError();
@@ -30,17 +29,16 @@ struct ComparePointers
 class AdaptiveSimpson::SimpsonImpl
 {
 public:
-  SimpsonImpl() : m_lowerBound(0.0), m_upperBound(0.0), m_epsilon(1.0e-5), m_maximumDivisions(1000){};
   std::vector<double> sumPieces(
       std::priority_queue<std::shared_ptr<helper>, std::vector<std::shared_ptr<helper>>, ComparePointers> &pieces);
   void createElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element);
   void splitElement(const std::shared_ptr<helper> &mostError, const std::shared_ptr<helper> &element);
   std::vector<double> integrate();
   std::function<std::vector<double>(std::deque<double> &evaluationPoints)> m_integrand;
-  double m_lowerBound, m_upperBound, m_epsilon;
+  double m_lowerBound{0.0}, m_upperBound{0.0}, m_epsilon{1.0e-5};
   std::vector<double> m_lowerBoundsInnerDimensions, m_upperBoundsInnerDimensions;
   std::deque<double> m_evaluationPointsOuterDimensions;
-  std::size_t m_maximumDivisions;
+  std::size_t m_maximumDivisions{1000};
   std::unique_ptr<SimpsonImpl> clone();
 };
 

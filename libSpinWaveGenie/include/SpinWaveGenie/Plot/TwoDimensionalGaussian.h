@@ -46,7 +46,7 @@ private:
   int maximumEvaluations;
   double tolerance;
   double a, b, c;
-  double kx, ky, kz;
+  double kx{0.0}, ky{0.0}, kz{0.0};
   Vector3 direction;
   EnergyResolutionFunction res;
 };

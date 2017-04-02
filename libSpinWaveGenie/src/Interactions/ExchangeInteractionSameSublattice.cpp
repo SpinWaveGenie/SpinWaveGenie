@@ -50,7 +50,7 @@ void ExchangeInteractionSameSublattice::calcConstantValues(const Cell &cell)
   // cout << "Sr: " << Sr << endl;
 
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
   // cout << "z_rs = " << z_rs << endl;
 
   // cout << "cell check(calcConstantValues): " << cell2.begin()->getName() << endl;
@@ -64,7 +64,7 @@ void ExchangeInteractionSameSublattice::calculateEnergy(const Cell &cell, double
 {
   r = cell.getPosition(sl_r);
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
   double Sr = cell[r].getMoment();
   size_t numberOfAtoms = cell[r].size();
   energy -= value * z_rs * numberOfAtoms * Sr * Sr;
