@@ -50,7 +50,7 @@ const Matrix3 &Cell::getReciprocalVectors() const { return reciprocalVectors; }
 
 void Cell::addSublattice(const Sublattice &sl)
 {
-  std::string name = sl.getName();
+  const std::string &name = sl.getName();
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it != sublatticeInfo.end())
   {
