@@ -25,7 +25,7 @@ class SPINWAVEGENIE_EXPORT IntegrateAxes : public SpinWavePlot
 {
 public:
   IntegrateAxes(const IntegrateAxes &other);
-  IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01,
+  IntegrateAxes(std::unique_ptr<SpinWavePlot> &&resFunction, const HKLDirections &directions, double tol = 0.01,
                 int maxEvals = 100);
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
   std::unique_ptr<SpinWavePlot> clone() override;
@@ -38,7 +38,7 @@ private:
   HKLDirections integrationDirections;
   int maximumEvaluations;
   double tolerance;
-  double kx, ky, kz;
+  double kx{0.0}, ky{0.0}, kz{0.0};
   std::vector<double> calculateIntegrand(std::deque<double> &x);
   std::vector<double> xmin, xmax;
 };
