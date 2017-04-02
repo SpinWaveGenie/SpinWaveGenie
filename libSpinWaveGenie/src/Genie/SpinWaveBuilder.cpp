@@ -6,7 +6,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-SpinWaveBuilder::SpinWaveBuilder() {}
+SpinWaveBuilder::SpinWaveBuilder() = default;
 
 SpinWaveBuilder::SpinWaveBuilder(const Cell &cellIn) : cell(cellIn) {}
 

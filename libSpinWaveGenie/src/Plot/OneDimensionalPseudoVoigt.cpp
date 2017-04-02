@@ -15,11 +15,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-OneDimensionalPseudoVoigt::OneDimensionalPseudoVoigt() : eta(0.0), tolerance(0.001)
-{
-  Gaussian = memory::make_unique<OneDimensionalGaussian>();
-  Lorentzian = memory::make_unique<OneDimensionalLorentzian>();
-}
+OneDimensionalPseudoVoigt::OneDimensionalPseudoVoigt() = default;
 
 void OneDimensionalPseudoVoigt::setEta(double InEta) { eta = InEta; }
 

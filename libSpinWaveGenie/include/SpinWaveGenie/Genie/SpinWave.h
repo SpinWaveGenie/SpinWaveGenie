@@ -38,7 +38,7 @@ class SPINWAVEGENIE_EXPORT SpinWave
 public:
   //! Use SpinWaveBuilder to generate SpinWave instance
   friend class SpinWaveBuilder;
-  SpinWave() : KXP(0.0), KYP(0.0), KZP(0.0), M(0), N(0), NU(0), MI(0), IM(0), interactions{} {};
+  SpinWave() = default;
   SpinWave(const Cell &cell_in, const InteractionsContainer &interactions_in);
   //! Clear dynamical matrix and any previously calculated frequencies and intensities.
   void clearMatrix();
@@ -57,13 +57,12 @@ public:
   const Results &getPoints() const { return VI; };
 
 private:
-  double KXP, KYP, KZP;
+  double KXP{0.}, KYP{0.}, KZP{0.};
   Cell cell;
   void calculateEigenvalues();
   void calculateWeights();
   void calculateIntensities();
-  std::size_t M, N;
-  int NU, MI, IM;
+  std::size_t M{0}, N{0};
   Eigen::MatrixXcd LN;
   Eigen::VectorXd SS;
   Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;

@@ -35,8 +35,9 @@ public:
   std::unique_ptr<OneDimensionalShapes> clone() override;
 
 private:
-  double eta, tolerance;
-  std::unique_ptr<OneDimensionalShapes> Lorentzian, Gaussian;
+  double eta{0.0}, tolerance{0.001};
+  std::unique_ptr<OneDimensionalShapes> Lorentzian{memory::make_unique<OneDimensionalGaussian>()},
+      Gaussian{memory::make_unique<OneDimensionalLorentzian>()};
 };
 }
 #endif /* defined(__OneDimensionalPseudoVoigt__) */
