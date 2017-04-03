@@ -82,7 +82,7 @@ before_script:
       then
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/3.6/lib/libpython3.6m.dylib;
       else
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
@@ -91,7 +91,7 @@ before_script:
       then
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.4m.so;
       else
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION;
       fi
     fi
 
