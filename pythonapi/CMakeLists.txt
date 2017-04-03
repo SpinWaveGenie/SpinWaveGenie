@@ -33,7 +33,7 @@ elseif(CMAKE_GENERATOR MATCHES "Xcode")
 endif()
 
 if(WIN32)
-  target_link_libraries( python_SpinWaveGenie SpinWaveGenie ${PYTHON_LIBRARY})
+  target_link_libraries( python_SpinWaveGenie PRIVATE ${PYTHON_LIBRARY})
   set_target_properties( python_SpinWaveGenie PROPERTIES SUFFIX ".pyd")
 else()
   set_target_properties( python_SpinWaveGenie PROPERTIES PREFIX "")
