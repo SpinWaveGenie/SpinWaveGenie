@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE( ConstructorsTest )
 
     BOOST_CHECK_EQUAL(test.getName(),"");
     BOOST_CHECK_EQUAL(test.getType(),"None");
-    BOOST_CHECK_EQUAL(test.size(), 0);
+    BOOST_CHECK_EQUAL(test.size(), std::size_t{0});
     BOOST_CHECK_SMALL(test.getMoment(),1.0e-8);
     BOOST_CHECK_SMALL(test.getTheta(),1.0e-8);
     BOOST_CHECK_SMALL(test.getPhi(),1.0e-8);

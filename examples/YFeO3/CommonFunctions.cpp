@@ -47,14 +47,14 @@ SpinWaveGenie::SpinWave createModel()
     SpinWaveBuilder builder(cell);
     
     InteractionFactory interactions;
-   
-    Vector3 xhat(1.0,0.0,0.0); 
+
+    Eigen::Vector3d xhat(1.0, 0.0, 0.0);
     builder.addInteraction(interactions.getAnisotropy("Ka",-0.0055,xhat,name1));
     builder.addInteraction(interactions.getAnisotropy("Ka",-0.0055,xhat,name2));
     builder.addInteraction(interactions.getAnisotropy("Ka",-0.0055,xhat,name3));
     builder.addInteraction(interactions.getAnisotropy("Ka",-0.0055,xhat,name4));
 
-    Vector3 zhat(0.0,0.0,1.0);
+    Eigen::Vector3d zhat(0.0, 0.0, 1.0);
     builder.addInteraction(interactions.getAnisotropy("Kc",-0.00305,zhat,name1));
     builder.addInteraction(interactions.getAnisotropy("Kc",-0.00305,zhat,name2));
     builder.addInteraction(interactions.getAnisotropy("Kc",-0.00305,zhat,name3));
@@ -72,7 +72,7 @@ SpinWaveGenie::SpinWave createModel()
     builder.addInteraction(interactions.getExchange("J2",-0.21,name1,name3,5.3,5.5));
     builder.addInteraction(interactions.getExchange("J2",-0.21,name2,name4,5.3,5.5));
 
-    Vector3 yhat(0.0,1.0,0.0);
+    Eigen::Vector3d yhat(0.0, 1.0, 0.0);
     builder.addInteraction(interactions.getDzyaloshinskiiMoriya("D1",-0.074,yhat,name4,name1,3.8,4.3));
     builder.addInteraction(interactions.getDzyaloshinskiiMoriya("D1",-0.074,yhat,name2,name3,3.8,4.3));
 

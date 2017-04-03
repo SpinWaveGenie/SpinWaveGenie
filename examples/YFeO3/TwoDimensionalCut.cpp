@@ -20,7 +20,7 @@ void alongKAxis()
     resinfo.b = 0.0;
     resinfo.c = 0.48;
     resinfo.tol = 1.0e-1;
-    resinfo.direction = Vector3(0.0,1.0,0.0);
+    resinfo.direction = Eigen::Vector3d(0.0, 1.0, 0.0);
 
     unique_ptr<SpinWavePlot> res(memory::make_unique<TwoDimensionResolutionFunction>(resinfo, SW, energies));
 
@@ -64,7 +64,7 @@ void alongLAxis()
     resinfo.b = -20.0;
     resinfo.c = 1.3;
     resinfo.tol = 1.0e-1;
-    resinfo.direction = Vector3(0.0,0.0,1.0);
+    resinfo.direction = Eigen::Vector3d(0.0, 0.0, 1.0);
 
     unique_ptr<SpinWavePlot> res(memory::make_unique<TwoDimensionResolutionFunction>(resinfo, SW, energies));
 

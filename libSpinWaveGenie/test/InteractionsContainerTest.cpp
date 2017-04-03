@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(iteratorAccess)
 {
   InteractionsContainer interactions = getInteractions();
 
-  BOOST_CHECK_EQUAL(interactions.size(), 3);
+  BOOST_CHECK_EQUAL(interactions.size(), std::size_t{3});
 }
 
 BOOST_AUTO_TEST_CASE(CopyAssignmentOperator)

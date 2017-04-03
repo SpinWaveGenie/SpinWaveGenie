@@ -7,19 +7,11 @@ if(NOT PYTHON_SITE_PACKAGES_DIR)
   set( PYTHON_SITE_PACKAGES_DIR ${PYTHON_SITE_PACKAGES} CACHE FILEPATH "site-packages directory for python bindings")
 endif()
 
-message(STATUS "PYTHON_SITE_PACKAGES = ${PYTHON_SITE_PACKAGES_DIR}")
+message(STATUS "PYTHON_SITE_PACKAGES = ${PYTHON_SITE_PACKAGES_DIR}" )
 
-include(ExternalProject)
-ExternalProject_Add(pybind11 GIT_REPOSITORY https://github.com/pybind/pybind11.git GIT_TAG v2.1.0
-                             PREFIX ${CMAKE_CURRENT_BINARY_DIR}/pybind11
-                             CONFIGURE_COMMAND ""
-                             BUILD_COMMAND ""
-                             INSTALL_COMMAND "" )
-ExternalProject_Get_Property(pybind11 source_dir)
+pybind11_add_module( python_SpinWaveGenie src/SpinWaveGenie.cpp )
+target_link_libraries( python_SpinWaveGenie PRIVATE SpinWaveGenie )
 
-add_library( python_SpinWaveGenie SHARED src/SpinWaveGenie.cpp)
-target_include_directories( python_SpinWaveGenie PRIVATE ${PYTHON_INCLUDE_DIR} ${source_dir}/include )
-target_link_libraries( python_SpinWaveGenie SpinWaveGenie )
 file(MAKE_DIRECTORY SpinWaveGenie)
 set_target_properties ( python_SpinWaveGenie PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
 set_target_properties ( python_SpinWaveGenie PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )

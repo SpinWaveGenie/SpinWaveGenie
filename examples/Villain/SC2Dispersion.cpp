@@ -1,9 +1,13 @@
-#include <cmath>
-#include <string>
+
 #include "SpinWaveGenie/Containers/Containers.h"
 #include "SpinWaveGenie/Genie/Genie.h"
 #include "SpinWaveGenie/Interactions/Interactions.h"
 #include "SpinWaveGenie/Plot/Plot.h"
+
+#include "Eigen/Core"
+
+#include <cmath>
+#include <string>
 
 using namespace std;
 using namespace SpinWaveGenie;
@@ -48,8 +52,8 @@ int main()
     builder.addInteraction(interactions.getExchange("J",J,name1,name1,0.9,1.1));
     builder.addInteraction(interactions.getExchange("metaJ",-1.0*eta*J,name2,name2,0.9,1.1));
     builder.addInteraction(interactions.getExchange("gammaJ",gamma*J,name1,name2,0.9,1.1));
-    
-    Vector3 zhat(0.0,0.0,1.0);
+
+    Eigen::Vector3d zhat(0.0, 0.0, 1.0);
     builder.addInteraction(interactions.getMagneticField("B",B,zhat,name1));
     builder.addInteraction(interactions.getMagneticField("B",B,zhat,name2));
 

@@ -29,8 +29,8 @@ int main()
     SpinWaveBuilder builder(cell);
     
     InteractionFactory interactions;
-    
-    Vector3 xhat(1.0,0.0,0.0);
+
+    Eigen::Vector3d xhat(1.0, 0.0, 0.0);
     builder.addInteraction(interactions.getExchange("J",-1.0,name0,name1,0.4,0.6));
     builder.addInteraction(interactions.getAnisotropy("D",0.1,xhat,name0));
     builder.addInteraction(interactions.getAnisotropy("D",0.1,xhat,name1));
