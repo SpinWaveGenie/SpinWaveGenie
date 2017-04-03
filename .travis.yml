@@ -89,7 +89,7 @@ before_script:
     then
       if [ "$PYTHON_VERSION" == "3.4" ];
       then
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/bin/python3;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DPYTHON_EXECUTABLE=/usr/bin/python3;
       else
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON;
       fi
