@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(isSorted)
   InteractionsContainer interactions = getInteractions();
   interactions.sort();
 
-  BOOST_CHECK_EQUAL(interactions.size(), 3);
+  BOOST_CHECK_EQUAL(interactions.size(), std::size_t{3});
 
   auto first = interactions[0].sublattices();
   BOOST_CHECK_EQUAL(first[0], "sl0");
