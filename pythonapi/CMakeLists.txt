@@ -18,6 +18,8 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
                        COMMAND ${CMAKE_COMMAND} ARGS -E copy
                        ${CMAKE_CFG_INTDIR}/python_SpinWaveGenie.pyd
                        SpinWaveGenie/python_SpinWaveGenie.pyd )
+else ()
+  set_target_properties ( python_SpinWaveGenie PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie )
 endif ()
 
 set_target_properties ( python_SpinWaveGenie PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
