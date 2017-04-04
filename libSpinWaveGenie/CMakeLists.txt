@@ -34,6 +34,15 @@ endif()
 
 include(GenerateExportHeader)
 add_library(SpinWaveGenie SHARED ${LIBRARY_SRCS} ${LIBRARY_HDRS})
+
+#borrow LTO settings from pybind11
+if (PYBIND11_LTO_CXX_FLAGS)
+  target_compile_options(SpinWaveGenie PRIVATE "$<$<NOT:$<CONFIG:Debug>>:${PYBIND11_LTO_CXX_FLAGS}>")
+endif()
+if (PYBIND11_LTO_LINKER_FLAGS)
+  target_link_libraries(SpinWaveGenie PRIVATE "$<$<NOT:$<CONFIG:Debug>>:${PYBIND11_LTO_LINKER_FLAGS}>")
+endif()
+
 generate_export_header(SpinWaveGenie EXPORT_FILE_NAME SpinWaveGenie/Export.h)
 
 #We need need the header files both to build SpinWaveGenie and for the interface.

@@ -36,6 +36,7 @@ install:
 
 before_build:
   - cd %APPVEYOR_BUILD_FOLDER%
+  - git submodule update --init --recursive
   - md build
   - cd build
   - cmake --version

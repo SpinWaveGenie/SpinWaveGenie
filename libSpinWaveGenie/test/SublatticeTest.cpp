@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE( ConstructorsTest )
 
     BOOST_CHECK_EQUAL(test.getName(),"");
     BOOST_CHECK_EQUAL(test.getType(),"None");
-    BOOST_CHECK_EQUAL(test.size(), 0);
+    BOOST_CHECK_EQUAL(test.size(), std::size_t{0});
     BOOST_CHECK_SMALL(test.getMoment(),1.0e-8);
     BOOST_CHECK_SMALL(test.getTheta(),1.0e-8);
     BOOST_CHECK_SMALL(test.getPhi(),1.0e-8);
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE( AtomsTest )
     Sublattice test;
     test.addAtom(0.0,0.0,0.0);
     test.addAtom(0.5,0.5,0.5);
-    BOOST_CHECK_EQUAL(test.size(), 2);
+    BOOST_CHECK_EQUAL(test.size(), std::size_t{2});
 
     Eigen::Vector3d atom0(0.0, 0.0, 0.0);
     bool FoundAtom0 = false;
