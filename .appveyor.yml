@@ -14,7 +14,7 @@ environment:
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
       image: Visual Studio 2017
     - PYTHON_DIR: "Miniconda36-x64"
-	  PYTHON_VERSION: 3.6
+      PYTHON_VERSION: 3.6
       CACHE_FILENAME: "AppveyorPython36-x64.cmake"
       image: Visual Studio 2017
     - PYTHON_DIR: "Miniconda-x64"
