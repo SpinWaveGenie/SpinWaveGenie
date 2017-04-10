@@ -9,7 +9,7 @@ configuration: Release
 environment:
   PATH: "C:/projects/ThirdPartyVC141/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
   matrix:
-    - PYTHON_DIR: C:\Miniconda-x64
+    - PYTHON_DIR: "C:\Miniconda-x64"
       PYTHON_VERSION: 2.7
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
       image: Visual Studio 2017
