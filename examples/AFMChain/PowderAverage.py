@@ -34,3 +34,23 @@ builder.addInteraction(anisotropy0)
 builder.addInteraction(anisotropy1)
 
 SW = builder.createElement()
+
+Line=swg.PointsAlongLine()
+Line.setFirstPoint(0.0,0.0,0.0)
+Line.setFinalPoint(0.0,0.0,3.0*2.0*np.pi)
+Line.setNumberPoints(201)
+kPoints = Line.getPoints()
+energies = Energies(0.2, 3.0, 201)
+
+ODfactory = swg.OneDimensionalFactory()
+gauss=ODfactory.getGaussian(0.15,1.0e-1)
+
+SWP=swg.SpinWavePlot()
+res=SWP.EnergyResolutionFunction(gauss,SW,energies)
+cut=SWP.IntegrateThetaPhi(res,1e-1)
+
+twodimcut=TwoDimensionalCut()
+twodimcut.setFilename("AFMPowderAverage")
+twodimcut.setPlotObject(cut)
+twodimcut.setPoints(kPoints)
+twodimcut.save()

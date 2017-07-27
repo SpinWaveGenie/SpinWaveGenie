@@ -1,6 +1,8 @@
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
+#include "SpinWaveGenie/Containers/PointsAlongLine.h"
+#include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/SpinWaveBuilder.h"
@@ -101,6 +103,17 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def_readonly("frequency", &Point::frequency, "Frequency associated with a given excitation (in meV).")
       .def_readonly("intensity", &Point::intensity, " Measurable intensity of a given excitation (arb. units).");
 
+ py::class_<PointsAlongLine>(m, "PointsAlongLine")
+      .def(py::init<>())
+      .def("setFirstPoint",&PointsAlongLine::setFirstPoint,"Set the first point in a line of points")
+      .def("setFinalPoint",&PointsAlongLine::setFinalPoint,"Set the last point in a line of points")
+      .def("setNumberPoints",&PointsAlongLine::setNumberPoints,"Set the Number of points")
+      .def("getPoints",&PointsAlongLine::getPoints,"Get the points as described above")
+
+ py::class_<Energies>(m,"Energies")
+      .def(py::init<>())
+      .def(py::init<double, double, std::size_t >())
+
   py::class_<Results>(m, "Results")
       .def("insert", &Results::insert, "Insert Point struct into container.")
       .def("__len__", &Results::size, " size of Results container.")
@@ -142,20 +155,23 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
   py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
+      .def(py::init<>())
       .def("setFilename",&TwoDimensionalCut::setFilename,"Set filename to save results of cut")
-      .def("setPoints",&TwoDimensionalCut::setPoints)
-      .def("setEnergyPoints",TwoDimensionalCut::setEnergyPoints)
-      .def("setPlotObject",&TwoDimensionalCut::setPlotObject)
-      .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename")
-      
+      .def("setPoints",&TwoDimensionalCut::setPoints,"")
+      .def("setEnergyPoints",TwoDimensionalCut::setEnergyPoints,"")
+      .def("setPlotObject",&TwoDimensionalCut::setPlotObject,"")
+      .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename");
+
   py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
+      .def(py::init<>())
       .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
       .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
-      .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
-           "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object")
+      .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,"")
+           "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
    py::class_<SpinWavePlot>(m,"SpinWavePlot")
-       .def("EnergyResolutionFunction",&SpinWavePlot::EnergyResolutionFunction)
-       .def("IntegrateThetaPhi",&SpinWavePlot::IntegrateThetaPhi)
+       .def(py::init<>())
+       .def("EnergyResolutionFunction",&SpinWavePlot::EnergyResolutionFunction,"")
+       .def("IntegrateThetaPhi",&SpinWavePlot::IntegrateThetaPhi,"");
   return m.ptr();
 }
