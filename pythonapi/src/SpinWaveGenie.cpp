@@ -141,5 +141,21 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
       .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
+  py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
+      .def("setFilename",&TwoDimensionalCut::setFilename,"Set filename to save results of cut")
+      .def("setPoints",&TwoDimensionalCut::setPoints)
+      .def("setEnergyPoints",TwoDimensionalCut::setEnergyPoints)
+      .def("setPlotObject",&TwoDimensionalCut::setPlotObject)
+      .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename")
+      
+  py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
+      .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
+      .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
+      .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
+           "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object")
+
+   py::class_<SpinWavePlot>(m,"SpinWavePlot")
+       .def("EnergyResolutionFunction",&SpinWavePlot::EnergyResolutionFunction)
+       .def("IntegrateThetaPhi",&SpinWavePlot::IntegrateThetaPhi)
   return m.ptr();
 }
