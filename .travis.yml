@@ -1,4 +1,4 @@
-language: python
+language: cpp
 
 sudo: required
 
@@ -11,11 +11,11 @@ matrix:
     - os: linux
       dist: trusty
       compiler: gcc
-      python: 2.7
+      env: PYTHON_VERSION=2.7
     - os: linux
       dist: trusty
       compiler: gcc
-      python: 3.4
+      env: PYTHON_VERSION=3.4
     - os: osx
       osx_image: xcode8.3
       compiler: clang
@@ -62,12 +62,10 @@ before_install:
       cmake ..;
       make;
       sudo make install;
-      if [ "$TRAVIS_PYTHON_VERSION" == "3.4" ];
-      then
-        pip3 install numpy;
-      else
-        pip2 install numpy;
-      fi
+      pip install --user --upgrade pip virtualenv;
+      virtualenv -p python$PYTHON_VERSION venv;
+      source venv/bin/activate;
+      pip install numpy
     fi
 
 before_script:
