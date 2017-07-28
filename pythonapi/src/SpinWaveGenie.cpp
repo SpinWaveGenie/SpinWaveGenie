@@ -1,14 +1,16 @@
+#include "pybind11/eigen.h"
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
+#include "SpinWaveGenie/Containers/ThreeVectors.h"
+#include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/SpinWaveBuilder.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
-#include "pybind11/eigen.h"
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
 
 namespace py = pybind11;
 using namespace SpinWaveGenie;
@@ -126,6 +128,30 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("createMatrix", &SpinWave::createMatrix, "Set the location to calculate in reciprocal space.")
       .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
       .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
+
+  py::class_<ThreeVectors<double>>(m, "ThreeVectors")
+      .def(py::init<>())
+      .def("clear", &ThreeVectors<double>::clear, "Clear container so that the size is zero.")
+      .def("empty", &ThreeVectors<double>::empty, "check if there are no elements in this container.")
+      .def("insert", &ThreeVectors<double>::insert, "insert an array of 3 elements into container.")
+      .def("__len__", &ThreeVectors<double>::size, "returns the size of the container.")
+      .def("__iter__", [](const ThreeVectors<double> &s) { return py::make_iterator(s.begin(), s.end()); },
+           py::keep_alive<0, 1>());
+
+  py::class_<ThreeVectors<std::complex<double>>>(m, "ComplexThreeVectors")
+      .def(py::init<>())
+    .def("clear", &ThreeVectors<std::complex<double>>::clear, "Clear container so that the size is zero.")
+      .def("empty", &ThreeVectors<std::complex<double>>::empty, "check if there are no elements in this container.")
+      .def("insert", &ThreeVectors<std::complex<double>>::insert, "insert an array of 3 elements into container.")
+      .def("__len__", &ThreeVectors<std::complex<double>>::size, "returns the size of the container.")
+      .def("__iter__",
+           [](const ThreeVectors<std::complex<double>> &s) { return py::make_iterator(s.begin(), s.end()); },
+           py::keep_alive<0, 1>());
+
+  py::class_<UniqueThreeVectors<double>, ThreeVectors<double>>(m, "UniqueThreeVectors")
+      .def(py::init<>())
+      .def("insert", &UniqueThreeVectors<double>::insert, "insert an array of 3 elements into container.")
+      .def("__eq__", &UniqueThreeVectors<double>::operator==, "check if two arrays contain the same elements");
 
   return m.ptr();
 }
