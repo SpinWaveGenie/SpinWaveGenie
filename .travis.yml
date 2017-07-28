@@ -65,7 +65,7 @@ before_install:
       pip install --user --upgrade pip virtualenv;
       virtualenv -p python$PYTHON_VERSION venv;
       source venv/bin/activate;
-      pip install numpy
+      pip install numpy;
     fi
 
 before_script:
