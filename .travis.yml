@@ -64,9 +64,9 @@ before_install:
       sudo make install;
       if [ "$PYTHON_VERSION" == "3.4" ];
       then
-        sudo apt-get install -qq python3-dev python3-numpy;
+        pip3 install numpy;
       else
-        sudo apt-get install -qq python-dev python-numpy;
+        pip2 install numpy;
       fi
     fi
 
