@@ -11,11 +11,11 @@ matrix:
     - os: linux
       dist: trusty
       compiler: gcc
-      env: PYTHON_VERSION=2.7
+      python: 2.7
     - os: linux
       dist: trusty
       compiler: gcc
-      env: PYTHON_VERSION=3.4
+      python: 3.4
     - os: osx
       osx_image: xcode8.3
       compiler: clang
@@ -62,7 +62,7 @@ before_install:
       cmake ..;
       make;
       sudo make install;
-      if [ "$PYTHON_VERSION" == "3.4" ];
+      if [ "$TRAVIS_PYTHON_VERSION" == "3.4" ];
       then
         pip3 install numpy;
       else
