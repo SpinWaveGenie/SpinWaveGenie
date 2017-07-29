@@ -42,6 +42,7 @@ install:
   - conda info -a
   - conda create -q -n testenv python=%PYTHON_VERSION% numpy
   - activate testenv
+  - echo %PYTHONPATH%
 
 before_build:
   - cd %APPVEYOR_BUILD_FOLDER%
@@ -55,5 +56,4 @@ build_script:
   - cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
-  - echo %PYTHONPATH%
   - ctest -C Release --output-on-failure
