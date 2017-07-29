@@ -55,4 +55,5 @@ build_script:
   - cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
+  - echo %PYTHONPATH%
   - ctest -C Release --output-on-failure
