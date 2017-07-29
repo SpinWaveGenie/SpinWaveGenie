@@ -9,19 +9,19 @@ configuration: Release
 environment:
   PATH: "C:/projects/ThirdPartyVC141/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
   matrix:
-    - PYTHON_DIR: "Miniconda-x64"
+    - MINICONDA: C:\Miniconda-x64
       PYTHON_VERSION: 2.7
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
       image: Visual Studio 2017
-    - PYTHON_DIR: "Miniconda36-x64"
+    - MINICONDA: C:\Miniconda36-x64
       PYTHON_VERSION: 3.6
       CACHE_FILENAME: "AppveyorPython36-x64.cmake"
       image: Visual Studio 2017
-    - PYTHON_DIR: "Miniconda-x64"
+    - MINICONDA: C:\Miniconda-x64
       PYTHON_VERSION: 2.7
       CACHE_FILENAME: "AppveyorPython27-x64.cmake"
       image: Visual Studio 2015
-    - PYTHON_DIR: "Miniconda36-x64"
+    - MINICONDA: C:\Miniconda36-x64
       PYTHON_VERSION: 3.6
       CACHE_FILENAME: "AppveyorPython36-x64.cmake"
       image: Visual Studio 2015
@@ -36,7 +36,7 @@ init:
 install:
   - cd c:\projects
   - git clone https://github.com/SpinWaveGenie/ThirdPartyVC141.git
-  - set PATH=C:/%PYTHON_DIR%;C:/%PYTHON_DIR%/Scripts;%PATH%
+  - set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
