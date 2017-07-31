@@ -1,4 +1,4 @@
-language: generic
+language: cpp
 
 sudo: required
 
@@ -17,11 +17,11 @@ matrix:
       compiler: gcc
       env: PYTHON_VERSION=3.4
     - os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9
       compiler: clang
       env: PYTHON_VERSION=3.6
     - os: osx
-      osx_image: xcode8.2
+      osx_image: xcode8.3
       compiler: clang
       env: PYTHON_VERSION=2.7
     - os: osx
@@ -49,25 +49,23 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
-      wget -q https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz --no-check-certificate;
-      tar -xzf cmake-3.7.2-Linux-x86_64.tar.gz;
-      sudo ln -f -s ./cmake-3.7.2-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
+      wget -q https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz --no-check-certificate;
+      tar -xzf cmake-3.9.0-Linux-x86_64.tar.gz;
+      sudo ln -f -s ./cmake-3.9.0-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
       sudo apt-get update -qq;
       sudo apt-get install -qq libboost-dev libboost-test-dev libtbb-dev;
-      wget -q http://bitbucket.org/eigen/eigen/get/3.3.3.tar.gz;
-      tar -xzf 3.3.3.tar.gz;
-      cd eigen-eigen-67e894c6cd8f;
+      wget -q http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz;
+      tar -xzf 3.3.4.tar.gz;
+      cd eigen-eigen-5a0156e40feb;
       mkdir build;
       cd build;
       cmake ..;
       make;
       sudo make install;
-      if [ "$PYTHON_VERSION" == "3.4" ];
-      then
-        sudo apt-get install -qq python3-dev python3-numpy;
-      else
-        sudo apt-get install -qq python-dev python-numpy;
-      fi
+      pip install --user --upgrade pip virtualenv;
+      virtualenv -p python$PYTHON_VERSION venv;
+      source venv/bin/activate;
+      pip install numpy;
     fi
 
 before_script:

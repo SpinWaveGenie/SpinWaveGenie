@@ -6,12 +6,9 @@
 #include <iostream>
 #include <vector>
 
-//! Structure of Arrays used for storing vectors with three components.
+//! Array of Struct used for storing vectors with three components.
 /*!
- Vectors containing three elements are not ideally coellesced in memory.
- Therefore, we use an alternative where where each component is stored
- in a separate vector and accessed using an Iterator.
- */
+ Vectors containing three elements */
 
 namespace SpinWaveGenie
 {
@@ -25,7 +22,7 @@ public:
   //! \param x zeroth element of type T
   //! \param y first element of type T
   //! \param z second element of type T
-  void insert(T x, T y, T z);
+  bool insert(T x, T y, T z);
   using Iterator = typename std::vector<std::array<T, 3>>::iterator;
   using ConstIterator = typename std::vector<std::array<T, 3>>::const_iterator;
   //! \return number of elements in the ThreeVector
@@ -51,9 +48,10 @@ protected:
 
 template <typename T> bool ThreeVectors<T>::empty() const { return values.empty(); }
 
-template <typename T> void ThreeVectors<T>::insert(T x, T y, T z)
+template <typename T> bool ThreeVectors<T>::insert(T x, T y, T z)
 {
   values.push_back({{x,y,z}});
+  return true;
 }
 
 template <typename T> size_t ThreeVectors<T>::size() const

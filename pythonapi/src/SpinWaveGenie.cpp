@@ -1,8 +1,13 @@
+#include "pybind11/eigen.h"
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
 #include "SpinWaveGenie/Containers/PointsAlongLine.h"
 #include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Containers/ThreeVectors.h"
+#include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/SpinWaveBuilder.h"
@@ -22,9 +27,6 @@
 #include "SpinWaveGenie/Plot/TwoDGaussian.h"
 #include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
 #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
-#include "pybind11/eigen.h"
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
 
 namespace py = pybind11;
 using namespace SpinWaveGenie;
