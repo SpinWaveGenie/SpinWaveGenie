@@ -14,19 +14,19 @@
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
 #include "SpinWaveGenie/Plot/Plot.h"
-#include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
-#include "SpinWaveGenie/Plot/IntegrateEnergy.h "
-#include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
-#include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
-#include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
-#include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
-#include "SpinWaveGenie/Plot/OneDimensionalPseudoVoigt.h"
-#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
-#include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
-#include "SpinWaveGenie/Plot/TwoDGaussian.h"
-#include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
-#include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
+// #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
+// #include "SpinWaveGenie/Plot/IntegrateEnergy.h "
+// #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
+// #include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
+// #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
+// #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
+// #include "SpinWaveGenie/Plot/OneDimensionalPseudoVoigt.h"
+// #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+// #include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
+// #include "SpinWaveGenie/Plot/SpinWavePlot.h"
+// #include "SpinWaveGenie/Plot/TwoDGaussian.h"
+// #include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
+// #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
 
 namespace py = pybind11;
 using namespace SpinWaveGenie;
@@ -110,11 +110,11 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("setFirstPoint",&PointsAlongLine::setFirstPoint,"Set the first point in a line of points")
       .def("setFinalPoint",&PointsAlongLine::setFinalPoint,"Set the last point in a line of points")
       .def("setNumberPoints",&PointsAlongLine::setNumberPoints,"Set the Number of points")
-      .def("getPoints",&PointsAlongLine::getPoints,"Get the points as described above")
+      .def("getPoints",&PointsAlongLine::getPoints,"Get the points as described above");
 
  py::class_<Energies>(m,"Energies")
       .def(py::init<>())
-      .def(py::init<double, double, std::size_t >())
+      .def(py::init<double, double, std::size_t >());
 
   py::class_<Results>(m, "Results")
       .def("insert", &Results::insert, "Insert Point struct into container.")
@@ -168,7 +168,7 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def(py::init<>())
       .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
       .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
-      .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,"")
+      .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
            "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
    py::class_<SpinWavePlot>(m,"SpinWavePlot")
