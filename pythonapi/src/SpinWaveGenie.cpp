@@ -156,13 +156,40 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
       .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
-  py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
+      py::class_<ThreeVectors<double>>(m, "ThreeVectors")
       .def(py::init<>())
-      .def("setFilename",&TwoDimensionalCut::setFilename,"Set filename to save results of cut")
-      .def("setPoints",&TwoDimensionalCut::setPoints,"")
-      .def("setEnergyPoints",TwoDimensionalCut::setEnergyPoints,"")
-      .def("setPlotObject",&TwoDimensionalCut::setPlotObject,"")
-      .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename");
+      .def("clear", &ThreeVectors<double>::clear, "Clear container so that the size is zero.")
+      .def("empty", &ThreeVectors<double>::empty, "check if there are no elements in this container.")
+      .def("insert", &ThreeVectors<double>::insert, "insert an array of 3 elements into container.")
+      .def("__len__", &ThreeVectors<double>::size, "returns the size of the container.")
+      .def("__iter__", [](const ThreeVectors<double> &s) { return py::make_iterator(s.begin(), s.end()); },
+           py::keep_alive<0, 1>());
+
+  py::class_<ThreeVectors<std::complex<double>>>(m, "ComplexThreeVectors")
+      .def(py::init<>())
+      .def("clear", &ThreeVectors<std::complex<double>>::clear, "Clear container so that the size is zero.")
+      .def("empty", &ThreeVectors<std::complex<double>>::empty, "check if there are no elements in this container.")
+      .def("insert", &ThreeVectors<std::complex<double>>::insert, "insert an array of 3 elements into container.")
+      .def("__len__", &ThreeVectors<std::complex<double>>::size, "returns the size of the container.")
+      .def("__iter__",
+           [](const ThreeVectors<std::complex<double>> &s) { return py::make_iterator(s.begin(), s.end()); },
+           py::keep_alive<0, 1>());
+
+  py::class_<UniqueThreeVectors<double>, ThreeVectors<double>>(m, "UniqueThreeVectors")
+      .def(py::init<>())
+      .def("insert", &UniqueThreeVectors<double>::insert, "insert an array of 3 elements into container.")
+      .def("__eq__", &UniqueThreeVectors<double>::operator==, "check if two arrays contain the same elements");
+
+
+  // py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
+  //     .def(py::init<>())
+  //     .def("setFilename",&TwoDimensionalCut::setFilename,"Set filename to save results of cut")
+  //     .def("setPoints",&TwoDimensionalCut::setPoints,"")
+  //     .def("setEnergyPoints",TwoDimensionalCut::setEnergyPoints,"")
+  //     .def("setPlotObject",&TwoDimensionalCut::setPlotObject,"")
+  //     .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename");
+
+  
 
   py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
       .def(py::init<>())
@@ -171,9 +198,9 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
            "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
-   py::class_<SpinWavePlot>(m,"SpinWavePlot")
-       .def(py::init<>())
-       .def("EnergyResolutionFunction",&SpinWavePlot::EnergyResolutionFunction,"")
-       .def("IntegrateThetaPhi",&SpinWavePlot::IntegrateThetaPhi,"");
+  //  py::class_<EnergyResolution>(m,"EnergyResolution")
+  //      .def(py::init<>())
+  //      .def("EnergyResolutionFunction",&EnergyResolution::EnergyResolutionFunction,"")
+  //      .def("IntegrateThetaPhi",&EnergyResolution::IntegrateThetaPhi,"");
   return m.ptr();
 }
