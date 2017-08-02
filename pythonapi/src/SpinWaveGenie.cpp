@@ -17,11 +17,6 @@
 // #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
 // #include "SpinWaveGenie/Plot/IntegrateEnergy.h "
 // #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
-// #include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
-// #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
-// #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
-// #include "SpinWaveGenie/Plot/OneDimensionalPseudoVoigt.h"
-// #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 // #include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
 // #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 // #include "SpinWaveGenie/Plot/TwoDGaussian.h"
@@ -180,6 +175,29 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("insert", &UniqueThreeVectors<double>::insert, "insert an array of 3 elements into container.")
       .def("__eq__", &UniqueThreeVectors<double>::operator==, "check if two arrays contain the same elements");
 
+  py::class_<OneDimensionalShapes>(m,"OneDimensionalShapes")
+          .def("getFunction",&OneDimensionalShapes::getFunction,"Get the function used");
+
+  py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
+          .def(py::init<>())
+          .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
+          .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
+          .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
+               "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
+
+ py::class_<SpinWavePlot>(m,"SpinWavePlot")
+      .def("getCut",&SpinWavePlot::getCut,"retrieve the Cut");
+ py::class_<EnergyResolutionFunction,SpinWavePlot>(m,"EnergyResolution")
+           .def("setResolutionFunction",
+                static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes)>(&EnergyResolutionFunction::setResolutionFunction),
+                "Set the Resolution Function")
+           .def("setEnergies",&EnergyResolutionFunction::setEnergies,"Set the energy points")
+           .def("setSpinWave",&EnergyResolutionFunction::setSpinWave,"Set the Spin wave model");
+
+
+           //      .def(py::init<>())
+           //      .def("EnergyResolutionFunction",&EnergyResolution::EnergyResolutionFunction,"")
+           //      .def("IntegrateThetaPhi",&EnergyResolution::IntegrateThetaPhi,"");
 
   // py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
   //     .def(py::init<>())
@@ -189,19 +207,8 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
   //     .def("setPlotObject",&TwoDimensionalCut::setPlotObject,"")
   //     .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename");
 
-  py::class_<OneDimensionalShapes>(m,"OneDimensionalShapes")
-      .def("getFunction",&OneDimensionalShapes::getFunction,"Get the function used");
 
-  py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
-      .def(py::init<>())
-      .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
-      .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
-      .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
-           "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
-  //  py::class_<EnergyResolution>(m,"EnergyResolution")
-  //      .def(py::init<>())
-  //      .def("EnergyResolutionFunction",&EnergyResolution::EnergyResolutionFunction,"")
-  //      .def("IntegrateThetaPhi",&EnergyResolution::IntegrateThetaPhi,"");
+
   return m.ptr();
 }

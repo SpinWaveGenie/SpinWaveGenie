@@ -45,7 +45,7 @@ energies = swg.Energies(0.2, 3.0, 201)
 ODfactory = swg.OneDimensionalFactory()
 gauss=ODfactory.getGaussian(0.15,1.0e-1)
 
-# SWP=swg.SpinWavePlot()
+SWP=swg.SpinWavePlot()
 # res=SWP.EnergyResolutionFunction(gauss,SW,energies)
 # cut=SWP.IntegrateThetaPhi(res,1e-1)
 #
