@@ -189,7 +189,8 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
   //     .def("setPlotObject",&TwoDimensionalCut::setPlotObject,"")
   //     .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename");
 
-  
+  py::class_<OneDimensionalShapes>(m,"OneDimensionalShapes")
+      .def("getFunction",&OneDimensionalShapes::getFunction,"Get the function used");
 
   py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
       .def(py::init<>())
