@@ -42,7 +42,7 @@ double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
   return eta * Lorentzian->getFunction(frequency, energy) + (1.0 - eta) * Gaussian->getFunction(frequency, energy);
 }
 
-unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone()
+unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone() const
 {
   return memory::make_unique<OneDimensionalPseudoVoigt>(*this);
 }

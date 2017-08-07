@@ -4,6 +4,8 @@
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
+#include "SpinWaveGenie/Containers/PointsAlongLine.h"
+#include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
@@ -11,6 +13,13 @@
 #include "SpinWaveGenie/Genie/SpinWaveBuilder.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
+#include "SpinWaveGenie/Plot/Plot.h"
+// #include "SpinWaveGenie/Plot/IntegrateEnergy.h "
+// #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
+// #include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
+// #include "SpinWaveGenie/Plot/SpinWavePlot.h"
+// #include "SpinWaveGenie/Plot/TwoDGaussian.h"
+// #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
 
 namespace py = pybind11;
 using namespace SpinWaveGenie;
@@ -89,6 +98,17 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def_readonly("frequency", &Point::frequency, "Frequency associated with a given excitation (in meV).")
       .def_readonly("intensity", &Point::intensity, " Measurable intensity of a given excitation (arb. units).");
 
+ py::class_<PointsAlongLine>(m, "PointsAlongLine")
+      .def(py::init<>())
+      .def("setFirstPoint",&PointsAlongLine::setFirstPoint,"Set the first point in a line of points")
+      .def("setFinalPoint",&PointsAlongLine::setFinalPoint,"Set the last point in a line of points")
+      .def("setNumberPoints",&PointsAlongLine::setNumberPoints,"Set the Number of points")
+      .def("getPoints",&PointsAlongLine::getPoints,"Get the points as described above");
+
+ py::class_<Energies>(m,"Energies")
+      .def(py::init<>())
+      .def(py::init<double, double, std::size_t >());
+
   py::class_<Results>(m, "Results")
       .def("insert", &Results::insert, "Insert Point struct into container.")
       .def("__len__", &Results::size, " size of Results container.")
@@ -129,7 +149,7 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
       .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
-  py::class_<ThreeVectors<double>>(m, "ThreeVectors")
+      py::class_<ThreeVectors<double>>(m, "ThreeVectors")
       .def(py::init<>())
       .def("clear", &ThreeVectors<double>::clear, "Clear container so that the size is zero.")
       .def("empty", &ThreeVectors<double>::empty, "check if there are no elements in this container.")
@@ -140,7 +160,7 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
 
   py::class_<ThreeVectors<std::complex<double>>>(m, "ComplexThreeVectors")
       .def(py::init<>())
-    .def("clear", &ThreeVectors<std::complex<double>>::clear, "Clear container so that the size is zero.")
+      .def("clear", &ThreeVectors<std::complex<double>>::clear, "Clear container so that the size is zero.")
       .def("empty", &ThreeVectors<std::complex<double>>::empty, "check if there are no elements in this container.")
       .def("insert", &ThreeVectors<std::complex<double>>::insert, "insert an array of 3 elements into container.")
       .def("__len__", &ThreeVectors<std::complex<double>>::size, "returns the size of the container.")
@@ -152,6 +172,43 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def(py::init<>())
       .def("insert", &UniqueThreeVectors<double>::insert, "insert an array of 3 elements into container.")
       .def("__eq__", &UniqueThreeVectors<double>::operator==, "check if two arrays contain the same elements");
+
+  py::class_<OneDimensionalShapes>(m,"OneDimensionalShapes")
+          .def("getFunction",&OneDimensionalShapes::getFunction,"Get the function used");
+
+  py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
+          .def(py::init<>())
+          .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
+          .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
+          .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
+               "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
+
+  py::class_<SpinWavePlot>(m, "SpinWavePlot")
+      .def("getCell", &SpinWavePlot::getCell, py::return_value_policy::reference_internal, "retrieve Cell")
+      .def("getCut", &SpinWavePlot::getCut, "retrieve the Cut")
+      .def("getEnergies", &SpinWavePlot::getEnergies, py::return_value_policy::reference_internal, "retrieve energies")
+      .def("setEnergies", &SpinWavePlot::setEnergies, "set energies");
+
+  py::class_<EnergyResolutionFunction, SpinWavePlot>(m, "EnergyResolutionFunction")
+      .def(py::init<>())
+      .def(py::init<const OneDimensionalShapes &, const SpinWave &, const Energies &>())
+      .def("setResolutionFunction",
+           static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes &)>(
+               &EnergyResolutionFunction::setResolutionFunction),
+           "Set the resolution function")
+      .def("setSpinWave", &EnergyResolutionFunction::setSpinWave, "Set the spin wave model");
+
+  py::class_<IntegrateEnergy, SpinWavePlot>(m, "IntegrateEnegy")
+      .def(py::init<const SpinWavePlot &, const Energies &, double, double, int>());
+
+  py::class_<TwoDimensionalCut>(m, "TwoDimensionalCut")
+      .def(py::init<>())
+      .def("setFilename", &TwoDimensionalCut::setFilename, "Set filename to save results of cut")
+      .def("setPoints", &TwoDimensionalCut::setPoints, "")
+      .def("setEnergyPoints", &TwoDimensionalCut::setEnergyPoints, "")
+      .def("setPlotObject",
+           static_cast<void (TwoDimensionalCut::*)(const SpinWavePlot &)>(&TwoDimensionalCut::setPlotObject), "")
+      .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
 
   return m.ptr();
 }

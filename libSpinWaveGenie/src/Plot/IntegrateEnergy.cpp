@@ -30,6 +30,13 @@ IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, const Ene
 {
 }
 
+IntegrateEnergy::IntegrateEnergy(const SpinWavePlot &resFunction, const Energies &energies, double delta, double tol,
+                                 int maxEvals)
+    : resolutionFunction(resFunction.clone()), maximumEvaluations(maxEvals), tolerance(tol), delta(delta), kx(0.0),
+      ky(0.0), kz(0.0), centeredEnergies(energies)
+{
+}
+
 std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double> &x)
 {
   assert(x.size() == 1);
@@ -68,5 +75,5 @@ const Energies &IntegrateEnergy::getEnergies() { return centeredEnergies; }
 
 void IntegrateEnergy::setEnergies(const Energies &energiesIn) { centeredEnergies = energiesIn; }
 
-std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() { return memory::make_unique<IntegrateEnergy>(*this); }
+std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() const { return memory::make_unique<IntegrateEnergy>(*this); }
 }

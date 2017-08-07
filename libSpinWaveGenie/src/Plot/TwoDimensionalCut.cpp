@@ -58,9 +58,16 @@ class progressBar
 namespace SpinWaveGenie
 {
 
+TwoDimensionalCut::TwoDimensionalCut(const TwoDimensionalCut &other)
+    : filename(other.filename), cut(other.cut->clone()), points(other.points)
+{
+}
+
 void TwoDimensionalCut::setFilename(const std::string &name) { this->filename = name; }
 
 void TwoDimensionalCut::setPlotObject(std::unique_ptr<SpinWavePlot> object) { this->cut = move(object); }
+
+void TwoDimensionalCut::setPlotObject(const SpinWavePlot &object) { this->cut = object.clone(); }
 
 void TwoDimensionalCut::setPoints(const ThreeVectors<double> &pts) { this->points = pts; }
 

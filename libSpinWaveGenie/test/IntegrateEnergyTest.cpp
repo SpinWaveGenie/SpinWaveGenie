@@ -15,7 +15,7 @@ namespace SpinWaveGenie
         {
             m_Cell.setBasisVectors(1.0,1.0,1.0,90.0,90.0,90.0);
         };
-        std::unique_ptr<SpinWavePlot> clone() override
+        std::unique_ptr<SpinWavePlot> clone() const override
         {
           return memory::make_unique<IntegrateNormalDistribution>(*this);
         };

@@ -25,7 +25,7 @@ public:
   double getMinimumEnergy() override;
   double getMaximumEnergy() override;
   double getFunction(double frequency, double energy) override;
-  std::unique_ptr<OneDimensionalShapes> clone() override;
+  std::unique_ptr<OneDimensionalShapes> clone() const override;
 
 private:
   double getExponentialFactor();
