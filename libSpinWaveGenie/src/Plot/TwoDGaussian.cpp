@@ -46,8 +46,5 @@ double TwoDGaussian::getFunction(double frequency, double energy)
   return exp(-1.0 * (c * pow(frequency - energy, 2) + 2.0 * b * (frequency - energy) * u + a * pow(u, 2)));
 }
 
-unique_ptr<OneDimensionalShapes> TwoDGaussian::clone()
-{
-    return memory::make_unique<TwoDGaussian>(*this);
-}
+unique_ptr<OneDimensionalShapes> TwoDGaussian::clone() const { return memory::make_unique<TwoDGaussian>(*this); }
 }

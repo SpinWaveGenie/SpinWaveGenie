@@ -68,5 +68,5 @@ const Energies &IntegrateEnergy::getEnergies() { return centeredEnergies; }
 
 void IntegrateEnergy::setEnergies(const Energies &energiesIn) { centeredEnergies = energiesIn; }
 
-std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() { return memory::make_unique<IntegrateEnergy>(*this); }
+std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() const { return memory::make_unique<IntegrateEnergy>(*this); }
 }

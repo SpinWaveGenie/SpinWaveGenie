@@ -185,19 +185,20 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
           .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
                "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
- py::class_<SpinWavePlot>(m,"SpinWavePlot")
-      .def("getCut",&SpinWavePlot::getCut,"retrieve the Cut");
- py::class_<EnergyResolutionFunction,SpinWavePlot>(m,"EnergyResolution")
-           .def("setResolutionFunction",
-                static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes)>(&EnergyResolutionFunction::setResolutionFunction),
-                "Set the Resolution Function")
-           .def("setEnergies",&EnergyResolutionFunction::setEnergies,"Set the energy points")
-           .def("setSpinWave",&EnergyResolutionFunction::setSpinWave,"Set the Spin wave model");
+  py::class_<SpinWavePlot>(m, "SpinWavePlot")
+      .def("getCell", &SpinWavePlot::getCell, py::return_value_policy::reference_internal, "retrieve Cell")
+      .def("getCut", &SpinWavePlot::getCut, "retrieve the Cut")
+      .def("getEnergies", &SpinWavePlot::getEnergies, py::return_value_policy::reference_internal, "retrieve energies")
+      .def("setEnergies", &SpinWavePlot::setEnergies, "set energies");
 
-
-           //      .def(py::init<>())
-           //      .def("EnergyResolutionFunction",&EnergyResolution::EnergyResolutionFunction,"")
-           //      .def("IntegrateThetaPhi",&EnergyResolution::IntegrateThetaPhi,"");
+  py::class_<EnergyResolutionFunction, SpinWavePlot>(m, "EnergyResolutionFunction")
+      .def(py::init<>())
+      .def(py::init<const OneDimensionalShapes &, const SpinWave &, const Energies &>())
+      .def("setResolutionFunction",
+           static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes &)>(
+               &EnergyResolutionFunction::setResolutionFunction),
+           "Set the resolution function")
+      .def("setSpinWave", &EnergyResolutionFunction::setSpinWave, "Set the spin wave model");
 
   // py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
   //     .def(py::init<>())

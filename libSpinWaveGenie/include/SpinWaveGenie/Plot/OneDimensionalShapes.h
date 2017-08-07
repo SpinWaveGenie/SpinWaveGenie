@@ -24,7 +24,7 @@ public:
   virtual double getMinimumEnergy() = 0;
   virtual double getMaximumEnergy() = 0;
   virtual double getFunction(double frequency, double energy) = 0;
-  virtual std::unique_ptr<OneDimensionalShapes> clone() = 0;
+  virtual std::unique_ptr<OneDimensionalShapes> clone() const = 0;
   virtual ~OneDimensionalShapes() = default;
 };
 }

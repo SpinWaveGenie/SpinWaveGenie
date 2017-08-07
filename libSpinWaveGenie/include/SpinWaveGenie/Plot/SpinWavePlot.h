@@ -16,7 +16,7 @@ namespace SpinWaveGenie
 class SPINWAVEGENIE_EXPORT SpinWavePlot
 {
 public:
-  virtual std::unique_ptr<SpinWavePlot> clone() = 0;
+  virtual std::unique_ptr<SpinWavePlot> clone() const = 0;
   virtual const Cell &getCell() const = 0;
   virtual const Energies &getEnergies() = 0;
   virtual void setEnergies(const Energies &energies) = 0;
