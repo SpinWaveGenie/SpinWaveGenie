@@ -25,8 +25,8 @@ public:
   TwoDimensionalCut() = default;
   TwoDimensionalCut(const TwoDimensionalCut &other);
   TwoDimensionalCut &operator=(const TwoDimensionalCut &other);
-  TwoDimensionalCut(TwoDimensionalCut &&) noexcept = default;
-  TwoDimensionalCut &operator=(TwoDimensionalCut &&) noexcept = default;
+  TwoDimensionalCut(TwoDimensionalCut &&) = default;
+  TwoDimensionalCut &operator=(TwoDimensionalCut &&) = default;
   void setFilename(const std::string &name);
   void setPoints(const ThreeVectors<double> &pts);
   void setEnergyPoints(double min, double max, size_t points);
