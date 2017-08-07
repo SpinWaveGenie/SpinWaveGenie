@@ -22,14 +22,16 @@ class SpinWavePlot;
 class SPINWAVEGENIE_EXPORT TwoDimensionalCut
 {
 public:
+  TwoDimensionalCut() = default;
   TwoDimensionalCut(const TwoDimensionalCut &other);
-  TwoDimsionalCut &operator=(const TwoDimensionalCut &other);
-  TwoDimensionalCut(TwoDimenstionalCut &&) noexcept = default;
-  TwoDimensionalCut &operator=(TwoDimenstionalCut &&) noexcept = default;
+  TwoDimensionalCut &operator=(const TwoDimensionalCut &other);
+  TwoDimensionalCut(TwoDimensionalCut &&) noexcept = default;
+  TwoDimensionalCut &operator=(TwoDimensionalCut &&) noexcept = default;
   void setFilename(const std::string &name);
   void setPoints(const ThreeVectors<double> &pts);
   void setEnergyPoints(double min, double max, size_t points);
   void setPlotObject(std::unique_ptr<SpinWavePlot> object);
+  void setPlotObject(const SpinWavePlot &object);
   Eigen::MatrixXd getMatrix();
   void save();
 private:

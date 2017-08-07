@@ -206,7 +206,8 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("setFilename", &TwoDimensionalCut::setFilename, "Set filename to save results of cut")
       .def("setPoints", &TwoDimensionalCut::setPoints, "")
       .def("setEnergyPoints", &TwoDimensionalCut::setEnergyPoints, "")
-      .def("setPlotObject", &TwoDimensionalCut::setPlotObject, "")
+      .def("setPlotObject",
+           static_cast<void (TwoDimensionalCut::*)(const SpinWavePlot &)>(&TwoDimensionalCut::setPlotObject), "")
       .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
 
   return m.ptr();
