@@ -16,10 +16,7 @@ namespace SpinWaveGenie
             m_Cell.setBasisVectors(1.0,1.0,1.0,90.0,90.0,90.0);
             m_Energies = Energies(0.0,0.0,1);
         };
-        std::unique_ptr<SpinWavePlot> clone() override
-        {
-            return memory::make_unique<ConstantFunction>(*this);
-        };
+        std::unique_ptr<SpinWavePlot> clone() const override { return memory::make_unique<ConstantFunction>(*this); };
         const Cell& getCell() const override
         {
             return m_Cell;
@@ -59,10 +56,7 @@ public:
         m_Cell.setBasisVectors(1.0,1.0,1.0,90.0,90.0,90.0);
         m_Energies = Energies(0.0,0.0,1);
     };
-    std::unique_ptr<SpinWavePlot> clone() override
-    {
-        return memory::make_unique<SphericalHarmonics>(*this);
-    };
+    std::unique_ptr<SpinWavePlot> clone() const override { return memory::make_unique<SphericalHarmonics>(*this); };
     const Cell& getCell() const override
     {
         return m_Cell;

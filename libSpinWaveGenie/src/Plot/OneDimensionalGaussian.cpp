@@ -44,7 +44,7 @@ double OneDimensionalGaussian::getFunction(double frequency, double energy)
   return m_Factor * exp(m_ma * pow(frequency - energy, 2));
 }
 
-unique_ptr<OneDimensionalShapes> OneDimensionalGaussian::clone()
+unique_ptr<OneDimensionalShapes> OneDimensionalGaussian::clone() const
 {
   return memory::make_unique<OneDimensionalGaussian>(*this);
 }

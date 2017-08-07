@@ -28,7 +28,7 @@ public:
   IntegrateAxes(std::unique_ptr<SpinWavePlot> &&resFunction, const HKLDirections &directions, double tol = 0.01,
                 int maxEvals = 100);
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
-  std::unique_ptr<SpinWavePlot> clone() override;
+  std::unique_ptr<SpinWavePlot> clone() const override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
   void setEnergies(const Energies &energiesIn) override;

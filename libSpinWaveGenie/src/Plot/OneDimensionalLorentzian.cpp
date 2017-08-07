@@ -29,7 +29,7 @@ double OneDimensionalLorentzian::getFunction(double frequency, double energy)
   return FWHM / (2.0 * M_PI * (pow(frequency - energy, 2) + pow(0.5 * FWHM, 2)));
 }
 
-unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone()
+unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone() const
 {
   return memory::make_unique<OneDimensionalLorentzian>(*this);
 }

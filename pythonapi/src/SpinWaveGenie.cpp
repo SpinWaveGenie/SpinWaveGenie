@@ -14,13 +14,11 @@
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
 #include "SpinWaveGenie/Plot/Plot.h"
-// #include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
 // #include "SpinWaveGenie/Plot/IntegrateEnergy.h "
 // #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 // #include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
 // #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 // #include "SpinWaveGenie/Plot/TwoDGaussian.h"
-// #include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
 // #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
 
 namespace py = pybind11;
@@ -185,30 +183,31 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
           .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
                "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
- py::class_<SpinWavePlot>(m,"SpinWavePlot")
-      .def("getCut",&SpinWavePlot::getCut,"retrieve the Cut");
- py::class_<EnergyResolutionFunction,SpinWavePlot>(m,"EnergyResolution")
-           .def("setResolutionFunction",
-                static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes)>(&EnergyResolutionFunction::setResolutionFunction),
-                "Set the Resolution Function")
-           .def("setEnergies",&EnergyResolutionFunction::setEnergies,"Set the energy points")
-           .def("setSpinWave",&EnergyResolutionFunction::setSpinWave,"Set the Spin wave model");
+  py::class_<SpinWavePlot>(m, "SpinWavePlot")
+      .def("getCell", &SpinWavePlot::getCell, py::return_value_policy::reference_internal, "retrieve Cell")
+      .def("getCut", &SpinWavePlot::getCut, "retrieve the Cut")
+      .def("getEnergies", &SpinWavePlot::getEnergies, py::return_value_policy::reference_internal, "retrieve energies")
+      .def("setEnergies", &SpinWavePlot::setEnergies, "set energies");
 
+  py::class_<EnergyResolutionFunction, SpinWavePlot>(m, "EnergyResolutionFunction")
+      .def(py::init<>())
+      .def(py::init<const OneDimensionalShapes &, const SpinWave &, const Energies &>())
+      .def("setResolutionFunction",
+           static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes &)>(
+               &EnergyResolutionFunction::setResolutionFunction),
+           "Set the resolution function")
+      .def("setSpinWave", &EnergyResolutionFunction::setSpinWave, "Set the spin wave model");
 
-           //      .def(py::init<>())
-           //      .def("EnergyResolutionFunction",&EnergyResolution::EnergyResolutionFunction,"")
-           //      .def("IntegrateThetaPhi",&EnergyResolution::IntegrateThetaPhi,"");
+  py::class_<IntegrateEnergy, SpinWavePlot>(m, "IntegrateEnegy")
+      .def(py::init<const SpinWavePlot &, const Energies &, double, double, int>());
 
-  // py::class_<TwoDimensionalCut>(m,"TwoDimensionalCut")
-  //     .def(py::init<>())
-  //     .def("setFilename",&TwoDimensionalCut::setFilename,"Set filename to save results of cut")
-  //     .def("setPoints",&TwoDimensionalCut::setPoints,"")
-  //     .def("setEnergyPoints",TwoDimensionalCut::setEnergyPoints,"")
-  //     .def("setPlotObject",&TwoDimensionalCut::setPlotObject,"")
-  //     .def("save",&TwoDimensionalCut::save,"Calculate and the save the result to the specified filename");
-
-
-
+  py::class_<TwoDimensionalCut>(m, "TwoDimensionalCut")
+      .def(py::init<>())
+      .def("setFilename", &TwoDimensionalCut::setFilename, "Set filename to save results of cut")
+      .def("setPoints", &TwoDimensionalCut::setPoints, "")
+      .def("setEnergyPoints", &TwoDimensionalCut::setEnergyPoints, "")
+      .def("setPlotObject", &TwoDimensionalCut::setPlotObject, "")
+      .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
 
   return m.ptr();
 }

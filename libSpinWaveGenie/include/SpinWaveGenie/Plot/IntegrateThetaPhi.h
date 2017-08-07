@@ -26,7 +26,7 @@ public:
   IntegrateThetaPhi(const IntegrateThetaPhi &other)
       : maximumEvaluations(other.maximumEvaluations), r(0.0), tolerance(other.tolerance),
         resolutionFunction(other.resolutionFunction->clone()){};
-  std::unique_ptr<SpinWavePlot> clone() override;
+  std::unique_ptr<SpinWavePlot> clone() const override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
   void setEnergies(const Energies &energiesIn) override;

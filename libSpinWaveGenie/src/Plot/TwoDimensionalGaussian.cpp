@@ -90,7 +90,7 @@ void TwoDimensionResolutionFunction::setTolerance(double toleranceIn, int maxEva
 
 void TwoDimensionResolutionFunction::setEnergies(const Energies &energiesIn) { energies = energiesIn; }
 
-std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone()
+std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone() const
 {
   return memory::make_unique<TwoDimensionResolutionFunction>(*this);
 }

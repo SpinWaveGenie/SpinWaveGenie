@@ -28,15 +28,17 @@ public:
   EnergyResolution() = default;
   EnergyResolution(const EnergyResolution &other);
   EnergyResolution &operator=(const EnergyResolution &other);
-  EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn,
+  EnergyResolution(std::unique_ptr<OneDimensionalShapes> &&ResolutionFunctionIn, const T &SWIn,
                    const Energies &energiesIn);
+  EnergyResolution(const OneDimensionalShapes &ResolutionFunctionIn, const T &SWIn, const Energies &energiesIn);
   std::vector<double> getCut(double kx, double ky, double kz) override;
   void setSpinWave(const T &SWIn);
+  void setResolutionFunction(const OneDimensionalShapes &resolutionFunctionIn);
   void setResolutionFunction(std::unique_ptr<OneDimensionalShapes> resolutionFunctionIn);
   const Cell &getCell() const override;
   void setEnergies(const Energies &energiesIn) override;
   const Energies &getEnergies() override;
-  std::unique_ptr<SpinWavePlot> clone() override;
+  std::unique_ptr<SpinWavePlot> clone() const override;
 
 private:
   Energies energies;
@@ -49,15 +51,14 @@ using EnergyResolutionFunction = EnergyResolution<SpinWaveGenie::SpinWave>;
 template class EnergyResolution<SpinWave>;
 
 template <class T>
-EnergyResolution<T>::EnergyResolution(std::unique_ptr<OneDimensionalShapes> ResolutionFunctionIn, const T &SWIn,
+EnergyResolution<T>::EnergyResolution(const OneDimensionalShapes &ResolutionFunctionIn, const T &SWIn,
                                       const Energies &energiesIn)
-{
-  // std::cout << "Creating Energy Resolution Function" << std::endl;
-  this->energies = energiesIn;
-  // cout << "Energy Points " << EnergyPoints << endl;
-  ResolutionFunction = std::move(ResolutionFunctionIn);
-  SW = SWIn;
-}
+    : energies(energiesIn), ResolutionFunction(ResolutionFunctionIn.clone()), SW(SWIn){};
+
+template <class T>
+EnergyResolution<T>::EnergyResolution(std::unique_ptr<OneDimensionalShapes> &&ResolutionFunctionIn, const T &SWIn,
+                                      const Energies &energiesIn)
+    : energies(energiesIn), ResolutionFunction(std::move(ResolutionFunctionIn)), SW(SWIn){};
 
 template <class T> EnergyResolution<T>::EnergyResolution(const EnergyResolution<T> &other)
 {
@@ -79,6 +80,11 @@ template <class T> EnergyResolution<T> &EnergyResolution<T>::operator=(const Ene
   SW = other.SW;
   ResolutionFunction = move(other.ResolutionFunction->clone());
   return *this;
+}
+
+template <class T> void EnergyResolution<T>::setResolutionFunction(const OneDimensionalShapes &resolutionFunctionIn)
+{
+  ResolutionFunction = resolutionFunctionIn.clone();
 }
 
 template <class T>
@@ -125,7 +131,7 @@ template <class T> const Energies &EnergyResolution<T>::getEnergies() { return e
 
 template <class T> void EnergyResolution<T>::setEnergies(const Energies &energiesIn) { energies = energiesIn; }
 
-template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone()
+template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone() const
 {
   return memory::make_unique<EnergyResolution<T>>(*this);
 }
