@@ -201,6 +201,11 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
   py::class_<IntegrateEnergy, SpinWavePlot>(m, "IntegrateEnegy")
       .def(py::init<const SpinWavePlot &, const Energies &, double, double, int>());
 
+  py::class_<IntegrateThetaPhi, SpinWavePlot>(m, "IntegrateThetaPhi")
+      .def(py::init<>())
+      //.def(py::init<const OneDimensionalShapes &, double, int>())
+      .def("getCut", &IntegrateThetaPhi::getCut,"Retrieve the Cut");
+      //
   py::class_<TwoDimensionalCut>(m, "TwoDimensionalCut")
       .def(py::init<>())
       .def("setFilename", &TwoDimensionalCut::setFilename, "Set filename to save results of cut")
