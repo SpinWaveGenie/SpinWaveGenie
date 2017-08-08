@@ -47,10 +47,10 @@ gauss=ODfactory.getGaussian(0.15,1.0e-1)
 
 
 res=swg.EnergyResolutionFunction(gauss,SW,energies)
-cut=swg.IntegrateThetaPhi(res,1e-1)
+cut=swg.IntegrateThetaPhi(res,1e-1,1000)
 #
-# twodimcut=TwoDimensionalCut()
-# twodimcut.setFilename("AFMPowderAverage")
-# twodimcut.setPlotObject(cut)
-# twodimcut.setPoints(kPoints)
-# twodimcut.save()
+twodimcut=swg.TwoDimensionalCut()
+twodimcut.setFilename("AFMPowderAverage")
+twodimcut.setPlotObject(cut)
+twodimcut.setPoints(kPoints)
+twodimcut.save()
