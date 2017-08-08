@@ -46,8 +46,8 @@ ODfactory = swg.OneDimensionalFactory()
 gauss=ODfactory.getGaussian(0.15,1.0e-1)
 
 SWP=swg.SpinWavePlot()
-# res=SWP.EnergyResolutionFunction(gauss,SW,energies)
-# cut=SWP.IntegrateThetaPhi(res,1e-1)
+res=swg.EnergyResolutionFunction(gauss,SW,energies)
+#cut=swg.IntegrateThetaPhi(res,1e-1)
 #
 # twodimcut=TwoDimensionalCut()
 # twodimcut.setFilename("AFMPowderAverage")
