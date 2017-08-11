@@ -24,7 +24,7 @@ cell.addSublattice(spin1)
 cell.addAtom(name1,0.5,0.0,0.0)
 
 factory = swg.InteractionFactory()
-exchange = factory.getExchange("J",J,name0,name1,0.9,1.1)
+exchange = factory.getExchange("J",J,name0,name1,0.45,0.55)
 anisotropy0 = factory.getAnisotropy("D",D,xhat,name0)
 anisotropy1 = factory.getAnisotropy("D",D,xhat,name1)
 
