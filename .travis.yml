@@ -40,7 +40,7 @@ before_install:
       brew install tbb --c++11;
       if [ "$PYTHON_VERSION" == "3.6" ];
       then
-        brew install nlopt;
+        brew install nlopt --without-numpy;
         brew install python3;
         brew install gcc;
         brew link --overwrite gcc;
