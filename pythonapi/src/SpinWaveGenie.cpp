@@ -24,9 +24,9 @@
 namespace py = pybind11;
 using namespace SpinWaveGenie;
 
-PYBIND11_PLUGIN(python_SpinWaveGenie)
+PYBIND11_MODULE(python_SpinWaveGenie, m)
 {
-  py::module m("python_SpinWaveGenie", "Python Bindings for the SpinWaveGenie Library");
+  m.doc() = "Python Bindings for the SpinWaveGenie Library";
 
   py::class_<Sublattice>(m, "Sublattice")
       .def(py::init<>())
@@ -209,6 +209,4 @@ PYBIND11_PLUGIN(python_SpinWaveGenie)
       .def("setPlotObject",
            static_cast<void (TwoDimensionalCut::*)(const SpinWavePlot &)>(&TwoDimensionalCut::setPlotObject), "")
       .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
-
-  return m.ptr();
 }
