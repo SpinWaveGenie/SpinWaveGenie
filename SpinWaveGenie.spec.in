@@ -14,10 +14,13 @@ Source0:        %{name}-%{version}.tar.gz
 BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
 Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
 
+Requires: git-archive-all
 Requires: gcc-c++
 Requires: boost-devel
 Requires: eigen3-devel
-Requires: cmake >= 2.8.12
+Requires: cmake >= 3.1
+Requires: python2-devel
+Requires: python2-numpy
 %if @CPACK_RPM_USE_THREADS@
 Requires: tbb-devel
 %endif
@@ -29,7 +32,7 @@ Requires: tbb-devel
 %setup -q
 
 %build
-%cmake %{?el6:-DBoost_NO_BOOST_CMAKE=ON} -DBUILD_TESTING=True
+%cmake -DBUILD_TESTING=True -DPYBIND11_PYTHON_VERSION=2.7 -DPYTHON_SITE_PACKAGES_DIR=%{python2_sitelib}
 %{!?make_build: %define make_build %{__make} %{?_smp_mflags}}
 %make_build
 
@@ -45,4 +48,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/SpinWaveGenie/
 %{_libdir}/cmake/SpinWaveGenie/
 %{_libdir}/libSpinWaveGenie.so
+%{python2_sitelib}/*
 %doc
