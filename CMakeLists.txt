@@ -61,7 +61,14 @@ if(WARNINGS_AS_ERRORS)
   endif()
 endif()
 
-find_package(Eigen3 3.2.7 REQUIRED)
+#option(USE_SYSTEM_EIGEN "Use the system installed Eigen?" OFF)
+#if(NOT USE_SYSTEM_EIGEN)
+include(Eigen)
+#set(eigen_INSTALL ${CMAKE_CURRENT_BINARY_DIR}/eigen/install)
+#set(Eigen3_DIR ${eigen_INSTALL}/share/eigen3/cmake/)
+#endif()
+
+#find_package(Eigen3 REQUIRED NO_MODULE)
 
 find_package(Threads)
 if(USE_THREADS)

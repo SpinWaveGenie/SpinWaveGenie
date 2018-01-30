@@ -55,9 +55,10 @@ set_property( TARGET SpinWaveGenie PROPERTY
 set_property( TARGET SpinWaveGenie PROPERTY CXX_VISIBILITY_PRESET hidden)
 set_property( TARGET SpinWaveGenie PROPERTY VISIBILITY_INLINES_HIDDEN 1)
 
-target_include_directories( SpinWaveGenie SYSTEM INTERFACE PUBLIC ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
+target_include_directories( SpinWaveGenie SYSTEM INTERFACE PUBLIC ${Boost_INCLUDE_DIR} )
 target_include_directories( SpinWaveGenie PRIVATE src)
 target_include_directories( SpinWaveGenie SYSTEM PRIVATE ${TBB_INCLUDE_DIRS})
+target_link_libraries( SpinWaveGenie PUBLIC Eigen3::Eigen)
 target_link_libraries( SpinWaveGenie PRIVATE ${TBB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 if(BUILD_TESTING)
@@ -67,6 +68,8 @@ endif (BUILD_TESTING)
 include(GNUInstallDirs)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/eigen/src/eigen/install/include/eigen3/Eigen DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Eigen)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie/Export.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SpinWaveGenie )
 install(TARGETS SpinWaveGenie EXPORT SpinWaveGenieTargets 
                               ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
