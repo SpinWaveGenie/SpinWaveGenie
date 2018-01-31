@@ -61,7 +61,7 @@ if(WARNINGS_AS_ERRORS)
   endif()
 endif()
 
-find_package(Eigen3 3.2.7 REQUIRED)
+include(Eigen)
 
 find_package(Threads)
 if(USE_THREADS)
