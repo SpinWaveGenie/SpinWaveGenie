@@ -18,7 +18,6 @@ else()
   execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/extern-eigen )
 
   set(Eigen3_DIR "${CMAKE_BINARY_DIR}/extern-eigen/install/share/eigen3/cmake" CACHE PATH "")
-  find_package(Eigen3 REQUIRED)
 endif()
 
 find_package(Eigen3 REQUIRED)
