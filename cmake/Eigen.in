@@ -3,12 +3,12 @@ include( ExternalProject )
 
 ExternalProject_Add(eigen
     URL http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz
-    DOWNLOAD_DIR ${CMAKE_CURRENT_BINARY_DIR}/eigen/download
-    SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/eigen/source
-    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/eigen/install
+    DOWNLOAD_DIR ${CMAKE_CURRENT_BINARY_DIR}/extern-eigen/download
+    SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/extern-eigen/source
+    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/extern-eigen/install
     CMAKE_CACHE_ARGS
         -DCMAKE_BUILD_TYPE:STRING=Release
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
-        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_CURRENT_BINARY_DIR}/eigen/install
+        -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_CURRENT_BINARY_DIR}/extern-eigen/install
 )
 
