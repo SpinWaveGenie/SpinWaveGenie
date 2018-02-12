@@ -35,7 +35,7 @@ Requires: tbb
 %setup -q
 
 %build
-%cmake -DBUILD_TESTING=True -DPYBIND11_PYTHON_VERSION=2.7 -DPYTHON_SITE_PACKAGES_DIR=%{python2_sitelib}
+%cmake3 -DBUILD_TESTING=True -DPYBIND11_PYTHON_VERSION=2.7 -DPYTHON_SITE_PACKAGES_DIR=%{python2_sitelib}
 %{!?make_build: %define make_build %{__make} %{?_smp_mflags}}
 %make_build
 
