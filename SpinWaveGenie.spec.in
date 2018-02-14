@@ -13,7 +13,7 @@ Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
 %{?fedora:Requires: python2 python2-numpy}
-%{?rhel: Requires: python numpy}
+%{?rhel:Requires: python numpy}
 
 Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
 
