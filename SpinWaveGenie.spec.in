@@ -12,16 +12,8 @@ Source0:        %{name}-%{version}.tar.gz
 #Source0:        @CPACK_RPM_PACKAGE_URL@/releases/download/v%{version}/SpinWaveGenie-%{version}.tar.gz
 
 BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
+Requires: python2 python2-numpy
 Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
-
-BuildRequires: gcc-c++
-BuildRequires: boost-devel
-#%{?fedora:BuildRequires: eigen3-devel}
-%{?fedora:Requires: cmake >= 3.1}
-%{?rhel:Requires: cmake3 >= 3.1}
-BuildRequires: python2-devel
-Requires: python2
-Requires: python2-numpy
 
 %if @CPACK_RPM_USE_THREADS@
 BuildRequires: tbb-devel
@@ -48,7 +40,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-#%{_includedir}/SpinWaveGenie/
 %{_libdir}/cmake/SpinWaveGenie/
 %{_libdir}/libSpinWaveGenie.so
 %{python2_sitelib}/*
