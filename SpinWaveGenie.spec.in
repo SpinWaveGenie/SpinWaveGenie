@@ -12,7 +12,9 @@ Source0:        %{name}-%{version}.tar.gz
 #Source0:        @CPACK_RPM_PACKAGE_URL@/releases/download/v%{version}/SpinWaveGenie-%{version}.tar.gz
 
 BuildRequires:  @CPACK_RPM_PACKAGE_REQUIRES@
-Requires: python2 python2-numpy
+%{?fedora:Requires: python2 python2-numpy}
+%{?rhel: Requires: python numpy}
+
 Prefix:         @CPACK_PACKAGING_INSTALL_PREFIX@
 
 %if @CPACK_RPM_USE_THREADS@
