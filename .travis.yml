@@ -41,10 +41,10 @@ before_install:
       if [ "$PYTHON_VERSION" == "3.6" ];
       then
         brew install nlopt --without-numpy;
-        brew install python3;
+        brew upgrade python;
         brew install gcc;
         brew link --overwrite gcc;
-        brew install numpy --with-python3 --without-python;
+        brew install numpy;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
