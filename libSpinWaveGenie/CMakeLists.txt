@@ -67,8 +67,6 @@ endif (BUILD_TESTING)
 
 include(GNUInstallDirs)
 
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie/Export.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SpinWaveGenie )
 install(TARGETS SpinWaveGenie EXPORT SpinWaveGenieTargets 
                               ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                               LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -17,7 +17,7 @@ matrix:
       compiler: gcc
       env: PYTHON_VERSION=3.4
     - os: osx
-      osx_image: xcode9
+      osx_image: xcode9.3beta
       compiler: clang
       env: PYTHON_VERSION=3.6
     - os: osx
@@ -34,17 +34,17 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
       brew update > /dev/null 2>&1;
-      brew tap homebrew/science;
       brew outdated cmake || brew upgrade cmake;
       brew install eigen;
-      brew install tbb --c++11;
+      brew install tbb;
       if [ "$PYTHON_VERSION" == "3.6" ];
       then
         brew install nlopt --without-numpy;
-        brew install python3;
+        brew upgrade python;
         brew install gcc;
         brew link --overwrite gcc;
-        brew install numpy --with-python3 --without-python;
+        brew install numpy;
+        brew link --overwrite numpy;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
