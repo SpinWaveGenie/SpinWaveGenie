@@ -34,10 +34,9 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
       brew update > /dev/null 2>&1;
-      brew tap homebrew/science;
       brew outdated cmake || brew upgrade cmake;
       brew install eigen;
-      brew install tbb --c++11;
+      brew install tbb;
       if [ "$PYTHON_VERSION" == "3.6" ];
       then
         brew install nlopt --without-numpy;
@@ -45,6 +44,7 @@ before_install:
         brew install gcc;
         brew link --overwrite gcc;
         brew install numpy;
+        brew link --overwrite numpy;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
