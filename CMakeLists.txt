@@ -1,6 +1,6 @@
+cmake_minimum_required (VERSION 3.1)
 project(SpinWaveGenie)
 
-cmake_minimum_required (VERSION 3.1)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_MACOSX_RPATH TRUE)
 
@@ -47,9 +47,9 @@ if(WITH_SANITIZERS)
   file(WRITE ${PROJECT_BINARY_DIR}/ubsan.txt "fun:*_Ios_Fmtflags*")
   set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
   add_compile_options(-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
-  string(APPEND CMAKE_MODULE_LINKER_FLAGS "${SAN_FLAGS} -lubsan" )
-  string(APPEND CMAKE_EXE_LINKER_FLAGS "${SAN_FLAGS} -lubsan" )
-  string(APPEND CMAKE_SHARED_LINKER_FLAGS "${SAN_FLAGS} -lubsan" )
+  string(APPEND CMAKE_MODULE_LINKER_FLAGS "${SAN_FLAGS}" )
+  string(APPEND CMAKE_EXE_LINKER_FLAGS "${SAN_FLAGS}" )
+  string(APPEND CMAKE_SHARED_LINKER_FLAGS "${SAN_FLAGS}" )
 endif()
 
 option(WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
