@@ -83,7 +83,6 @@ void MagneticFieldInteraction::calculateFirstOrderTerms(const Cell &cell, Eigen:
 
 void MagneticFieldInteraction::calcConstantValues(const Cell &cell)
 {
-  complex<double> XI(0.0, 1.0);
   // find location of r
   r = cell.getPosition(sl_r);
   M = cell.size();
