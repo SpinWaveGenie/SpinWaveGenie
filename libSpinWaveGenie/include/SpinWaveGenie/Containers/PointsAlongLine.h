@@ -29,16 +29,16 @@ public:
   void setFinalPoint(double kx, double ky, double kz);
   //! Set number of k-points along line.
   //! \param points number of k-points.
-  void setNumberPoints(long points);
+  void setNumberPoints(ThreeVectors<double>::size_type points);
   //! Get resulting k-points along line.
   //! \return k-points along line.
   ThreeVectors<double> getPoints();
 
 private:
   void calculatePoints();
-  ThreeVectors<double> Kpoints;
   double kxi, kyi, kzi, kxf, kyf, kzf;
-  long numberPoints;
+  ThreeVectors<double>::size_type numberPoints;
+  ThreeVectors<double> Kpoints;
 };
 }
 #endif /* defined(__PointsAlongLine__) */

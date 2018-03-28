@@ -49,15 +49,15 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
   phi = phiInput;
 
   // rotation matrix defined in equation A.1 in J. Phys.: Condens. Matter 21 (2009) 216001
-  rotationMatrix(0, 0) = cos(theta) * cos(phi);
-  rotationMatrix(0, 1) = cos(theta) * sin(phi);
-  rotationMatrix(0, 2) = -1.0 * sin(theta);
-  rotationMatrix(1, 0) = -1.0 * sin(phi);
-  rotationMatrix(1, 1) = cos(phi);
+  rotationMatrix(0, 0) = std::cos(theta) * std::cos(phi);
+  rotationMatrix(0, 1) = std::cos(theta) * std::sin(phi);
+  rotationMatrix(0, 2) = -1.0 * std::sin(theta);
+  rotationMatrix(1, 0) = -1.0 * std::sin(phi);
+  rotationMatrix(1, 1) = std::cos(phi);
   rotationMatrix(1, 2) = 0.0;
-  rotationMatrix(2, 0) = sin(theta) * cos(phi);
-  rotationMatrix(2, 1) = sin(theta) * sin(phi);
-  rotationMatrix(2, 2) = cos(theta);
+  rotationMatrix(2, 0) = std::sin(theta) * std::cos(phi);
+  rotationMatrix(2, 1) = std::sin(theta) * std::sin(phi);
+  rotationMatrix(2, 2) = std::cos(theta);
 
   inverseMatrix = rotationMatrix.inverse();
 }
