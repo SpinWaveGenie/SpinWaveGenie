@@ -5,7 +5,6 @@
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionsContainer.h"
-#include "SpinWaveGenie/Memory.h"
 #include <string>
 #include <vector>
 

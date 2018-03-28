@@ -1,6 +1,5 @@
 #include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Memory.h"
 #include <cassert>
 #include <iostream>
 
@@ -20,7 +19,7 @@ ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(const strin
 
 std::unique_ptr<Interaction> ExchangeInteractionSameSublattice::clone() const
 {
-  return memory::make_unique<ExchangeInteractionSameSublattice>(*this);
+  return std::make_unique<ExchangeInteractionSameSublattice>(*this);
 }
 
 void ExchangeInteractionSameSublattice::updateInteraction(double value_in, const string &sl_r_in, double min_in,

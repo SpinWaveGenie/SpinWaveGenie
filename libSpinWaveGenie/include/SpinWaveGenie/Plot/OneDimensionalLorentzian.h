@@ -10,7 +10,6 @@
 #define __OneDimensionalLorentzian__
 
 #include "SpinWaveGenie/Export.h"
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include <iostream>
 

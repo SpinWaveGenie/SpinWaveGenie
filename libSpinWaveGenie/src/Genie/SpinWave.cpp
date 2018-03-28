@@ -5,7 +5,6 @@
 
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace Eigen;
 using namespace std;

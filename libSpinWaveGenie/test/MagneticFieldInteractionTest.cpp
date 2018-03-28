@@ -3,7 +3,6 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-#include "SpinWaveGenie/Memory.h"
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include "SpinWaveGenie/Containers/Containers.h"

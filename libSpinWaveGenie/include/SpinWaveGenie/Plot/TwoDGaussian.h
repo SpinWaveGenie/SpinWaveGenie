@@ -10,7 +10,6 @@
 #define __spin_wave_genie__TwoDGaussian__
 
 #include "SpinWaveGenie/Export.h"
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include <iostream>
 

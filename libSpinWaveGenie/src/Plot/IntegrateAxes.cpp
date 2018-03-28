@@ -101,5 +101,5 @@ const Energies &IntegrateAxes::getEnergies() { return resolutionFunction->getEne
 
 void IntegrateAxes::setEnergies(const Energies &energiesIn) { resolutionFunction->setEnergies(energiesIn); }
 
-std::unique_ptr<SpinWavePlot> IntegrateAxes::clone() const { return memory::make_unique<IntegrateAxes>(*this); }
+std::unique_ptr<SpinWavePlot> IntegrateAxes::clone() const { return std::make_unique<IntegrateAxes>(*this); }
 }
