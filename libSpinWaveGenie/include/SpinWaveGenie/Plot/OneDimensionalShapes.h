@@ -11,6 +11,7 @@
 
 #include "SpinWaveGenie/Export.h"
 #include <iostream>
+#include <memory>
 
 namespace SpinWaveGenie
 {

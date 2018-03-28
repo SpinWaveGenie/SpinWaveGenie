@@ -1,4 +1,3 @@
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/SpinWaveGenie.h"
 
 #include "Eigen/Core"

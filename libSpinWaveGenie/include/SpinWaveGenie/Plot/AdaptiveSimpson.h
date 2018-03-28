@@ -4,6 +4,7 @@
 #include "SpinWaveGenie/Export.h"
 #include <deque>
 #include <functional>
+#include <memory>
 #include <vector>
 
 class SPINWAVEGENIE_EXPORT AdaptiveSimpson
