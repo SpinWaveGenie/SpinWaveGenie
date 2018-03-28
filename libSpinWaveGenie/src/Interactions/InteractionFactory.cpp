@@ -23,11 +23,11 @@ std::unique_ptr<Interaction> InteractionFactory::getExchange(const std::string &
 {
   if (sl_r.compare(sl_s) == 0)
   {
-    return memory::make_unique<ExchangeInteractionSameSublattice>(name, value, sl_r, min, max);
+    return std::make_unique<ExchangeInteractionSameSublattice>(name, value, sl_r, min, max);
   }
   else
   {
-    return memory::make_unique<ExchangeInteraction>(name, value, sl_r, sl_s, min, max);
+    return std::make_unique<ExchangeInteraction>(name, value, sl_r, sl_s, min, max);
 }
 }
 
@@ -42,16 +42,16 @@ InteractionFactory::getDzyaloshinskiiMoriya(const std::string &name, double valu
 
   if (x < 0.01 && y > 0.99 && z < 0.01)
   {
-    return memory::make_unique<DM_Y_Interaction>(name, value, sl_r, sl_s, min, max);
+    return std::make_unique<DM_Y_Interaction>(name, value, sl_r, sl_s, min, max);
   }
   else if (x < 0.01 && y < 0.01 && z > 0.99)
   {
-    return memory::make_unique<DM_Z_Interaction>(name, value, sl_r, sl_s, min, max);
+    return std::make_unique<DM_Z_Interaction>(name, value, sl_r, sl_s, min, max);
   }
   else
   {
     // a general DM interaction has not yet been implemented
-    return memory::make_unique<DM_Z_Interaction>(name, value, sl_r, sl_s, min, max);
+    return std::make_unique<DM_Z_Interaction>(name, value, sl_r, sl_s, min, max);
   }
 }
 
@@ -59,13 +59,13 @@ std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(const std::string
                                                                const Eigen::Vector3d &direction,
                                                                const std::string &sl_r)
 {
-  return memory::make_unique<AnisotropyInteraction>(name, value, direction, sl_r);
+  return std::make_unique<AnisotropyInteraction>(name, value, direction, sl_r);
 }
 
 std::unique_ptr<Interaction> InteractionFactory::getMagneticField(const std::string &name, double value,
                                                                   const Eigen::Vector3d &direction,
                                                                   const std::string &sl_r)
 {
-  return memory::make_unique<MagneticFieldInteraction>(name, value, direction, sl_r);
+  return std::make_unique<MagneticFieldInteraction>(name, value, direction, sl_r);
 }
 }

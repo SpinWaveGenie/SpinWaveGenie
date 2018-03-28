@@ -2,7 +2,6 @@
 #define __AdaptiveSimpson__
 
 #include "SpinWaveGenie/Export.h"
-#include "SpinWaveGenie/Memory.h"
 #include <deque>
 #include <functional>
 #include <vector>

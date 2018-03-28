@@ -44,6 +44,6 @@ double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
 
 unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone() const
 {
-  return memory::make_unique<OneDimensionalPseudoVoigt>(*this);
+  return std::make_unique<OneDimensionalPseudoVoigt>(*this);
 }
 }
