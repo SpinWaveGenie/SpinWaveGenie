@@ -32,7 +32,7 @@ void SpinWaveBuilder::updateInteraction(const string &name, double value)
 {
   for (auto & elem : interactions)
   {
-    if (name.compare(elem.getName()) == 0)
+    if (name == elem.getName())
     {
       elem.updateValue(value);
     }
