@@ -84,8 +84,9 @@ std::vector<double> productFunction(std::deque<double> &x)
 {
   std::vector<double> prod(1, 1.0);
   unsigned int i;
-  for (i = 0; i < x.size(); ++i)
+  for (i = 0; i < x.size(); ++i) {
     prod[0] *= 2.0 * x[i];
+}
   return prod;
 }
 
@@ -161,8 +162,9 @@ std::vector<double> tsudasFunction(std::deque<double> &x)
   double c = (1.0 + sqrt(10.0)) / 9.0;
   std::vector<double> result(1, 1.0);
   unsigned int i;
-  for (i = 0; i < dim; i++)
+  for (i = 0; i < dim; i++) {
     result[0] *= c / (c + 1) * pow((c + 1) / (c + x[i]), 2.0);
+}
   return result;
 }
 
@@ -187,8 +189,9 @@ std::vector<double> complexFunction(std::deque<double> &x)
   double p = 1.0 / dim;
   double prod = pow(1 + p, dim);
   unsigned int i;
-  for (i = 0; i < dim; i++)
+  for (i = 0; i < dim; i++) {
     prod *= pow(x[i], p);
+}
   return std::vector<double>(1, prod);
 }
 
