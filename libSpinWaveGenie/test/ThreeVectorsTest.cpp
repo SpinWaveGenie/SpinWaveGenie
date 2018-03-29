@@ -47,8 +47,8 @@ BOOST_AUTO_TEST_CASE( ClearTest )
     doubleTest.clear();
     complexTest.clear();
 
-    BOOST_CHECK(doubleTest.size() == 0);
-    BOOST_CHECK(complexTest.size() == 0);
+    BOOST_CHECK(doubleTest.empty());
+    BOOST_CHECK(complexTest.empty());
 }
 
 BOOST_AUTO_TEST_CASE( IteratorTest )

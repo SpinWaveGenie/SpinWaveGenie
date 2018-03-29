@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(Iterator)
             foundSL1 = true;
         if ( elem.getName() == "SL2" )
             foundSL2 = true;
-        if ( elem.getName() == "" )
+        if ( elem.getName().empty() )
             foundBlank = true;
     }
     BOOST_CHECK(foundSL1);
