@@ -45,7 +45,7 @@ public:
   //! \return sublattice
   Sublattice &getSublattice(const std::string &name);
   const Sublattice &getSublattice(const std::string &name) const;
-  const Sublattice &operator[](std::size_t position) const;
+  const Sublattice &operator[](std::vector<Sublattice>::size_type position) const;
   //! Add atom to sublattice name at position pos
   //! \param name Sublattice atom belongs to
   //! \param x x coordinate of atom in fraction of the basis vectors.
@@ -54,10 +54,10 @@ public:
   void addAtom(const std::string &name, double x, double y, double z);
   //! Returns the position where sublattice name is stored.
   //! \param name name of sublattice.
-  std::size_t getPosition(const std::string &name) const;
+  std::vector<Sublattice>::difference_type getPosition(const std::string &name) const;
   //! Returns the number of sublattices in the cell
   //! \return number of sublattices
-  size_t size() const { return sublatticeInfo.size(); }
+  std::vector<Sublattice>::size_type size() const { return sublatticeInfo.size(); }
   using Iterator = std::vector<Sublattice>::iterator;
   using ConstIterator = std::vector<Sublattice>::const_iterator;
   //! \return Returns an Iterator pointing to the first Sublattice element

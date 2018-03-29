@@ -58,7 +58,7 @@ public:
   void addAtom(double x, double y, double z);
   //! returns the number of atoms in this sublattice
   //! \return number of atoms
-  std::size_t size() const { return positions.size(); }
+  UniqueThreeVectors<double>::size_type size() const { return positions.size(); }
   using Iterator = UniqueThreeVectors<double>::Iterator;
   using ConstIterator = UniqueThreeVectors<double>::ConstIterator;
   //! returns an Iterator to the first atomic position
@@ -75,9 +75,9 @@ public:
   ConstIterator cend() const { return positions.cend(); }
 
 private:
-  std::string name, type;
   double spin, theta, phi;
   Eigen::Matrix3d rotationMatrix, inverseMatrix;
+  std::string name, type;
   UniqueThreeVectors<double> positions;
 };
 }

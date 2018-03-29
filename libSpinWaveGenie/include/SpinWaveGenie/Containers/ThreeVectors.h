@@ -23,10 +23,12 @@ public:
   //! \param y first element of type T
   //! \param z second element of type T
   bool insert(T x, T y, T z);
+  using size_type = typename std::vector<std::array<T, 3>>::size_type;
+  using difference_type = typename std::vector<std::array<T, 3>>::difference_type;
   using Iterator = typename std::vector<std::array<T, 3>>::iterator;
   using ConstIterator = typename std::vector<std::array<T, 3>>::const_iterator;
   //! \return number of elements in the ThreeVector
-  size_t size() const;
+  size_type size() const;
   //! Clears all data stored in the ThreeVector.
   void clear();
   //! \return Returns an Iterator pointing to the first element
@@ -54,10 +56,7 @@ template <typename T> bool ThreeVectors<T>::insert(T x, T y, T z)
   return true;
 }
 
-template <typename T> size_t ThreeVectors<T>::size() const
-{
-  return values.size();
-}
+template <typename T> typename ThreeVectors<T>::size_type ThreeVectors<T>::size() const { return values.size(); }
 
 template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::begin()
 {
