@@ -4,6 +4,7 @@
 #include <numeric>
 #include <algorithm>
 #include <boost/test/unit_test.hpp>
+#include <utility>
 #include "SpinWaveGenie/Containers/Containers.h"
 #include "SpinWaveGenie/Plot/Plot.h"
 
@@ -14,7 +15,7 @@ class SimpleSpinWave
 {
 public:
   SimpleSpinWave() = default;
-  SimpleSpinWave(Results input) { m_Results = input; };
+  SimpleSpinWave(Results input) { m_Results = std::move(input); };
   void createMatrix(double /*KX*/, double /*KY*/, double /*KZ*/){};
   void calculate(){};
   Results getPoints() { return m_Results; };

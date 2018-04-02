@@ -59,10 +59,12 @@ BOOST_AUTO_TEST_CASE( AtomsTest )
     {
       Eigen::Vector3d test0(atom0[0] - point[0], atom0[1] - point[1], atom0[2] - point[2]);
       Eigen::Vector3d test1(atom1[0] - point[0], atom1[1] - point[1], atom1[2] - point[2]);
-      if (test0.norm() < 0.01)
+      if (test0.norm() < 0.01) {
         FoundAtom0 = true;
-      if (test1.norm() < 0.01)
+}
+      if (test1.norm() < 0.01) {
         FoundAtom1 = true;
+}
     }
     BOOST_CHECK(FoundAtom0);
     BOOST_CHECK(!FoundAtom1);
