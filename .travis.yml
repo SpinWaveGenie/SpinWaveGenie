@@ -24,7 +24,8 @@ before_script:
   - cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=3.4;
 
 script:
-  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make - j 2; fi
+  - make -j 2; 
+  - make test -j 2;
 
 notifications:
   email:
