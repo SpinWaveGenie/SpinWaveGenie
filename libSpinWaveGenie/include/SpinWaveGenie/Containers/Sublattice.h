@@ -1,10 +1,11 @@
 #ifndef __Sublattice_H__
 #define __Sublattice_H__
 
-#include <vector>
-#include <string>
-#include "SpinWaveGenie/Containers/Matrices.h"
+#include "Eigen/Core"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
+#include <string>
+#include <vector>
 
 namespace SpinWaveGenie
 {
@@ -15,25 +16,23 @@ namespace SpinWaveGenie
  the atomic positions of a particular sublattice. In addition, it calculates rotation
  and inverse rotation matrices.
  */
-class Sublattice
+class SPINWAVEGENIE_EXPORT Sublattice
 {
 public:
   //! Default constructor
   Sublattice();
-  //! Destructor
-  ~Sublattice(){};
   //! set name to describe sublattice
   //! \param nameInput a std::string argument unique to each sublattice
-  void setName(std::string nameInput);
+  void setName(const std::string &nameInput);
   //! returns name of a given sublattice
   //! \return name of sublattice
-  std::string getName() const;
-  //! set type to describe magnetic form factor used in the calculation of intensities;
+  const std::string &getName() const;
+  //! set type to describe magnetic form factor used in the calculation of intensities
   //! \param typeInput a std::string argument
-  void setType(std::string typeInput);
+  void setType(const std::string &typeInput);
   //! returns name of a given sublattice
   //! \return name of sublattice
-  std::string getType() const;
+  const std::string &getType() const;
   //! set moment in spherical coordinates r,theta,phi
   /*! \param spinInput magnitude of spin moment
    \param thetaInput angle \f$ 0 \leq \theta \leq  \pi \f$
@@ -41,37 +40,44 @@ public:
    */
   void setMoment(double spinInput, double thetaInput, double phiInput);
   //! \return coordinate \f$ r  \f$ of \f$ \left( r,\theta,\phi \right) \f$, unitless
-  double getMoment() const;
+  double getMoment() const { return spin; }
   //! \return coordinates \f$\theta\f$ of \f$ \left( r,\theta,\phi \right) \f$, in radians
-  double getTheta() const;
+  double getTheta() const { return theta; }
   //! \return coordinates \f$ \phi \f$ of \f$ \left( r,\theta,\phi \right) \f$, in radians
-  double getPhi() const;
+  double getPhi() const { return phi; }
   //! returns rotation matrix as an Eigen::Matrix3d object
   //! \return rotation matrix
-  const Matrix3 &getRotationMatrix() const;
+  const Eigen::Matrix3d &getRotationMatrix() const { return rotationMatrix; }
   //! returns inverse rotation matrix as an Eigen::Matrix3d object
   //! \return inverse rotation matrix
-  const Matrix3 &getInverseMatrix() const;
+  const Eigen::Matrix3d &getInverseMatrix() const { return inverseMatrix; }
   //! add atom to the sublattice
   //! \param x x component of atomic position in Angstroms
   //! \param y y component of atomic position in Angstroms
   //! \param z z component of atomic position in Angstroms
   void addAtom(double x, double y, double z);
-  typedef UniqueThreeVectors<double>::Iterator Iterator;
-  typedef UniqueThreeVectors<double>::ConstIterator ConstIterator;
-  //! returns an Iterator to the first atomic position;
-  Iterator begin();
-  //! returns an Iterator to the end of the vector;
-  Iterator end();
-  //! returns a ConstIterator to the first atomic position;
-  ConstIterator cbegin();
-  //! returns a ConstIterator to the end of the vector;
-  ConstIterator cend();
+  //! returns the number of atoms in this sublattice
+  //! \return number of atoms
+  UniqueThreeVectors<double>::size_type size() const { return positions.size(); }
+  using Iterator = UniqueThreeVectors<double>::Iterator;
+  using ConstIterator = UniqueThreeVectors<double>::ConstIterator;
+  //! returns an Iterator to the first atomic position
+  Iterator begin() { return positions.begin(); }
+  //! returns an Iterator to the end of the vector
+  Iterator end() { return positions.end(); }
+  //! returns an Iterator to the first atomic position
+  ConstIterator begin() const { return positions.cbegin(); }
+  //! returns an Iterator to the end of the vector
+  ConstIterator end() const { return positions.cend(); }
+  //! returns a ConstIterator to the first atomic position
+  ConstIterator cbegin() const { return positions.cbegin(); }
+  //! returns a ConstIterator to the end of the vector
+  ConstIterator cend() const { return positions.cend(); }
 
 private:
-  std::string name, type;
   double spin, theta, phi;
-  Matrix3 rotationMatrix, inverseMatrix;
+  Eigen::Matrix3d rotationMatrix, inverseMatrix;
+  std::string name, type;
   UniqueThreeVectors<double> positions;
 };
 }

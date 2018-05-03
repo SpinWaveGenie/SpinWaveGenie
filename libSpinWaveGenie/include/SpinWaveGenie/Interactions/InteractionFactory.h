@@ -9,26 +9,26 @@
 #ifndef __spin_wave_genie__InteractionFactory__
 #define __spin_wave_genie__InteractionFactory__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <string>
-
-#include "SpinWaveGenie/Containers/Matrices.h"
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include <iostream>
+#include <string>
 
 namespace SpinWaveGenie
 {
 
-class InteractionFactory
+class SPINWAVEGENIE_EXPORT InteractionFactory
 {
 public:
-  std::unique_ptr<Interaction> getExchange(std::string name, double value, std::string sl_r, std::string sl_s,
-                                           double min, double max);
-  std::unique_ptr<Interaction> getDzyaloshinskiiMoriya(std::string name, double value, Vector3 unitVector,
-                                                       std::string sl_r, std::string sl_s, double min, double max);
-  std::unique_ptr<Interaction> getAnisotropy(std::string name, double value, Vector3 unitVector, std::string sl_r);
-  std::unique_ptr<Interaction> getMagneticField(std::string name_in, double value_in, Vector3 direction,
-                                                std::string sl_r_in);
+  std::unique_ptr<Interaction> getExchange(const std::string &name, double value, const std::string &sl_r,
+                                           const std::string &sl_s, double min, double max);
+  std::unique_ptr<Interaction> getDzyaloshinskiiMoriya(const std::string &name, double value,
+                                                       const Eigen::Vector3d &direction, const std::string &sl_r,
+                                                       const std::string &sl_s, double min, double max);
+  std::unique_ptr<Interaction> getAnisotropy(const std::string &name, double value, const Eigen::Vector3d &direction,
+                                             const std::string &sl_r);
+  std::unique_ptr<Interaction> getMagneticField(const std::string &name, double value, const Eigen::Vector3d &direction,
+                                                const std::string &sl_r);
 
 private:
 };

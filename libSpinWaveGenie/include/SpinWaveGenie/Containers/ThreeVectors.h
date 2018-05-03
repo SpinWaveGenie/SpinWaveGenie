@@ -1,38 +1,34 @@
 #ifndef __ThreeVectors__
 #define __ThreeVectors__
 
-#include <vector>
-#include <boost/iterator/zip_iterator.hpp>
-#include <boost/tuple/tuple.hpp>
+#include <array>
+#include <cassert>
 #include <iostream>
+#include <vector>
 
-//! Structure of Arrays used for storing vectors with three components.
+//! Array of Struct used for storing vectors with three components.
 /*!
- Vectors containing three elements are not ideally coellesced in memory.
- Therefore, we use an alternative where where each component is stored
- in a separate vector and accessed using an Iterator.
- */
+ Vectors containing three elements */
 
 namespace SpinWaveGenie
 {
 
 template <typename T> class ThreeVectors
 {
-protected:
-  typedef typename std::vector<T>::iterator ValueIterator;
-  typedef typename std::vector<T>::const_iterator ConstValueIterator;
 
 public:
-  bool empty();
+  bool empty() const;
   //! insert three elements x,y,z
   //! \param x zeroth element of type T
   //! \param y first element of type T
   //! \param z second element of type T
-  void insert(T x, T y, T z);
-  typedef boost::zip_iterator<boost::tuple<ValueIterator, ValueIterator, ValueIterator>> Iterator;
-  typedef boost::zip_iterator<boost::tuple<ConstValueIterator, ConstValueIterator, ConstValueIterator>> ConstIterator;
+  bool insert(T x, T y, T z);
+  using size_type = typename std::vector<std::array<T, 3>>::size_type;
+  using difference_type = typename std::vector<std::array<T, 3>>::difference_type;
+  using Iterator = typename std::vector<std::array<T, 3>>::iterator;
+  using ConstIterator = typename std::vector<std::array<T, 3>>::const_iterator;
   //! \return number of elements in the ThreeVector
-  size_t size();
+  size_type size() const;
   //! Clears all data stored in the ThreeVector.
   void clear();
   //! \return Returns an Iterator pointing to the first element
@@ -40,57 +36,61 @@ public:
   //! \return Returns an Iterator pointing to the end of the vector
   Iterator end();
   //! \return Returns a ConstIterator pointing to the first element
+  ConstIterator begin() const;
+  //! \return Returns an ConstIterator pointing to the end of the vector
+  ConstIterator end() const;
+  //! \return Returns a ConstIterator pointing to the first element
   ConstIterator cbegin() const;
   //! \return Returns an ConstIterator pointing to the end of the vector
   ConstIterator cend() const;
 
 protected:
-  std::vector<T> valuesX;
-  std::vector<T> valuesY;
-  std::vector<T> valuesZ;
+  std::vector<std::array<T, 3>> values;
 };
 
-template <typename T> bool ThreeVectors<T>::empty() { return valuesX.empty(); }
+template <typename T> bool ThreeVectors<T>::empty() const { return values.empty(); }
 
-template <typename T> void ThreeVectors<T>::insert(T x, T y, T z)
+template <typename T> bool ThreeVectors<T>::insert(T x, T y, T z)
 {
-  valuesX.push_back(x);
-  valuesY.push_back(y);
-  valuesZ.push_back(z);
+  values.push_back({{x,y,z}});
+  return true;
 }
 
-template <typename T>
-
-size_t ThreeVectors<T>::size()
-{
-  return valuesX.size();
-}
+template <typename T> typename ThreeVectors<T>::size_type ThreeVectors<T>::size() const { return values.size(); }
 
 template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::begin()
 {
-  return boost::make_zip_iterator(boost::make_tuple(valuesX.begin(), valuesY.begin(), valuesZ.begin()));
+  return values.begin();
 }
 
 template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::end()
 {
-  return boost::make_zip_iterator(boost::make_tuple(valuesX.end(), valuesY.end(), valuesZ.end()));
+  return values.end();
+}
+
+template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::begin() const
+{
+  return values.cbegin();
+}
+
+template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::end() const
+{
+  return values.cend();
 }
 
 template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cbegin() const
 {
-  return boost::make_zip_iterator(boost::make_tuple(valuesX.cbegin(), valuesY.cbegin(), valuesZ.cbegin()));
+  return values.cbegin();
 }
 
 template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cend() const
 {
-  return boost::make_zip_iterator(boost::make_tuple(valuesX.cend(), valuesY.cend(), valuesZ.cend()));
+  return values.cend();
 }
 
 template <typename T> void ThreeVectors<T>::clear()
 {
-  valuesX.clear();
-  valuesY.clear();
-  valuesZ.clear();
+  values.clear();
 }
 }
 #endif /* defined(__ThreeVectors__) */

@@ -9,6 +9,7 @@
 #ifndef __spin_wave_genie__HKLDirection__
 #define __spin_wave_genie__HKLDirection__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <vector>
 
@@ -39,7 +40,7 @@ struct Axis
  Axes DO NOT need to be orthogonal.
  */
 
-class HKLDirections
+class SPINWAVEGENIE_EXPORT HKLDirections
 {
 public:
   //! Add integration direction to container.
@@ -53,36 +54,29 @@ public:
   //! \param delta Integration distance as a fraction of the vector shown above. Total distance is 2*delta
   void addDirection(double v0, double v1, double v2, double delta);
   //! \return Number of integration directions in container.
-  size_t size() const;
+  size_t size() const { return integrationDirections.size(); }
   //! Allow access to container via the subscript operator.
   //! \param position of Axis in container.
   //! \return reference to Axis object.
-  const Axis &operator[](std::size_t position);
-  typedef std::vector<Axis>::iterator Iterator;
-  typedef std::vector<Axis>::const_iterator ConstIterator;
+  const Axis &operator[](std::size_t position) const { return integrationDirections[position]; }
+  using Iterator = std::vector<Axis>::iterator;
+  using ConstIterator = std::vector<Axis>::const_iterator;
   //! \return Iterator pointing to the first Axis element
-  Iterator begin();
+  Iterator begin() { return integrationDirections.begin(); }
   //! \return Iterator pointing to the end of the container.
-  Iterator end();
+  Iterator end() { return integrationDirections.end(); }
   //! \return ConstIterator pointing to the first Axis element
-  ConstIterator cbegin();
+  ConstIterator begin() const { return integrationDirections.cbegin(); }
   //! \return ConstIterator pointing to the end of the container.
-  ConstIterator cend();
+  ConstIterator end() const { return integrationDirections.cend(); }
+  //! \return ConstIterator pointing to the first Axis element
+  ConstIterator cbegin() const { return integrationDirections.cbegin(); }
+  //! \return ConstIterator pointing to the end of the container.
+  ConstIterator cend() const { return integrationDirections.cend(); }
 
 private:
   std::vector<Axis> integrationDirections;
 };
 
-inline const Axis &HKLDirections::operator[](std::size_t position) { return integrationDirections[position]; }
-
-inline size_t HKLDirections::size() const { return integrationDirections.size(); }
-
-inline HKLDirections::Iterator HKLDirections::begin() { return integrationDirections.begin(); }
-
-inline HKLDirections::Iterator HKLDirections::end() { return integrationDirections.end(); }
-
-inline HKLDirections::ConstIterator HKLDirections::cbegin() { return integrationDirections.cbegin(); }
-
-inline HKLDirections::ConstIterator HKLDirections::cend() { return integrationDirections.cend(); }
 }
 #endif /* defined(__spin_wave_genie__HKLDirection__) */

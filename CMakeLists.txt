@@ -1,13 +1,12 @@
-project(spin_wave_genie)
+cmake_minimum_required (VERSION 3.1)
+project(SpinWaveGenie)
 
-cmake_minimum_required (VERSION 2.8.12)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_MACOSX_RPATH FALSE)
-#set(CMAKE_SKIP_RPATH TRUE)
+set(CMAKE_MACOSX_RPATH TRUE)
 
 set(SPINWAVEGENIE_VERSION_MAJOR "0")
-set(SPINWAVEGENIE_VERSION_MINOR "2")
-set(SPINWAVEGENIE_VERSION_PATCH "1")
+set(SPINWAVEGENIE_VERSION_MINOR "3")
+set(SPINWAVEGENIE_VERSION_PATCH "0")
 set(SPINWAVEGENIE_VERSION "${SPINWAVEGENIE_VERSION_MAJOR}.${SPINWAVEGENIE_VERSION_MINOR}.${SPINWAVEGENIE_VERSION_PATCH}")
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -30,45 +29,27 @@ if (COVERALLS)
     coveralls_turn_on_coverage()
 endif()
 
-
-if(${CMAKE_VERSION} VERSION_GREATER 3.1.0 OR ${CMAKE_VERSION} VERSION_EQUAL 3.1.0)
-  set(CMAKE_CXX_STANDARD 14)
-  set(CXX_STANDARD_REQUIRED 11)
-else()
-  if(NOT "${CMAKE_CXX_FLAGS}" MATCHES "c\\+\\+[01][xyz147]")
-    include(CheckCXXCompilerFlag)
-    CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-    if(COMPILER_SUPPORTS_CXX14)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-    elseif(COMPILER_SUPPORTS_CXX11)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    endif()
-  endif()
-endif()
+set(CMAKE_CXX_STANDARD 14)
+set(CXX_STANDARD_REQUIRED 14)
 # XCode isn't picking up the standard set above.
 if(CMAKE_GENERATOR STREQUAL Xcode)
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -Wall -Wextra -Wpedantic")
+if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+  string(APPEND CMAKE_CXX_FLAGS " -DEIGEN_DONT_PARALLELIZE -Wall -Wextra")
 endif()
 
-if(CMAKE_GENERATOR STREQUAL Xcode)
-  set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
-  set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
-endif()
 option(WITH_SANITIZERS "Enable sanitizers" OFF)
 if(WITH_SANITIZERS)
   message(STATUS "enabling address & undefined behavior sanitizers")
   file(WRITE ${PROJECT_BINARY_DIR}/ubsan.txt "fun:*_Ios_Fmtflags*")
-  set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
-  add_compile_options(-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${SAN_FLAGS}" )
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${SAN_FLAGS}" )
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SAN_FLAGS}" )
+  set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
+  add_compile_options(-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
+  string(APPEND CMAKE_MODULE_LINKER_FLAGS "${SAN_FLAGS}" )
+  string(APPEND CMAKE_EXE_LINKER_FLAGS "${SAN_FLAGS}" )
+  string(APPEND CMAKE_SHARED_LINKER_FLAGS "${SAN_FLAGS}" )
 endif()
 
 option(WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
@@ -80,22 +61,23 @@ if(WARNINGS_AS_ERRORS)
   endif()
 endif()
 
-find_package(Eigen3 REQUIRED)
+include(Eigen)
 
 find_package(Threads)
 if(USE_THREADS)
   find_package(TBB)
 endif()
 
-string(FIND ${CMAKE_SYSTEM} "el6" isRHEL6)
-if (isRHEL6)
-    set(Boost_NO_BOOST_CMAKE ON)
-endif(isRHEL6)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
+
+if(MSVC)
+  add_compile_options(/wd4251)
+endif()
 
 if(WIN32)
     add_definitions( -DBOOST_ALL_NO_LIB
                      -DBOOST_ALL_DYN_LINK
+                     -D_CRT_SECURE_NO_WARNINGS
                      -D_USE_MATH_DEFINES
                      -DNOMINMAX)
 endif()
@@ -110,27 +92,30 @@ if(BUILD_TESTING)
 endif(BUILD_TESTING)
 
 if(USE_THREADS AND TBB_FOUND )
-add_definitions(-DUSE_THREADS)
-endif()
-
-INCLUDE (CheckIncludeFileCXX)
-CHECK_INCLUDE_FILE_CXX( atomic HAVE_ATOMIC)
-if(HAVE_ATOMIC)
-    add_definitions(-DHAVE_ATOMIC_H)
+    add_definitions(-DUSE_THREADS)
 endif()
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target(doc
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen" VERBATIM
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc
+  ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
-endif(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
+endif()
+
+option( PYTHON_API "Build Python bindings for SpinWaveGenie" ON)
+if(PYTHON_API)
+  add_subdirectory( pybind11 )
+endif()
 
 add_subdirectory(libSpinWaveGenie)
+
+if(PYTHON_API)
+  add_subdirectory(pythonapi)
+endif()
 
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
@@ -156,20 +141,28 @@ set ( CPACK_RPM_PACKAGE_LICENSE "BSD 3-clause License" )
 set ( CPACK_RPM_PACKAGE_RELEASE 1 )
 set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
 set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
-set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake >= 2.8.12 gcc-c++ doxygen boost-test boost-devel" )
+set ( CPACK_RPM_PACKAGE_REQUIRES "gcc-c++ doxygen boost-test boost-devel" )
+if ( "${UNIX_DIST}" MATCHES "Fedora" )
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " cmake >= 3.1" )
+else ()
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " cmake3 >= 3.1" )
+endif()
+
 if(USE_THREADS AND TBB_FOUND )
-  set ( CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES} tbb-devel" )
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " tbb-devel" )
   set ( CPACK_RPM_USE_THREADS "1" )
 else()
   set ( CPACK_RPM_USE_THREADS "0" )
 endif()
+if(PYTHON_API)
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " python2-devel" )
+endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
-
+                ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
 
 add_custom_command( OUTPUT SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
-                    COMMAND git archive --format=tar --prefix=SpinWaveGenie-${CPACK_PACKAGE_VERSION}/ HEAD | gzip -c > ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
+                    COMMAND git archive-all --prefix=SpinWaveGenie-${CPACK_PACKAGE_VERSION}/ ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
 add_custom_target( source_tgz

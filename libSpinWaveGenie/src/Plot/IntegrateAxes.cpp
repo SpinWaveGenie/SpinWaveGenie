@@ -13,16 +13,16 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-IntegrateAxes::IntegrateAxes(const IntegrateAxes &other) : kx(0.0), ky(0.0), kz(0.0)
+IntegrateAxes::IntegrateAxes(const IntegrateAxes &other)
 {
-  resolutionFunction = move(other.resolutionFunction->clone());
+  resolutionFunction = other.resolutionFunction->clone();
   this->maximumEvaluations = other.maximumEvaluations;
   this->tolerance = other.tolerance;
   this->integrationDirections = other.integrationDirections;
 }
 
-IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol, int maxEvals)
-    : kx(0.0), ky(0.0), kz(0.0)
+IntegrateAxes::IntegrateAxes(unique_ptr<SpinWavePlot> &&resFunction, const HKLDirections &directions, double tol,
+                             int maxEvals)
 {
   this->tolerance = tol;
   this->maximumEvaluations = maxEvals;
@@ -54,7 +54,7 @@ std::vector<double> IntegrateAxes::calculateIntegrand(std::deque<double> &x)
 struct DivideValue
 {
   double value;
-  DivideValue(double v) { value = 1.0 / v; }
+  DivideValue(double v) : value{1.0 / v} {}
   void operator()(double &elem) const { elem *= value; }
 };
 
@@ -99,7 +99,7 @@ const Cell &IntegrateAxes::getCell() const { return resolutionFunction->getCell(
 
 const Energies &IntegrateAxes::getEnergies() { return resolutionFunction->getEnergies(); }
 
-void IntegrateAxes::setEnergies(Energies energiesIn) { resolutionFunction->setEnergies(energiesIn); }
+void IntegrateAxes::setEnergies(const Energies &energiesIn) { resolutionFunction->setEnergies(energiesIn); }
 
-std::unique_ptr<SpinWavePlot> IntegrateAxes::clone() { return memory::make_unique<IntegrateAxes>(*this); }
+std::unique_ptr<SpinWavePlot> IntegrateAxes::clone() const { return std::make_unique<IntegrateAxes>(*this); }
 }

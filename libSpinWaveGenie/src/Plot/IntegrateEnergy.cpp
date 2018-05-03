@@ -16,16 +16,23 @@ namespace SpinWaveGenie
 
 IntegrateEnergy::IntegrateEnergy(const IntegrateEnergy &other) : kx(0.0), ky(0.0), kz(0.0)
 {
-  resolutionFunction = move(other.resolutionFunction->clone());
+  resolutionFunction = other.resolutionFunction->clone();
   this->centeredEnergies = other.centeredEnergies;
   this->delta = other.delta;
   this->tolerance = other.tolerance;
   this->maximumEvaluations = other.maximumEvaluations;
 }
 
-IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol,
-                                 int maxEvals)
+IntegrateEnergy::IntegrateEnergy(unique_ptr<SpinWavePlot> resFunction, const Energies &energies, double delta,
+                                 double tol, int maxEvals)
     : resolutionFunction(std::move(resFunction)), maximumEvaluations(maxEvals), tolerance(tol), delta(delta), kx(0.0),
+      ky(0.0), kz(0.0), centeredEnergies(energies)
+{
+}
+
+IntegrateEnergy::IntegrateEnergy(const SpinWavePlot &resFunction, const Energies &energies, double delta, double tol,
+                                 int maxEvals)
+    : resolutionFunction(resFunction.clone()), maximumEvaluations(maxEvals), tolerance(tol), delta(delta), kx(0.0),
       ky(0.0), kz(0.0), centeredEnergies(energies)
 {
 }
@@ -66,7 +73,7 @@ const Cell &IntegrateEnergy::getCell() const { return resolutionFunction->getCel
 
 const Energies &IntegrateEnergy::getEnergies() { return centeredEnergies; }
 
-void IntegrateEnergy::setEnergies(Energies energiesIn) { centeredEnergies = energiesIn; }
+void IntegrateEnergy::setEnergies(const Energies &energiesIn) { centeredEnergies = energiesIn; }
 
-std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() { return memory::make_unique<IntegrateEnergy>(*this); }
+std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() const { return std::make_unique<IntegrateEnergy>(*this); }
 }

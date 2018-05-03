@@ -1,7 +1,7 @@
-#include <iostream>
 #include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Memory.h"
+#include <cassert>
+#include <iostream>
 
 using namespace std;
 using namespace Eigen;
@@ -9,19 +9,21 @@ using namespace Eigen;
 namespace SpinWaveGenie
 {
 
-ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(string name_in, double value_in, string sl_r_in,
-                                                                     double min_in, double max_in)
-    : name(std::move(name_in)), r(0), s(0), M(0)
+ExchangeInteractionSameSublattice::ExchangeInteractionSameSublattice(const string &name_in, double value_in,
+                                                                     const string &sl_r_in, double min_in,
+                                                                     double max_in)
+    : name(name_in), r(0), M(0)
 {
   this->updateInteraction(value_in, sl_r_in, min_in, max_in);
 }
 
 std::unique_ptr<Interaction> ExchangeInteractionSameSublattice::clone() const
 {
-  return memory::make_unique<ExchangeInteractionSameSublattice>(*this);
+  return std::make_unique<ExchangeInteractionSameSublattice>(*this);
 }
 
-void ExchangeInteractionSameSublattice::updateInteraction(double value_in, string sl_r_in, double min_in, double max_in)
+void ExchangeInteractionSameSublattice::updateInteraction(double value_in, const string &sl_r_in, double min_in,
+                                                          double max_in)
 {
   value = value_in;
   sl_r = sl_r_in;
@@ -29,13 +31,13 @@ void ExchangeInteractionSameSublattice::updateInteraction(double value_in, strin
   max = max_in;
 }
 
-const string &ExchangeInteractionSameSublattice::getName() { return name; }
+const string &ExchangeInteractionSameSublattice::getName() const { return name; }
 
 void ExchangeInteractionSameSublattice::updateValue(double value_in) { value = value_in; }
 
 std::array<std::string, 2> ExchangeInteractionSameSublattice::sublattices() const { return {{sl_r, sl_r}}; }
 
-void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
+void ExchangeInteractionSameSublattice::calcConstantValues(const Cell &cell)
 {
   // cout << "cell check(calcConstantValues): " << cell.begin()->getName() << endl;
   r = cell.getPosition(sl_r);
@@ -47,7 +49,7 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
   // cout << "Sr: " << Sr << endl;
 
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
   // cout << "z_rs = " << z_rs << endl;
 
   // cout << "cell check(calcConstantValues): " << cell2.begin()->getName() << endl;
@@ -57,24 +59,24 @@ void ExchangeInteractionSameSublattice::calcConstantValues(Cell &cell)
   // cout << LNrr << " " << LNrs << endl;
 }
 
-void ExchangeInteractionSameSublattice::calculateEnergy(Cell &cell, double &energy)
+void ExchangeInteractionSameSublattice::calculateEnergy(const Cell &cell, double &energy)
 {
   r = cell.getPosition(sl_r);
   neighbors.findNeighbors(cell, sl_r, sl_r, min, max);
-  double z_rs = static_cast<double>(neighbors.size());
+  auto z_rs = static_cast<double>(neighbors.size());
   double Sr = cell[r].getMoment();
-
-  energy -= value * z_rs * Sr * Sr;
+  size_t numberOfAtoms = cell[r].size();
+  energy -= value * z_rs * numberOfAtoms * Sr * Sr;
 }
 
-void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(Cell & /*cell*/, VectorXcd & /*elements*/)
+void ExchangeInteractionSameSublattice::calculateFirstOrderTerms(const Cell & /*cell*/, VectorXcd & /*elements*/)
 {
   // first order terms are 0.0
 }
 
-void ExchangeInteractionSameSublattice::updateMatrix(Vector3d K, MatrixXcd &LN)
+void ExchangeInteractionSameSublattice::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) const
 {
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << value << " " << sl_r << " " << sl_r << " " << gamma_rs << endl;
 
   // cout << "number of neighbors: " << neighbors.size() << endl;

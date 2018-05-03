@@ -9,14 +9,14 @@
 #ifndef __spin_wave_genie__TwoDGaussian__
 #define __spin_wave_genie__TwoDGaussian__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class TwoDGaussian : public OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT TwoDGaussian : public OneDimensionalShapes
 {
 public:
   // void setFWHM(double InFWHM){};
@@ -26,8 +26,7 @@ public:
   double getMinimumEnergy() override;
   double getMaximumEnergy() override;
   double getFunction(double frequency, double energy) override;
-  std::unique_ptr<OneDimensionalShapes> clone() override;
-  ~TwoDGaussian(){};
+  std::unique_ptr<OneDimensionalShapes> clone() const override;
 
 private:
   double getExponentialFactor();

@@ -9,36 +9,35 @@
 #ifndef __IntegrateAxes__
 #define __IntegrateAxes__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <vector>
-#include <deque>
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
-#include "SpinWaveGenie/Containers/HKLDirections.h"
 #include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Containers/HKLDirections.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <deque>
+#include <iostream>
+#include <vector>
 
 namespace SpinWaveGenie
 {
 
-class IntegrateAxes : public SpinWavePlot
+class SPINWAVEGENIE_EXPORT IntegrateAxes : public SpinWavePlot
 {
 public:
   IntegrateAxes(const IntegrateAxes &other);
-  IntegrateAxes(std::unique_ptr<SpinWavePlot> resFunction, HKLDirections directions, double tol = 0.01,
-                int maxEval = 100);
-  std::vector<double> getCut(double kx, double ky, double kz) override;
-  std::unique_ptr<SpinWavePlot> clone() override;
+  IntegrateAxes(std::unique_ptr<SpinWavePlot> &&resFunction, const HKLDirections &directions, double tol = 0.01,
+                int maxEvals = 100);
+  std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
+  std::unique_ptr<SpinWavePlot> clone() const override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
-  void setEnergies(Energies energies) override;
-  ~IntegrateAxes(){};
+  void setEnergies(const Energies &energiesIn) override;
 
 private:
   std::unique_ptr<SpinWavePlot> resolutionFunction;
   HKLDirections integrationDirections;
   int maximumEvaluations;
   double tolerance;
-  double kx, ky, kz;
+  double kx{0.0}, ky{0.0}, kz{0.0};
   std::vector<double> calculateIntegrand(std::deque<double> &x);
   std::vector<double> xmin, xmax;
 };

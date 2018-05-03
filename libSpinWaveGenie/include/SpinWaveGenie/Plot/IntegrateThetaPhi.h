@@ -9,28 +9,28 @@
 #ifndef __spin_wave_genie__IntegrateThetaPhi__
 #define __spin_wave_genie__IntegrateThetaPhi__
 
+#include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include <deque>
 #include <vector>
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
-#include "SpinWaveGenie/Containers/Energies.h"
 
 namespace SpinWaveGenie
 {
 
-class IntegrateThetaPhi : public SpinWavePlot
+class SPINWAVEGENIE_EXPORT IntegrateThetaPhi : public SpinWavePlot
 {
 public:
   IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol = 1.0e-4, int maxEvals = 1000)
       : maximumEvaluations(maxEvals), r(0.0), tolerance(tol), resolutionFunction(std::move(object)){};
   IntegrateThetaPhi(const IntegrateThetaPhi &other)
       : maximumEvaluations(other.maximumEvaluations), r(0.0), tolerance(other.tolerance),
-        resolutionFunction(move(other.resolutionFunction->clone())){};
-  std::unique_ptr<SpinWavePlot> clone() override;
+        resolutionFunction(other.resolutionFunction->clone()){};
+  std::unique_ptr<SpinWavePlot> clone() const override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
-  void setEnergies(Energies energies) override;
+  void setEnergies(const Energies &energiesIn) override;
   std::vector<double> getCut(double kx, double ky, double kz) override;
-  ~IntegrateThetaPhi(){};
 
 private:
   std::vector<double> calculateIntegrand(std::deque<double> &x);

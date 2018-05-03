@@ -12,50 +12,39 @@ using namespace SpinWaveGenie;
 
 BOOST_AUTO_TEST_CASE( CubicBasisVectors )
 {
-    Matrix3 ActualBasisVectors,ActualReciprocalVectors;
-    ActualBasisVectors <<
-    2.0,0.0,0.0,
-    0.0,2.0,0.0,
-    0.0,0.0,2.0;
-    
-    ActualReciprocalVectors <<
-    M_PI,0.0,0.0,
-    0.0,M_PI,0.0,
-    0.0,0.0,M_PI;
-    
-    Cell test;
-    test.setBasisVectors(2.0,2.0,2.0,90.0,90.0,90.0);
-    Matrix3 BasisVectors = test.getBasisVectors();
-    Matrix3 diff = BasisVectors-ActualBasisVectors;
-    BOOST_CHECK_SMALL(diff.norm(),1.0e-8);
-    
-    Matrix3 ReciprocalVectors = test.getReciprocalVectors();
-    diff = ReciprocalVectors-ActualReciprocalVectors;
-    BOOST_CHECK_SMALL(diff.norm(),1.0e-8);
+  Eigen::Matrix3d ActualBasisVectors, ActualReciprocalVectors;
+  ActualBasisVectors << 2.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 2.0;
+
+  ActualReciprocalVectors << M_PI, 0.0, 0.0, 0.0, M_PI, 0.0, 0.0, 0.0, M_PI;
+
+  Cell test;
+  test.setBasisVectors(2.0, 2.0, 2.0, 90.0, 90.0, 90.0);
+  Eigen::Matrix3d BasisVectors = test.getBasisVectors();
+  Eigen::Matrix3d diff = BasisVectors - ActualBasisVectors;
+  BOOST_CHECK_SMALL(diff.norm(), 1.0e-8);
+
+  Eigen::Matrix3d ReciprocalVectors = test.getReciprocalVectors();
+  diff = ReciprocalVectors - ActualReciprocalVectors;
+  BOOST_CHECK_SMALL(diff.norm(), 1.0e-8);
 }
 
 BOOST_AUTO_TEST_CASE( HexagonalBasisVectors )
 {
-    Matrix3 ActualBasisVectors,ActualReciprocalVectors;
-    ActualBasisVectors <<
-    1.0,0.0,0.0,
-    -0.5,0.5*sqrt(3.0),0.0,
-    0.0,0.0,1.0;
-    
-    ActualReciprocalVectors <<
-    2.0*M_PI,2.0*M_PI/sqrt(3),0.0,
-    0.0,4.0*M_PI/sqrt(3),0.0,
-    0.0,0.0,2.0*M_PI;
-    
-    Cell test;
-    test.setBasisVectors(1.0,1.0,1.0,90.0,90.0,120.0);
-    Matrix3 BasisVectors = test.getBasisVectors();
-    Matrix3 diff = BasisVectors-ActualBasisVectors;
-    BOOST_CHECK_SMALL(diff.norm(),1.0e-8);
-    
-    Matrix3 ReciprocalVectors = test.getReciprocalVectors();
-    diff = ReciprocalVectors-ActualReciprocalVectors;
-    BOOST_CHECK_SMALL(diff.norm(),1.0e-8);
+  Eigen::Matrix3d ActualBasisVectors, ActualReciprocalVectors;
+  ActualBasisVectors << 1.0, 0.0, 0.0, -0.5, 0.5 * sqrt(3.0), 0.0, 0.0, 0.0, 1.0;
+
+  ActualReciprocalVectors << 2.0 * M_PI, 2.0 * M_PI / sqrt(3), 0.0, 0.0, 4.0 * M_PI / sqrt(3), 0.0, 0.0, 0.0,
+      2.0 * M_PI;
+
+  Cell test;
+  test.setBasisVectors(1.0, 1.0, 1.0, 90.0, 90.0, 120.0);
+  Eigen::Matrix3d BasisVectors = test.getBasisVectors();
+  Eigen::Matrix3d diff = BasisVectors - ActualBasisVectors;
+  BOOST_CHECK_SMALL(diff.norm(), 1.0e-8);
+
+  Eigen::Matrix3d ReciprocalVectors = test.getReciprocalVectors();
+  diff = ReciprocalVectors - ActualReciprocalVectors;
+  BOOST_CHECK_SMALL(diff.norm(), 1.0e-8);
     
 }
 
@@ -105,14 +94,16 @@ BOOST_AUTO_TEST_CASE( AddAtom )
     
     bool foundAtom1 = false;
     bool foundAtom2 = false;
-    for (Sublattice::Iterator atom=cell.getSublattice("SL1").begin(); atom!=cell.getSublattice("SL1").end(); ++atom)
+    for (const auto &atom : cell.getSublattice("SL1"))
     {
-        Vector3 atomdistance1(atom->get<0>()-0.0,atom->get<1>()-0.0,atom->get<2>()-0.0);
-        Vector3 atomdistance2(atom->get<0>()-1.0,atom->get<1>()-1.0,atom->get<2>()-1.0);
-        if (atomdistance1.norm() <0.01)
-            foundAtom1 = true;
-        if (atomdistance2.norm() <0.01)
-            foundAtom2 = true;
+      Eigen::Vector3d atomdistance1(atom[0] - 0.0, atom[1] - 0.0, atom[2] - 0.0);
+      Eigen::Vector3d atomdistance2(atom[0] - 1.0, atom[1] - 1.0, atom[2] - 1.0);
+      if (atomdistance1.norm() < 0.01) {
+        foundAtom1 = true;
+}
+      if (atomdistance2.norm() < 0.01) {
+        foundAtom2 = true;
+}
     }
     BOOST_CHECK(foundAtom1);
     BOOST_CHECK(foundAtom2);
@@ -137,14 +128,17 @@ BOOST_AUTO_TEST_CASE(Iterator)
     bool foundSL1 = false;
     bool foundSL2 = false;
     bool foundBlank = false;
-    for (auto & elem : cell)
+    for (const auto &elem : cell)
     {
-        if ( elem.getName() == "SL1")
+        if ( elem.getName() == "SL1") {
             foundSL1 = true;
-        if ( elem.getName() == "SL2" )
+}
+        if ( elem.getName() == "SL2" ) {
             foundSL2 = true;
-        if ( elem.getName() == "" )
+}
+        if ( elem.getName().empty() ) {
             foundBlank = true;
+}
     }
     BOOST_CHECK(foundSL1);
     BOOST_CHECK(foundSL2);

@@ -1,21 +1,19 @@
 #include "SpinWaveGenie/Containers/Cell.h"
+
+#include "boost/math/special_functions/pow.hpp"
+
 #include <Eigen/Dense>
 #include <iostream>
 #include <string>
 #include <stdexcept>
-
-using std::pair;
-using std::string;
-using std::cout;
-using std::endl;
 
 namespace SpinWaveGenie
 {
 
 struct CompareSublatticeNames
 {
-  CompareSublatticeNames(std::string name) : name(std::move(name)) {}
-  bool operator()(const Sublattice &arg) { return name.compare(arg.getName()) == 0; }
+  CompareSublatticeNames(const std::string &sublatticeName) : name(sublatticeName) {}
+  bool operator()(const Sublattice &arg) { return name == arg.getName(); }
   std::string name;
 };
 
@@ -23,16 +21,17 @@ void Cell::setBasisVectors(double a, double b, double c, double alpha_deg, doubl
 {
   //! <a href=https://github.com/mantidproject/documents/blob/master/Design/UBMatriximplementationnotes.pdf> Reference
   //</a>
+  constexpr double deg2rad = M_PI / 180.0;
   double alpha, beta, gamma;
-  alpha = alpha_deg * M_PI / 180.0;
-  beta = beta_deg * M_PI / 180.0;
-  gamma = gamma_deg * M_PI / 180.0;
+  alpha = alpha_deg * deg2rad;
+  beta = beta_deg * deg2rad;
+  gamma = gamma_deg * deg2rad;
 
-  double ci, cj, ck;
-  ci = c * cos(beta);
-  cj = c * (cos(alpha) - cos(gamma) * cos(beta)) / sin(gamma);
-  ck = c / sin(gamma) * sqrt(1.0 - pow(cos(alpha), 2) - pow(cos(beta), 2) - pow(cos(gamma), 2) +
-                             2.0 * cos(alpha) * cos(beta) * cos(gamma));
+  double ci = c * std::cos(beta);
+  double cj = c * (std::cos(alpha) - std::cos(gamma) * std::cos(beta)) / std::sin(gamma);
+  double ck = c / std::sin(gamma) *
+              std::sqrt(1.0 - boost::math::pow<2>(cos(alpha)) - boost::math::pow<2>(cos(beta)) -
+                        boost::math::pow<2>(cos(gamma)) + 2.0 * cos(alpha) * cos(beta) * cos(gamma));
 
   basisVectors << a, 0.0, 0.0, b *cos(gamma), b * sin(gamma), 0.0, ci, cj, ck;
 
@@ -47,15 +46,15 @@ void Cell::setBasisVectors(double a, double b, double c, double alpha_deg, doubl
   // cout << "recip vectors equal" <<reciprocalVectors << endl;
 }
 
-void Cell::setBasisVectors(double scale, Matrix3 basis) { basisVectors = scale * basis; }
+void Cell::setBasisVectors(double scale, const Eigen::Matrix3d &basis) { basisVectors = scale * basis; }
 
-const Matrix3 &Cell::getBasisVectors() const { return basisVectors; }
+const Eigen::Matrix3d &Cell::getBasisVectors() const { return basisVectors; }
 
-const Matrix3 &Cell::getReciprocalVectors() const { return reciprocalVectors; }
+const Eigen::Matrix3d &Cell::getReciprocalVectors() const { return reciprocalVectors; }
 
-void Cell::addSublattice(Sublattice &sl)
+void Cell::addSublattice(const Sublattice &sl)
 {
-  std::string name = sl.getName();
+  const std::string &name = sl.getName();
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it != sublatticeInfo.end())
   {
@@ -67,7 +66,7 @@ void Cell::addSublattice(Sublattice &sl)
   }
 }
 
-Sublattice &Cell::getSublattice(string name)
+Sublattice &Cell::getSublattice(const std::string &name)
 {
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it == sublatticeInfo.end())
@@ -77,9 +76,22 @@ Sublattice &Cell::getSublattice(string name)
   return *it;
 }
 
-Sublattice &Cell::operator[](std::size_t position) { return sublatticeInfo[position]; }
+const Sublattice &Cell::getSublattice(const std::string &name) const
+{
+  auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
+  if (it == sublatticeInfo.end())
+  {
+    throw std::invalid_argument("sublattice not found");
+  }
+  return *it;
+}
 
-std::size_t Cell::getPosition(std::string name)
+const Sublattice &Cell::operator[](std::vector<Sublattice>::size_type position) const
+{
+  return sublatticeInfo[position];
+}
+
+std::vector<Sublattice>::difference_type Cell::getPosition(const std::string &name) const
 {
   auto it = std::find_if(sublatticeInfo.begin(), sublatticeInfo.end(), CompareSublatticeNames(name));
   if (it == sublatticeInfo.end())
@@ -89,28 +101,19 @@ std::size_t Cell::getPosition(std::string name)
   return std::distance(sublatticeInfo.begin(), it);
 }
 
-void Cell::addAtom(std::string name, double x, double y, double z)
+void Cell::addAtom(const std::string &name, double x, double y, double z)
 {
-  Vector3 scaled_position(x, y, z);
+  Eigen::Vector3d scaled_position(x, y, z);
 
   // cout << "scaled= " << scaled_position.transpose() << endl;
   // cout << basisVectors << endl;
 
-  Vector3 pos = scaled_position.transpose() * basisVectors;
+  Eigen::Vector3d pos = scaled_position.transpose() * basisVectors;
 
   // cout << "unscaled= " << pos.transpose() << endl;
   // cout << " " <<endl;
 
-  getSublattice(name).addAtom(pos[0], pos[1], pos[2]);
+  this->getSublattice(name).addAtom(pos[0], pos[1], pos[2]);
 }
 
-size_t Cell::size() const { return sublatticeInfo.size(); }
-
-Cell::Iterator Cell::begin() { return sublatticeInfo.begin(); }
-
-Cell::Iterator Cell::end() { return sublatticeInfo.end(); }
-
-Cell::ConstIterator Cell::cbegin() { return sublatticeInfo.cbegin(); }
-
-Cell::ConstIterator Cell::cend() { return sublatticeInfo.cend(); }
 }

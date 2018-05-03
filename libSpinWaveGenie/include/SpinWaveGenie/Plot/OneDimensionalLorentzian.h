@@ -9,14 +9,14 @@
 #ifndef __OneDimensionalLorentzian__
 #define __OneDimensionalLorentzian__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class OneDimensionalLorentzian : public OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT OneDimensionalLorentzian : public OneDimensionalShapes
 {
 public:
   void setFWHM(double InFWHM);
@@ -24,8 +24,7 @@ public:
   double getMinimumEnergy() override;
   double getMaximumEnergy() override;
   double getFunction(double frequency, double energy) override;
-  std::unique_ptr<OneDimensionalShapes> clone() override;
-  ~OneDimensionalLorentzian(){};
+  std::unique_ptr<OneDimensionalShapes> clone() const override;
 
 private:
   double getExponentialFactor();

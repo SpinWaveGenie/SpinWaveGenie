@@ -26,23 +26,15 @@ namespace SpinWaveGenie
 
 MagneticFormFactor::MagneticFormFactor() { this->initializeMap(); }
 
-MagneticFormFactor::MagneticFormFactor(std::string type)
+MagneticFormFactor::MagneticFormFactor(const std::string &type)
 {
   this->initializeMap();
   this->setType(type);
 }
 
-MagneticFormFactor::MagneticFormFactor(const MagneticFormFactor &other)
-    : coefficients(other.coefficients), Farray(other.Farray), NormalizedWeights(other.NormalizedWeights)
-{
-}
-
 void MagneticFormFactor::initializeMap()
 {
   coefficients =
-#ifdef _WIN32
-      std::initializer_list<std::pair<const std::string, std::vector<double>>>
-#endif
       {{"NONE", vector<double>{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0}},
        {"AM2", vector<double>{0.474300, 21.776100, 1.580000, 5.690200, -1.077900, 4.145100, 0.021800}},
        {"AM3", vector<double>{0.423900, 19.573900, 1.457300, 5.872200, -0.905200, 3.968200, 0.023800}},
@@ -142,14 +134,14 @@ void MagneticFormFactor::initializeMap()
        {"ZR1", vector<double>{0.453200, 59.594799, 0.783400, 21.435699, -0.245100, 9.036000, 0.009800}}};
 }
 
-void MagneticFormFactor::setType(std::string type)
+void MagneticFormFactor::setType(const std::string &type)
 {
   Farray.clear();
   NormalizedWeights.clear();
   setType(type, 1.0);
 }
 
-void MagneticFormFactor::setType(std::string type, double weight)
+void MagneticFormFactor::setType(const std::string &type, double weight)
 {
 
   if (coefficients.find(type) != coefficients.end())
@@ -163,7 +155,7 @@ void MagneticFormFactor::setType(std::string type, double weight)
   }
 }
 
-void MagneticFormFactor::setType(std::vector<std::string> types, std::vector<double> weights)
+void MagneticFormFactor::setType(const std::vector<std::string> &types, const std::vector<double> &weights)
 {
 
   if (types.size() != weights.size())
@@ -192,9 +184,9 @@ void MagneticFormFactor::setType(std::vector<std::string> types, std::vector<dou
 class calculateFormFactor
 {
 public:
-  calculateFormFactor(double x, double y, double z)
+  calculateFormFactor(double kx, double ky, double kz)
   {
-    ms2 = -1.0 * (pow(x, 2) + pow(y, 2) + pow(z, 2)) / (16.0 * M_PI * M_PI);
+    ms2 = -1.0 * (pow(kx, 2) + pow(ky, 2) + pow(kz, 2)) / (16.0 * M_PI * M_PI);
   }
   double operator()(double result, const boost::tuple<vector<double>, double> &element)
   {
@@ -209,7 +201,7 @@ private:
 
 double MagneticFormFactor::getFormFactor(double x, double y, double z)
 {
-  if (Farray.size() == 0)
+  if (Farray.empty())
   {
     throw std::runtime_error("Magnetic Form Factor Not Set");
   }

@@ -1,6 +1,5 @@
 #include "SpinWaveGenie/Interactions/DM_Y_Interaction.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 using namespace Eigen;
@@ -8,16 +7,17 @@ using namespace Eigen;
 namespace SpinWaveGenie
 {
 
-DM_Y_Interaction::DM_Y_Interaction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in,
-                                   double max_in)
-    : name(std::move(name_in)), r(0), s(0), M(0), value0(0.0), value1(0.0), value2(0.0), value3(0.0), z_rs(0)
+DM_Y_Interaction::DM_Y_Interaction(const string &name_in, double value_in, const string &sl_r_in, const string &sl_s_in,
+                                   double min_in, double max_in)
+    : name(name_in), r(0), s(0), M(0), value0(0.0), value1(0.0), value2(0.0), value3(0.0), z_rs(0)
 {
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
-std::unique_ptr<Interaction> DM_Y_Interaction::clone() const { return memory::make_unique<DM_Y_Interaction>(*this); }
+std::unique_ptr<Interaction> DM_Y_Interaction::clone() const { return std::make_unique<DM_Y_Interaction>(*this); }
 
-void DM_Y_Interaction::updateInteraction(double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
+void DM_Y_Interaction::updateInteraction(double value_in, const string &sl_r_in, const string &sl_s_in, double min_in,
+                                         double max_in)
 {
   value = value_in;
   sl_r = sl_r_in;
@@ -26,13 +26,13 @@ void DM_Y_Interaction::updateInteraction(double value_in, string sl_r_in, string
   max = max_in;
 }
 
-const string &DM_Y_Interaction::getName() { return name; }
+const string &DM_Y_Interaction::getName() const { return name; }
 
 void DM_Y_Interaction::updateValue(double value_in) { value = value_in; }
 
 std::array<std::string, 2> DM_Y_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
-void DM_Y_Interaction::calcConstantValues(Cell &cell)
+void DM_Y_Interaction::calcConstantValues(const Cell &cell)
 {
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
@@ -58,14 +58,14 @@ void DM_Y_Interaction::calcConstantValues(Cell &cell)
   // cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
 }
 
-void DM_Y_Interaction::calculateEnergy(Cell & /*cell*/, double & /*energy*/) {}
+void DM_Y_Interaction::calculateEnergy(const Cell & /*cell*/, double & /*energy*/) {}
 
-void DM_Y_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
+void DM_Y_Interaction::calculateFirstOrderTerms(const Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Y_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
+void DM_Y_Interaction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
   // cout << value0 << " " << value1 << " " << value2 << " " << value3 << " " << endl;
   // cout << z_rs << " " << endl;
   LN(r, r) += z_rs * value0;

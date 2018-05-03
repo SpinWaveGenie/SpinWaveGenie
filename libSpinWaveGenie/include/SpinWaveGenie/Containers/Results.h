@@ -9,6 +9,7 @@
 #ifndef __spin_wave_genie__Results__
 #define __spin_wave_genie__Results__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <vector>
 
@@ -22,7 +23,9 @@ namespace SpinWaveGenie
  */
 struct Point
 {
+  //! Frequency associated with a given excitation (in meV).
   double frequency;
+  //! Measurable intensity of a given excitation (arb. units).
   double intensity;
   //! \return Whether this Point has lower frequency than Point val.
   bool operator<(const Point &val) const { return frequency < val.frequency; }
@@ -36,13 +39,13 @@ struct Point
  significant intensity are discarded.
  */
 
-class Results
+class SPINWAVEGENIE_EXPORT Results
 {
 public:
   //! Insert Point struct into container.
   void insert(Point value);
   //! \return size of Results container.
-  std::size_t size() const;
+  std::size_t size() const { return results.size(); }
   //! Sort Results by frequency.
   void sort();
   //! Clear results container so that the size is zero.
@@ -51,33 +54,25 @@ public:
   void uniqueSolutions();
   //! Filter Points by removing those without significant intensity.
   void significantSolutions(double ETS = 1.0e-10);
-  const Point &operator[](std::size_t position);
-  typedef std::vector<Point>::iterator Iterator;
-  typedef std::vector<Point>::const_iterator ConstIterator;
+  const Point &operator[](std::size_t bin) const { return results[bin]; }
+  using Iterator = std::vector<Point>::iterator;
+  using ConstIterator = std::vector<Point>::const_iterator;
   //! \return Returns an Iterator pointing to the first element in the container.
-  Iterator begin();
+  Iterator begin() { return results.begin(); }
   //! \return Returns an Iterator pointing to the end of the container.
-  Iterator end();
+  Iterator end() { return results.end(); }
   //! \return Returns an ConstIterator pointing to the first element in the container.
-  ConstIterator cbegin() const;
+  ConstIterator begin() const { return results.cbegin(); }
   //! \return Returns an ConstIterator pointing to the end of the container.
-  ConstIterator cend() const;
-  friend std::ostream &operator<<(std::ostream &output, const Results &n);
-  
+  ConstIterator end() const { return results.cend(); }
+  //! \return Returns an ConstIterator pointing to the first element in the container.
+  ConstIterator cbegin() const { return results.cbegin(); }
+  //! \return Returns an ConstIterator pointing to the end of the container.
+  ConstIterator cend() const { return results.cend(); }
+  friend SPINWAVEGENIE_EXPORT std::ostream &operator<<(std::ostream &output, const Results &n);
+
 private:
   std::vector<Point> results;
 };
-
-inline const Point &Results::operator[](std::size_t bin) { return results[bin]; }
-
-inline size_t Results::size() const { return results.size(); }
-
-inline Results::Iterator Results::begin() { return results.begin(); }
-
-inline Results::Iterator Results::end() { return results.end(); }
-
-inline Results::ConstIterator Results::cbegin() const { return results.cbegin(); }
-
-inline Results::ConstIterator Results::cend() const { return results.cend(); }
 }
 #endif /* defined(__spin_wave_genie__Results__) */

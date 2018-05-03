@@ -1,6 +1,5 @@
 #include "SpinWaveGenie/Interactions/DM_Z_Interaction.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 using namespace Eigen;
@@ -8,17 +7,17 @@ using namespace Eigen;
 namespace SpinWaveGenie
 {
 
-DM_Z_Interaction::DM_Z_Interaction(string name_in, double value_in, string sl_r_in, string sl_s_in, double min_in,
-                                   double max_in)
+DM_Z_Interaction::DM_Z_Interaction(const string &name_in, double value_in, const string &sl_r_in, const string &sl_s_in,
+                                   double min_in, double max_in)
     : name(name_in), r(0), s(0), M(0), tmp0(0.0), tmp1(0.0), tmp2(0.0), tmp3(0.0), tmp4(0.0), z_rs(0)
 {
-  name = name_in;
   this->updateInteraction(value_in, sl_r_in, sl_s_in, min_in, max_in);
 }
 
-std::unique_ptr<Interaction> DM_Z_Interaction::clone() const { return memory::make_unique<DM_Z_Interaction>(*this); }
+std::unique_ptr<Interaction> DM_Z_Interaction::clone() const { return std::make_unique<DM_Z_Interaction>(*this); }
 
-void DM_Z_Interaction::updateInteraction(double value_in, string sl_r_in, string sl_s_in, double min_in, double max_in)
+void DM_Z_Interaction::updateInteraction(double value_in, const string &sl_r_in, const string &sl_s_in, double min_in,
+                                         double max_in)
 {
   value = value_in;
   sl_r = sl_r_in;
@@ -29,13 +28,13 @@ void DM_Z_Interaction::updateInteraction(double value_in, string sl_r_in, string
 
 std::array<std::string, 2> DM_Z_Interaction::sublattices() const { return {{sl_r, sl_s}}; }
 
-const string &DM_Z_Interaction::getName() { return name; }
+const string &DM_Z_Interaction::getName() const { return name; }
 
 void DM_Z_Interaction::updateValue(double value_in) { value = value_in; }
 
-void DM_Z_Interaction::calculateEnergy(Cell & /*cell*/, double & /*energy*/) {}
+void DM_Z_Interaction::calculateEnergy(const Cell & /*cell*/, double & /*energy*/) {}
 
-void DM_Z_Interaction::calcConstantValues(Cell &cell)
+void DM_Z_Interaction::calcConstantValues(const Cell &cell)
 {
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
@@ -61,12 +60,12 @@ void DM_Z_Interaction::calcConstantValues(Cell &cell)
   z_rs = static_cast<double>(neighbors.size());
 }
 
-void DM_Z_Interaction::calculateFirstOrderTerms(Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
+void DM_Z_Interaction::calculateFirstOrderTerms(const Cell & /*cell*/, Eigen::VectorXcd & /*elements*/) {}
 
-void DM_Z_Interaction::updateMatrix(Vector3d K, MatrixXcd &LN)
+void DM_Z_Interaction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) const
 {
   complex<double> XI(0.0, 1.0);
-  gamma_rs = neighbors.getGamma(K);
+  complex<double> gamma_rs = neighbors.getGamma(K);
 
   LN(r, r) -= z_rs * tmp0;
   LN(r, s) -= z_rs * conj(gamma_rs) * (tmp1 - XI * tmp2 - XI * tmp3 - tmp4);

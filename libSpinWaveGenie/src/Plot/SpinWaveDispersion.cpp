@@ -3,10 +3,6 @@
 #include "SpinWaveGenie/Containers/Results.h"
 #include "External/ezRateProgressBar.hpp"
 
-using std::string;
-using std::vector;
-using std::cout;
-using std::endl;
 using namespace SpinWaveGenie;
 
 SpinWaveDispersion::SpinWaveDispersion()
@@ -32,15 +28,15 @@ void SpinWaveDispersion::setOptions(Options PrintOptions, bool Value)
   }
 }
 
-void SpinWaveDispersion::setFilename(string name) { Filename = name; }
+void SpinWaveDispersion::setFilename(const std::string &name) { Filename = name; }
 
 void SpinWaveDispersion::setGenie(const SpinWave &SW) { Genie = SW; }
 
-void SpinWaveDispersion::setPoints(ThreeVectors<double> pts)
+void SpinWaveDispersion::setPoints(const ThreeVectors<double> &points)
 {
-  for (auto it = pts.begin(); it != pts.end(); it++)
+  for (const auto &pt : points)
   {
-    Kpoints.insert(it->get<0>(), it->get<1>(), it->get<2>());
+    Kpoints.insert(pt[0], pt[1], pt[2]);
   }
 }
 
@@ -50,11 +46,11 @@ void SpinWaveDispersion::save()
   ez::ezRateProgressBar<std::size_t> p(Kpoints.size());
   p.units = "Q-points";
   p.start();
-  for (auto it = Kpoints.begin(); it != Kpoints.end(); it++)
+  for (const auto &kpt : Kpoints)
   {
-    double x = it->get<0>();
-    double y = it->get<1>();
-    double z = it->get<2>();
+    double x = kpt[0];
+    double y = kpt[1];
+    double z = kpt[2];
     // cout << x << " " << y << " " << z << endl;
 
     if (PrintPosition)
@@ -84,8 +80,8 @@ void SpinWaveDispersion::save()
       }
     }
 
-    file << endl;
-    p.update(std::distance(Kpoints.begin(), it));
+    file << "\n";
+    ++p;
   }
   p.update(Kpoints.size());
 }

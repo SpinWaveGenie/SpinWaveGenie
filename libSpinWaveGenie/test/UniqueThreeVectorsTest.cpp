@@ -9,7 +9,6 @@
 #include <string>
 
 using namespace SpinWaveGenie;
-using std::complex;
 
 BOOST_AUTO_TEST_CASE( InsertTest )
 {
@@ -19,10 +18,10 @@ BOOST_AUTO_TEST_CASE( InsertTest )
     
     BOOST_CHECK(doubleTest.size() == 1);
 
-    auto it = doubleTest.begin();
-    BOOST_CHECK_CLOSE(it->get<0>(),1.0,1.0e-5);
-    BOOST_CHECK_CLOSE(it->get<1>(),1.0,1.0e-5);
-    BOOST_CHECK_CLOSE(it->get<2>(),1.0,1.0e-5);
+    const auto &point = *doubleTest.begin();
+    BOOST_CHECK_CLOSE(point[0], 1.0, 1.0e-5);
+    BOOST_CHECK_CLOSE(point[1], 1.0, 1.0e-5);
+    BOOST_CHECK_CLOSE(point[2], 1.0, 1.0e-5);
 }
 
 BOOST_AUTO_TEST_CASE( ClearTest )
@@ -34,7 +33,7 @@ BOOST_AUTO_TEST_CASE( ClearTest )
 
     doubleTest.clear();
 
-    BOOST_CHECK(doubleTest.size() == 0);
+    BOOST_CHECK(doubleTest.empty());
 }
 
 BOOST_AUTO_TEST_CASE( IteratorTest )
@@ -50,12 +49,14 @@ BOOST_AUTO_TEST_CASE( IteratorTest )
     BOOST_CHECK(doubleTest.size() == 2);
 
     int index = 0;
-    for (auto it = doubleTest.begin(); it!=doubleTest.end(); ++it)
+    for (const auto &point : doubleTest)
     {
-        if (index == 0)
-            BOOST_CHECK_CLOSE(it->get<0>()+it->get<1>()+it->get<2>(),3.0,1.0e-5);
-        if (index == 1)
-            BOOST_CHECK_CLOSE(it->get<0>()+it->get<1>()+it->get<2>(),6.0,1.0e-5);
+        if (index == 0) {
+          BOOST_CHECK_CLOSE(point[0] + point[1] + point[2], 3.0, 1.0e-5);
+}
+        if (index == 1) {
+          BOOST_CHECK_CLOSE(point[0] + point[1] + point[2], 6.0, 1.0e-5);
+}
         index++;
     }
 }

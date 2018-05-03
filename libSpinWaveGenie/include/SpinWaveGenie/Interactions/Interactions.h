@@ -14,8 +14,9 @@
 #include "SpinWaveGenie/Interactions/DM_Z_Interaction.h"
 #include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
 #include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
-#include "SpinWaveGenie/Interactions/InteractionFactory.h"
-#include "SpinWaveGenie/Interactions/MagneticFieldInteraction.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include "SpinWaveGenie/Interactions/InteractionFactory.h"
+#include "SpinWaveGenie/Interactions/InteractionsContainer.h"
+#include "SpinWaveGenie/Interactions/MagneticFieldInteraction.h"
 
 #endif

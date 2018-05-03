@@ -36,9 +36,9 @@ BOOST_AUTO_TEST_CASE(DispersionTest)
   line.setNumberPoints(61);
   ThreeVectors<double> kPoints = line.getPoints();
 
-  for (auto it = kPoints.begin(); it != kPoints.end(); ++it)
+  for (const auto &kpt : kPoints)
   {
-    double k = it->get<0>();
+    double k = kpt[0];
     genie.createMatrix(k, 0.0, 0.0);
     genie.calculate();
     Results pt = genie.getPoints();

@@ -10,6 +10,7 @@
 #define __spin_wave_genie__TwoDimensionalCut__
 
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
+#include "SpinWaveGenie/Export.h"
 
 #include <memory>
 
@@ -18,13 +19,19 @@ namespace SpinWaveGenie
 
 class SpinWavePlot;
 
-class TwoDimensionalCut
+class SPINWAVEGENIE_EXPORT TwoDimensionalCut
 {
 public:
-  void setFilename(std::string name);
-  void setPoints(ThreeVectors<double> pos);
-  void setEnergyPoints(double min, double max, size_t numberpoints);
+  TwoDimensionalCut() = default;
+  TwoDimensionalCut(const TwoDimensionalCut &other);
+  TwoDimensionalCut &operator=(const TwoDimensionalCut &other);
+  TwoDimensionalCut(TwoDimensionalCut &&) = default;
+  TwoDimensionalCut &operator=(TwoDimensionalCut &&) = default;
+  void setFilename(const std::string &name);
+  void setPoints(const ThreeVectors<double> &pts);
+  void setEnergyPoints(double min, double max, size_t points);
   void setPlotObject(std::unique_ptr<SpinWavePlot> object);
+  void setPlotObject(const SpinWavePlot &object);
   Eigen::MatrixXd getMatrix();
   void save();
 private:

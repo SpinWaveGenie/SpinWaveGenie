@@ -20,15 +20,14 @@ using namespace std;
 
 namespace SpinWaveGenie
 {
-TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian &info, const SpinWave &SW,
-                                                               Energies energiesIn)
-    : kx(0.0), ky(0.0), kz(0.0)
+TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(const TwoDimGaussian &info, const SpinWave &SW,
+                                                               const Energies &energiesIn)
 {
   a = info.a;
   b = info.b;
   c = info.c;
-  info.direction.normalize();
   direction = info.direction;
+  direction.normalize();
   tolerance = info.tol;
   maximumEvaluations = 100;
   energies = energiesIn;
@@ -38,7 +37,7 @@ TwoDimensionResolutionFunction::TwoDimensionResolutionFunction(TwoDimGaussian &i
 
 std::vector<double> TwoDimensionResolutionFunction::calculateIntegrand(std::deque<double> &x)
 {
-  unique_ptr<TwoDGaussian> resinfo(memory::make_unique<TwoDGaussian>());
+  auto resinfo = std::make_unique<TwoDGaussian>();
   resinfo->setTolerance(0.1 * tolerance);
   resinfo->setResolution(a, b, c);
   resinfo->setU(x[0]);
@@ -89,10 +88,10 @@ void TwoDimensionResolutionFunction::setTolerance(double toleranceIn, int maxEva
   maximumEvaluations = maxEvals;
 }
 
-void TwoDimensionResolutionFunction::setEnergies(Energies energiesIn) { energies = energiesIn; }
+void TwoDimensionResolutionFunction::setEnergies(const Energies &energiesIn) { energies = energiesIn; }
 
-std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone()
+std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone() const
 {
-  return memory::make_unique<TwoDimensionResolutionFunction>(*this);
+  return std::make_unique<TwoDimensionResolutionFunction>(*this);
 }
 }

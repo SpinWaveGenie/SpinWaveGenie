@@ -2,10 +2,6 @@
 #include <Eigen/Dense>
 #include "SpinWaveGenie/Containers/Sublattice.h"
 
-using std::string;
-using std::cout;
-using std::endl;
-
 namespace SpinWaveGenie
 {
 
@@ -16,17 +12,17 @@ Sublattice::Sublattice()
   this->setMoment(0.0, 0.0, 0.0);
 }
 
-void Sublattice::setName(string nameInput) { name = nameInput; }
+void Sublattice::setName(const std::string &nameInput) { name = nameInput; }
 
-string Sublattice::getName() const { return name; }
+const std::string &Sublattice::getName() const { return name; }
 
-void Sublattice::setType(string typeInput)
+void Sublattice::setType(const std::string &typeInput)
 {
   // cout << typeInput << endl;
   type = typeInput;
 }
 
-string Sublattice::getType() const
+const std::string &Sublattice::getType() const
 {
   // cout << type << endl;
   return type;
@@ -53,36 +49,19 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
   phi = phiInput;
 
   // rotation matrix defined in equation A.1 in J. Phys.: Condens. Matter 21 (2009) 216001
-  rotationMatrix(0, 0) = cos(theta) * cos(phi);
-  rotationMatrix(0, 1) = cos(theta) * sin(phi);
-  rotationMatrix(0, 2) = -1.0 * sin(theta);
-  rotationMatrix(1, 0) = -1.0 * sin(phi);
-  rotationMatrix(1, 1) = cos(phi);
+  rotationMatrix(0, 0) = std::cos(theta) * std::cos(phi);
+  rotationMatrix(0, 1) = std::cos(theta) * std::sin(phi);
+  rotationMatrix(0, 2) = -1.0 * std::sin(theta);
+  rotationMatrix(1, 0) = -1.0 * std::sin(phi);
+  rotationMatrix(1, 1) = std::cos(phi);
   rotationMatrix(1, 2) = 0.0;
-  rotationMatrix(2, 0) = sin(theta) * cos(phi);
-  rotationMatrix(2, 1) = sin(theta) * sin(phi);
-  rotationMatrix(2, 2) = cos(theta);
+  rotationMatrix(2, 0) = std::sin(theta) * std::cos(phi);
+  rotationMatrix(2, 1) = std::sin(theta) * std::sin(phi);
+  rotationMatrix(2, 2) = std::cos(theta);
 
   inverseMatrix = rotationMatrix.inverse();
 }
 
-double Sublattice::getMoment() const { return spin; }
-
-double Sublattice::getTheta() const { return theta; }
-
-double Sublattice::getPhi() const { return phi; }
-
-const Matrix3 &Sublattice::getRotationMatrix() const { return rotationMatrix; }
-
-const Matrix3 &Sublattice::getInverseMatrix() const { return inverseMatrix; }
-
 void Sublattice::addAtom(double x, double y, double z) { positions.insert(x, y, z); }
 
-Sublattice::ConstIterator Sublattice::cbegin() { return positions.cbegin(); }
-
-Sublattice::ConstIterator Sublattice::cend() { return positions.cend(); }
-
-Sublattice::Iterator Sublattice::begin() { return positions.begin(); }
-
-Sublattice::Iterator Sublattice::end() { return positions.end(); }
 }

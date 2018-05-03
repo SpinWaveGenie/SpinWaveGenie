@@ -9,33 +9,34 @@
 #ifndef __spin_wave_genie__MagneticFieldInteraction__
 #define __spin_wave_genie__MagneticFieldInteraction__
 
-#include <iostream>
+#include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
 
-class MagneticFieldInteraction : public Interaction
+class SPINWAVEGENIE_EXPORT MagneticFieldInteraction : public Interaction
 {
 public:
   //!
-  MagneticFieldInteraction(std::string name_in, double value_in, Vector3 direction, std::string sl_r_in);
+  MagneticFieldInteraction(std::string name_in, double value_in, const Eigen::Vector3d &unitVectorIn,
+                           const std::string &sl_r_in);
   //!
-  void updateInteraction(double value_in, Vector3 direction, std::string sl_r_in);
+  void updateInteraction(double value_in, const Eigen::Vector3d &unitVectorIn, const std::string &sl_r_in);
   //!
   void updateValue(double value_in) override;
-  const std::string &getName() override;
-  void calcConstantValues(Cell &cell) override;
-  void calculateEnergy(Cell &cell, double &energy) override;
-  void calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements) override;
-  void updateMatrix(Eigen::Vector3d K, Eigen::MatrixXcd &LN) override;
+  const std::string &getName() const override;
+  void calcConstantValues(const Cell &cell) override;
+  void calculateEnergy(const Cell &cell, double &energy) override;
+  void calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements) override;
+  void updateMatrix(const Eigen::Vector3d &K, Eigen::MatrixXcd &LN) const override;
   std::array<std::string, 2> sublattices() const override;
-  virtual std::unique_ptr<Interaction> clone() const override;
-  virtual ~MagneticFieldInteraction(){};
+  std::unique_ptr<Interaction> clone() const override;
 
 private:
   std::string name, sl_r;
-  Vector3 directions;
+  Eigen::Vector3d directions;
   double value;
   std::size_t r, M;
   std::complex<double> LNrr;

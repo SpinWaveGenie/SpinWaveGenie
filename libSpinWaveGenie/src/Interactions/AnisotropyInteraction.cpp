@@ -7,39 +7,41 @@
 //
 
 #include "SpinWaveGenie/Interactions/AnisotropyInteraction.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 
 namespace SpinWaveGenie
 {
 
-AnisotropyInteraction::AnisotropyInteraction(string name_in, double value_in, Vector3 unitVectorIn, string sl_r_in)
-    : name(std::move(name_in)), r(0), M(0)
+AnisotropyInteraction::AnisotropyInteraction(const string &name_in, double value_in,
+                                             const Eigen::Vector3d &direction_in, const string &sl_r_in)
+    : name(name_in), r(0), M(0)
 {
-  this->updateInteraction(value_in, unitVectorIn, sl_r_in);
+  this->updateInteraction(value_in, direction_in, sl_r_in);
 }
 
 std::unique_ptr<Interaction> AnisotropyInteraction::clone() const
 {
-  return memory::make_unique<AnisotropyInteraction>(*this);
+  return std::make_unique<AnisotropyInteraction>(*this);
 }
 
-void AnisotropyInteraction::updateInteraction(double value_in, Vector3 unitVectorIn, string sl_r_in)
+void AnisotropyInteraction::updateInteraction(double value_in, const Eigen::Vector3d &direction_in,
+                                              const string &sl_r_in)
 {
   value = value_in;
-  unitVectorIn.normalize();
-  directions = unitVectorIn * unitVectorIn.transpose();
+  auto unitVector = direction_in;
+  unitVector.normalize();
+  directions = unitVector * unitVector.transpose();
   sl_r = sl_r_in;
 }
 
-const string &AnisotropyInteraction::getName() { return name; }
+const string &AnisotropyInteraction::getName() const { return name; }
 
 void AnisotropyInteraction::updateValue(double value_in) { value = value_in; }
 
 std::array<std::string, 2> AnisotropyInteraction::sublattices() const { return {{sl_r, sl_r}}; }
 
-void AnisotropyInteraction::calcConstantValues(Cell &cell)
+void AnisotropyInteraction::calcConstantValues(const Cell &cell)
 {
   complex<double> XI(0.0, 1.0);
   // find location of r
@@ -47,13 +49,14 @@ void AnisotropyInteraction::calcConstantValues(Cell &cell)
   M = cell.size();
 
   const double S = cell.getSublattice(sl_r).getMoment();
-  const Matrix3 &inv = cell.getSublattice(sl_r).getInverseMatrix();
+  const Eigen::Matrix3d &inv = cell.getSublattice(sl_r).getInverseMatrix();
 
   LNrr = complex<double>(0.0, 0.0);
   LNrMr = complex<double>(0.0, 0.0);
   LNrrM = complex<double>(0.0, 0.0);
 
   for (std::size_t i = 0; i < 3; i++)
+  {
     for (std::size_t j = 0; j < 3; j++)
     {
       // cout << i << " " << j << " " << directions(i,j) << endl;
@@ -69,16 +72,19 @@ void AnisotropyInteraction::calcConstantValues(Cell &cell)
         LNrrM += X * zeta;
       }
     }
+  }
   // cout << "new implementation" << endl;
   // cout << LNrr << " "<< LNrMr << " " << LNrrM << " " << LNrMrM << endl;
 }
 
-void AnisotropyInteraction::calculateEnergy(Cell &cell, double &energy)
+void AnisotropyInteraction::calculateEnergy(const Cell &cell, double &energy)
 {
   r = cell.getPosition(sl_r);
   double S = cell[r].getMoment();
-  const Matrix3 &inv = cell[r].getInverseMatrix();
+  const Eigen::Matrix3d &inv = cell[r].getInverseMatrix();
+  size_t numberOfAtoms = cell[r].size();
 
+  double temp{0.0};
   for (int i = 0; i < 3; i++)
   {
     for (int j = 0; j < 3; j++)
@@ -86,17 +92,18 @@ void AnisotropyInteraction::calculateEnergy(Cell &cell, double &energy)
       // cout << i << " " << j << " " << directions(i,j) << endl;
       if (abs(directions(i, j)) > 1.0e-10)
       {
-        energy += value * directions(i, j) * S * S * inv(i, 2) * inv(j, 2);
+        temp += directions(i, j) * inv(i, 2) * inv(j, 2);
       }
     }
   }
+  energy += value * S * S * numberOfAtoms * temp;
 }
 
-void AnisotropyInteraction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXcd &elements)
+void AnisotropyInteraction::calculateFirstOrderTerms(const Cell &cell, Eigen::VectorXcd &elements)
 {
   complex<double> XI(0.0, 1.0);
   double S = cell.getSublattice(sl_r).getMoment();
-  const Matrix3 &inv = cell.getSublattice(sl_r).getInverseMatrix();
+  const Eigen::Matrix3d &inv = cell.getSublattice(sl_r).getInverseMatrix();
   r = cell.getPosition(sl_r);
   M = cell.size();
 
@@ -118,7 +125,7 @@ void AnisotropyInteraction::calculateFirstOrderTerms(Cell &cell, Eigen::VectorXc
   }
 }
 
-void AnisotropyInteraction::updateMatrix(Vector3 /*K*/, Eigen::MatrixXcd &LN)
+void AnisotropyInteraction::updateMatrix(const Eigen::Vector3d & /*K*/, Eigen::MatrixXcd &LN) const
 {
   LN(r, r) += LNrr;
   LN(r, r + M) += LNrrM;

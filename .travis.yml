@@ -5,21 +5,30 @@ compiler: gcc
 os: linux
 dist: trusty
 sudo: required
+env: 
+  - COMPILER_VERSION=6
+  - PYTHON_VERSION=3.4
 
 before_install:
-  - sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x;
+  - wget -q https://cmake.org/files/v3.10/cmake-3.10.3-Linux-x86_64.tar.gz --no-check-certificate;
+  - tar -xzf cmake-3.10.3-Linux-x86_64.tar.gz;
+  - sudo ln -f -s ./cmake-3.10.3-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
   - sudo apt-get update -qq;
-  - sudo apt-get purge -qq cmake;
-  - sudo apt-get install -qq cmake;
-  - cmake --version;
-  - sudo apt-get install -qq libboost-dev libboost-test-dev libeigen3-dev libtbb-dev;
+  - sudo apt-get install -qq gcc-$COMPILER_VERSION g++-$COMPILER_VERSION libboost-dev libboost-test-dev libtbb-dev;
+  - pip install --user --upgrade pip virtualenv;
+  - virtualenv -p python$PYTHON_VERSION venv;
+  - source venv/bin/activate;
+  - pip install numpy;
 
 before_script:
-  - cmake -DBUILD_TESTING=ON  . ; 
+  - export CXX=g++-$COMPILER_VERSION;
+  - export CC=gcc-$COMPILER_VERSION;
+  - cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION;
 
 script:
-  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make; make test; fi
-    
+  - if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make - j 2; fi
+
 notifications:
   email:
     on_success: change
@@ -38,6 +47,6 @@ addons:
       description: "Build submitted via Travis CI"
     notification_email: hahnse@ornl.gov
     build_command_prepend: "make clean"
-    build_command:   "make -j 4"
+    build_command:   "make -j 2"
     branch_pattern: coverity_scan
 

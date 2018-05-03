@@ -15,13 +15,19 @@ namespace SpinWaveGenie
 
 Energies::Energies(double minimum, double maximum, std::size_t numberPoints)
 {
-  energies.reserve(numberPoints);
-  for (std::size_t bin = 0; bin != numberPoints; bin++)
+  if (numberPoints == 1)
   {
-    if (numberPoints == 1)
-      energies.push_back(minimum);
-    else
-      energies.push_back(minimum + (maximum - minimum) * (double)bin / (double)(numberPoints - 1));
+    energies.push_back(minimum);
+  }
+  else
+  {
+    energies.reserve(numberPoints);
+    double delta = (maximum - minimum) / static_cast<double>(numberPoints - 1);
+    for (std::size_t bin = 0; bin != numberPoints; bin++)
+    {
+
+      energies.push_back(minimum + delta * static_cast<double>(bin));
+    }
   }
 }
 
@@ -48,9 +54,9 @@ void Energies::clear() { energies.clear(); }
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Energies &n)
 {
   output << "  frequency\n";
-  for (auto result = n.cbegin(); result != n.cend(); ++result)
+  for (const auto &result : n)
   {
-    output << boost::format("%9.5f\n") % *result;
+    output << boost::format("%9.5f\n") % result;
   }
   return output;
 }

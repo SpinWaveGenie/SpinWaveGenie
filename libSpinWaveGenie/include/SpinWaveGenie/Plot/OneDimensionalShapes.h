@@ -9,23 +9,23 @@
 #ifndef __OneDimensionalShapes__
 #define __OneDimensionalShapes__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
-#include "SpinWaveGenie/Memory.h"
+#include <memory>
 
 namespace SpinWaveGenie
 {
 
 /* Abstract base class */
-class OneDimensionalShapes
+class SPINWAVEGENIE_EXPORT OneDimensionalShapes
 {
 public:
-  // virtual void setFWHM(double InFWHM) = 0;
   virtual void setTolerance(double InTolerance) = 0;
   virtual double getMinimumEnergy() = 0;
   virtual double getMaximumEnergy() = 0;
   virtual double getFunction(double frequency, double energy) = 0;
-  virtual std::unique_ptr<OneDimensionalShapes> clone() = 0;
-  virtual ~OneDimensionalShapes(){};
+  virtual std::unique_ptr<OneDimensionalShapes> clone() const = 0;
+  virtual ~OneDimensionalShapes() = default;
 };
 }
 #endif /* defined(__OneDimensionalShapes__) */

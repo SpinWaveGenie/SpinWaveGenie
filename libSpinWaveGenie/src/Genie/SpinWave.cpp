@@ -5,8 +5,6 @@
 
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Containers/Matrices.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace Eigen;
 using namespace std;
@@ -14,69 +12,19 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-SpinWave::SpinWave(const Cell &cell_in, std::vector<std::unique_ptr<Interaction>> interactions_in)
-    : KXP(0.0), KYP(0.0), KZP(0.0), cell(cell_in), M(cell.size()), N(2 * M), NU(0), MI(0), IM(0),
-      interactions(std::move(interactions_in))
+SpinWave::SpinWave(const Cell &cell_in, const InteractionsContainer &interactions_in)
+    : cell(cell_in), M(cell.size()), N(2 * M), interactions(interactions_in)
 {
-
   LN.setZero(N, N);
-
-  SS.setZero(N);
-  for (size_t j = 0; j < M; j++)
-  {
-    SS(j) = 1.0;
-  }
-
-  for (size_t j = M; j < N; j++)
-  {
-    SS(j) = -1.0;
-  }
-}
-
-SpinWave::SpinWave(const SpinWave &model)
-    : KXP(model.KXP), KYP(model.KYP), KZP(model.KZP), cell(model.cell), M(model.M), N(model.N), NU(model.NU),
-      MI(model.MI), IM(model.IM), LN(model.LN), SS(model.SS), ces(model.ces), WW(model.WW), VI(model.VI), XY(model.XY),
-      XIN(model.XIN), formFactor(model.formFactor)
-{
-  for (const auto &iter : model.interactions) // r
-  {
-    this->interactions.push_back(iter->clone());
-  }
-}
-
-SpinWave &SpinWave::operator=(const SpinWave &model)
-{
-  this->KXP = model.KXP;
-  this->KYP = model.KYP;
-  this->KZP = model.KZP;
-  this->cell = model.cell;
-  this->M = model.M;
-  this->N = model.N;
-  this->NU = model.NU;
-  this->MI = model.MI;
-  this->IM = model.IM;
-  this->LN = model.LN;
-  this->SS = model.SS;
-  this->ces = model.ces;
-  this->WW = model.WW;
-  this->VI = model.VI;
-  this->XY = model.XY;
-  this->XIN = model.XIN;
-  this->formFactor = model.formFactor;
-
-  for (const auto &iter : model.interactions) // r
-  {
-    this->interactions.push_back(iter->clone());
-  }
-
-  return *this;
+  SS.resize(N);
+  std::fill_n(SS.data(), M, 1.0);
+  std::fill_n(std::next(SS.data(), M), M, -1.0);
 }
 
 void SpinWave::createMatrix(double KX, double KY, double KZ)
 {
-  const Matrix3 &recip = cell.getReciprocalVectors();
-  Vector3 K;
-  K << KX, KY, KZ;
+  const Eigen::Matrix3d &recip = cell.getReciprocalVectors();
+  Eigen::Vector3d K(KX, KY, KZ);
   K = K.transpose() * recip;
   this->KXP = KX;
   this->KYP = KY;
@@ -84,7 +32,7 @@ void SpinWave::createMatrix(double KX, double KY, double KZ)
   clearMatrix();
   for (const auto &iter : interactions) // r
   {
-    iter->updateMatrix(K, LN);
+    iter.updateMatrix(K, LN);
   }
 }
 
@@ -121,7 +69,9 @@ void SpinWave::calculateEigenvalues()
 
   ces.compute(LN);
   if (ces.info() != Success)
+  {
     cout << ces.info() << endl;
+  }
 
   for (size_t i = 0; i < N; i++)
   {
@@ -139,6 +89,7 @@ void SpinWave::calculateEigenvalues()
 
 void SpinWave::calculateWeights()
 {
+  using MatrixXcdRowMajor = Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   MatrixXcdRowMajor XX;
   WW.resize(N);
   XX = ces.eigenvectors().adjoint();
@@ -219,10 +170,12 @@ void SpinWave::calculateWeights()
   // If two eigenvalues are approx. zero, std::partition
   // may fail to separate positive and negative weights.
   if (AL[M - 1].weight < 0.0 || AL[M].weight > 0.0)
+  {
     std::sort(AL.begin(), AL.end(), [](const results &a, const results &b)
               {
                 return a.weight > b.weight;
               });
+  }
 
   for (size_t L1 = 0; L1 < N; L1++)
   {
@@ -244,7 +197,9 @@ void SpinWave::calculateWeights()
       oldPosition->index = AL[L1].index;
     }
     else
+    {
       throw std::runtime_error("Error while reordering eigenvectors. ");
+    }
   }
 
   //
@@ -265,10 +220,10 @@ void SpinWave::calculateIntensities()
   ArrayXXcd Intensities(M, 3);
   Intensities.setZero();
 
-  long L2 = 0;
+  std::size_t L2 = 0;
   for (const auto & elem : cell) // r
   {
-    const Matrix3 &V_r = elem.getInverseMatrix();
+    const Eigen::Matrix3d &V_r = elem.getInverseMatrix();
     double S_r = elem.getMoment();
     formFactor.setType(elem.getType());
     double ff = formFactor.getFormFactor(KX, KY, KZ);
@@ -281,7 +236,7 @@ void SpinWave::calculateIntensities()
         Intensities(L, L1) += sqrt(S_r) * ff * Intensities_r;
       }
     }
-    L2++;
+    ++L2;
   }
 
   Intensities *= Intensities.conjugate();
@@ -297,10 +252,14 @@ void SpinWave::calculateIntensities()
     pt.frequency = abs(WW[i + M]);
     double qSquared = pow(KX, 2) + pow(KY, 2) + pow(KZ, 2);
     if (qSquared < std::numeric_limits<double>::epsilon())
+    {
       pt.intensity = std::numeric_limits<double>::quiet_NaN();
+    }
     else
+    {
       pt.intensity =
           SXX(i) + SYY(i) + SZZ(i) - (pow(KX, 2) * SXX(i) + pow(KY, 2) * SYY(i) + pow(KZ, 2) * SZZ(i)) / qSquared;
+    }
     VI.insert(pt);
   }
 }
@@ -312,5 +271,4 @@ void SpinWave::calculate()
   this->calculateIntensities();
 }
 
-Results SpinWave::getPoints() { return VI; }
 }

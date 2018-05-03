@@ -32,25 +32,24 @@ void Results::sort() { std::sort(results.begin(), results.end()); }
 void Results::uniqueSolutions()
 {
   double EPS = 1.0e-5;
-  int VP_pos;
   vector<Point> VI_unique;
   // Find unique eigenvalues
   VI_unique = results;
   std::sort(VI_unique.begin(), VI_unique.end());
   VI_unique.erase(unique(VI_unique.begin(), VI_unique.end(), evalues_equal), VI_unique.end());
 
-  int NU = (int)VI_unique.size();
+  std::size_t NU = VI_unique.size();
   VI_unique.resize(NU);
 
-  for (int i = 0; i < NU; i++)
+  for (std::size_t i = 0; i < NU; i++)
   {
     VI_unique[i].intensity = 0.0;
   }
 
   for (const auto & elem : results)
   {
-    VP_pos = NU; // set position to a nonsense value
-    for (int j = 0; j < NU; j++)
+    std::size_t VP_pos = NU; // set position to a nonsense value
+    for (std::size_t j = 0; j < NU; j++)
     {
       if (std::abs(elem.frequency - VI_unique[j].frequency) < EPS)
       {
@@ -60,7 +59,9 @@ void Results::uniqueSolutions()
       }
     }
     if (VP_pos == NU)
+    {
       std::cout << "error finding unique value" << std::endl;
+    }
   }
 
   results = VI_unique;
@@ -69,7 +70,6 @@ void Results::uniqueSolutions()
 void Results::significantSolutions(double ETS)
 {
   vector<Point> VI_signif;
-
   for (size_t k = 0; k != results.size(); k++)
   {
     if (results[k].intensity > ETS)
@@ -83,9 +83,9 @@ void Results::significantSolutions(double ETS)
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Results &n)
 {
     output << "  frequency  intensity\n";
-    for (auto result = n.cbegin(); result != n.cend(); ++result)
+    for (const auto &result : n)
     {
-        output << boost::format("%9.5f %10.5f\n") % result->frequency % result->intensity;
+      output << boost::format("%9.5f %10.5f\n") % result.frequency % result.intensity;
     }
     return output;
 }

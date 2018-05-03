@@ -15,20 +15,17 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone()
-{
-    return memory::make_unique<IntegrateThetaPhi>(*this);
-}
+std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone() const { return std::make_unique<IntegrateThetaPhi>(*this); }
 
 const Cell &IntegrateThetaPhi::getCell() const { return resolutionFunction->getCell(); }
 
 const Energies &IntegrateThetaPhi::getEnergies() { return resolutionFunction->getEnergies(); }
 
-void IntegrateThetaPhi::setEnergies(Energies energiesIn) { resolutionFunction->setEnergies(energiesIn); }
+void IntegrateThetaPhi::setEnergies(const Energies &energiesIn) { resolutionFunction->setEnergies(energiesIn); }
 
 std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
 {
-  Vector3 tmp, k;
+  Eigen::Vector3d tmp, k;
   double theta = x[0];
   double phi = x[1];
 
@@ -40,7 +37,7 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
   tmp[1] = r * sin(theta) * sin(phi);
   tmp[2] = r * cos(theta);
 
-  Matrix3 basisVectors = resolutionFunction->getCell().getBasisVectors();
+  Eigen::Matrix3d basisVectors = resolutionFunction->getCell().getBasisVectors();
 
   k = tmp.transpose() * basisVectors / (2.0 * M_PI);
   // cout << tmp.norm() << endl;
@@ -56,7 +53,7 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
   // cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
   double factor = sin(theta) / (4.0 * M_PI);
   std::transform(val.begin(), val.end(), val.begin(),
-                 std::bind(std::multiplies<double>(), factor, std::placeholders::_1));
+                 std::bind(std::multiplies<>(), factor, std::placeholders::_1));
   return val;
 }
 

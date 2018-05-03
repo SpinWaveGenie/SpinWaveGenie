@@ -1,29 +1,42 @@
 version: 0.2.{build}
 
 branches:
-  except:
-  - coverity_scan
+  only:
+  - master
 
 configuration: Release
 
+image:
+- Visual Studio 2017
+
 environment:
-  PATH: "C:/projects/ThirdPartyVC120/lib;%PATH%"
+  PATH: "C:/projects/ThirdPartyVC141/lib;C:/projects/spinwavegenie/build/libSpinWaveGenie/Release;%PATH%"
+  matrix:
+    - PYTHON_DIR: "Python27-x64"
+      CACHE_FILENAME: "AppveyorPython27-x64.cmake"
+    - PYTHON_DIR: "Python36-x64"
+      CACHE_FILENAME: "AppveyorPython36-x64.cmake"
 
 platform: x64
 
+init:
+- echo %APPVEYOR_BUILD_WORKER_IMAGE%
+
 install:
-- cmd: cd c:\projects
-- cmd: git clone https://github.com/SpinWaveGenie/ThirdPartyVC120.git
+  - cd c:\projects
+  - git clone https://github.com/SpinWaveGenie/ThirdPartyVC141.git
+  - C:\%PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:
-- ps: cd "${env:APPVEYOR_BUILD_FOLDER}"
-- cmd: md build
-- cmd: cd build
-- cmd: cmake --version
-- cmd: cmake -G "Visual Studio 12 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../appveyor.cmake  ..
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - git submodule update --init --recursive
+  - md build
+  - cd build
+  - cmake --version
+  - cmake -G "Visual Studio 15 2017 Win64" -DBUILD_TESTING=TRUE -DWARNINGS_AS_ERRORS=ON -C ../%CACHE_FILENAME% ..
 
 build_script:
-- cmd: cmake --build . -- /p:Configuration=Release /m:2
+  - cmake --build . -- /p:Configuration=Release /m:2
 
 test_script:
-- cmd: ctest -C Release --output-on-failure
+  - ctest -C Release --output-on-failure

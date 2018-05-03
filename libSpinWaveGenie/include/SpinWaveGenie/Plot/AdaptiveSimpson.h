@@ -1,12 +1,13 @@
 #ifndef __AdaptiveSimpson__
 #define __AdaptiveSimpson__
 
-#include <vector>
-#include <functional>
+#include "SpinWaveGenie/Export.h"
 #include <deque>
-#include "SpinWaveGenie/Memory.h"
+#include <functional>
+#include <memory>
+#include <vector>
 
-class AdaptiveSimpson
+class SPINWAVEGENIE_EXPORT AdaptiveSimpson
 //! Numerical Integration using the Adaptive Simpson's method.
 /*!
  This class vector quantities multiple dimensions.
@@ -26,8 +27,8 @@ public:
   AdaptiveSimpson();
   AdaptiveSimpson(const AdaptiveSimpson &other);
   AdaptiveSimpson &operator=(const AdaptiveSimpson &other);
-  AdaptiveSimpson(AdaptiveSimpson &&other);
-  AdaptiveSimpson &operator=(AdaptiveSimpson &&other);
+  AdaptiveSimpson(AdaptiveSimpson &&other) noexcept;
+  AdaptiveSimpson &operator=(AdaptiveSimpson &&other) noexcept;
   //! set function calculating the integrand.
   //! \param integrand function object must be of this type.
   void setFunction(const std::function<std::vector<double>(std::deque<double> &evaluationPoints)> &integrand);

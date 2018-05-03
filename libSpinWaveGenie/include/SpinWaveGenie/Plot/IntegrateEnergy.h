@@ -9,28 +9,29 @@
 #ifndef __spin_wave_genie__IntegrateEnergy__
 #define __spin_wave_genie__IntegrateEnergy__
 
-#include <iostream>
-#include "SpinWaveGenie/Memory.h"
-#include <vector>
-#include <deque>
-#include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Export.h"
+#include "SpinWaveGenie/Plot/SpinWavePlot.h"
+#include <deque>
+#include <iostream>
+#include <vector>
 
 namespace SpinWaveGenie
 {
 
-class IntegrateEnergy : public SpinWavePlot
+class SPINWAVEGENIE_EXPORT IntegrateEnergy : public SpinWavePlot
 {
 public:
   IntegrateEnergy(const IntegrateEnergy &other);
-  IntegrateEnergy(std::unique_ptr<SpinWavePlot> resFunction, Energies energies, double delta, double tol = 0.01,
-                  int maxEval = 100000);
-  std::vector<double> getCut(double kx, double ky, double kz) override;
-  std::unique_ptr<SpinWavePlot> clone() override;
+  IntegrateEnergy(std::unique_ptr<SpinWavePlot> resFunction, const Energies &energies, double delta, double tol = 0.01,
+                  int maxEvals = 100000);
+  IntegrateEnergy(const SpinWavePlot &resFunction, const Energies &energies, double delta, double tol = 0.01,
+                  int maxEvals = 100000);
+  std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;
+  std::unique_ptr<SpinWavePlot> clone() const override;
   const Cell &getCell() const override;
   const Energies &getEnergies() override;
-  void setEnergies(Energies energies) override;
-  ~IntegrateEnergy(){};
+  void setEnergies(const Energies &energiesIn) override;
 
 private:
   std::vector<double> calculateIntegrand(std::deque<double> &x);

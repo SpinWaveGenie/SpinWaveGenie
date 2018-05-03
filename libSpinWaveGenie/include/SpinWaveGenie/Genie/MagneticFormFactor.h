@@ -9,6 +9,7 @@
 #ifndef __MagneticFormFactor__
 #define __MagneticFormFactor__
 
+#include "SpinWaveGenie/Export.h"
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -30,33 +31,32 @@ href="http://www.ill.eu/index.php?eID=tx_nawsecuredl&u=0&file=fileadmin/users_fi
 ILL Neutron Data Booklet </a>
  */
 
-class MagneticFormFactor
+class SPINWAVEGENIE_EXPORT MagneticFormFactor
 {
 public:
   //! Default Constructor.
   MagneticFormFactor();
   //! Construct Magnetic Form Factor object of a given type.
   //! \param type Name of ion from the ILL Neutron Data Booklet (in CAPS)
-  MagneticFormFactor(std::string type);
-  MagneticFormFactor(const MagneticFormFactor &other);
+  MagneticFormFactor(const std::string &type);
   //! \Sets the type of ion.
   //! \param type Name of ion from ILL Neutron Data Booklet (in CAPS)
-  void setType(std::string type);
+  void setType(const std::string &type);
   //! \Sets ions with multiple types.
   //! \param types Names of ions from the ILL Neutron Data Booklet (in CAPS).
   //! \param weights Weights associaed with each ion. The sum of all weights will be renormalized to 1.0.
-  void setType(std::vector<std::string> types, std::vector<double> weights);
+  void setType(const std::vector<std::string> &types, const std::vector<double> &weights);
   //! Get the magnetic form factor at a specific Q-point.
   //! \param kx x-component of Q-point, in Angstroms.
   //! \param ky y-component of Q-point, in Angstroms.
   //! \param kz z-component of Q-point, in Angstroms.
-  double getFormFactor(double kx, double ky, double kz);
+  double getFormFactor(double x, double y, double z);
 
 protected:
   std::unordered_map<std::string, std::vector<double>> coefficients;
 
 private:
-  void setType(std::string type, double weight);
+  void setType(const std::string &type, double weight);
   void initializeMap();
   std::vector<std::vector<double>> Farray;
   std::vector<double> NormalizedWeights;
