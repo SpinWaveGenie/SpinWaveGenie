@@ -21,6 +21,7 @@ before_install:
 before_script:
   - export CXX=g++-6;
   - export CC=gcc-6;
+  - cov-configure --comptype gcc --compiler /usr/bin/g++-6
   - cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=3.4;
 
 script:
