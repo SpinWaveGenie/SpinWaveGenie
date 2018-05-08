@@ -43,7 +43,7 @@ addons:
       name: "SpinWaveGenie/SpinWaveGenie"
       description: "Build submitted via Travis CI"
     notification_email: hahnse@ornl.gov
-    build_command_prepend: "make clean && cov-configure --comptype gcc --compiler /usr/bin/g++-6"
+    build_command_prepend: "make clean && cov-configure --comptype gcc --compiler /usr/bin/g++-6 && cov-configure --comptype gcc --compiler /usr/bin/gcc-6"
     build_command:   "make"
     branch_pattern: coverity_scan
 
