@@ -24,8 +24,7 @@ before_script:
   - cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=3.4;
 
 script:
-  - make -j 2; 
-  - make test -j 2;
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j 2; make test -j 2; fi
 
 notifications:
   email:
@@ -45,6 +44,6 @@ addons:
       description: "Build submitted via Travis CI"
     notification_email: hahnse@ornl.gov
     build_command_prepend: "make clean"
-    build_command:   "make -j 2"
+    build_command:   "make"
     branch_pattern: coverity_scan
 
