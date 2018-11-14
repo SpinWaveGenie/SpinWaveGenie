@@ -201,6 +201,7 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
   py::class_<IntegrateEnergy, SpinWavePlot>(m, "IntegrateEnegy")
       .def(py::init<const SpinWavePlot &, const Energies &, double, double, int>());
 
+
   py::class_<TwoDimensionalCut>(m, "TwoDimensionalCut")
       .def(py::init<>())
       .def("setFilename", &TwoDimensionalCut::setFilename, "Set filename to save results of cut")
@@ -209,4 +210,10 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def("setPlotObject",
            static_cast<void (TwoDimensionalCut::*)(const SpinWavePlot &)>(&TwoDimensionalCut::setPlotObject), "")
       .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
+
+  py::class_<IntegrateThetaPhi, SpinWavePlot>(m, "IntegrateThetaPhi")
+      .def(py::init<const SpinWavePlot &, double, int>());
+      //
+
+  
 }

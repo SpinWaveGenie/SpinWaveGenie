@@ -23,6 +23,8 @@ class SPINWAVEGENIE_EXPORT IntegrateThetaPhi : public SpinWavePlot
 public:
   IntegrateThetaPhi(std::unique_ptr<SpinWavePlot> object, double tol = 1.0e-4, int maxEvals = 1000)
       : maximumEvaluations(maxEvals), r(0.0), tolerance(tol), resolutionFunction(std::move(object)){};
+  IntegrateThetaPhi(const SpinWavePlot &object, double tol = 1.0e-4, int maxEvals = 1000)
+      : maximumEvaluations(maxEvals), r(0.0), tolerance(tol), resolutionFunction(object.clone()){};
   IntegrateThetaPhi(const IntegrateThetaPhi &other)
       : maximumEvaluations(other.maximumEvaluations), r(0.0), tolerance(other.tolerance),
         resolutionFunction(other.resolutionFunction->clone()){};
