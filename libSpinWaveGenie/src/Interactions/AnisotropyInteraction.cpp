@@ -7,7 +7,6 @@
 //
 
 #include "SpinWaveGenie/Interactions/AnisotropyInteraction.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 
@@ -23,7 +22,7 @@ AnisotropyInteraction::AnisotropyInteraction(const string &name_in, double value
 
 std::unique_ptr<Interaction> AnisotropyInteraction::clone() const
 {
-  return memory::make_unique<AnisotropyInteraction>(*this);
+  return std::make_unique<AnisotropyInteraction>(*this);
 }
 
 void AnisotropyInteraction::updateInteraction(double value_in, const Eigen::Vector3d &direction_in,

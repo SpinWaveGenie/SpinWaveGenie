@@ -98,10 +98,12 @@ BOOST_AUTO_TEST_CASE( AddAtom )
     {
       Eigen::Vector3d atomdistance1(atom[0] - 0.0, atom[1] - 0.0, atom[2] - 0.0);
       Eigen::Vector3d atomdistance2(atom[0] - 1.0, atom[1] - 1.0, atom[2] - 1.0);
-      if (atomdistance1.norm() < 0.01)
+      if (atomdistance1.norm() < 0.01) {
         foundAtom1 = true;
-      if (atomdistance2.norm() < 0.01)
+}
+      if (atomdistance2.norm() < 0.01) {
         foundAtom2 = true;
+}
     }
     BOOST_CHECK(foundAtom1);
     BOOST_CHECK(foundAtom2);
@@ -128,12 +130,15 @@ BOOST_AUTO_TEST_CASE(Iterator)
     bool foundBlank = false;
     for (const auto &elem : cell)
     {
-        if ( elem.getName() == "SL1")
+        if ( elem.getName() == "SL1") {
             foundSL1 = true;
-        if ( elem.getName() == "SL2" )
+}
+        if ( elem.getName() == "SL2" ) {
             foundSL2 = true;
-        if ( elem.getName() == "" )
+}
+        if ( elem.getName().empty() ) {
             foundBlank = true;
+}
     }
     BOOST_CHECK(foundSL1);
     BOOST_CHECK(foundSL2);

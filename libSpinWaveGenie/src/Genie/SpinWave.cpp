@@ -5,7 +5,6 @@
 
 #include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace Eigen;
 using namespace std;
@@ -221,7 +220,7 @@ void SpinWave::calculateIntensities()
   ArrayXXcd Intensities(M, 3);
   Intensities.setZero();
 
-  long L2 = 0;
+  std::size_t L2 = 0;
   for (const auto & elem : cell) // r
   {
     const Eigen::Matrix3d &V_r = elem.getInverseMatrix();
@@ -237,7 +236,7 @@ void SpinWave::calculateIntensities()
         Intensities(L, L1) += sqrt(S_r) * ff * Intensities_r;
       }
     }
-    L2++;
+    ++L2;
   }
 
   Intensities *= Intensities.conjugate();

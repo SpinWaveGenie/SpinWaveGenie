@@ -70,7 +70,6 @@ void Results::uniqueSolutions()
 void Results::significantSolutions(double ETS)
 {
   vector<Point> VI_signif;
-
   for (size_t k = 0; k != results.size(); k++)
   {
     if (results[k].intensity > ETS)

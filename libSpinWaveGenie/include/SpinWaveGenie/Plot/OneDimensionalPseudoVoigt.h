@@ -10,7 +10,6 @@
 #define __OneDimensionalPseudoVoigt__
 
 #include "SpinWaveGenie/Export.h"
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
@@ -36,8 +35,8 @@ public:
 
 private:
   double eta{0.0}, tolerance{0.001};
-  std::unique_ptr<OneDimensionalShapes> Lorentzian{memory::make_unique<OneDimensionalGaussian>()},
-      Gaussian{memory::make_unique<OneDimensionalLorentzian>()};
+  std::unique_ptr<OneDimensionalShapes> Lorentzian{std::make_unique<OneDimensionalGaussian>()},
+      Gaussian{std::make_unique<OneDimensionalLorentzian>()};
 };
 }
 #endif /* defined(__OneDimensionalPseudoVoigt__) */

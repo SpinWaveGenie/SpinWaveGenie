@@ -15,7 +15,7 @@ using namespace std;
 namespace SpinWaveGenie
 {
 
-std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone() const { return memory::make_unique<IntegrateThetaPhi>(*this); }
+std::unique_ptr<SpinWavePlot> IntegrateThetaPhi::clone() const { return std::make_unique<IntegrateThetaPhi>(*this); }
 
 const Cell &IntegrateThetaPhi::getCell() const { return resolutionFunction->getCell(); }
 
@@ -53,7 +53,7 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
   // cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
   double factor = sin(theta) / (4.0 * M_PI);
   std::transform(val.begin(), val.end(), val.begin(),
-                 std::bind(std::multiplies<double>(), factor, std::placeholders::_1));
+                 std::bind(std::multiplies<>(), factor, std::placeholders::_1));
   return val;
 }
 

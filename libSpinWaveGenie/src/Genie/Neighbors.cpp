@@ -28,11 +28,11 @@ void Neighbors::findNeighbors(const Cell &cell, const std::string &sl1, const st
         // cout << "atom2:  " << atom2->get<0>() << " " << atom2->get<1>() << " " << atom2->get<2>() << endl;
         // cout << "atom1:  " << atom1->get<0>() << " " << atom1->get<1>() << " " << atom1->get<2>() << endl;
         // cout << atomdistance.transpose() << endl;
-        for (long n1 = -supercellSize; n1 <= supercellSize; n1++)
+        for (int32_t n1 = -supercellSize; n1 <= supercellSize; n1++)
         {
-          for (long n2 = -supercellSize; n2 <= supercellSize; n2++)
+          for (int32_t n2 = -supercellSize; n2 <= supercellSize; n2++)
           {
-            for (long n3 = -supercellSize; n3 <= supercellSize; n3++)
+            for (int32_t n3 = -supercellSize; n3 <= supercellSize; n3++)
             {
               // find distance between supercells
               Eigen::Vector3d dispRLU(n1, n2, n3);

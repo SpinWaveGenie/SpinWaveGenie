@@ -13,7 +13,6 @@
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include <algorithm>
@@ -133,7 +132,7 @@ template <class T> void EnergyResolution<T>::setEnergies(const Energies &energie
 
 template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone() const
 {
-  return memory::make_unique<EnergyResolution<T>>(*this);
+  return std::make_unique<EnergyResolution<T>>(*this);
 }
 }
 

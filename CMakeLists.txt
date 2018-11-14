@@ -1,12 +1,12 @@
+cmake_minimum_required (VERSION 3.1)
 project(SpinWaveGenie)
 
-cmake_minimum_required (VERSION 3.1)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_MACOSX_RPATH TRUE)
 
 set(SPINWAVEGENIE_VERSION_MAJOR "0")
-set(SPINWAVEGENIE_VERSION_MINOR "2")
-set(SPINWAVEGENIE_VERSION_PATCH "1")
+set(SPINWAVEGENIE_VERSION_MINOR "3")
+set(SPINWAVEGENIE_VERSION_PATCH "0")
 set(SPINWAVEGENIE_VERSION "${SPINWAVEGENIE_VERSION_MAJOR}.${SPINWAVEGENIE_VERSION_MINOR}.${SPINWAVEGENIE_VERSION_PATCH}")
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -30,7 +30,7 @@ if (COVERALLS)
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
-set(CXX_STANDARD_REQUIRED 11)
+set(CXX_STANDARD_REQUIRED 14)
 # XCode isn't picking up the standard set above.
 if(CMAKE_GENERATOR STREQUAL Xcode)
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
@@ -38,18 +38,18 @@ if(CMAKE_GENERATOR STREQUAL Xcode)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE -Wall -Wextra")
+  string(APPEND CMAKE_CXX_FLAGS " -DEIGEN_DONT_PARALLELIZE -Wall -Wextra")
 endif()
 
 option(WITH_SANITIZERS "Enable sanitizers" OFF)
 if(WITH_SANITIZERS)
   message(STATUS "enabling address & undefined behavior sanitizers")
   file(WRITE ${PROJECT_BINARY_DIR}/ubsan.txt "fun:*_Ios_Fmtflags*")
-  set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
-  add_compile_options(-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${SAN_FLAGS}" )
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${SAN_FLAGS}" )
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SAN_FLAGS}" )
+  set(SAN_FLAGS "-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt")
+  add_compile_options(-fno-omit-frame-pointer -fno-common -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-blacklist=${PROJECT_BINARY_DIR}/ubsan.txt)
+  string(APPEND CMAKE_MODULE_LINKER_FLAGS "${SAN_FLAGS}" )
+  string(APPEND CMAKE_EXE_LINKER_FLAGS "${SAN_FLAGS}" )
+  string(APPEND CMAKE_SHARED_LINKER_FLAGS "${SAN_FLAGS}" )
 endif()
 
 option(WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
@@ -61,7 +61,7 @@ if(WARNINGS_AS_ERRORS)
   endif()
 endif()
 
-find_package(Eigen3 3.2.7 REQUIRED)
+include(Eigen)
 
 find_package(Threads)
 if(USE_THREADS)
@@ -141,19 +141,28 @@ set ( CPACK_RPM_PACKAGE_LICENSE "BSD 3-clause License" )
 set ( CPACK_RPM_PACKAGE_RELEASE 1 )
 set ( CPACK_RPM_PACKAGE_URL "${CPACK_PACKAGE_URL}" )
 set ( CPACK_RPM_PACKAGE_GROUP "Development/Tools" )
-set ( CPACK_RPM_PACKAGE_REQUIRES "eigen3-devel cmake >= 2.8.12 gcc-c++ doxygen boost-test boost-devel" )
+set ( CPACK_RPM_PACKAGE_REQUIRES "gcc-c++ doxygen boost-test boost-devel" )
+if ( "${UNIX_DIST}" MATCHES "Fedora" )
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " cmake >= 3.1" )
+else ()
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " cmake3 >= 3.1" )
+endif()
+
 if(USE_THREADS AND TBB_FOUND )
-  set ( CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES} tbb-devel" )
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " tbb-devel" )
   set ( CPACK_RPM_USE_THREADS "1" )
 else()
   set ( CPACK_RPM_USE_THREADS "0" )
+endif()
+if(PYTHON_API)
+  string ( APPEND CPACK_RPM_PACKAGE_REQUIRES " python2-devel" )
 endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/SpinWaveGenie.spec.in
                 ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie.spec )
 
 add_custom_command( OUTPUT SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
-                    COMMAND git archive --format=tar --prefix=SpinWaveGenie-${CPACK_PACKAGE_VERSION}/ HEAD | gzip -c > ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
+                    COMMAND git archive-all --prefix=SpinWaveGenie-${CPACK_PACKAGE_VERSION}/ ${CMAKE_CURRENT_BINARY_DIR}/SpinWaveGenie-${CPACK_PACKAGE_VERSION}.tar.gz
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     )
 add_custom_target( source_tgz

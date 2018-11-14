@@ -30,7 +30,7 @@ struct TwoDimGaussian
 class SPINWAVEGENIE_EXPORT TwoDimensionResolutionFunction : public SpinWavePlot
 {
 public:
-  TwoDimensionResolutionFunction(){};
+  TwoDimensionResolutionFunction() = default;
   TwoDimensionResolutionFunction(const TwoDimGaussian &info, const SpinWave &SW, const Energies &energiesIn);
   TwoDimensionResolutionFunction(const TwoDimensionResolutionFunction & /*other*/) = default;
   std::vector<double> getCut(double kxIn, double kyIn, double kzIn) override;

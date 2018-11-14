@@ -7,7 +7,6 @@
 //
 
 #include "SpinWaveGenie/Interactions/MagneticFieldInteraction.h"
-#include "SpinWaveGenie/Memory.h"
 
 using namespace std;
 
@@ -23,7 +22,7 @@ MagneticFieldInteraction::MagneticFieldInteraction(string name_in, double value_
 
 std::unique_ptr<Interaction> MagneticFieldInteraction::clone() const
 {
-  return memory::make_unique<MagneticFieldInteraction>(*this);
+  return std::make_unique<MagneticFieldInteraction>(*this);
 }
 
 void MagneticFieldInteraction::updateInteraction(double value_in, const Eigen::Vector3d &unitVectorIn,
@@ -83,7 +82,6 @@ void MagneticFieldInteraction::calculateFirstOrderTerms(const Cell &cell, Eigen:
 
 void MagneticFieldInteraction::calcConstantValues(const Cell &cell)
 {
-  complex<double> XI(0.0, 1.0);
   // find location of r
   r = cell.getPosition(sl_r);
   M = cell.size();

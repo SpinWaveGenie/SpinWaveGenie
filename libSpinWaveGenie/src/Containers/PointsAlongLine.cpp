@@ -17,12 +17,12 @@ void PointsAlongLine::setFinalPoint(double kx, double ky, double kz)
   kzf = kz;
 }
 
-void PointsAlongLine::setNumberPoints(long points) { numberPoints = points; }
+void PointsAlongLine::setNumberPoints(ThreeVectors<double>::size_type points) { numberPoints = points; }
 
 void PointsAlongLine::calculatePoints()
 {
   Kpoints.clear();
-  for (int m = 0; m < numberPoints; m++)
+  for (ThreeVectors<double>::size_type m = 0; m < numberPoints; m++)
   {
     if (numberPoints == 1)
     {

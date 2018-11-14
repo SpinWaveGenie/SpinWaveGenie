@@ -11,7 +11,6 @@
 
 #include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Export.h"
-#include "SpinWaveGenie/Memory.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include <deque>
 #include <iostream>

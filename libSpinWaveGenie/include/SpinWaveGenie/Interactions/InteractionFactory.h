@@ -11,7 +11,6 @@
 
 #include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Interactions/Interaction.h"
-#include "SpinWaveGenie/Memory.h"
 #include <iostream>
 #include <string>
 

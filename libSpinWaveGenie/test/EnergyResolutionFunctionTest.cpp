@@ -4,6 +4,7 @@
 #include <numeric>
 #include <algorithm>
 #include <boost/test/unit_test.hpp>
+#include <utility>
 #include "SpinWaveGenie/Containers/Containers.h"
 #include "SpinWaveGenie/Plot/Plot.h"
 
@@ -13,12 +14,13 @@ using namespace SpinWaveGenie;
 class SimpleSpinWave
 {
 public:
-    SimpleSpinWave(){};
-    SimpleSpinWave(Results input) {m_Results = input;};
-    void createMatrix(double /*KX*/, double /*KY*/, double /*KZ*/){};
-    void calculate() {};
-    Results getPoints() {return m_Results;};
-    const Cell& getCell() const {return m_Cell;};
+  SimpleSpinWave() = default;
+  SimpleSpinWave(Results input) { m_Results = std::move(input); };
+  void createMatrix(double /*KX*/, double /*KY*/, double /*KZ*/){};
+  void calculate(){};
+  Results getPoints() { return m_Results; };
+  const Cell &getCell() const { return m_Cell; };
+
 private:
     Results m_Results;
     Cell m_Cell;
@@ -45,14 +47,14 @@ void runTest(std::unique_ptr<OneDimensionalShapes> resolutionFunction)
     BOOST_CHECK_CLOSE(testme[25]/testme[30],0.5,0.01);
     
     //check lower bound;
-    auto min_zeros = std::find_if(testme.begin(), testme.end(),std::bind(std::greater<double>(),std::placeholders::_1,1.0e-3));
+    auto min_zeros = std::find_if(testme.begin(), testme.end(),std::bind(std::greater<>(),std::placeholders::_1,1.0e-3));
     BOOST_CHECK_EQUAL(std::distance(testme.begin(), min_zeros), static_cast<long>(energies.getLowerBound(min)));
 
     double shouldBeZero = std::accumulate(testme.begin(),min_zeros,0.0);
     BOOST_CHECK_CLOSE(shouldBeZero,0.0,1.0e-15);
     
     //check upper bound
-    auto max_zeros = std::find_if_not(min_zeros+1, testme.end(),std::bind(std::greater<double>(),std::placeholders::_1,1.0e-3));
+    auto max_zeros = std::find_if_not(min_zeros+1, testme.end(),std::bind(std::greater<>(),std::placeholders::_1,1.0e-3));
     BOOST_CHECK_EQUAL(std::distance(testme.begin(), max_zeros), static_cast<long>(energies.getUpperBound(max)));
 
     shouldBeZero = std::accumulate(max_zeros,testme.end(),0.0);
@@ -78,7 +80,7 @@ BOOST_AUTO_TEST_CASE(UpdatedGaussianFunction)
 {
   OneDimensionalFactory factory;
   auto gaussian = factory.getGaussian(20.0, 1.0e-1);
-  OneDimensionalGaussian *gaussian_ptr = dynamic_cast<OneDimensionalGaussian *>(gaussian.get());
+  auto gaussian_ptr = dynamic_cast<OneDimensionalGaussian *>(gaussian.get());
   BOOST_CHECK(gaussian_ptr != nullptr);
   // fix coverity issue
   if (gaussian_ptr)
@@ -93,7 +95,7 @@ BOOST_AUTO_TEST_CASE(UpdatedLorentzianFunction)
 {
   OneDimensionalFactory factory;
   auto lorentzian = factory.getLorentzian(20.0, 1.0e-1);
-  OneDimensionalLorentzian *lorentzian_ptr = dynamic_cast<OneDimensionalLorentzian *>(lorentzian.get());
+  auto lorentzian_ptr = dynamic_cast<OneDimensionalLorentzian *>(lorentzian.get());
   BOOST_CHECK(lorentzian_ptr != nullptr);
   // fix coverity issue
   if (lorentzian_ptr)

@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE( ClearTest )
 
     doubleTest.clear();
 
-    BOOST_CHECK(doubleTest.size() == 0);
+    BOOST_CHECK(doubleTest.empty());
 }
 
 BOOST_AUTO_TEST_CASE( IteratorTest )
@@ -51,10 +51,12 @@ BOOST_AUTO_TEST_CASE( IteratorTest )
     int index = 0;
     for (const auto &point : doubleTest)
     {
-        if (index == 0)
+        if (index == 0) {
           BOOST_CHECK_CLOSE(point[0] + point[1] + point[2], 3.0, 1.0e-5);
-        if (index == 1)
+}
+        if (index == 1) {
           BOOST_CHECK_CLOSE(point[0] + point[1] + point[2], 6.0, 1.0e-5);
+}
         index++;
     }
 }

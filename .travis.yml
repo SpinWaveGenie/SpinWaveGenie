@@ -11,57 +11,51 @@ matrix:
     - os: linux
       dist: trusty
       compiler: gcc
-      env: PYTHON_VERSION=2.7
+      env:
+        - COMPILER_VERSION=5
+        - PYTHON_VERSION=2.7
     - os: linux
       dist: trusty
       compiler: gcc
-      env: PYTHON_VERSION=3.4
+      env: 
+        - COMPILER_VERSION=6
+        - PYTHON_VERSION=3.4
     - os: osx
-      osx_image: xcode9
+      osx_image: xcode9.3beta
       compiler: clang
       env: PYTHON_VERSION=3.6
     - os: osx
       osx_image: xcode8.3
       compiler: clang
-      env: PYTHON_VERSION=2.7
-    - os: osx
-      osx_image: xcode7.3
-      compiler: clang
-      env: PYTHON_VERSION=2.7
-      env: COVERALLS=true
+      env: 
+        - PYTHON_VERSION=2.7
+        - COVERALLS=true
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
       brew update > /dev/null 2>&1;
-      brew tap homebrew/science;
       brew outdated cmake || brew upgrade cmake;
       brew install eigen;
-      brew install tbb --c++11;
+      brew install tbb;
       if [ "$PYTHON_VERSION" == "3.6" ];
       then
-        brew install nlopt;
-        brew install python3;
+        brew install nlopt --without-numpy;
+        brew upgrade python;
         brew install gcc;
         brew link --overwrite gcc;
-        brew install numpy --with-python3 --without-python;
+        brew install numpy;
+        brew link --overwrite numpy;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
-      wget -q https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz --no-check-certificate;
-      tar -xzf cmake-3.9.0-Linux-x86_64.tar.gz;
-      sudo ln -f -s ./cmake-3.9.0-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
+      wget -q https://cmake.org/files/v3.10/cmake-3.10.3-Linux-x86_64.tar.gz --no-check-certificate;
+      tar -xzf cmake-3.10.3-Linux-x86_64.tar.gz;
+      sudo ln -f -s ./cmake-3.10.3-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
+      sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
       sudo apt-get update -qq;
-      sudo apt-get install -qq libboost-dev libboost-test-dev libtbb-dev;
-      wget -q http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz;
-      tar -xzf 3.3.4.tar.gz;
-      cd eigen-eigen-5a0156e40feb;
-      mkdir build;
-      cd build;
-      cmake ..;
-      make;
-      sudo make install;
+      sudo apt-get install -qq gcc-$COMPILER_VERSION g++-$COMPILER_VERSION libboost-dev libboost-test-dev libtbb-dev;
       pip install --user --upgrade pip virtualenv;
       virtualenv -p python$PYTHON_VERSION venv;
       source venv/bin/activate;
@@ -75,16 +69,18 @@ before_script:
       if [ "$COVERALLS" == "true" ];
       then
         echo "CHECKING CODE COVERAGE, $COVERALLS";
-        cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON .;
+        cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON . -DUSE_SYSTEM_EIGEN=ON;
       elif [ "$PYTHON_VERSION" == "3.6" ];
       then
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION -DUSE_SYSTEM_EIGEN=ON;
       else
-        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION;
+        cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION -DUSE_SYSTEM_EIGEN=ON;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
+      export CXX=g++-$COMPILER_VERSION;
+      export CC=gcc-$COMPILER_VERSION; 
       cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION;
     fi
 
