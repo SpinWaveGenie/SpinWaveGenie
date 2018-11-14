@@ -215,5 +215,5 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def(py::init<const SpinWavePlot &, double, int>());
       //
 
-  return m.ptr();
+  
 }
