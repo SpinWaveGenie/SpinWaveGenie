@@ -46,6 +46,9 @@ before_install:
         brew link --overwrite gcc;
         brew install numpy;
         brew link --overwrite numpy;
+      elif [ "$PYTHON_VERSION" == "2.7" ];
+      then
+        brew install python@2;
       fi
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
