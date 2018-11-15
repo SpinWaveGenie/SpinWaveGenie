@@ -9,23 +9,23 @@ branches:
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       env:
         - COMPILER_VERSION=5
         - PYTHON_VERSION=2.7
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       env: 
-        - COMPILER_VERSION=6
-        - PYTHON_VERSION=3.4
+        - COMPILER_VERSION=7
+        - PYTHON_VERSION=3.5
     - os: osx
-      osx_image: xcode9.3beta
+      osx_image: xcode10.1
       compiler: clang
-      env: PYTHON_VERSION=3.6
+      env: PYTHON_VERSION=3.7
     - os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9.4
       compiler: clang
       env: 
         - PYTHON_VERSION=2.7
@@ -38,7 +38,7 @@ before_install:
       brew outdated cmake || brew upgrade cmake;
       brew install eigen;
       brew install tbb;
-      if [ "$PYTHON_VERSION" == "3.6" ];
+      if [ "$PYTHON_VERSION" == "3.7" ];
       then
         brew install nlopt --without-numpy;
         brew upgrade python;
@@ -50,12 +50,9 @@ before_install:
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ];
     then
-      wget -q https://cmake.org/files/v3.10/cmake-3.10.3-Linux-x86_64.tar.gz --no-check-certificate;
-      tar -xzf cmake-3.10.3-Linux-x86_64.tar.gz;
-      sudo ln -f -s ./cmake-3.10.3-Linux-x86_64/bin/cmake /usr/local/bin/cmake;
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
       sudo apt-get update -qq;
-      sudo apt-get install -qq gcc-$COMPILER_VERSION g++-$COMPILER_VERSION libboost-dev libboost-test-dev libtbb-dev;
+      sudo apt-get install -qq gcc-$COMPILER_VERSION g++-$COMPILER_VERSION cmake libboost-dev libboost-test-dev libtbb-dev;
       pip install --user --upgrade pip virtualenv;
       virtualenv -p python$PYTHON_VERSION venv;
       source venv/bin/activate;
@@ -70,7 +67,7 @@ before_script:
       then
         echo "CHECKING CODE COVERAGE, $COVERALLS";
         cmake -DWARNINGS_AS_ERRORS=ON -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON . -DUSE_SYSTEM_EIGEN=ON;
-      elif [ "$PYTHON_VERSION" == "3.6" ];
+      elif [ "$PYTHON_VERSION" == "3.7" ];
       then
         cmake -DWARNINGS_AS_ERRORS=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DPYBIND11_PYTHON_VERSION=$PYTHON_VERSION -DUSE_SYSTEM_EIGEN=ON;
       else
