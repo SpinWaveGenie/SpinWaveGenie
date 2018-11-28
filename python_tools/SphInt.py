@@ -1,4 +1,5 @@
 import numpy as np
+
 def fib(n,m ):
     """
     return the m largest values in a sequence of n fibonacci numbers in a sequence
@@ -61,8 +62,8 @@ def sph_integrate(func,n=17,nE=1,*fargs):
     integrand_array*=(1+np.cos(np.pi*zt))
     integral_out=integrand_array.sum(axis=0)*np.pi*dz
     return integral_out
-    
-def I_qtp_E(p,z,q,E,cell):
+
+def I_qtp_E(p,z,q,E,cell,genie_inst):
     """
     return an intensity based on q, z=cos(theta), and phi (p)
     """
@@ -71,3 +72,14 @@ def I_qtp_E(p,z,q,E,cell):
     qv[0],qv[1],qv[2] = rtp2xyz(q,t,p)
     bv = cell.getBasisVectors()
     hkl = qv.T*bv/2/np.pi
+    genie.createMatrix(*hkl)
+    genie.calculate()
+    res=genie.getPoints()
+    A=np.zeros(len(res))
+    c=np.zeros(len(res))
+    w=np.zeros(len(res))+1.0
+    for idx in range(len(res)):
+        A[idx]=res[idx].intensity
+        c[idx]=res[idx].frequency
+    I=ngauss(E,A,c,w)
+    return I
