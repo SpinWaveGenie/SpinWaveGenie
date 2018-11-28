@@ -1,4 +1,5 @@
 import numpy as np
+import helper
 
 def fib(n,m ):
     """
@@ -23,7 +24,7 @@ def calc_z_Phi(n,phi_bound_2pi=True):
     dz=2/Fs[1]
     z=np.arange(-1,1,dz)
     phi=(np.pi*Fs[0]/Fs[1])*np.arange(len(z))
-    n2p=floor(phi/(np.pi))
+    n2p=np.floor_divide(phi,np.pi)
     if phi_bound_2pi:
          phi_out=phi-np.pi*n2p
     else:
@@ -44,7 +45,7 @@ def weight_sample(z):
     """
     return(z + np.sin(np.pi*z)/np.pi)
 
-def sph_integrate(func,n=17,nE=1,*fargs):
+def sph_integrate(func,n,nE,*fargs):
     """
     perform a spherical integration on the given
     func
@@ -71,15 +72,15 @@ def I_qtp_E(p,z,q,E,cell,genie_inst):
     qv = np.zeros(3)
     qv[0],qv[1],qv[2] = rtp2xyz(q,t,p)
     bv = cell.getBasisVectors()
-    hkl = qv.T*bv/2/np.pi
-    genie.createMatrix(*hkl)
-    genie.calculate()
-    res=genie.getPoints()
+    hkl = (qv.T*bv/2/np.pi).sum(axis=0)
+    genie_inst.createMatrix(*hkl)
+    genie_inst.calculate()
+    res=genie_inst.getPoints()
     A=np.zeros(len(res))
     c=np.zeros(len(res))
     w=np.zeros(len(res))+1.0
     for idx in range(len(res)):
         A[idx]=res[idx].intensity
         c[idx]=res[idx].frequency
-    I=ngauss(E,A,c,w)
+    I=helper.ngauss(E,A,c,w)
     return I
