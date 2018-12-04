@@ -64,9 +64,12 @@ def sph_integrate(func,n,nE,*fargs):
     integral_out=integrand_array.sum(axis=0)*np.pi*dz
     return integral_out
 
-def I_qtp_E(p,z,q,E,cell,genie_inst):
+def I_qtp_E(p,z,q,E,gw,cell,genie_inst):
     """
     return an intensity based on q, z=cos(theta), and phi (p)
+    E is an array of energy values, gw is the width of a gaussian in energy to integrate
+    cell is a cell object for determining the unit cell.
+    genie_inst is the instance of a genie object for calculating spin waves
     """
     t=np.arccos(z)
     qv = np.zeros(3)
@@ -78,7 +81,7 @@ def I_qtp_E(p,z,q,E,cell,genie_inst):
     res=genie_inst.getPoints()
     A=np.zeros(len(res))
     c=np.zeros(len(res))
-    w=np.zeros(len(res))+1.0
+    w=np.zeros(len(res))+gw
     for idx in range(len(res)):
         A[idx]=res[idx].intensity
         c[idx]=res[idx].frequency
