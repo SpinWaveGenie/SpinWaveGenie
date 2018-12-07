@@ -122,7 +122,7 @@ qpts=np.linspace(0,4,301)
 energies=np.linspace(0.1,30.1,601)
 #energies=swg.Energies(0.1,30.1,301)
 def t_fun(qpt):
-    return SInt.sph_integrate(SInt.I_qtp_E,17,len(energies),qpt,energies,0.1,cell,genie)
+    return SInt.sph_integrate(SInt.I_qtp_E,17,len(energies),qpt,energies,0.2,cell,genie)
 print (time.clock())
 ITmp=Pool(len(qpts)).map(t_fun,qpts)
 print(time.clock())
