@@ -61,8 +61,28 @@ def sph_integrate(func,n,nE,*fargs):
         integrand_array[idx,:]=func(phi[idx],zpj,*fargs)+func(phi_pp[idx],zpj,*fargs)
     zt=np.tile(z,(nE,1)).T
     integrand_array*=(1+np.cos(np.pi*zt))
-    integral_out=integrand_array.sum(axis=0)*np.pi*dz
+    integral_out=np.sum(integrand_array,axis=0)*np.pi*dz
     return integral_out
+
+def sph_integrate_array(func,n,nE,*fargs):
+        """
+        perform a spherical integration on the given
+        func
+        n is the sequence number of the fibronacci sequence
+        Reference equation 8 in https://doi.org/10.1088/0305-4470/37/48/005
+        output the array for testing purposes
+        """
+        z,phi,dz = calc_z_Phi(n)
+        zp = weight_sample(z)
+        integrand_array=np.zeros((len(zp),nE))
+        phi_pp=phi+np.pi # add pi to phi before calculating each function
+        # use for loop to allow for non vectorizable functions
+        for idx,zpj in enumerate(zp):
+            integrand_array[idx,:]=func(phi[idx],zpj,*fargs)+func(phi_pp[idx],zpj,*fargs)
+        zt=np.tile(z,(nE,1)).T
+        integrand_array*=(1+np.cos(np.pi*zt))
+        integral_out=np.nansum(integrand_array,axis=0)*np.pi*dz
+        return integrand_array
 
 def I_qtp_E(p,z,q,E,gw,cell,genie_inst):
     """
@@ -83,7 +103,9 @@ def I_qtp_E(p,z,q,E,gw,cell,genie_inst):
     c=np.zeros(len(res))
     w=np.zeros(len(res))+gw
     for idx in range(len(res)):
-        A[idx]=res[idx].intensity
+          # handle if the C++ code returns a nan.  # probably needs to be caught upstream
+        if ~np.isnan(res[idx].intensity):
+            A[idx]=res[idx].intensity
         c[idx]=res[idx].frequency
     I=helper.ngauss(E,A,c,w)
     return I
