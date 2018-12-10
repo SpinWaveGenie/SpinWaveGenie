@@ -27,7 +27,7 @@ def get_neighbor_idx(m_at,latt,n_order,max_radii=3.):
     0 is first order
     """
     n_at=latt.get_number_of_atoms()
-    num_n=nl.NeighborList(ones(n_at)*max_radii,self_interaction=False,bothways=True)
+    num_n=nl.NeighborList(np.ones(n_at)*max_radii,self_interaction=False,bothways=True)
     num_n.update(latt)
     idxs,vec=num_n.get_neighbors(m_at)
     dist_lst=latt.get_distances(m_at,idxs).round(4)
@@ -52,11 +52,11 @@ n_at=mn.get_number_of_atoms()
 # define 1st three atoms by hand and then loop through all NNN to be sure all
 # spins are defined
 # you can use ase.visualize.view to check if it is correct
-mm=zeros(n_at)
+mm=np.zeros(n_at)
 mm[0:3]=spin
 mm[3]=-spin
 at_num=0
-while prod(abs(mm))<1:
+while np.prod(abs(mm))<1:
     nnnidxs=get_neighbor_idx(at_num,mn,1,max_radii=3.)
     mm[nnnidxs]=-mm[at_num]
     at_num+=1
@@ -64,11 +64,11 @@ mn.set_initial_magnetic_moments(mm)
 inpos=mn.get_scaled_positions()
 #Define spin direction as in the plane
 # component perp to plane
-Sx_vec=cross(inpos[1,:],inpos[2,:])/norm(cross(inpos[1,:],inpos[2,:]))
+Sx_vec=np.cross(inpos[1,:],inpos[2,:])/np.linalg.norm(np.cross(inpos[1,:],inpos[2,:]))
 # component in plane and perpendicular to moment direction.
-Sy_vec=inpos[1,:]/norm(inpos[1,:])
+Sy_vec=inpos[1,:]/np.linalg.norm(inpos[1,:])
 # Moment direction
-Sz_vec=cross(Sx_vec,Sy_vec)
+Sz_vec=np.cross(Sx_vec,Sy_vec)
 # start setting up spin wave genie
 cell=swg.Cell()
 # use unit cell from ase
@@ -88,7 +88,7 @@ Mn2.setMoment(2.5,1.99133,2.6779)
 # add the subblatices to the cells
 cell.addSublattice(Mn1)
 cell.addSublattice(Mn2)
-atom_pos=zeros(mn.positions.shape)
+atom_pos=np.zeros(mn.positions.shape)
 spin_dict={2.5:"Mn1",-2.5:"Mn2"}
 for idx in range(len(mn.positions)):
     pos=inpos[idx]
