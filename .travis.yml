@@ -36,15 +36,15 @@ before_install:
     then
       brew update > /dev/null 2>&1;
       brew outdated cmake || brew upgrade cmake;
-      brew install eigen;
+      brew outdated eigen || brew upgrade eigen;
       brew install tbb;
       if [ "$PYTHON_VERSION" == "3.7" ];
       then
-        brew install nlopt --without-numpy;
-        brew upgrade python;
-        brew install gcc;
+        brew install nlopt;
+        brew outdated python || brew upgrade python;
+        brew outdated gcc || brew upgrade gcc;
         brew link --overwrite gcc;
-        brew install numpy;
+        brew outdated numpy || brew install numpy;
         brew link --overwrite numpy;
       elif [ "$PYTHON_VERSION" == "2.7" ];
       then
