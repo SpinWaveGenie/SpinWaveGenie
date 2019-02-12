@@ -62,6 +62,12 @@ std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(const std::string
   return std::make_unique<AnisotropyInteraction>(name, value, direction, sl_r);
 }
 
+std::unique_ptr<Interaction> InteractionFactory::getAnisotropy(const std::string &name, const Eigen::Matrix3d &matrix,
+                                                               const std::string &sl_r)
+{
+  return std::make_unique<AnisotropyInteraction>(name, matrix, sl_r);
+}
+
 std::unique_ptr<Interaction> InteractionFactory::getMagneticField(const std::string &name, double value,
                                                                   const Eigen::Vector3d &direction,
                                                                   const std::string &sl_r)

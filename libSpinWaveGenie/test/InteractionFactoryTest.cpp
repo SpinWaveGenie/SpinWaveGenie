@@ -30,10 +30,22 @@ BOOST_AUTO_TEST_CASE(GetDzyaloshinskiiMoriya)
   BOOST_CHECK_EQUAL(sl[1], "SB");
 }
 
-BOOST_AUTO_TEST_CASE(getAnisotropy)
+BOOST_AUTO_TEST_CASE(getAnisotropyVector)
 {
   InteractionFactory factory;
   auto anisotropy = factory.getAnisotropy("K", 1.0, {0.0, 0.0, 1.0}, "SA");
+  BOOST_CHECK_EQUAL(anisotropy->getName(), "K");
+  auto sl = anisotropy->sublattices();
+  BOOST_CHECK_EQUAL(sl[0], "SA");
+  BOOST_CHECK_EQUAL(sl[1], "SA");
+}
+
+BOOST_AUTO_TEST_CASE(getAnisotropyMatrix)
+{
+  InteractionFactory factory;
+  Eigen::Matrix3d z;
+  z << 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0;
+  auto anisotropy = factory.getAnisotropy("K", z, "SA");
   BOOST_CHECK_EQUAL(anisotropy->getName(), "K");
   auto sl = anisotropy->sublattices();
   BOOST_CHECK_EQUAL(sl[0], "SA");
