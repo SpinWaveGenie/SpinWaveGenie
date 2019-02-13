@@ -20,6 +20,13 @@ AnisotropyInteraction::AnisotropyInteraction(const string &name_in, double value
   this->updateInteraction(value_in, direction_in, sl_r_in);
 }
 
+AnisotropyInteraction::AnisotropyInteraction(const string &name_in, const Eigen::Matrix3d &matrix_in,
+                                             const string &sl_r_in)
+    : name(name_in), r(0), M(0)
+{
+  this->updateInteraction(matrix_in, sl_r_in);
+}
+
 std::unique_ptr<Interaction> AnisotropyInteraction::clone() const
 {
   return std::make_unique<AnisotropyInteraction>(*this);
@@ -33,11 +40,25 @@ void AnisotropyInteraction::updateInteraction(double value_in, const Eigen::Vect
   unitVector.normalize();
   directions = unitVector * unitVector.transpose();
   sl_r = sl_r_in;
+  matrix_input = false;
+}
+
+void AnisotropyInteraction::updateInteraction(const Eigen::Matrix3d &matrix_in, const string &sl_r_in)
+{
+  value = 1.0;
+  directions = matrix_in;
+  sl_r = sl_r_in;
+  matrix_input = true;
 }
 
 const string &AnisotropyInteraction::getName() const { return name; }
 
-void AnisotropyInteraction::updateValue(double value_in) { value = value_in; }
+void AnisotropyInteraction::updateValue(double value_in)
+{
+  if (matrix_input)
+    throw std::runtime_error("Cannot update anisotropy value created with Matrix input.");
+  value = value_in;
+}
 
 std::array<std::string, 2> AnisotropyInteraction::sublattices() const { return {{sl_r, sl_r}}; }
 

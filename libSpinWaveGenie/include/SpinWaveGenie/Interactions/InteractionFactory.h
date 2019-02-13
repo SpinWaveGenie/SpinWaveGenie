@@ -27,6 +27,8 @@ public:
                                                        const std::string &sl_s, double min, double max);
   std::unique_ptr<Interaction> getAnisotropy(const std::string &name, double value, const Eigen::Vector3d &direction,
                                              const std::string &sl_r);
+  std::unique_ptr<Interaction> getAnisotropy(const std::string &name, const Eigen::Matrix3d &matrix,
+                                             const std::string &sl_r);
   std::unique_ptr<Interaction> getMagneticField(const std::string &name, double value, const Eigen::Vector3d &direction,
                                                 const std::string &sl_r);
 

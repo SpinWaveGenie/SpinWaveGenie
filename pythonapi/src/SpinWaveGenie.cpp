@@ -89,10 +89,18 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
 
   py::class_<InteractionFactory>(m, "InteractionFactory")
       .def(py::init<>())
-      .def("getExchange",&InteractionFactory::getExchange,"Construct exchange interaction term.")
-      .def("getDzyaloshinskiiMoriya",&InteractionFactory::getDzyaloshinskiiMoriya,"Construct Dzyaloshinskii-Moriya interaction term")
-      .def("getAnisotropy",&InteractionFactory::getAnisotropy,"Construct single-ion anisotropy term.")
-      .def("getMagneticField",&InteractionFactory::getMagneticField,"Construct magnetic field term.");
+      .def("getExchange", &InteractionFactory::getExchange, "Construct exchange interaction term.")
+      .def("getDzyaloshinskiiMoriya", &InteractionFactory::getDzyaloshinskiiMoriya,
+           "Construct Dzyaloshinskii-Moriya interaction term")
+      .def("getAnisotropy",
+           py::overload_cast<const std::string &, double, const Eigen::Vector3d &, const std::string &>(
+               &InteractionFactory::getAnisotropy),
+           "Construct single-ion anisotropy term.")
+      .def("getAnisotropy",
+           py::overload_cast<const std::string &, const Eigen::Matrix3d &, const std::string &>(
+               &InteractionFactory::getAnisotropy),
+           "Construct single-ion anisotropy term.")
+      .def("getMagneticField", &InteractionFactory::getMagneticField, "Construct magnetic field term.");
 
   py::class_<Point>(m, "Point")
       .def_readonly("frequency", &Point::frequency, "Frequency associated with a given excitation (in meV).")

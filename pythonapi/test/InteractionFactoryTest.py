@@ -28,6 +28,14 @@ class TestInteractionFactoryClass(unittest.TestCase):
         self.assertEqual(sl[0],"SA")
         self.assertEqual(sl[1],"SA")
 
+    def test_getAnisotropy(self):
+        factory = swg.InteractionFactory()
+        anisotropy = factory.getAnisotropy("K",[[0.0,0.0,0.0,],[0.0,0.0,0.0],[0.0,0.0,1.0]],"SA")
+        self.assertEqual(anisotropy.getName(),"K")
+        sl = anisotropy.sublattices()
+        self.assertEqual(sl[0],"SA")
+        self.assertEqual(sl[1],"SA")
+
     def test_getMagneticField(self):
         factory = swg.InteractionFactory()
         magnetic_field = factory.getMagneticField("B",1.0,[0.0,0.0,1.0],"SA")
