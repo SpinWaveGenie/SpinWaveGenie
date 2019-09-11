@@ -19,7 +19,7 @@ namespace SpinWaveGenie
 class SPINWAVEGENIE_EXPORT EnergyDependentGaussian : public OneDimensionalShapes
 {
 public:
-  OneDimensionalGaussian(const std::array<double, 4> &FWHM, double Tolerance = 0.01);
+  EnergyDependentGaussian(const std::array<double, 4> &FWHM, double Tolerance = 0.01);
   void setFWHM(const std::array<double, 4> &FWHM);
   void setTolerance(double InTolerance) override;
   double getMinimumEnergy() override;
@@ -29,8 +29,8 @@ public:
 
 private:
   void update();
-  double m_Tolerance;
   std::array<double, 4> m_sigma;
+  double m_Tolerance;
 };
 } // namespace SpinWaveGenie
 #endif /* defined(__EnergyDependentGaussian__) */
