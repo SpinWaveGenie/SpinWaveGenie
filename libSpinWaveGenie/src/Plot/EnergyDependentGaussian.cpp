@@ -41,9 +41,10 @@ double EnergyDependentGaussian::getMaximumEnergy() { return std::numeric_limits<
 
 double EnergyDependentGaussian::getFunction(double frequency, double energy)
 {
-  double sigma = m_sigma[0] + m_sigma[1] * energy + m_sigma[2] * boost::math::pow<2>(energy) +
-                 m_sigma[3] * boost::math::pow<3>(energy);
-  return 1.0 / (std::sqrt(2.0 * M_PI) * std::exp(-1.0 / (2.0 * boost::math::pow<2>(sigma))) *
+  double sigma = m_sigma[0] + m_sigma[1] * frequency + m_sigma[2] * boost::math::pow<2>(frequency) +
+                 m_sigma[3] * boost::math::pow<3>(frequency);
+  std::cout << "sigma: " << sigma << '\n';
+  return 1.0 / (sigma * std::sqrt(2.0 * M_PI)) * std::exp(-1.0 / (2.0 * boost::math::pow<2>(sigma)) *
                 boost::math::pow<2>(frequency - energy));
 }
 

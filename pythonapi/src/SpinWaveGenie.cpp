@@ -50,14 +50,14 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
   py::class_<Cell>(m, "Cell")
       .def(py::init<>())
       .def("setBasisVectors",
-           static_cast<void (Cell::*)(double, double, double, double, double, double)>(&Cell::setBasisVectors),
+           py::overload_cast<double, double, double, double, double, double>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
-      .def("setBasisVectors", static_cast<void (Cell::*)(double, const Eigen::Matrix3d &)>(&Cell::setBasisVectors),
+      .def("setBasisVectors", py::overload_cast<double, const Eigen::Matrix3d &>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
       .def("getBasisVectors", &Cell::getBasisVectors, "get basis vectors")
       .def("getReciprocalVectors", &Cell::getReciprocalVectors, "get basis vectors")
       .def("addSublattice", &Cell::addSublattice, "Add sublattice to cell")
-      .def("getSublattice", static_cast<Sublattice &(Cell::*)(const std::string &name)>(&Cell::getSublattice),
+      .def("getSublattice", py::overload_cast<const std::string &>(&Cell::getSublattice),
            "Returns sublattice object")
       .def("__getitem__",
            [](const Cell &s, size_t i) {
@@ -139,9 +139,7 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def(py::init<>())
       .def(py::init<const Cell &>())
       .def("updateCell", &SpinWaveBuilder::updateCell, "")
-      .def("addInteraction",
-           static_cast<void (SpinWaveBuilder::*)(const Interaction &)>(&SpinWaveBuilder::addInteraction),
-           "Add a magnetic interaction to the model.")
+      .def("addInteraction", py::overload_cast<const Interaction &>(&SpinWaveBuilder::addInteraction), "Add a magnetic interaction to the model.")
       .def("updateInteraction", &SpinWaveBuilder::updateInteraction, "Update interaction parameter.")
       .def("getEnergy", &SpinWaveBuilder::getEnergy, "Get the classical energy associated with the model.")
       .def("getFirstOrderTerms", &SpinWaveBuilder::getFirstOrderTerms,
@@ -186,7 +184,8 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
 
   py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
           .def(py::init<>())
-          .def("getGaussian",&OneDimensionalFactory::getGaussian,"Given a FWHM and a tolerance provide a 1D Gaussian object")
+          .def("getGaussian",py::overload_cast<double, double>(&OneDimensionalFactory::getGaussian),"Given a FWHM and a tolerance provide a 1D Gaussian object")
+          .def("getGaussian",py::overload_cast<const std::array<double,4>&,double>(&OneDimensionalFactory::getGaussian),"Given a FWHM and a tolerance provide a 1D Gaussian object")
           .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
           .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
                "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
@@ -200,9 +199,7 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
   py::class_<EnergyResolutionFunction, SpinWavePlot>(m, "EnergyResolutionFunction")
       .def(py::init<>())
       .def(py::init<const OneDimensionalShapes &, const SpinWave &, const Energies &>())
-      .def("setResolutionFunction",
-           static_cast<void (EnergyResolutionFunction::*)(const OneDimensionalShapes &)>(
-               &EnergyResolutionFunction::setResolutionFunction),
+      .def("setResolutionFunction", py::overload_cast<const OneDimensionalShapes &>(&EnergyResolutionFunction::setResolutionFunction),
            "Set the resolution function")
       .def("setSpinWave", &EnergyResolutionFunction::setSpinWave, "Set the spin wave model");
 
@@ -214,8 +211,7 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def("setFilename", &TwoDimensionalCut::setFilename, "Set filename to save results of cut")
       .def("setPoints", &TwoDimensionalCut::setPoints, "")
       .def("setEnergyPoints", &TwoDimensionalCut::setEnergyPoints, "")
-      .def("setPlotObject",
-           static_cast<void (TwoDimensionalCut::*)(const SpinWavePlot &)>(&TwoDimensionalCut::setPlotObject), "")
+      .def("setPlotObject", py::overload_cast<const SpinWavePlot &>(&TwoDimensionalCut::setPlotObject), "")
       .def("getMatrix", &TwoDimensionalCut::getMatrix,"Get cut as a 2D array")
       .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
 
