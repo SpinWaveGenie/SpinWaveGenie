@@ -11,7 +11,7 @@
 
 #include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
-#include <iostream>
+#include <array>
 
 namespace SpinWaveGenie
 {
