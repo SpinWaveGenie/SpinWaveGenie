@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE( GaussianFunction )
 BOOST_AUTO_TEST_CASE( EnergyDependentGaussian )
 {
     OneDimensionalFactory factory;
-    auto gaussian = factory.getGaussian({4.1109,-0.033267,9.706e-05,2.0379e-07},1.0e-3);
+    auto gaussian = factory.getGaussian({{4.1109,-0.033267,9.706e-05,2.0379e-07}},1.0e-3);
     runEnergyDependentTest(move(gaussian));
 }
 
