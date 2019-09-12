@@ -29,8 +29,10 @@ public:
 
 private:
   void update();
-  std::array<double, 4> m_sigma;
-  double m_Tolerance;
+  void setFWHM(double frequency);
+  std::array<double, 4> m_expansion;
+  double m_FWHM, m_Tolerance;
+  double m_Diff, m_Factor, m_ma;
 };
 } // namespace SpinWaveGenie
 #endif /* defined(__EnergyDependentGaussian__) */
