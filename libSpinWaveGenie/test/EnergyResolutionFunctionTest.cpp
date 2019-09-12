@@ -79,9 +79,6 @@ void runEnergyDependentTest(std::unique_ptr<OneDimensionalShapes> resolutionFunc
     EnergyResolution<SimpleSpinWave> res(move(resolutionFunction),SW,energies);
     std::vector<double> testme = res.getCut(0.0, 0.0, 0.0);
 
-    //for (auto &value:testme)
-    //    std::cout << value << std::endl;
-
     //check FWHM ~3.2 meV
     BOOST_CHECK_CLOSE(testme[284]/testme[300],0.50124290142034589,0.001);
 
@@ -99,8 +96,6 @@ void runEnergyDependentTest(std::unique_ptr<OneDimensionalShapes> resolutionFunc
     shouldBeZero = std::accumulate(max_zeros,testme.end(),0.0);
     BOOST_CHECK_CLOSE(shouldBeZero,0.0,1.0e-15);
 }
-
-
 
 BOOST_AUTO_TEST_CASE( GaussianFunction )
 {
