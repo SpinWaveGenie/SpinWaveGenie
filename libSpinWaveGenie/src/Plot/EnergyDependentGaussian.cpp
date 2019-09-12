@@ -3,7 +3,6 @@
 #include "boost/math/special_functions/pow.hpp"
 
 #include <cmath>
-#include <limits>
 
 namespace SpinWaveGenie
 {
@@ -26,8 +25,9 @@ void EnergyDependentGaussian::setFWHM(const std::array<double, 4> &InFWHM)
   m_expansion = InFWHM;
 }
 
-void EnergyDependentGaussian::setFWHM(double frequency) {
+void EnergyDependentGaussian::setFrequency(double frequency) {
   m_FWHM = m_expansion[0] + m_expansion[1] * frequency + m_expansion[2] * boost::math::pow<2>(frequency) + m_expansion[3] * boost::math::pow<3>(frequency);
+  m_frequency = frequency;
   this->update();
 }
 
@@ -43,10 +43,9 @@ double EnergyDependentGaussian::getMaximumEnergy()
   return m_Diff;
 }
 
-double EnergyDependentGaussian::getFunction(double frequency, double energy)
+double EnergyDependentGaussian::getFunction(double energy)
 {
-  this->setFWHM(frequency);
-  return m_Factor * exp(m_ma * pow(frequency - energy, 2));
+  return m_Factor * exp(m_ma * pow(m_frequency - energy, 2));
 }
 
 std::unique_ptr<OneDimensionalShapes> EnergyDependentGaussian::clone() const

@@ -1,5 +1,8 @@
-#include <cmath>
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
+
+#include "boost/math/special_functions/pow.hpp"
+
+#include <cmath>
 
 using namespace std;
 
@@ -39,9 +42,14 @@ double OneDimensionalGaussian::getMaximumEnergy()
   return m_Diff;
 }
 
-double OneDimensionalGaussian::getFunction(double frequency, double energy)
+void OneDimensionalGaussian::setFrequency(double frequency)
 {
-  return m_Factor * exp(m_ma * pow(frequency - energy, 2));
+    m_frequency = frequency;
+}
+
+double OneDimensionalGaussian::getFunction(double energy)
+{
+  return m_Factor * exp(m_ma * boost::math::pow<2>(m_frequency - energy));
 }
 
 unique_ptr<OneDimensionalShapes> OneDimensionalGaussian::clone() const

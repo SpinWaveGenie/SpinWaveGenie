@@ -37,9 +37,15 @@ double OneDimensionalPseudoVoigt::getMinimumEnergy() { return -1.0 * getMaximumE
 
 double OneDimensionalPseudoVoigt::getMaximumEnergy() { return Lorentzian->getMaximumEnergy(); }
 
-double OneDimensionalPseudoVoigt::getFunction(double frequency, double energy)
+void OneDimensionalPseudoVoigt::setFrequency(double frequency)
 {
-  return eta * Lorentzian->getFunction(frequency, energy) + (1.0 - eta) * Gaussian->getFunction(frequency, energy);
+    Lorentzian->setFrequency(frequency);
+    Gaussian->setFrequency(frequency);
+}
+
+double OneDimensionalPseudoVoigt::getFunction(double energy)
+{
+  return eta * Lorentzian->getFunction(energy) + (1.0 - eta) * Gaussian->getFunction(energy);
 }
 
 unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone() const

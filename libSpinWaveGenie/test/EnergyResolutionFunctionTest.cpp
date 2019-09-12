@@ -71,7 +71,7 @@ void runEnergyDependentTest(std::unique_ptr<OneDimensionalShapes> resolutionFunc
 
     SimpleSpinWave SW(result);
 
-    resolutionFunction->getFunction(pt.frequency,pt.frequency);
+    resolutionFunction->setFrequency(pt.frequency);
     double max = resolutionFunction->getMaximumEnergy() + pt.frequency;
     double min = resolutionFunction->getMinimumEnergy() + pt.frequency;
 

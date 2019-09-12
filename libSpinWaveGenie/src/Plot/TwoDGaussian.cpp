@@ -41,9 +41,14 @@ double TwoDGaussian::getMaximumEnergy()
   return max(firstSolution, secondSolution);
 }
 
-double TwoDGaussian::getFunction(double frequency, double energy)
+void TwoDGaussian::setFrequency(double frequency)
 {
-  return exp(-1.0 * (c * pow(frequency - energy, 2) + 2.0 * b * (frequency - energy) * u + a * pow(u, 2)));
+    m_frequency = frequency;
+}
+
+double TwoDGaussian::getFunction(double energy)
+{
+  return exp(-1.0 * (c * pow(m_frequency - energy, 2) + 2.0 * b * (m_frequency - energy) * u + a * pow(u, 2)));
 }
 
 unique_ptr<OneDimensionalShapes> TwoDGaussian::clone() const { return std::make_unique<TwoDGaussian>(*this); }

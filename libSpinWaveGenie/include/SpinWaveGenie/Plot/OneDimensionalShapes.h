@@ -23,7 +23,8 @@ public:
   virtual void setTolerance(double InTolerance) = 0;
   virtual double getMinimumEnergy() = 0;
   virtual double getMaximumEnergy() = 0;
-  virtual double getFunction(double frequency, double energy) = 0;
+  virtual void setFrequency(double frequency) = 0;
+  virtual double getFunction(double energy) = 0;
   virtual std::unique_ptr<OneDimensionalShapes> clone() const = 0;
   virtual ~OneDimensionalShapes() = default;
 };

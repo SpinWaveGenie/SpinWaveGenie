@@ -24,15 +24,15 @@ public:
   void setTolerance(double InTolerance) override;
   double getMinimumEnergy() override;
   double getMaximumEnergy() override;
-  double getFunction(double frequency, double energy) override;
+  void setFrequency(double frequency) override;
+  double getFunction(double energy) override;
   std::unique_ptr<OneDimensionalShapes> clone() const override;
-
 private:
   void update();
-  void setFWHM(double frequency);
   std::array<double, 4> m_expansion;
   double m_FWHM, m_Tolerance;
   double m_Diff, m_Factor, m_ma;
+  double m_frequency;
 };
 } // namespace SpinWaveGenie
 #endif /* defined(__EnergyDependentGaussian__) */
