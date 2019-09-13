@@ -1,6 +1,5 @@
 set(BUILD_DIR C:/projects/ThirdPartyVC141 CACHE PATH "")
-set(Boost_INCLUDE_DIR C:/Libraries/boost_1_69_0 CACHE PATH "")
-set(Boost_LIBRARY_DIR C:/Libraries/boost_1_69_0/lib64-msvc-14.1 CACHE PATH "")
+set(BOOST_ROOT C:/Libraries/boost_1_69_0 CACHE PATH "")
 set(EIGEN3_INCLUDE_DIR ${BUILD_DIR}/include CACHE PATH "")
 set(TBB_INSTALL_DIR ${BUILD_DIR} CACHE PATH "")
 set(NLOPT_INCLUDE_DIR ${BUILD_DIR} CACHE PATH "")
