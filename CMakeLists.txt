@@ -75,7 +75,8 @@ if(MSVC)
 endif()
 
 if(WIN32)
-    add_definitions( -D_CRT_SECURE_NO_WARNINGS
+    add_definitions( -DBOOST_ALL_DYN_LINK
+                     -D_CRT_SECURE_NO_WARNINGS
                      -D_USE_MATH_DEFINES
                      -DNOMINMAX)
 endif()
