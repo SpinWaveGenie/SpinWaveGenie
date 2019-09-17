@@ -21,7 +21,7 @@ platform: x64
 
 init:
 - echo %APPVEYOR_BUILD_WORKER_IMAGE%
-- cd C:\Libraries\boost_1_69_0\lib64-msvc-14.0
+- cd C:\Libraries\boost_1_69_0
 - dir
 
 install:
