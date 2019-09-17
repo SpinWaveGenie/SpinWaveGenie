@@ -61,12 +61,54 @@ void runTest(std::unique_ptr<OneDimensionalShapes> resolutionFunction)
     BOOST_CHECK_CLOSE(shouldBeZero,0.0,1.0e-15);
 }
 
+void runEnergyDependentTest(std::unique_ptr<OneDimensionalShapes> resolutionFunction)
+{
+    Point pt;
+    pt.frequency = 30.0;
+    pt.intensity = 1.0;
+    Results result;
+    result.insert(pt);
+
+    SimpleSpinWave SW(result);
+
+    resolutionFunction->setFrequency(pt.frequency);
+    double max = resolutionFunction->getMaximumEnergy() + pt.frequency;
+    double min = resolutionFunction->getMinimumEnergy() + pt.frequency;
+
+    Energies energies(0.0, 60.0, 601);
+    EnergyResolution<SimpleSpinWave> res(move(resolutionFunction),SW,energies);
+    std::vector<double> testme = res.getCut(0.0, 0.0, 0.0);
+
+    //check FWHM ~3.2 meV
+    BOOST_CHECK_CLOSE(testme[284]/testme[300],0.50124290142034589,0.001);
+
+    //check lower bound
+    auto min_zeros = std::find_if(testme.begin(), testme.end(),std::bind(std::greater<>(),std::placeholders::_1,1.0e-3));
+    BOOST_CHECK_EQUAL(std::distance(testme.begin(), min_zeros), static_cast<long>(energies.getLowerBound(min)));
+
+    double shouldBeZero = std::accumulate(testme.begin(),min_zeros,0.0);
+    BOOST_CHECK_CLOSE(shouldBeZero,0.0,1.0e-15);
+
+    //check upper bound
+    auto max_zeros = std::find_if_not(min_zeros+1, testme.end(),std::bind(std::greater<>(),std::placeholders::_1,1.0e-3));
+    BOOST_CHECK_EQUAL(std::distance(testme.begin(), max_zeros), static_cast<long>(energies.getUpperBound(max)));
+
+    shouldBeZero = std::accumulate(max_zeros,testme.end(),0.0);
+    BOOST_CHECK_CLOSE(shouldBeZero,0.0,1.0e-15);
+}
 
 BOOST_AUTO_TEST_CASE( GaussianFunction )
 {
     OneDimensionalFactory factory;
     auto gaussian = factory.getGaussian(10.0,5.0e-3);
     runTest(move(gaussian));
+}
+
+BOOST_AUTO_TEST_CASE( EnergyDependentGaussian )
+{
+    OneDimensionalFactory factory;
+    auto gaussian = factory.getGaussian({{4.1109,-0.033267,9.706e-05,2.0379e-07}},1.0e-3);
+    runEnergyDependentTest(move(gaussian));
 }
 
 BOOST_AUTO_TEST_CASE( LorentzianFunction )

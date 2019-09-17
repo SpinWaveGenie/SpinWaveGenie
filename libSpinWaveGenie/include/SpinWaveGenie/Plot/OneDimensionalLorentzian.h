@@ -23,12 +23,14 @@ public:
   void setTolerance(double InTolerance) override;
   double getMinimumEnergy() override;
   double getMaximumEnergy() override;
-  double getFunction(double frequency, double energy) override;
+  void setFrequency(double frequency) override;
+  double getFunction(double energy) override;
   std::unique_ptr<OneDimensionalShapes> clone() const override;
 
 private:
   double getExponentialFactor();
   double FWHM, Tolerance;
+  double m_frequency;
 };
 }
 #endif /* defined(__OneDimensionalLorentzian__) */

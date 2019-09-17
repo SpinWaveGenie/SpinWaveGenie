@@ -7,6 +7,7 @@
 //
 
 #include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
+#include "SpinWaveGenie/Plot/EnergyDependentGaussian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
@@ -20,12 +21,17 @@ std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double 
   return std::make_unique<OneDimensionalGaussian>(fwhm, tol);
 }
 
+std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(const std::array<double,4> &fwhm, double tol)
+{
+  return std::make_unique<EnergyDependentGaussian>(fwhm, tol);
+}
+
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getLorentzian(double fwhm, double tol)
 {
   auto resinfo = std::make_unique<OneDimensionalLorentzian>();
   resinfo->setFWHM(fwhm);
   resinfo->setTolerance(tol);
-  return std::move(resinfo);
+  return resinfo;
 }
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getPseudoVoigt(double eta, double fwhm, double tol)
@@ -34,6 +40,6 @@ std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getPseudoVoigt(doub
   resinfo->setEta(eta);
   resinfo->setFWHM(fwhm);
   resinfo->setTolerance(tol);
-  return std::move(resinfo);
+  return resinfo;
 }
 } // namespace SpinWaveGenie

@@ -5,10 +5,11 @@
 //  Created by Hahn, Steven E. on 2/5/14.
 //
 //
-#include <cmath>
 #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
 
-using namespace std;
+#include "boost/math/special_functions/pow.hpp"
+
+#include <cmath>
 
 namespace SpinWaveGenie
 {
@@ -24,12 +25,17 @@ double OneDimensionalLorentzian::getMaximumEnergy()
   return (0.5 * FWHM) * sqrt(2.0 / (M_PI * FWHM * Tolerance) - 1.0);
 }
 
-double OneDimensionalLorentzian::getFunction(double frequency, double energy)
+double OneDimensionalLorentzian::getFunction(double energy)
 {
-  return FWHM / (2.0 * M_PI * (pow(frequency - energy, 2) + pow(0.5 * FWHM, 2)));
+  return FWHM / (2.0 * M_PI * (boost::math::pow<2>(m_frequency - energy) + boost::math::pow<2>(0.5 * FWHM)));
 }
 
-unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone() const
+void OneDimensionalLorentzian::setFrequency(double frequency)
+{
+    m_frequency = frequency;
+}
+
+std::unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone() const
 {
   return std::make_unique<OneDimensionalLorentzian>(*this);
 }

@@ -111,13 +111,13 @@ template <class T> std::vector<double> EnergyResolution<T>::getCut(double kx, do
   {
     if (std::isfinite(point.frequency) && std::isfinite(point.intensity))
     {
+      ResolutionFunction->setFrequency(point.frequency);
       const double min = point.frequency + ResolutionFunction->getMinimumEnergy();
       const double max = point.frequency + ResolutionFunction->getMaximumEnergy();
       const std::size_t UpperBound = energies.getUpperBound(max);
-      // std::cout << min << " " << energies.getLowerBound(min) << " " << max << " " << UpperBound << std::endl;
       for (std::size_t index = energies.getLowerBound(min); index != UpperBound; ++index)
       {
-        fval[index] += point.intensity * ResolutionFunction->getFunction(point.frequency, energies[index]);
+        fval[index] += point.intensity * ResolutionFunction->getFunction(energies[index]);
       }
     }
   }
