@@ -26,5 +26,5 @@ public:
 
 private:
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__OneDimensionalFactory__) */

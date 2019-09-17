@@ -78,5 +78,5 @@ private:
   std::vector<Axis> integrationDirections;
 };
 
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__HKLDirection__) */

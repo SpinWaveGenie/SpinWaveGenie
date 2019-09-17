@@ -6,15 +6,15 @@
 //
 //
 
-#include <cmath>
-#include <algorithm>
-#include <functional>
-#include "SpinWaveGenie/Genie/SpinWave.h"
-#include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Plot/TwoDimensionalGaussian.h"
-#include "SpinWaveGenie/Plot/TwoDGaussian.h"
-#include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
+#include "SpinWaveGenie/Containers/Results.h"
+#include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
+#include "SpinWaveGenie/Plot/EnergyResolutionFunction.h"
+#include "SpinWaveGenie/Plot/TwoDGaussian.h"
+#include <algorithm>
+#include <cmath>
+#include <functional>
 
 using namespace std;
 
@@ -94,4 +94,4 @@ std::unique_ptr<SpinWavePlot> TwoDimensionResolutionFunction::clone() const
 {
   return std::make_unique<TwoDimensionResolutionFunction>(*this);
 }
-}
+} // namespace SpinWaveGenie

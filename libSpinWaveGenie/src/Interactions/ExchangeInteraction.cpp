@@ -149,4 +149,4 @@ void ExchangeInteraction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) 
   LN(s + M, r + M) += LNrs * gamma_rs;
   LN(s + M, s + M) += LNss;
 }
-}
+} // namespace SpinWaveGenie

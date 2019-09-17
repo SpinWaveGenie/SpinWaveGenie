@@ -37,6 +37,6 @@ public:
 private:
 };
 
-}
+} // namespace SpinWaveGenie
 
 #endif // __Interaction_H__

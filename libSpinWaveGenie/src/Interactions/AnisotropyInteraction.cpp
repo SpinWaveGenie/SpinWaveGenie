@@ -153,4 +153,4 @@ void AnisotropyInteraction::updateMatrix(const Eigen::Vector3d & /*K*/, Eigen::M
   LN(r + M, r) += LNrMr;
   LN(r + M, r + M) += LNrr;
 }
-}
+} // namespace SpinWaveGenie

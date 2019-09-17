@@ -34,5 +34,5 @@ private:
   double m_Diff, m_Factor, m_ma;
   double m_frequency;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__OneDimensionalGaussian__) */

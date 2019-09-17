@@ -55,5 +55,5 @@ public:
 private:
   std::vector<std::unique_ptr<Interaction>> container;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__SpinWaveGEnie__InteractionsContainer__) */

@@ -3,7 +3,6 @@
 
 #include "SpinWaveGenie/Containers/Cell.h"
 #include "SpinWaveGenie/Containers/Results.h"
-#include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Export.h"
 #include "SpinWaveGenie/Genie/MagneticFormFactor.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
@@ -71,5 +70,5 @@ private:
   InteractionsContainer interactions;
   MagneticFormFactor formFactor;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__SpinWave__) */

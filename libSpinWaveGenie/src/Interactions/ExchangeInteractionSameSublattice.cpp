@@ -86,4 +86,4 @@ void ExchangeInteractionSameSublattice::updateMatrix(const Eigen::Vector3d &K, M
   LN(r, r) += LNrr + LNrs * conj(gamma_rs);
   LN(r + M, r + M) += LNrr + conj(LNrs) * conj(gamma_rs);
 }
-}
+} // namespace SpinWaveGenie

@@ -36,5 +36,5 @@ private:
   double value0, value1, value2, value3;
   double z_rs;
 };
-}
+} // namespace SpinWaveGenie
 #endif

@@ -37,7 +37,7 @@ void DM_Y_Interaction::calcConstantValues(const Cell &cell)
   r = cell.getPosition(sl_r);
   s = cell.getPosition(sl_s);
   M = cell.size();
-  
+
   // cout << r << "\t" << s << endl << F << endl;
   // cout << endl;
 
@@ -81,4 +81,4 @@ void DM_Y_Interaction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) con
   LN(s + M, s + M) += z_rs * value0;
   LN(s + M, r + M) += z_rs * gamma_rs * (value1 - XI * value2 - XI * value3);
 }
-}
+} // namespace SpinWaveGenie

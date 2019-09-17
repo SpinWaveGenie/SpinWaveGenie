@@ -6,9 +6,9 @@
 //
 //
 
-#include <vector>
 #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 #include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
+#include <vector>
 
 using namespace std;
 
@@ -52,8 +52,7 @@ std::vector<double> IntegrateThetaPhi::calculateIntegrand(std::deque<double> &x)
 
   // cout << MinimumEnergy << " " << MaximumEnergy << " " << EnergyPoints << endl;
   double factor = sin(theta) / (4.0 * M_PI);
-  std::transform(val.begin(), val.end(), val.begin(),
-                 std::bind(std::multiplies<>(), factor, std::placeholders::_1));
+  std::transform(val.begin(), val.end(), val.begin(), std::bind(std::multiplies<>(), factor, std::placeholders::_1));
   return val;
 }
 
@@ -75,4 +74,4 @@ std::vector<double> IntegrateThetaPhi::getCut(double /*kx*/, double /*ky*/, doub
   test.setMaximumDivisions(maximumEvaluations);
   return test.integrate();
 }
-}
+} // namespace SpinWaveGenie

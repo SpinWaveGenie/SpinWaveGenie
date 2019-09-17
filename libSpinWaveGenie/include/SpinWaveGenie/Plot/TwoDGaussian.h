@@ -36,6 +36,6 @@ private:
   double u;
   double m_frequency;
 };
-}
+} // namespace SpinWaveGenie
 
 #endif /* defined(__spin_wave_genie__TwoDGaussian__) */

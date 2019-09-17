@@ -42,7 +42,7 @@ std::vector<double> IntegrateEnergy::calculateIntegrand(std::deque<double> &x)
   assert(x.size() == 1);
 
   Energies newEnergies;
-  for (const auto & elem : centeredEnergies)
+  for (const auto &elem : centeredEnergies)
   {
     newEnergies.insert(elem + x[0]);
   }
@@ -76,4 +76,4 @@ const Energies &IntegrateEnergy::getEnergies() { return centeredEnergies; }
 void IntegrateEnergy::setEnergies(const Energies &energiesIn) { centeredEnergies = energiesIn; }
 
 std::unique_ptr<SpinWavePlot> IntegrateEnergy::clone() const { return std::make_unique<IntegrateEnergy>(*this); }
-}
+} // namespace SpinWaveGenie

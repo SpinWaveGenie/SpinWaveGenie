@@ -30,13 +30,10 @@ double OneDimensionalLorentzian::getFunction(double energy)
   return FWHM / (2.0 * M_PI * (boost::math::pow<2>(m_frequency - energy) + boost::math::pow<2>(0.5 * FWHM)));
 }
 
-void OneDimensionalLorentzian::setFrequency(double frequency)
-{
-    m_frequency = frequency;
-}
+void OneDimensionalLorentzian::setFrequency(double frequency) { m_frequency = frequency; }
 
 std::unique_ptr<OneDimensionalShapes> OneDimensionalLorentzian::clone() const
 {
   return std::make_unique<OneDimensionalLorentzian>(*this);
 }
-}
+} // namespace SpinWaveGenie

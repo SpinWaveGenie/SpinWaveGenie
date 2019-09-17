@@ -45,4 +45,4 @@ ThreeVectors<double> PointsAlongLine::getPoints()
   calculatePoints();
   return Kpoints;
 }
-}
+} // namespace SpinWaveGenie

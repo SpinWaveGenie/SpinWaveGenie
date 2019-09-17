@@ -1,9 +1,9 @@
 #ifndef __SpinWaveDispersion__
 #define __SpinWaveDispersion__
 
-#include <iostream>
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
 #include "SpinWaveGenie/Genie/SpinWave.h"
+#include <iostream>
 
 class SPINWAVEGENIE_EXPORT SpinWaveDispersion
 {

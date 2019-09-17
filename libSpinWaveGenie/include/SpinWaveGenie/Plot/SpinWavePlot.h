@@ -23,5 +23,5 @@ public:
   virtual std::vector<double> getCut(double kx, double ky, double kz) = 0; // returns constant-Q cut
   virtual ~SpinWavePlot() = default;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__SpinWavePlot__) */

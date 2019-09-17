@@ -34,5 +34,5 @@ public:
 
 private:
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__InteractionFactory__) */

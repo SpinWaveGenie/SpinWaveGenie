@@ -106,4 +106,4 @@ void MagneticFieldInteraction::updateMatrix(const Eigen::Vector3d & /*K*/, Eigen
   LN(r, r) += LNrr;
   LN(r + M, r + M) += LNrr;
 }
-}
+} // namespace SpinWaveGenie

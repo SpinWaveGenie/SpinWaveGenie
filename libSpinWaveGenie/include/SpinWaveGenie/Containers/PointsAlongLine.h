@@ -40,5 +40,5 @@ private:
   ThreeVectors<double>::size_type numberPoints;
   ThreeVectors<double> Kpoints;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__PointsAlongLine__) */

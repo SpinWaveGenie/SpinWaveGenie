@@ -32,5 +32,5 @@ private:
   double FWHM, Tolerance;
   double m_frequency;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__OneDimensionalLorentzian__) */

@@ -16,32 +16,26 @@ void EnergyDependentGaussian::update()
   m_Factor = 2.0 * sqrt(log(2.0)) / (m_FWHM * sqrt(M_PI));
 }
 
-EnergyDependentGaussian::EnergyDependentGaussian(const std::array<double, 4> &FWHM, double Tolerance) : m_expansion(FWHM), m_Tolerance(Tolerance)
+EnergyDependentGaussian::EnergyDependentGaussian(const std::array<double, 4> &FWHM, double Tolerance)
+    : m_expansion(FWHM), m_Tolerance(Tolerance)
 {
 }
 
-void EnergyDependentGaussian::setFWHM(const std::array<double, 4> &InFWHM)
-{
-  m_expansion = InFWHM;
-}
+void EnergyDependentGaussian::setFWHM(const std::array<double, 4> &InFWHM) { m_expansion = InFWHM; }
 
-void EnergyDependentGaussian::setFrequency(double frequency) {
-  m_FWHM = m_expansion[0] + m_expansion[1] * frequency + m_expansion[2] * boost::math::pow<2>(frequency) + m_expansion[3] * boost::math::pow<3>(frequency);
+void EnergyDependentGaussian::setFrequency(double frequency)
+{
+  m_FWHM = m_expansion[0] + m_expansion[1] * frequency + m_expansion[2] * boost::math::pow<2>(frequency) +
+           m_expansion[3] * boost::math::pow<3>(frequency);
   m_frequency = frequency;
   this->update();
 }
 
-void EnergyDependentGaussian::setTolerance(double InTolerance)
-{
-  m_Tolerance = InTolerance;
-}
+void EnergyDependentGaussian::setTolerance(double InTolerance) { m_Tolerance = InTolerance; }
 
 double EnergyDependentGaussian::getMinimumEnergy() { return -1.0 * m_Diff; }
 
-double EnergyDependentGaussian::getMaximumEnergy()
-{
-  return m_Diff;
-}
+double EnergyDependentGaussian::getMaximumEnergy() { return m_Diff; }
 
 double EnergyDependentGaussian::getFunction(double energy)
 {

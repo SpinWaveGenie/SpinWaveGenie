@@ -4,8 +4,8 @@
 
 #include <Eigen/Dense>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 namespace SpinWaveGenie
 {
@@ -33,7 +33,7 @@ void Cell::setBasisVectors(double a, double b, double c, double alpha_deg, doubl
               std::sqrt(1.0 - boost::math::pow<2>(cos(alpha)) - boost::math::pow<2>(cos(beta)) -
                         boost::math::pow<2>(cos(gamma)) + 2.0 * cos(alpha) * cos(beta) * cos(gamma));
 
-  basisVectors << a, 0.0, 0.0, b *cos(gamma), b * sin(gamma), 0.0, ci, cj, ck;
+  basisVectors << a, 0.0, 0.0, b * cos(gamma), b * sin(gamma), 0.0, ci, cj, ck;
 
   // cout << "basis vectors equal" <<basisVectors << endl;
 
@@ -116,4 +116,4 @@ void Cell::addAtom(const std::string &name, double x, double y, double z)
   this->getSublattice(name).addAtom(pos[0], pos[1], pos[2]);
 }
 
-}
+} // namespace SpinWaveGenie

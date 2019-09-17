@@ -41,9 +41,10 @@ public:
   //! Constructs a SpinWave object to calculate the spin-wave dispersion.
   //! \return SpinWave object used to calculate the spin-wave dispersion.
   SpinWave createElement();
+
 private:
   Cell cell;
   InteractionsContainer interactions;
 };
-}
+} // namespace SpinWaveGenie
 #endif

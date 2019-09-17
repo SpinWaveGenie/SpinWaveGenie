@@ -69,7 +69,7 @@ template <class T> EnergyResolution<T>::EnergyResolution(const EnergyResolution<
   if (other.ResolutionFunction)
   {
     ResolutionFunction = std::move(other.ResolutionFunction->clone());
-}
+  }
 }
 
 template <class T> EnergyResolution<T> &EnergyResolution<T>::operator=(const EnergyResolution &other)
@@ -107,7 +107,7 @@ template <class T> std::vector<double> EnergyResolution<T>::getCut(double kx, do
 
   // points.significantSolutions();
 
-  for (const auto & point : points)
+  for (const auto &point : points)
   {
     if (std::isfinite(point.frequency) && std::isfinite(point.intensity))
     {
@@ -134,6 +134,6 @@ template <class T> std::unique_ptr<SpinWavePlot> EnergyResolution<T>::clone() co
 {
   return std::make_unique<EnergyResolution<T>>(*this);
 }
-}
+} // namespace SpinWaveGenie
 
 #endif /* defined(__EnergyResolutionFunction__) */

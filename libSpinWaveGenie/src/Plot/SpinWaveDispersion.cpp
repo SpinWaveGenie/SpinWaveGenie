@@ -1,7 +1,7 @@
-#include <fstream>
 #include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
-#include "SpinWaveGenie/Containers/Results.h"
 #include "External/ezRateProgressBar.hpp"
+#include "SpinWaveGenie/Containers/Results.h"
+#include <fstream>
 
 using namespace SpinWaveGenie;
 
@@ -66,7 +66,7 @@ void SpinWaveDispersion::save()
 
     if (PrintFrequency)
     {
-      for (const auto & pt : pts)
+      for (const auto &pt : pts)
       {
         file << pt.frequency << "  ";
       }
@@ -74,7 +74,7 @@ void SpinWaveDispersion::save()
 
     if (PrintIntensity)
     {
-      for (const auto & pt : pts)
+      for (const auto &pt : pts)
       {
         file << pt.intensity << " ";
       }

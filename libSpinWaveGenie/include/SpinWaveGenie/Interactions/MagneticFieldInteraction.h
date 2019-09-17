@@ -41,5 +41,5 @@ private:
   std::size_t r, M;
   std::complex<double> LNrr;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__MagneticFieldInteraction__) */

@@ -1,6 +1,6 @@
-#include <iostream>
-#include <Eigen/Dense>
 #include "SpinWaveGenie/Containers/Sublattice.h"
+#include <Eigen/Dense>
+#include <iostream>
 
 namespace SpinWaveGenie
 {
@@ -64,4 +64,4 @@ void Sublattice::setMoment(double spinInput, double thetaInput, double phiInput)
 
 void Sublattice::addAtom(double x, double y, double z) { positions.insert(x, y, z); }
 
-}
+} // namespace SpinWaveGenie

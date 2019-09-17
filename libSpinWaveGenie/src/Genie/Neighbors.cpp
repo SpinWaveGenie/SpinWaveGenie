@@ -1,7 +1,7 @@
-#include <iostream>
-#include "boost/format.hpp"
 #include "SpinWaveGenie/Genie/Neighbors.h"
 #include "SpinWaveGenie/Containers/Cell.h"
+#include "boost/format.hpp"
+#include <iostream>
 
 namespace SpinWaveGenie
 {
@@ -102,4 +102,4 @@ std::ostream &operator<<(std::ostream &output, const Neighbors &n)
   }
   return output;
 }
-}
+} // namespace SpinWaveGenie

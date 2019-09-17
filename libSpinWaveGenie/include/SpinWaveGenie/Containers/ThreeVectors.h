@@ -52,45 +52,27 @@ template <typename T> bool ThreeVectors<T>::empty() const { return values.empty(
 
 template <typename T> bool ThreeVectors<T>::insert(T x, T y, T z)
 {
-  values.push_back({{x,y,z}});
+  values.push_back({{x, y, z}});
   return true;
 }
 
 template <typename T> typename ThreeVectors<T>::size_type ThreeVectors<T>::size() const { return values.size(); }
 
-template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::begin()
-{
-  return values.begin();
-}
+template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::begin() { return values.begin(); }
 
-template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::end()
-{
-  return values.end();
-}
+template <typename T> typename ThreeVectors<T>::Iterator ThreeVectors<T>::end() { return values.end(); }
 
-template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::begin() const
-{
-  return values.cbegin();
-}
+template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::begin() const { return values.cbegin(); }
 
-template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::end() const
-{
-  return values.cend();
-}
+template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::end() const { return values.cend(); }
 
 template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cbegin() const
 {
   return values.cbegin();
 }
 
-template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cend() const
-{
-  return values.cend();
-}
+template <typename T> typename ThreeVectors<T>::ConstIterator ThreeVectors<T>::cend() const { return values.cend(); }
 
-template <typename T> void ThreeVectors<T>::clear()
-{
-  values.clear();
-}
-}
+template <typename T> void ThreeVectors<T>::clear() { values.clear(); }
+} // namespace SpinWaveGenie
 #endif /* defined(__ThreeVectors__) */

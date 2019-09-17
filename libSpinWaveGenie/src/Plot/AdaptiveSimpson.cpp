@@ -1,10 +1,10 @@
-#include <cmath>
-#include <cassert>
-#include <iostream>
-#include <queue>
-#include <algorithm>
-#include <limits>
 #include "SpinWaveGenie/Plot/AdaptiveSimpson.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <limits>
+#include <queue>
 
 struct helper
 {

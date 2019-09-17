@@ -39,4 +39,4 @@ std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Interactions
   }
   return output;
 }
-}
+} // namespace SpinWaveGenie
