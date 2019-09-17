@@ -78,5 +78,5 @@ private:
   Eigen::Matrix3d reciprocalVectors;
   std::vector<Sublattice> sublatticeInfo;
 };
-}
+} // namespace SpinWaveGenie
 #endif // __Cell_H__

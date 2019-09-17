@@ -80,4 +80,4 @@ void DM_Z_Interaction::updateMatrix(const Eigen::Vector3d &K, MatrixXcd &LN) con
   LN(s + M, s + M) -= z_rs * tmp0;
   LN(s + M, r + M) -= z_rs * gamma_rs * (-tmp1 - XI * tmp2 - XI * tmp3 - tmp4);
 }
-}
+} // namespace SpinWaveGenie

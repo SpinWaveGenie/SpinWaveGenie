@@ -28,5 +28,5 @@ public:
   virtual std::unique_ptr<OneDimensionalShapes> clone() const = 0;
   virtual ~OneDimensionalShapes() = default;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__OneDimensionalShapes__) */

@@ -34,10 +34,11 @@ public:
   void setPlotObject(const SpinWavePlot &object);
   Eigen::MatrixXd getMatrix();
   void save();
+
 private:
   std::string filename;
   std::unique_ptr<SpinWaveGenie::SpinWavePlot> cut;
   SpinWaveGenie::ThreeVectors<double> points;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__TwoDimensionalCut__) */

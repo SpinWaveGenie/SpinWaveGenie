@@ -1,11 +1,8 @@
-#include "pybind11/eigen.h"
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
 #include "SpinWaveGenie/Containers/Cell.h"
+#include "SpinWaveGenie/Containers/Energies.h"
+#include "SpinWaveGenie/Containers/PointsAlongLine.h"
 #include "SpinWaveGenie/Containers/Results.h"
 #include "SpinWaveGenie/Containers/Sublattice.h"
-#include "SpinWaveGenie/Containers/PointsAlongLine.h"
-#include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Containers/ThreeVectors.h"
 #include "SpinWaveGenie/Containers/UniqueThreeVectors.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
@@ -14,6 +11,9 @@
 #include "SpinWaveGenie/Interactions/Interaction.h"
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
 #include "SpinWaveGenie/Plot/Plot.h"
+#include "pybind11/eigen.h"
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 // #include "SpinWaveGenie/Plot/IntegrateEnergy.h "
 // #include "SpinWaveGenie/Plot/IntegrateThetaPhi.h"
 // #include "SpinWaveGenie/Plot/SpinWaveDispersion.h"
@@ -49,16 +49,14 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
 
   py::class_<Cell>(m, "Cell")
       .def(py::init<>())
-      .def("setBasisVectors",
-           py::overload_cast<double, double, double, double, double, double>(&Cell::setBasisVectors),
+      .def("setBasisVectors", py::overload_cast<double, double, double, double, double, double>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
       .def("setBasisVectors", py::overload_cast<double, const Eigen::Matrix3d &>(&Cell::setBasisVectors),
            "Set basis vectors from parameters")
       .def("getBasisVectors", &Cell::getBasisVectors, "get basis vectors")
       .def("getReciprocalVectors", &Cell::getReciprocalVectors, "get basis vectors")
       .def("addSublattice", &Cell::addSublattice, "Add sublattice to cell")
-      .def("getSublattice", py::overload_cast<const std::string &>(&Cell::getSublattice),
-           "Returns sublattice object")
+      .def("getSublattice", py::overload_cast<const std::string &>(&Cell::getSublattice), "Returns sublattice object")
       .def("__getitem__",
            [](const Cell &s, size_t i) {
              if (i >= s.size())
@@ -83,9 +81,9 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
            py::keep_alive<0, 1>());
 
   py::class_<Interaction>(m, "Interaction")
-      .def("sublattices",&Interaction::sublattices,"get Sublattices associated with this Interaction.")
-      .def("getName",&Interaction::getName,"get Name associated with this Interaction.")
-      .def("updateValue",&Interaction::updateValue,"update Values associated with this Interaction.");
+      .def("sublattices", &Interaction::sublattices, "get Sublattices associated with this Interaction.")
+      .def("getName", &Interaction::getName, "get Name associated with this Interaction.")
+      .def("updateValue", &Interaction::updateValue, "update Values associated with this Interaction.");
 
   py::class_<InteractionFactory>(m, "InteractionFactory")
       .def(py::init<>())
@@ -106,16 +104,14 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def_readonly("frequency", &Point::frequency, "Frequency associated with a given excitation (in meV).")
       .def_readonly("intensity", &Point::intensity, " Measurable intensity of a given excitation (arb. units).");
 
- py::class_<PointsAlongLine>(m, "PointsAlongLine")
+  py::class_<PointsAlongLine>(m, "PointsAlongLine")
       .def(py::init<>())
-      .def("setFirstPoint",&PointsAlongLine::setFirstPoint,"Set the first point in a line of points")
-      .def("setFinalPoint",&PointsAlongLine::setFinalPoint,"Set the last point in a line of points")
-      .def("setNumberPoints",&PointsAlongLine::setNumberPoints,"Set the Number of points")
-      .def("getPoints",&PointsAlongLine::getPoints,"Get the points as described above");
+      .def("setFirstPoint", &PointsAlongLine::setFirstPoint, "Set the first point in a line of points")
+      .def("setFinalPoint", &PointsAlongLine::setFinalPoint, "Set the last point in a line of points")
+      .def("setNumberPoints", &PointsAlongLine::setNumberPoints, "Set the Number of points")
+      .def("getPoints", &PointsAlongLine::getPoints, "Get the points as described above");
 
- py::class_<Energies>(m,"Energies")
-      .def(py::init<>())
-      .def(py::init<double, double, std::size_t >());
+  py::class_<Energies>(m, "Energies").def(py::init<>()).def(py::init<double, double, std::size_t>());
 
   py::class_<Results>(m, "Results")
       .def("insert", &Results::insert, "Insert Point struct into container.")
@@ -139,7 +135,8 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def(py::init<>())
       .def(py::init<const Cell &>())
       .def("updateCell", &SpinWaveBuilder::updateCell, "")
-      .def("addInteraction", py::overload_cast<const Interaction &>(&SpinWaveBuilder::addInteraction), "Add a magnetic interaction to the model.")
+      .def("addInteraction", py::overload_cast<const Interaction &>(&SpinWaveBuilder::addInteraction),
+           "Add a magnetic interaction to the model.")
       .def("updateInteraction", &SpinWaveBuilder::updateInteraction, "Update interaction parameter.")
       .def("getEnergy", &SpinWaveBuilder::getEnergy, "Get the classical energy associated with the model.")
       .def("getFirstOrderTerms", &SpinWaveBuilder::getFirstOrderTerms,
@@ -155,7 +152,7 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def("calculate", &SpinWave::calculate, "Calculate spin-wave frequencies and intensities.")
       .def("getPoints", &SpinWave::getPoints, "Get calculated frequencies and intensities.");
 
-      py::class_<ThreeVectors<double>>(m, "ThreeVectors")
+  py::class_<ThreeVectors<double>>(m, "ThreeVectors")
       .def(py::init<>())
       .def("clear", &ThreeVectors<double>::clear, "Clear container so that the size is zero.")
       .def("empty", &ThreeVectors<double>::empty, "check if there are no elements in this container.")
@@ -179,16 +176,19 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def("insert", &UniqueThreeVectors<double>::insert, "insert an array of 3 elements into container.")
       .def("__eq__", &UniqueThreeVectors<double>::operator==, "check if two arrays contain the same elements");
 
-  py::class_<OneDimensionalShapes>(m,"OneDimensionalShapes")
-          .def("getFunction",&OneDimensionalShapes::getFunction,"Get the function used");
+  py::class_<OneDimensionalShapes>(m, "OneDimensionalShapes")
+      .def("getFunction", &OneDimensionalShapes::getFunction, "Get the function used");
 
-  py::class_<OneDimensionalFactory>(m,"OneDimensionalFactory")
-          .def(py::init<>())
-          .def("getGaussian",py::overload_cast<double, double>(&OneDimensionalFactory::getGaussian),"Given a FWHM and a tolerance provide a 1D Gaussian object")
-          .def("getGaussian",py::overload_cast<const std::array<double,4>&,double>(&OneDimensionalFactory::getGaussian),"Given a FWHM and a tolerance provide a 1D Gaussian object")
-          .def("getLorentzian",&OneDimensionalFactory::getLorentzian,"Given a FWHM and a tolerance provide a 1D Lorentzian object")
-          .def("getPseudoVoigt",&OneDimensionalFactory::getPseudoVoigt,
-               "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
+  py::class_<OneDimensionalFactory>(m, "OneDimensionalFactory")
+      .def(py::init<>())
+      .def("getGaussian", py::overload_cast<double, double>(&OneDimensionalFactory::getGaussian),
+           "Given a FWHM and a tolerance provide a 1D Gaussian object")
+      .def("getGaussian", py::overload_cast<const std::array<double, 4> &, double>(&OneDimensionalFactory::getGaussian),
+           "Given a FWHM and a tolerance provide a 1D Gaussian object")
+      .def("getLorentzian", &OneDimensionalFactory::getLorentzian,
+           "Given a FWHM and a tolerance provide a 1D Lorentzian object")
+      .def("getPseudoVoigt", &OneDimensionalFactory::getPseudoVoigt,
+           "Given an eta, a FWHM ,and a tolerance provide a 1D PseudoVoigh object");
 
   py::class_<SpinWavePlot>(m, "SpinWavePlot")
       .def("getCell", &SpinWavePlot::getCell, py::return_value_policy::reference_internal, "retrieve Cell")
@@ -199,7 +199,8 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
   py::class_<EnergyResolutionFunction, SpinWavePlot>(m, "EnergyResolutionFunction")
       .def(py::init<>())
       .def(py::init<const OneDimensionalShapes &, const SpinWave &, const Energies &>())
-      .def("setResolutionFunction", py::overload_cast<const OneDimensionalShapes &>(&EnergyResolutionFunction::setResolutionFunction),
+      .def("setResolutionFunction",
+           py::overload_cast<const OneDimensionalShapes &>(&EnergyResolutionFunction::setResolutionFunction),
            "Set the resolution function")
       .def("setSpinWave", &EnergyResolutionFunction::setSpinWave, "Set the spin wave model");
 
@@ -212,10 +213,9 @@ PYBIND11_MODULE(python_SpinWaveGenie, m)
       .def("setPoints", &TwoDimensionalCut::setPoints, "")
       .def("setEnergyPoints", &TwoDimensionalCut::setEnergyPoints, "")
       .def("setPlotObject", py::overload_cast<const SpinWavePlot &>(&TwoDimensionalCut::setPlotObject), "")
-      .def("getMatrix", &TwoDimensionalCut::getMatrix,"Get cut as a 2D array")
+      .def("getMatrix", &TwoDimensionalCut::getMatrix, "Get cut as a 2D array")
       .def("save", &TwoDimensionalCut::save, "Calculate and the save the result to the specified filename");
 
   py::class_<IntegrateThetaPhi, SpinWavePlot>(m, "IntegrateThetaPhi")
       .def(py::init<const SpinWavePlot &, double, int>());
-  
 }

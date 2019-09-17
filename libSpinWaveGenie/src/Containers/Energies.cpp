@@ -50,7 +50,7 @@ std::size_t Energies::getUpperBound(double energy)
 double *Energies::data() { return energies.data(); }
 
 void Energies::clear() { energies.clear(); }
-    
+
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Energies &n)
 {
   output << "  frequency\n";
@@ -60,4 +60,4 @@ std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Energies &n)
   }
   return output;
 }
-}
+} // namespace SpinWaveGenie

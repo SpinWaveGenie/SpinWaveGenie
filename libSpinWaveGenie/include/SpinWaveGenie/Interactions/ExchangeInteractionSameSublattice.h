@@ -34,5 +34,5 @@ private:
   double value, min, max;
   std::complex<double> LNrr, LNrs;
 };
-}
+} // namespace SpinWaveGenie
 #endif

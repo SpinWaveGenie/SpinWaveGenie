@@ -40,5 +40,5 @@ private:
   double r, tolerance;
   std::unique_ptr<SpinWavePlot> resolutionFunction;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__IntegrateThetaPhi__) */

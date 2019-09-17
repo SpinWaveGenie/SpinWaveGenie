@@ -27,6 +27,7 @@ public:
   void setFrequency(double frequency) override;
   double getFunction(double energy) override;
   std::unique_ptr<OneDimensionalShapes> clone() const override;
+
 private:
   void update();
   std::array<double, 4> m_expansion;

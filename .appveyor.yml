@@ -24,7 +24,7 @@ init:
 
 install:
   - cd c:\projects
-  - git clone https://github.com/SpinWaveGenie/ThirdPartyVC141.git
+  - git clone --depth 1 https://github.com/SpinWaveGenie/ThirdPartyVC141.git
   - C:\%PYTHON_DIR%\Scripts\pip.exe install numpy
 
 before_build:

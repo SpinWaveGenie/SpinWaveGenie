@@ -80,6 +80,6 @@ private:
   std::string name, type;
   UniqueThreeVectors<double> positions;
 };
-}
+} // namespace SpinWaveGenie
 
 #endif // __Sublattice_H__

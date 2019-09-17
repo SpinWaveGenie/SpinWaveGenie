@@ -57,5 +57,5 @@ private:
   UniqueThreeVectors<double> neighborList;
   std::size_t numberNeighbors{0};
 };
-}
+} // namespace SpinWaveGenie
 #endif // __Neighbors_H__

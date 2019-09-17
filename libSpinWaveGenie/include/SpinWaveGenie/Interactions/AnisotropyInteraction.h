@@ -46,5 +46,5 @@ private:
   std::complex<double> LNrr, LNrrM, LNrMr;
   bool matrix_input;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__AnisotropyInteraction__) */

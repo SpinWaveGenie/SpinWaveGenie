@@ -74,5 +74,5 @@ public:
 private:
   std::vector<Point> results;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__Results__) */

@@ -20,40 +20,40 @@
 #include "tbb/tbb.h"
 #endif
 
+#include "External/ezRateProgressBar.hpp"
+#include "SpinWaveGenie/Containers/Energies.h"
 #include "SpinWaveGenie/Plot/SpinWavePlot.h"
 #include "SpinWaveGenie/Plot/TwoDimensionalCut.h"
-#include "SpinWaveGenie/Containers/Energies.h"
-#include "External/ezRateProgressBar.hpp"
 
 namespace
 {
 class progressBar
+{
+public:
+  progressBar(std::size_t numberPoints) : m_numberPoints(numberPoints) { m_counter = 0; };
+  void increment() { m_counter++; };
+  void run()
   {
-  public:
-    progressBar(std::size_t numberPoints) : m_numberPoints(numberPoints) { m_counter = 0; };
-    void increment() { m_counter++; };
-    void run()
+    ez::ezRateProgressBar<std::size_t> p(m_numberPoints);
+    p.units = "Q-points";
+    p.start();
+    while (m_counter < m_numberPoints)
     {
-      ez::ezRateProgressBar<std::size_t> p(m_numberPoints);
-      p.units = "Q-points";
-      p.start();
-      while (m_counter < m_numberPoints)
-      {
-        p.update(m_counter);
+      p.update(m_counter);
 #ifdef _WIN32
-        Sleep(1);
+      Sleep(1);
 #else
-        sleep(1);
+      sleep(1);
 #endif
-      }
-      p.update(m_numberPoints);
     }
+    p.update(m_numberPoints);
+  }
 
-  private:
-    std::atomic<std::size_t> m_counter;
-    std::size_t m_numberPoints;
-  };
-}
+private:
+  std::atomic<std::size_t> m_counter;
+  std::size_t m_numberPoints;
+};
+} // namespace
 
 namespace SpinWaveGenie
 {
@@ -82,23 +82,22 @@ Eigen::MatrixXd TwoDimensionalCut::getMatrix()
   progressBar pbar(points.size());
   std::thread myThread(&progressBar::run, &pbar);
 #ifdef USE_THREADS
-  tbb::parallel_for(tbb::blocked_range<std::size_t>(0, points.size()),
-                    [this, &pbar, &mat](const tbb::blocked_range<std::size_t> r)
-                    {
-                      std::unique_ptr<SpinWaveGenie::SpinWavePlot> cutclone = cut->clone();
-                      for (std::size_t m = r.begin(); m < r.end(); ++m)
-                      {
-                        Eigen::MatrixXd::ColXpr values = mat.col(m);
-                        auto it = points.begin() + m;
-                        std::vector<double> val = cutclone->getCut((*it)[0], (*it)[1], (*it)[2]);
+  tbb::parallel_for(
+      tbb::blocked_range<std::size_t>(0, points.size()), [this, &pbar, &mat](const tbb::blocked_range<std::size_t> r) {
+        std::unique_ptr<SpinWaveGenie::SpinWavePlot> cutclone = cut->clone();
+        for (std::size_t m = r.begin(); m < r.end(); ++m)
+        {
+          Eigen::MatrixXd::ColXpr values = mat.col(m);
+          auto it = points.begin() + m;
+          std::vector<double> val = cutclone->getCut((*it)[0], (*it)[1], (*it)[2]);
 #ifdef _MSC_VER
-                        std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
+          std::copy(val.begin(), val.end(), stdext::make_checked_array_iterator(values.data(), values.size()));
 #else
                         std::copy(val.begin(), val.end(), values.data());
 #endif
-                        pbar.increment();
-                      }
-                    });
+          pbar.increment();
+        }
+      });
 #else
   for (std::size_t m = 0; m < points.size(); ++m)
   {
@@ -147,4 +146,4 @@ void TwoDimensionalCut::save()
   }
   file.close();
 }
-}
+} // namespace SpinWaveGenie

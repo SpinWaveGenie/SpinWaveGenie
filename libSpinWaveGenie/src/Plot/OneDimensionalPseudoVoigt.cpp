@@ -6,9 +6,9 @@
 //
 //
 
-#include <cmath>
 #include "SpinWaveGenie/Plot/OneDimensionalPseudoVoigt.h"
 #include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
+#include <cmath>
 
 using namespace std;
 
@@ -39,8 +39,8 @@ double OneDimensionalPseudoVoigt::getMaximumEnergy() { return Lorentzian->getMax
 
 void OneDimensionalPseudoVoigt::setFrequency(double frequency)
 {
-    Lorentzian->setFrequency(frequency);
-    Gaussian->setFrequency(frequency);
+  Lorentzian->setFrequency(frequency);
+  Gaussian->setFrequency(frequency);
 }
 
 double OneDimensionalPseudoVoigt::getFunction(double energy)
@@ -52,4 +52,4 @@ unique_ptr<OneDimensionalShapes> OneDimensionalPseudoVoigt::clone() const
 {
   return std::make_unique<OneDimensionalPseudoVoigt>(*this);
 }
-}
+} // namespace SpinWaveGenie

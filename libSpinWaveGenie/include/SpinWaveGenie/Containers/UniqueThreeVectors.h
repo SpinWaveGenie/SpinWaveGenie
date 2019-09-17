@@ -57,5 +57,5 @@ template <typename T> bool UniqueThreeVectors<T>::operator==(const UniqueThreeVe
   }
   return true;
 }
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__positions__UniquePositions__) */

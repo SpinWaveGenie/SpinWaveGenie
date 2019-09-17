@@ -5,9 +5,9 @@
 //  Created by Hahn, Steven E. on 6/23/14.
 //
 //
-#include <cmath>
-#include <algorithm>
 #include "SpinWaveGenie/Plot/TwoDGaussian.h"
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -41,10 +41,7 @@ double TwoDGaussian::getMaximumEnergy()
   return max(firstSolution, secondSolution);
 }
 
-void TwoDGaussian::setFrequency(double frequency)
-{
-    m_frequency = frequency;
-}
+void TwoDGaussian::setFrequency(double frequency) { m_frequency = frequency; }
 
 double TwoDGaussian::getFunction(double energy)
 {
@@ -52,4 +49,4 @@ double TwoDGaussian::getFunction(double energy)
 }
 
 unique_ptr<OneDimensionalShapes> TwoDGaussian::clone() const { return std::make_unique<TwoDGaussian>(*this); }
-}
+} // namespace SpinWaveGenie

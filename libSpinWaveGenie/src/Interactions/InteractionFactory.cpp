@@ -7,11 +7,11 @@
 //
 
 #include "SpinWaveGenie/Interactions/InteractionFactory.h"
-#include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
-#include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
+#include "SpinWaveGenie/Interactions/AnisotropyInteraction.h"
 #include "SpinWaveGenie/Interactions/DM_Y_Interaction.h"
 #include "SpinWaveGenie/Interactions/DM_Z_Interaction.h"
-#include "SpinWaveGenie/Interactions/AnisotropyInteraction.h"
+#include "SpinWaveGenie/Interactions/ExchangeInteraction.h"
+#include "SpinWaveGenie/Interactions/ExchangeInteractionSameSublattice.h"
 #include "SpinWaveGenie/Interactions/MagneticFieldInteraction.h"
 
 namespace SpinWaveGenie
@@ -28,7 +28,7 @@ std::unique_ptr<Interaction> InteractionFactory::getExchange(const std::string &
   else
   {
     return std::make_unique<ExchangeInteraction>(name, value, sl_r, sl_s, min, max);
-}
+  }
 }
 
 std::unique_ptr<Interaction>
@@ -74,4 +74,4 @@ std::unique_ptr<Interaction> InteractionFactory::getMagneticField(const std::str
 {
   return std::make_unique<MagneticFieldInteraction>(name, value, direction, sl_r);
 }
-}
+} // namespace SpinWaveGenie

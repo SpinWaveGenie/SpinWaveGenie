@@ -37,15 +37,9 @@ void OneDimensionalGaussian::setTolerance(double InTolerance)
 
 double OneDimensionalGaussian::getMinimumEnergy() { return -1.0 * m_Diff; }
 
-double OneDimensionalGaussian::getMaximumEnergy()
-{
-  return m_Diff;
-}
+double OneDimensionalGaussian::getMaximumEnergy() { return m_Diff; }
 
-void OneDimensionalGaussian::setFrequency(double frequency)
-{
-    m_frequency = frequency;
-}
+void OneDimensionalGaussian::setFrequency(double frequency) { m_frequency = frequency; }
 
 double OneDimensionalGaussian::getFunction(double energy)
 {
@@ -56,4 +50,4 @@ unique_ptr<OneDimensionalShapes> OneDimensionalGaussian::clone() const
 {
   return std::make_unique<OneDimensionalGaussian>(*this);
 }
-}
+} // namespace SpinWaveGenie

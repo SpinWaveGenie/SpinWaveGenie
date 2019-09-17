@@ -61,5 +61,5 @@ private:
   std::vector<std::vector<double>> Farray;
   std::vector<double> NormalizedWeights;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__MagneticFormFactor__) */

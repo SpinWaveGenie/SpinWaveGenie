@@ -76,5 +76,5 @@ private:
   std::vector<double> energies;
 };
 
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__spin_wave_genie__Energies__) */

@@ -41,6 +41,6 @@ private:
   double kx, ky, kz;
   Energies centeredEnergies;
 };
-}
+} // namespace SpinWaveGenie
 
 #endif /* defined(__spin_wave_genie__IntegrateEnergy__) */

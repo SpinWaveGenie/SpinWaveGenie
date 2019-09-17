@@ -40,4 +40,4 @@ void HKLDirections::addDirection(int direction, double delta)
 
   this->addDirection(v0, v1, v2, delta);
 }
-}
+} // namespace SpinWaveGenie

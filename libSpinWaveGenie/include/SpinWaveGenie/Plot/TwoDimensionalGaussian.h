@@ -50,6 +50,6 @@ private:
   Eigen::Vector3d direction;
   EnergyResolutionFunction res;
 };
-}
+} // namespace SpinWaveGenie
 
 #endif /* defined(__spin_wave_genie__TwoDimensionalGaussian__) */

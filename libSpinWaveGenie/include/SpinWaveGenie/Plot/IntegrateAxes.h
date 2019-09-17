@@ -41,5 +41,5 @@ private:
   std::vector<double> calculateIntegrand(std::deque<double> &x);
   std::vector<double> xmin, xmax;
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__IntegrateAxes__) */

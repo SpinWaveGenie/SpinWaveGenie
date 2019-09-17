@@ -8,10 +8,10 @@
 
 #include "SpinWaveGenie/Plot/OneDimensionalFactory.h"
 #include "SpinWaveGenie/Plot/EnergyDependentGaussian.h"
-#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 #include "SpinWaveGenie/Plot/OneDimensionalGaussian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalLorentzian.h"
 #include "SpinWaveGenie/Plot/OneDimensionalPseudoVoigt.h"
+#include "SpinWaveGenie/Plot/OneDimensionalShapes.h"
 
 namespace SpinWaveGenie
 {
@@ -21,7 +21,7 @@ std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(double 
   return std::make_unique<OneDimensionalGaussian>(fwhm, tol);
 }
 
-std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(const std::array<double,4> &fwhm, double tol)
+std::unique_ptr<OneDimensionalShapes> OneDimensionalFactory::getGaussian(const std::array<double, 4> &fwhm, double tol)
 {
   return std::make_unique<EnergyDependentGaussian>(fwhm, tol);
 }

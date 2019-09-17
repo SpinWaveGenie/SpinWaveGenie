@@ -1,10 +1,10 @@
 #include <Eigen/Cholesky>
-#include <iomanip>
 #include <cmath>
+#include <iomanip>
 #include <random>
 
-#include "SpinWaveGenie/Genie/SpinWave.h"
 #include "SpinWaveGenie/Genie/Neighbors.h"
+#include "SpinWaveGenie/Genie/SpinWave.h"
 
 using namespace Eigen;
 using namespace std;
@@ -162,19 +162,13 @@ void SpinWave::calculateWeights()
   //
   // Reorder the XX's by the weights
   //
-  std::partition(AL.begin(), AL.end(), [](const results &i)
-                 {
-                   return i.weight > 0;
-                 });
+  std::partition(AL.begin(), AL.end(), [](const results &i) { return i.weight > 0; });
 
   // If two eigenvalues are approx. zero, std::partition
   // may fail to separate positive and negative weights.
   if (AL[M - 1].weight < 0.0 || AL[M].weight > 0.0)
   {
-    std::sort(AL.begin(), AL.end(), [](const results &a, const results &b)
-              {
-                return a.weight > b.weight;
-              });
+    std::sort(AL.begin(), AL.end(), [](const results &a, const results &b) { return a.weight > b.weight; });
   }
 
   for (size_t L1 = 0; L1 < N; L1++)
@@ -187,11 +181,9 @@ void SpinWave::calculateWeights()
   // updated to reflect this.
   for (size_t L1 = 0; L1 < N; L1++)
   {
-    auto oldPosition = std::find_if(AL.begin() + L1, AL.end(), [L1](const results &elem) -> bool
-                                    {
-                                      return L1 == elem.index;
-                                    });
-    if(oldPosition != AL.end())
+    auto oldPosition =
+        std::find_if(AL.begin() + L1, AL.end(), [L1](const results &elem) -> bool { return L1 == elem.index; });
+    if (oldPosition != AL.end())
     {
       XX.row(L1).swap(XX.row(AL[L1].index)); // eigenvector
       oldPosition->index = AL[L1].index;
@@ -221,7 +213,7 @@ void SpinWave::calculateIntensities()
   Intensities.setZero();
 
   std::size_t L2 = 0;
-  for (const auto & elem : cell) // r
+  for (const auto &elem : cell) // r
   {
     const Eigen::Matrix3d &V_r = elem.getInverseMatrix();
     double S_r = elem.getMoment();
@@ -271,4 +263,4 @@ void SpinWave::calculate()
   this->calculateIntensities();
 }
 
-}
+} // namespace SpinWaveGenie

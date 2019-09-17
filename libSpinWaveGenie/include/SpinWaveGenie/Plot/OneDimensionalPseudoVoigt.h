@@ -39,5 +39,5 @@ private:
   std::unique_ptr<OneDimensionalShapes> Lorentzian{std::make_unique<OneDimensionalGaussian>()},
       Gaussian{std::make_unique<OneDimensionalLorentzian>()};
 };
-}
+} // namespace SpinWaveGenie
 #endif /* defined(__OneDimensionalPseudoVoigt__) */

@@ -30,7 +30,7 @@ void SpinWaveBuilder::addInteraction(const Interaction &in)
 
 void SpinWaveBuilder::updateInteraction(const string &name, double value)
 {
-  for (auto & elem : interactions)
+  for (auto &elem : interactions)
   {
     if (name == elem.getName())
     {
@@ -42,11 +42,11 @@ void SpinWaveBuilder::updateInteraction(const string &name, double value)
 double SpinWaveBuilder::getEnergy()
 {
   double energy = 0.0;
-  for (auto & elem : interactions)
+  for (auto &elem : interactions)
   {
     // energy = 0.0;
     elem.calculateEnergy(cell, energy);
-    //cout << elem->getName() << " " << energy / 4.0 << endl;
+    // cout << elem->getName() << " " << energy / 4.0 << endl;
   }
   // cout << endl;
   return energy;
@@ -56,7 +56,7 @@ Eigen::VectorXcd SpinWaveBuilder::getFirstOrderTerms()
 {
   Eigen::VectorXcd firstOrder;
   firstOrder.setZero(2 * cell.size());
-  for (auto & elem : interactions)
+  for (auto &elem : interactions)
   {
     /*cout << iter->getName() << " ";
     vector<string> sls = iter->sublattices();
@@ -93,4 +93,4 @@ SpinWave SpinWaveBuilder::createElement()
   }
   return SW;
 }
-}
+} // namespace SpinWaveGenie

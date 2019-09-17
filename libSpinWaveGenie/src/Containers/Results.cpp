@@ -6,10 +6,10 @@
 //
 //
 
+#include "SpinWaveGenie/Containers/Results.h"
+#include "boost/format.hpp"
 #include <algorithm> // std::sort
 #include <cmath>
-#include "boost/format.hpp"
-#include "SpinWaveGenie/Containers/Results.h"
 
 using std::vector;
 
@@ -46,7 +46,7 @@ void Results::uniqueSolutions()
     VI_unique[i].intensity = 0.0;
   }
 
-  for (const auto & elem : results)
+  for (const auto &elem : results)
   {
     std::size_t VP_pos = NU; // set position to a nonsense value
     for (std::size_t j = 0; j < NU; j++)
@@ -82,11 +82,11 @@ void Results::significantSolutions(double ETS)
 
 std::ostream &operator<<(std::ostream &output, const SpinWaveGenie::Results &n)
 {
-    output << "  frequency  intensity\n";
-    for (const auto &result : n)
-    {
-      output << boost::format("%9.5f %10.5f\n") % result.frequency % result.intensity;
-    }
-    return output;
+  output << "  frequency  intensity\n";
+  for (const auto &result : n)
+  {
+    output << boost::format("%9.5f %10.5f\n") % result.frequency % result.intensity;
+  }
+  return output;
 }
-}
+} // namespace SpinWaveGenie
