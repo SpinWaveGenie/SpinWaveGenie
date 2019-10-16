@@ -1,6 +1,12 @@
 message(STATUS "PYTHON_SITE_PACKAGES = ${PYTHON_SITE_PACKAGES_DIR}" )
 
-pybind11_add_module( python_SpinWaveGenie src/SpinWaveGenie.cpp )
+#avoid warnings from -Wdeprecated-register
+if (${PYBIND11_PYTHON_VERSION} VERSION_EQUAL "2.7" )
+  pybind11_add_module( python_SpinWaveGenie SYSTEM src/SpinWaveGenie.cpp )
+else()
+  pybind11_add_module( python_SpinWaveGenie src/SpinWaveGenie.cpp )
+endif()
+
 target_link_libraries( python_SpinWaveGenie PRIVATE SpinWaveGenie )
 file(MAKE_DIRECTORY SpinWaveGenie)
 
