@@ -86,7 +86,7 @@ before_script:
     fi
 
 script:
-  - make -j 2;
+  - make -j 2 VERBOSE=1;
   - if [ "$COVERALLS" == "true" ];
     then
       make coveralls -j 2;
