@@ -1,7 +1,7 @@
 message(STATUS "PYTHON_SITE_PACKAGES = ${PYTHON_SITE_PACKAGES_DIR}" )
 
 #avoid warnings from -Wdeprecated-register
-if (${PYBIND11_PYTHON_VERSION} VERSION_EQUAL "2.7" )
+if ("${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" VERSION_EQUAL 2.7 )
   pybind11_add_module( python_SpinWaveGenie SYSTEM src/SpinWaveGenie.cpp )
 else()
   pybind11_add_module( python_SpinWaveGenie src/SpinWaveGenie.cpp )
