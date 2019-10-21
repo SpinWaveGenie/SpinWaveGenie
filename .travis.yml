@@ -9,23 +9,23 @@ branches:
 matrix:
   include:
     - os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       env:
-        - COMPILER_VERSION=5
+        - COMPILER_VERSION=7
         - PYTHON_VERSION=2.7
     - os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       env: 
-        - COMPILER_VERSION=7
-        - PYTHON_VERSION=3.5
+        - COMPILER_VERSION=9
+        - PYTHON_VERSION=3.6
     - os: osx
-      osx_image: xcode10.1
+      osx_image: xcode11.2
       compiler: clang
       env: PYTHON_VERSION=3.7
     - os: osx
-      osx_image: xcode9.4
+      osx_image: xcode10.1
       compiler: clang
       env: 
         - PYTHON_VERSION=2.7
@@ -86,7 +86,7 @@ before_script:
     fi
 
 script:
-  - make -j 2;
+  - make -j 2 VERBOSE=1;
   - if [ "$COVERALLS" == "true" ];
     then
       make coveralls -j 2;
